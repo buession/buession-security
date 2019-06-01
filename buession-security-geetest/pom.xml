@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<name>Buession Security Geetest</name>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.buession.security</groupId>
+		<artifactId>buession-security-parent</artifactId>
+		<relativePath>../buession-security-parent</relativePath>
+		<version>1.0.0</version>
+	</parent>
+	<artifactId>buession-security-geetest</artifactId>
+	<url>https://github.com/buession/buession-security</url>
+	<description>Buession Security Framework For Geetest</description>
+	<packaging>jar</packaging>
+
+	<organization>
+		<name>buession.com Inc.</name>
+		<url>http://www.buession.com/</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>yong.teng</id>
+			<name>yong.teng</name>
+			<email>webmaster@buession.com</email>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:https://github.com/buession/buession-security.git</connection>
+		<developerConnection>scm:git:https://github.com/buession/buession-security.git</developerConnection>
+		<url>https://github.com/buession/buession-security</url>
+	</scm>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.buession.security</groupId>
+			<artifactId>buession-security-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.buession</groupId>
+			<artifactId>buession-httpclient</artifactId>
+			<version>${buession.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.buession</groupId>
+			<artifactId>buession-json</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>buession-security-geetest</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
