@@ -22,9 +22,9 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.core;
+package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.core.mcrypt.MD5Mcrypt;
+import com.buession.security.mcrypt.MD5Mcrypt;
 
 /**
  * @author Yong.Teng

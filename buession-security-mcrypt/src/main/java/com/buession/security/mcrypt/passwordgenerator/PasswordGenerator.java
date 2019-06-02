@@ -22,7 +22,7 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.core;
+package com.buession.security.mcrypt.passwordgenerator;
 
 /**
  * 密码生成器

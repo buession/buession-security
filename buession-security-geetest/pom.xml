@@ -46,6 +46,11 @@
 			<artifactId>buession-security-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.buession.security</groupId>
+			<artifactId>buession-security-mcrypt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.buession</groupId>

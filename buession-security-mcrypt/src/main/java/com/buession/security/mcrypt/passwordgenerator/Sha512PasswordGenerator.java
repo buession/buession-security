@@ -22,48 +22,14 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.core;
+package com.buession.security.mcrypt.passwordgenerator;
 
-import java.util.Random;
+import com.buession.security.mcrypt.Sha512Mcrypt;
 
 /**
- * 密码生成器抽象类
- *
  * @author Yong.Teng
  */
-public abstract class AbstractPasswordGenerator implements PasswordGenerator {
-
-    private final static char[] CHARS = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-            'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-            'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5',
-            '6', '7', '8', '9', '0', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{',
-            '}', '[', ']', '|', '\\', '/', ':', ';', '<', '>', '?', ',', '.'};
-
-    /**
-     * 生成随机密码
-     *
-     * @param length
-     *         长度
-     *
-     * @return 随机密码
-     */
-    @Override
-    public String generatorRandomPassword(final int length){
-        if(length <= 0){
-            throw new IllegalArgumentException("Password length cloud less than or equal to 0.");
-        }
-
-        StringBuffer sb = new StringBuffer(length);
-        Random random = new Random();
-
-        for(int i = 0; i < length; i++){
-            int j = random.nextInt(CHARS.length);
-
-            sb.append(CHARS[j]);
-        }
-
-        return sb.toString();
-    }
+public class Sha512PasswordGenerator extends AbstractPasswordGenerator {
 
     /**
      * 密码加密
@@ -76,8 +42,10 @@ public abstract class AbstractPasswordGenerator implements PasswordGenerator {
      * @return 加密后的密码
      */
     @Override
-    public byte[] digestEncoded(final byte[] password, final byte[] salt){
-        return digestEncoded(new String(password), new String(salt)).getBytes();
-    }
+    public String digestEncoded(final String password, final String salt){
+        Sha512Mcrypt sha512Mcrypt = new Sha512Mcrypt();
 
+        sha512Mcrypt.setSalt(salt);
+        return sha512Mcrypt.encode(password);
+    }
 }

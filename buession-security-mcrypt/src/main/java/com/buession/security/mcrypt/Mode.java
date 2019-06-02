@@ -22,30 +22,15 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.core;
-
-import com.buession.core.mcrypt.Sha256Mcrypt;
+package com.buession.security.mcrypt;
 
 /**
  * @author Yong.Teng
  */
-public class Sha256PasswordGenerator extends AbstractPasswordGenerator {
+public enum Mode {
 
-    /**
-     * 密码加密
-     *
-     * @param password
-     *         原始密码
-     * @param salt
-     *         salt
-     *
-     * @return 加密后的密码
-     */
-    @Override
-    public String digestEncoded(final String password, final String salt){
-        Sha256Mcrypt sha256Mcrypt = new Sha256Mcrypt();
+    ENCODE,
 
-        sha256Mcrypt.setSalt(salt);
-        return sha256Mcrypt.encode(password);
-    }
+    DECODE
+
 }

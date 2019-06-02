@@ -22,30 +22,22 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.core;
+package com.buession.security.mcrypt;
 
-import com.buession.core.mcrypt.Sha1Mcrypt;
+import org.junit.Test;
 
 /**
  * @author Yong.Teng
  */
-public class Sha1PasswordGenerator extends AbstractPasswordGenerator {
+public class AESMcryptTest {
 
-    /**
-     * 密码加密
-     *
-     * @param password
-     *         原始密码
-     * @param salt
-     *         salt
-     *
-     * @return 加密后的密码
-     */
-    @Override
-    public String digestEncoded(final String password, final String salt){
-        Sha1Mcrypt sha1Mcrypt = new Sha1Mcrypt();
+    @Test
+    public void encode(){
+        AESMcrypt aesMcrypt = new AESMcrypt();
 
-        sha1Mcrypt.setSalt(salt);
-        return sha1Mcrypt.encode(password);
+        aesMcrypt.setSalt("123");
+        System.out.println(aesMcrypt.encode(111));
+        System.out.println(aesMcrypt.decode("2B9DCBB83D97DA0F4C71AA22E9BE8ECD"));
     }
+
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<name>Buession Security Shiro</name>
+	<name>Buession Security Mcrypt</name>
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.buession.security</groupId>
@@ -9,9 +9,9 @@
 		<relativePath>../buession-security-parent</relativePath>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>buession-security-shiro</artifactId>
+	<artifactId>buession-security-mcrypt</artifactId>
 	<url>https://github.com/buession/buession-security</url>
-	<description>Buession Security Framework For Shiro</description>
+	<description>Buession Security Framework For Mcrypt</description>
 	<packaging>jar</packaging>
 
 	<organization>
@@ -48,51 +48,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.buession</groupId>
-			<artifactId>buession-redis</artifactId>
-			<version>${buession.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-aspectj</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-spring</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-web</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity-engine-core</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity-tools</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
@@ -104,7 +59,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>buession-security-shiro</finalName>
+		<finalName>buession-security-mcrypt</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
