@@ -3,6 +3,12 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<name>Buession Parent</name>
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.buession</groupId>
+		<artifactId>parent</artifactId>
+		<relativePath/>
+		<version>1.0.0</version>
+	</parent>
 	<groupId>com.buession.security</groupId>
 	<artifactId>buession-security-parent</artifactId>
 	<url>https://github.com/buession/buession-security</url>
@@ -49,13 +55,8 @@
 		<project.build.encoding>UTF-8</project.build.encoding>
 		<project.java.version>1.8</project.java.version>
 		<buession.version>1.0.0</buession.version>
-		<springframework.version>5.1.7.RELEASE</springframework.version>
-		<springframework.security.version>5.1.5.RELEASE</springframework.security.version>
 		<shiro.version>1.4.1</shiro.version>
-		<fasterxml.jackson.core.version>2.9.9</fasterxml.jackson.core.version>
-		<aspectjrt.version>1.9.2</aspectjrt.version>
 		<bouncycastle.version>1.60</bouncycastle.version>
-		<slf4j.version>1.7.26</slf4j.version>
 	</properties>
 
 	<dependencyManagement>
@@ -69,73 +70,6 @@
 				<groupId>com.buession</groupId>
 				<artifactId>buession-json</artifactId>
 				<version>${buession.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-aop</artifactId>
-				<version>${springframework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>${springframework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${springframework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${springframework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-expression</artifactId>
-				<version>${springframework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-jcl</artifactId>
-				<version>${springframework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-web</artifactId>
-				<version>${springframework.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-webmvc</artifactId>
-				<version>${springframework.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-core</artifactId>
-				<version>${springframework.security.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-config</artifactId>
-				<version>${springframework.security.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-rsa</artifactId>
-				<version>1.0.8.RELEASE</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-crypto</artifactId>
-				<version>${springframework.security.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-web</artifactId>
-				<version>${springframework.security.version}</version>
 			</dependency>
 
 			<dependency>
@@ -160,39 +94,6 @@
 			</dependency>
 
 			<dependency>
-				<groupId>com.google.code.findbugs</groupId>
-				<artifactId>jsr305</artifactId>
-				<version>3.0.2</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-core</artifactId>
-				<version>${fasterxml.jackson.core.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-annotations</artifactId>
-				<version>${fasterxml.jackson.core.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
-				<version>${fasterxml.jackson.core.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.aspectj</groupId>
-				<artifactId>aspectjrt</artifactId>
-				<version>${aspectjrt.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.aspectj</groupId>
-				<artifactId>aspectjweaver</artifactId>
-				<version>${aspectjrt.version}</version>
-			</dependency>
-
-			<dependency>
 				<groupId>org.bouncycastle</groupId>
 				<artifactId>bcpkix-jdk15on</artifactId>
 				<version>${bouncycastle.version}</version>
@@ -201,12 +102,6 @@
 				<groupId>org.bouncycastle</groupId>
 				<artifactId>bcprov-jdk15on</artifactId>
 				<version>${bouncycastle.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>joda-time</groupId>
-				<artifactId>joda-time</artifactId>
-				<version>2.10.2</version>
 			</dependency>
 
 			<!-- log start -->
