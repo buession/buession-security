@@ -1,0 +1,20 @@
+language: java
+sudo: required
+dist: trusty
+services:
+ - docker
+jdk:
+  - oraclejdk8
+branches:
+  only:
+    - master
+env:
+  global:
+    - JAVA_OPTS="-Xms512m -Xmx4048m -Xss128m -XX:ReservedCodeCacheSize=512m -XX:+UseG1GC -Xverify:none -server"
+before_install:
+  - unset _JAVA_OPTIONS
+install: true
+script:
+  - cd ${TRAVIS_BUILD_DIR}/buession-security-parent && mvn clean install -Dmaven.test.skip=true
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
