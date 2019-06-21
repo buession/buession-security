@@ -22,19 +22,19 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.liangvi.security.geetest;
+package com.buession.security.geetest;
 
 import com.buession.core.Status;
 import com.buession.core.validator.Validate;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
+import com.buession.security.geetest.core.ClientType;
 import com.buession.security.mcrypt.MD5Mcrypt;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.liangvi.security.geetest.core.ClientType;
-import com.liangvi.security.geetest.core.ProcessResult;
-import com.liangvi.security.geetest.core.RequestData;
+import com.buession.security.geetest.core.ProcessResult;
+import com.buession.security.geetest.core.RequestData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

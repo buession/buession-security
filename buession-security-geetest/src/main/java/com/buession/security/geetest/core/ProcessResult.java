@@ -22,52 +22,73 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.liangvi.security.geetest.core;
+package com.buession.security.geetest.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Yong.Teng
  */
-public class RequestData {
+public class ProcessResult {
 
-    @JsonProperty(value = "user_id")
-    private String userId;
+    private boolean success;
 
-    @JsonProperty(value = "client_type")
-    private ClientType clientType;
+    private String gt;
 
-    @JsonProperty(value = "ip_address")
-    private String ipAddress;
+    private String challenge;
 
-    @JsonProperty(value = "user_id")
-    public String getUserId(){
-        return userId;
+    @JsonProperty(value = "new_captcha")
+    private Boolean newCaptcha;
+
+    @JsonProperty(value = "session_id")
+    private String sessionId;
+
+    public boolean getSuccess(){
+        return success;
     }
 
-    @JsonProperty(value = "user_id")
-    public void setUserId(String userId){
-        this.userId = userId;
+    public boolean isSuccess(){
+        return getSuccess();
     }
 
-    @JsonProperty(value = "client_type")
-    public ClientType getClientType(){
-        return clientType;
+    public void setSuccess(boolean success){
+        this.success = success;
     }
 
-    @JsonProperty(value = "client_type")
-    public void setClientType(ClientType clientType){
-        this.clientType = clientType;
+    public String getGt(){
+        return gt;
     }
 
-    @JsonProperty(value = "ip_address")
-    public String getIpAddress(){
-        return ipAddress;
+    public void setGt(String gt){
+        this.gt = gt;
     }
 
-    @JsonProperty(value = "ip_address")
-    public void setIpAddress(String ipAddress){
-        this.ipAddress = ipAddress;
+    public String getChallenge(){
+        return challenge;
+    }
+
+    public void setChallenge(String challenge){
+        this.challenge = challenge;
+    }
+
+    @JsonProperty(value = "new_captcha")
+    public Boolean getNewCaptcha(){
+        return newCaptcha;
+    }
+
+    @JsonProperty(value = "new_captcha")
+    public void setNewCaptcha(Boolean newCaptcha){
+        this.newCaptcha = newCaptcha;
+    }
+
+    @JsonProperty(value = "session_id")
+    public String getSessionId(){
+        return sessionId;
+    }
+
+    @JsonProperty(value = "session_id")
+    public void setSessionId(String sessionId){
+        this.sessionId = sessionId;
     }
 
 }

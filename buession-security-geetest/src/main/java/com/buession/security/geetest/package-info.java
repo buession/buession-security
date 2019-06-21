@@ -25,4 +25,4 @@
 /**
  * @author Yong.Teng
  */
-package com.liangvi.security.geetest.core;
+package com.buession.security.geetest;

@@ -22,35 +22,23 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.liangvi.security.geetest.core;
+package com.buession.security.geetest;
 
 /**
  * @author Yong.Teng
  */
-public enum ClientType {
+public class Geetest {
 
-    /**
-     * 电脑上的浏览器
-     */
-    WEB("web"),
+    public final static String NAME = "geetest";
 
-    /**
-     * 手机上的浏览器，包括移动应用内完全内置的 web view
-     */
-    H5("h5"),
+    public final static String VERSION = "4.0";
 
-    /**
-     * 通过原生 SDK 植入 APP 应用的方式
-     */
-    NATIVE("native");
+    public final static String SDK_LANG = "java";
 
-    private String value;
+    public final static String API_BASE_URL = "http://api.geetest.com";
 
-    ClientType(String value){
-        this.value = value;
-    }
+    public final static String REGISTER_URL = "/register.php";
 
-    public String getValue(){
-        return value;
-    }
+    public final static String VALIDATE_URL = "/validate.php";
+
 }

@@ -22,23 +22,7 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.liangvi.security.geetest;
-
 /**
  * @author Yong.Teng
  */
-public class Geetest {
-
-    public final static String NAME = "geetest";
-
-    public final static String VERSION = "4.0";
-
-    public final static String SDK_LANG = "java";
-
-    public final static String API_BASE_URL = "http://api.geetest.com";
-
-    public final static String REGISTER_URL = "/register.php";
-
-    public final static String VALIDATE_URL = "/validate.php";
-
-}
+package com.buession.security.geetest.core;

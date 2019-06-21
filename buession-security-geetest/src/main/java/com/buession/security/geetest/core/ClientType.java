@@ -22,73 +22,35 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.liangvi.security.geetest.core;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.buession.security.geetest.core;
 
 /**
  * @author Yong.Teng
  */
-public class ProcessResult {
+public enum ClientType {
 
-    private boolean success;
+    /**
+     * 电脑上的浏览器
+     */
+    WEB("web"),
 
-    private String gt;
+    /**
+     * 手机上的浏览器，包括移动应用内完全内置的 web view
+     */
+    H5("h5"),
 
-    private String challenge;
+    /**
+     * 通过原生 SDK 植入 APP 应用的方式
+     */
+    NATIVE("native");
 
-    @JsonProperty(value = "new_captcha")
-    private Boolean newCaptcha;
+    private String value;
 
-    @JsonProperty(value = "session_id")
-    private String sessionId;
-
-    public boolean getSuccess(){
-        return success;
+    ClientType(String value){
+        this.value = value;
     }
 
-    public boolean isSuccess(){
-        return getSuccess();
+    public String getValue(){
+        return value;
     }
-
-    public void setSuccess(boolean success){
-        this.success = success;
-    }
-
-    public String getGt(){
-        return gt;
-    }
-
-    public void setGt(String gt){
-        this.gt = gt;
-    }
-
-    public String getChallenge(){
-        return challenge;
-    }
-
-    public void setChallenge(String challenge){
-        this.challenge = challenge;
-    }
-
-    @JsonProperty(value = "new_captcha")
-    public Boolean getNewCaptcha(){
-        return newCaptcha;
-    }
-
-    @JsonProperty(value = "new_captcha")
-    public void setNewCaptcha(Boolean newCaptcha){
-        this.newCaptcha = newCaptcha;
-    }
-
-    @JsonProperty(value = "session_id")
-    public String getSessionId(){
-        return sessionId;
-    }
-
-    @JsonProperty(value = "session_id")
-    public void setSessionId(String sessionId){
-        this.sessionId = sessionId;
-    }
-
 }

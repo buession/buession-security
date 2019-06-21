@@ -22,7 +22,52 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
+package com.buession.security.geetest.core;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * @author Yong.Teng
  */
-package com.liangvi.security.geetest;
+public class RequestData {
+
+    @JsonProperty(value = "user_id")
+    private String userId;
+
+    @JsonProperty(value = "client_type")
+    private ClientType clientType;
+
+    @JsonProperty(value = "ip_address")
+    private String ipAddress;
+
+    @JsonProperty(value = "user_id")
+    public String getUserId(){
+        return userId;
+    }
+
+    @JsonProperty(value = "user_id")
+    public void setUserId(String userId){
+        this.userId = userId;
+    }
+
+    @JsonProperty(value = "client_type")
+    public ClientType getClientType(){
+        return clientType;
+    }
+
+    @JsonProperty(value = "client_type")
+    public void setClientType(ClientType clientType){
+        this.clientType = clientType;
+    }
+
+    @JsonProperty(value = "ip_address")
+    public String getIpAddress(){
+        return ipAddress;
+    }
+
+    @JsonProperty(value = "ip_address")
+    public void setIpAddress(String ipAddress){
+        this.ipAddress = ipAddress;
+    }
+
+}
