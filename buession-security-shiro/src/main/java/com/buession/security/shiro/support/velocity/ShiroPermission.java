@@ -45,13 +45,13 @@ import java.util.Collection;
  */
 @DefaultKey("shiro")
 @ValidScope(Scope.APPLICATION)
-public class Permission {
+public class ShiroPermission {
 
     private final static String ROLE_NAMES_DELIMITER = ",";
 
     private final static String PERMISSION_NAMES_DELIMITER = ",";
 
-    private final static Logger logger = LoggerFactory.getLogger(Permission.class);
+    private final static Logger logger = LoggerFactory.getLogger(ShiroPermission.class);
 
     /**
      * 验证是否为已认证通过的用户，不包含已记住的用户，这是与 isUser 标签方法的区别所在。
