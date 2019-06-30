@@ -212,9 +212,13 @@ public class ShiroPermission {
      * @return 用户是否具有以下任意一个角色
      */
     public boolean hasAnyRoles(Collection<String> roleNames){
+        if(Validate.isEmpty(roleNames)){
+            return false;
+        }
+
         Subject subject = SecurityUtils.getSubject();
 
-        if(subject != null && Validate.isEmpty(roleNames) == false){
+        if(subject != null){
             for(String role : roleNames){
                 if(role != null && subject.hasRole(role.trim()) == true){
                     return true;
@@ -234,9 +238,13 @@ public class ShiroPermission {
      * @return 用户是否具有以下任意一个角色
      */
     public boolean hasAnyRoles(String[] roleNames){
+        if(Validate.isEmpty(roleNames)){
+            return false;
+        }
+
         Subject subject = SecurityUtils.getSubject();
 
-        if(subject != null && Validate.isEmpty(roleNames) == false){
+        if(subject != null){
             for(String role : roleNames){
                 if(role != null && subject.hasRole(role.trim()) == true){
                     return true;
@@ -321,9 +329,13 @@ public class ShiroPermission {
      * @return 用户是否具有以下任意一个权限
      */
     public boolean hasAnyPermissions(Collection<String> permissions){
+        if(Validate.isEmpty(permissions)){
+            return false;
+        }
+
         Subject subject = SecurityUtils.getSubject();
 
-        if(subject != null && Validate.isEmpty(permissions) == false){
+        if(subject != null){
             for(String permission : permissions){
                 if(permission != null && subject.isPermitted(permission.trim()) == true){
                     return true;
@@ -343,9 +355,13 @@ public class ShiroPermission {
      * @return 用户是否具有以下任意一个权限
      */
     public boolean hasAnyPermissions(String[] permissions){
+        if(Validate.isEmpty(permissions)){
+            return false;
+        }
+
         Subject subject = SecurityUtils.getSubject();
 
-        if(subject != null && Validate.isEmpty(permissions) == false){
+        if(subject != null){
             for(String permission : permissions){
                 if(permission != null && subject.isPermitted(permission.trim()) == true){
                     return true;
