@@ -37,4 +37,6 @@ public class Constants {
 
     public final static int MILLISECONDS_IN_A_SECOND = 1000;
 
+    public final static String ALL_PERMISSION = "*:*";
+
 }
