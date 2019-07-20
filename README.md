@@ -3,8 +3,8 @@
 基于 Pac4j、Shiro、Spring Security 和极验的安全类库，封装了多种密码加密方式。
 
 [![Build Status](https://travis-ci.org/buession/buession-security.svg?branch=master)](https://travis-ci.org/buession/buession-security)
-[![Coverage Status](https://img.shields.io/codecov/c/github/buession/buession-security/master.svg)](https://codecov.io/github/buession/buession-security?branch=master&view=all#sort=coverage&dir=asc)  
-[![Maven Central](https://img.shields.io/maven-central/v/com.buession.security/buession-security-core.svg)](https://search.maven.org/search?q=g:%22com.buession.security)
+[![Coverage Status](https://img.shields.io/codecov/c/github/buession/buession-security/master.svg)](https://codecov.io/github/buession/buession-security?branch=master&view=all#sort=coverage&dir=asc)
+[![Maven Central](https://img.shields.io/maven-central/v/com.buession.security/buession-security-core.svg)](https://search.maven.org/search?q=g:com.buession.security)
 [![GitHub release](https://img.shields.io/github/release/buession/buession-security.svg)](https://github.com/buession/buession-security/releases)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
@@ -19,7 +19,7 @@
 
 ## Maven
 
-- https://oss.sonatype.org/#nexus-search;quick~com.buession.security
+- https://search.maven.org/search?q=g:com.buession.security
 
 ## Documentation
 ---
