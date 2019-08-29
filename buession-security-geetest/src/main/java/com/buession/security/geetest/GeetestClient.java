@@ -224,7 +224,6 @@ public class GeetestClient {
 
             logger.debug("Enhenced Validate response: {}", response);
 
-
             ObjectMapper objectMapper = new ObjectMapper();
 
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -296,7 +295,6 @@ public class GeetestClient {
 
             logger.debug("gtServer register challenge success: {} ", response.getBody());
 
-
             ObjectMapper objectMapper = new ObjectMapper();
 
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -310,7 +308,9 @@ public class GeetestClient {
 
             if(processResult.getChallenge().length() == CHALLENGE_LENGTH){
                 final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-                getSuccessPreProcessResult(md5Mcrypt.encode(processResult.getChallenge() + geetestKey));
+
+                this.response = getSuccessPreProcessResult(md5Mcrypt.encode(processResult.getChallenge() + geetestKey));
+
                 return Status.SUCCESS;
             }else{
                 logger.error("gtServer register challenge error");
