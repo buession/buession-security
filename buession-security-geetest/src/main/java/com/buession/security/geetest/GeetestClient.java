@@ -212,7 +212,7 @@ public class GeetestClient {
             return Status.FAILURE;
         }
 
-        if(checkResultByPrivate(challenge, validate) == false){
+        if(checkResultByPrivate(geetestKey, challenge, validate) == false){
             return Status.FAILURE;
         }
 
@@ -234,7 +234,7 @@ public class GeetestClient {
             });
 
             final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-            return md5Mcrypt.encode(seccode).equals(returnMap.get("seccode")) ? Status.SUCCESS : Status.FAILURE;
+            return Status.valueOf(md5Mcrypt.encode(seccode).equals(returnMap.get("seccode")));
         }catch(Exception e){
             logger.error("Enhenced Validate failure: {}", e);
         }
@@ -256,7 +256,7 @@ public class GeetestClient {
      */
     public Status failbackValidateRequest(String challenge, String validate, String seccode){
         logger.debug("in failback validate");
-        return requestIsLegal(challenge, validate, seccode) ? Status.SUCCESS : Status.FAILURE;
+        return Status.valueOf(requestIsLegal(challenge, validate, seccode));
     }
 
     /**
@@ -289,7 +289,7 @@ public class GeetestClient {
         try{
             Response response = httpClient.get(url);
             if(response == null){
-                logger.warn("gtServer register challenge failed");
+                logger.warn("gtServer register challenge failure");
                 return Status.FAILURE;
             }
 
@@ -354,7 +354,7 @@ public class GeetestClient {
         String s2 = md5Mcrypt.encode(random(100));
 
         challenge.append(s1);
-        challenge.append((s2.substring(0, 2)));
+        challenge.append(s2, 0, 2);
 
         ProcessResult processResult = new ProcessResult();
 
@@ -378,12 +378,12 @@ public class GeetestClient {
      *
      * @return 检测结果
      */
-    protected boolean requestIsLegal(String challenge, String validate, String seccode){
-        return Validate.hasText(challenge) == false || Validate.hasText(validate) == false || Validate.hasText
-                (seccode) == false ? false : true;
+    protected final static boolean requestIsLegal(String challenge, String validate, String seccode){
+        return Validate.hasText(challenge) && Validate.hasText(validate) && Validate.hasText(seccode);
     }
 
-    protected boolean checkResultByPrivate(String challenge, String validate){
+    protected final static boolean checkResultByPrivate(final String geetestKey, final String challenge, final String
+            validate){
         final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
         StringBuilder sb = new StringBuilder();
 
