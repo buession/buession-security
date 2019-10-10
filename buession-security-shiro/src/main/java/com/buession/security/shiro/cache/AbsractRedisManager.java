@@ -117,7 +117,7 @@ public abstract class AbsractRedisManager implements RedisManager {
 
     @Override
     public Status delete(byte[]... keys){
-        return redisTemplate.del(keys) > 0 ? Status.SUCCESS : Status.FAILURE;
+        return Status.valueOf(redisTemplate.del(keys) > 0);
     }
 
     @Override

@@ -26,45 +26,30 @@ package com.buession.security.mcrypt;
 
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * @author Yong.Teng
  */
-public class AESMcryptTest {
+public class TempTest {
 
     @Test
-    public void encode(){
-        AESMcrypt aesMcrypt = new AESMcrypt();
-        Map<String, String> data = new LinkedHashMap<>();
+    public void test(){
+        String str = "{\"name\":\"旅途\",\"mobile\":\"588\",\"organization\":\"酷图\",\"mac\":\"a8:c8:3a:3b:9e:e7\"}";
 
-        data.put("ct", "FF");
-        data.put("t", "FF");
-        data.put("v", "V");
-        data.put("callback", "");
-
-        StringBuffer sb = new StringBuffer();
-
-        data.forEach((key, value)->{
-            if(sb.length() > 0){
-                sb.append('&');
-            }
-            sb.append(key);
-            sb.append('=');
-            try{
-                sb.append(URLEncoder.encode(value, StandardCharsets.UTF_8.name()));
-            }catch(UnsupportedEncodingException e){
-                e.printStackTrace();
-            }
-        });
-
-        aesMcrypt.setSalt("^c-d..7890123456");
+        String key = "Rmsb@9dnrUv4bFDM ";
         Base64Mcrypt base64Mcrypt = new Base64Mcrypt();
-        System.out.println(URLEncoder.encode(base64Mcrypt.encode(aesMcrypt.encode(sb.toString()))));
+        AESMcrypt aesMcrypt = new AESMcrypt(StandardCharsets.UTF_8, key);
+
+        String aesResult = aesMcrypt.encode(base64Mcrypt.encode(str));
+        String result = base64Mcrypt.encode(aesResult);
+        System.out.println(aesResult);
+        System.out.println("==================");
+        System.out.println(result);
+
+        result = base64Mcrypt.decode(aesMcrypt.decode(base64Mcrypt.decode(result)));
+        System.out.println("==================");
+        System.out.println(result);
     }
 
 }

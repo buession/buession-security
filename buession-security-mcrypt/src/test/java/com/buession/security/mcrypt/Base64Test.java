@@ -24,47 +24,26 @@
  */
 package com.buession.security.mcrypt;
 
+import org.apache.mina.util.Base64;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * @author Yong.Teng
  */
-public class AESMcryptTest {
+public class Base64Test {
 
     @Test
-    public void encode(){
-        AESMcrypt aesMcrypt = new AESMcrypt();
-        Map<String, String> data = new LinkedHashMap<>();
-
-        data.put("ct", "FF");
-        data.put("t", "FF");
-        data.put("v", "V");
-        data.put("callback", "");
-
-        StringBuffer sb = new StringBuffer();
-
-        data.forEach((key, value)->{
-            if(sb.length() > 0){
-                sb.append('&');
-            }
-            sb.append(key);
-            sb.append('=');
-            try{
-                sb.append(URLEncoder.encode(value, StandardCharsets.UTF_8.name()));
-            }catch(UnsupportedEncodingException e){
-                e.printStackTrace();
-            }
-        });
-
-        aesMcrypt.setSalt("^c-d..7890123456");
+    public void original(){
         Base64Mcrypt base64Mcrypt = new Base64Mcrypt();
-        System.out.println(URLEncoder.encode(base64Mcrypt.encode(aesMcrypt.encode(sb.toString()))));
+        System.out.println(base64Mcrypt.encode("abc中国"));
+    }
+
+    @Test
+    public void mina() throws UnsupportedEncodingException{
+        byte[] temp = Base64.encodeBase64("abc中国".getBytes("utf-8"));
+        System.out.println(new String(temp)); // YWJj5Lit5Zu9
     }
 
 }
