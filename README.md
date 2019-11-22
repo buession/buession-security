@@ -21,6 +21,8 @@
 
 - https://search.maven.org/search?q=g:com.buession.security
 
+- https://mvnrepository.com/search?q=com.buession.security
+
 ## Documentation
 ---
 
