@@ -127,7 +127,7 @@
 		<dependency>
 			<groupId>io.buji</groupId>
 			<artifactId>buji-pac4j</artifactId>
-			<version>4.1.0</version>
+			<version>4.1.1</version>
 		</dependency>
 
 		<dependency>
