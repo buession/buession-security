@@ -23,6 +23,8 @@
  * +-------------------------------------------------------------------------------------------------------+
  */
 /**
+ * 密码生成器
+ *
  * @author Yong.Teng
  */
 package com.buession.security.mcrypt.passwordgenerator;
