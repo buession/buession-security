@@ -35,21 +35,21 @@ public class TempTest {
 
     @Test
     public void test(){
-        String str = "{\"name\":\"旅途\",\"mobile\":\"588\",\"organization\":\"酷图\",\"mac\":\"a8:c8:3a:3b:9e:e7\"}";
+        Sha512Mcrypt sha512Mcrypt = new Sha512Mcrypt(StandardCharsets.UTF_8, "bQbyCowWYouzBVTujmZr");
+        String secret = "e2Sbg68MYBFfn6BEnuSyEhldCB2P1xej1WuLOH5W";
+        String signature = "ND3MahI1e9AB0TDn";
+        long timestamp = 1574776747;
 
-        String key = "Rmsb@9dnrUv4bFDM ";
-        Base64Mcrypt base64Mcrypt = new Base64Mcrypt();
-        AESMcrypt aesMcrypt = new AESMcrypt(StandardCharsets.UTF_8, key);
+        System.out.println(sha512Mcrypt.encode(secret + signature + timestamp));
 
-        String aesResult = aesMcrypt.encode(base64Mcrypt.encode(str));
-        String result = base64Mcrypt.encode(aesResult);
-        System.out.println(aesResult);
-        System.out.println("==================");
-        System.out.println(result);
+        Sha512Mcrypt sha512Mcrypt2 = new Sha512Mcrypt(StandardCharsets.UTF_8);
+        String key2 = "bQbyCowWYouzBVTujmZr";
+        String secret2 = "e2Sbg68MYBFfn6BEnuSyEhldCB2P1xej1WuLOH5W";
+        String signature2 = "ND3MahI1e9AB0TDn";
+        long timestamp2 = 1574776747;
 
-        result = base64Mcrypt.decode(aesMcrypt.decode(base64Mcrypt.decode(result)));
-        System.out.println("==================");
-        System.out.println(result);
+        System.out.println(sha512Mcrypt2.encode(key2 + secret2 + signature2 + timestamp2));
+        System.out.println("");
     }
 
 }
