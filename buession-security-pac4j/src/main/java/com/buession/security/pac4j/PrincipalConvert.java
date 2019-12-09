@@ -25,11 +25,12 @@
 package com.buession.security.pac4j;
 
 import com.buession.security.pac4j.core.UserProfile;
-import io.buji.pac4j.subject.Pac4jPrincipal;
+import com.buession.security.pac4j.subject.Pac4jPrincipal;
 import org.pac4j.core.profile.CommonProfile;
 
 import java.security.Principal;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * @author Yong.Teng
@@ -47,12 +48,13 @@ public class PrincipalConvert<I> {
 
         Pac4jPrincipal pac4jPrincipal = (Pac4jPrincipal) principal;
 
-        CommonProfile profile = pac4jPrincipal.getProfile();
+        Optional<CommonProfile> optional = pac4jPrincipal.getProfile();
 
-        if(profile == null){
+        if(optional == null){
             return null;
         }
 
+        final CommonProfile profile = optional.get();
         final UserProfile<I> user = new UserProfile<>();
 
         Object id = profile.getAttribute("id");

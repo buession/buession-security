@@ -125,12 +125,6 @@
 		<!-- pac4j end -->
 
 		<dependency>
-			<groupId>io.buji</groupId>
-			<artifactId>buji-pac4j</artifactId>
-			<version>4.1.1</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-core</artifactId>
 		</dependency>
@@ -156,6 +150,13 @@
 			<groupId>org.jasig.cas.client</groupId>
 			<artifactId>cas-client-support-saml</artifactId>
 			<version>${cas.client.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<scope>compile</scope>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>
