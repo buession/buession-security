@@ -215,10 +215,10 @@ public final class AESMcrypt extends AbstractMcrypt {
     }
 
     private final Key getKey(){
-        StringBuffer sb = new StringBuffer();
         String salt = getSalt();
-
         int saltLength = salt.length();
+        StringBuffer sb = new StringBuffer(saltLength * 2);
+
         if(saltLength < KEY_LENGTH){
             sb.append(salt);
             for(int i = 1; i <= KEY_LENGTH - saltLength; i++){

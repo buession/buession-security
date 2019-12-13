@@ -108,7 +108,8 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
         s = StringUtils.repeat('0', 10) + StringUtils.substr(md5(s + keya), 0, 16) + s;
         s = StringUtils.replace(base64Mcrypt.encode(mod(s, keyc)), "=", "");
 
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer(keyb.length() + s.length());
+
         sb.append(keyb);
         sb.append(s);
 
@@ -163,8 +164,8 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
     }
 
     private final static String mod(final String str, final String key){
-        StringBuilder sb = new StringBuilder();
         int strLength = str.length();
+        StringBuffer sb = new StringBuffer(strLength);
 
         for(int i = 0; i < strLength; i++){
             int j = (int) str.charAt(i);
@@ -179,7 +180,8 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
     private final static String microtime(){
         long timestamp = System.currentTimeMillis();
 
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer(24);
+
         sb.append(timestamp / 1000);
         sb.append('.');
         sb.append(timestamp % 1000 * 1000);

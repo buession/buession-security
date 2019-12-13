@@ -24,7 +24,6 @@
  */
 package com.buession.security.pac4j.filter;
 
-import com.buession.security.pac4j.context.ShiroSessionStore;
 import com.buession.security.pac4j.engine.ShiroSecurityLogic;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.JEEContext;
@@ -114,13 +113,12 @@ public class SecurityFilter extends AbstractPac4jFilter {
 
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
-        final SessionStore<JEEContext> sessionStore = getConfig().getSessionStore();
-        final JEEContext context = new JEEContext(request, response, sessionStore != null ? sessionStore :
-                ShiroSessionStore.INSTANCE);
+        final SessionStore<JEEContext> sessionStore = getSessionStore();
+        final JEEContext context = new JEEContext(request, response, sessionStore);
 
         securityLogic.perform(context, getConfig(), (ctx, profiles, parameters)->{
             filterChain.doFilter(request, response);
-            return null;
+            return ctx;
 
         }, JEEHttpActionAdapter.INSTANCE, getClients(), getAuthorizers(), getMatchers(), getMultiProfile());
     }

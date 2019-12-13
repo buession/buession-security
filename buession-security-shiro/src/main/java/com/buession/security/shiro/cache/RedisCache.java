@@ -286,13 +286,13 @@ public class RedisCache<K, V> implements Cache<K, V> {
     }
 
     private final static String joinRealmNames(List<String> realms){
-        StringBuilder redisKeyBuilder = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
 
         for(String realm : realms){
-            redisKeyBuilder.append(realm);
+            sb.append(realm);
         }
 
-        return redisKeyBuilder.toString();
+        return sb.toString();
     }
 
 }

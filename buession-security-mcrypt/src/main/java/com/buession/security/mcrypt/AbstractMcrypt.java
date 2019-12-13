@@ -379,7 +379,7 @@ public abstract class AbstractMcrypt implements Mcrypt {
      * @return formatted string
      */
     private static String getFormattedText(byte[] bytes){
-        final StringBuilder buffer = new StringBuilder(bytes.length * 2);
+        final StringBuffer buffer = new StringBuffer(bytes.length * 2);
 
         for(int j = 0; j < bytes.length; j++){
             buffer.append(HEX_DIGITS[(bytes[j] >> 4) & 0x0f]);

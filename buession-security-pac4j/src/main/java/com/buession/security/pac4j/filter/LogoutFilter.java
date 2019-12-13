@@ -24,7 +24,6 @@
  */
 package com.buession.security.pac4j.filter;
 
-import com.buession.security.pac4j.context.ShiroSessionStore;
 import com.buession.security.pac4j.profile.ShiroProfileManager;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.JEEContext;
@@ -117,12 +116,11 @@ public class LogoutFilter extends AbstractPac4jFilter {
 
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
-        final SessionStore<JEEContext> sessionStore = getConfig().getSessionStore();
-        final JEEContext context = new JEEContext(request, response, sessionStore != null ? sessionStore :
-                ShiroSessionStore.INSTANCE);
+        final SessionStore<JEEContext> sessionStore = getSessionStore();
+        final JEEContext context = new JEEContext(request, response, sessionStore);
 
         logoutLogic.perform(context, getConfig(), JEEHttpActionAdapter.INSTANCE, getDefaultUrl(), getLogoutUrlPattern
-                (), getLocalLogout(), false, getCentralLogout());
+                (), getLocalLogout(), true, getCentralLogout());
     }
 
 }

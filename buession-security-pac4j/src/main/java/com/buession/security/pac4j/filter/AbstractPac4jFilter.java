@@ -24,7 +24,10 @@
  */
 package com.buession.security.pac4j.filter;
 
+import com.buession.security.pac4j.context.ShiroSessionStore;
 import org.pac4j.core.config.Config;
+import org.pac4j.core.context.JEEContext;
+import org.pac4j.core.context.session.SessionStore;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
@@ -58,6 +61,11 @@ public abstract class AbstractPac4jFilter implements Filter {
 
     @Override
     public void destroy(){
+    }
+
+    protected SessionStore<JEEContext> getSessionStore(){
+        final SessionStore<JEEContext> sessionStore = getConfig().getSessionStore();
+        return sessionStore == null ? ShiroSessionStore.INSTANCE : sessionStore;
     }
 
 }

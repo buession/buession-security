@@ -349,7 +349,7 @@ public class GeetestClient {
      */
     protected ProcessResult getFailPreProcessResult(){
         final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-        StringBuilder challenge = new StringBuilder();
+        StringBuffer challenge = new StringBuffer();
         String s1 = md5Mcrypt.encode(random(100));
         String s2 = md5Mcrypt.encode(random(100));
 
@@ -385,7 +385,7 @@ public class GeetestClient {
     protected final static boolean checkResultByPrivate(final String geetestKey, final String challenge, final String
             validate){
         final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-        StringBuilder sb = new StringBuilder();
+        final StringBuffer sb = new StringBuffer();
 
         sb.append(geetestKey);
         sb.append(Geetest.NAME);
@@ -402,7 +402,8 @@ public class GeetestClient {
 
         public final static String buildRegisterUrl(final String geetestId, final ClientType clientType, final String
                 userId, final String ip){
-            StringBuilder sb = new StringBuilder();
+            final StringBuffer sb = new StringBuffer(Geetest.API_BASE_URL.length() + Geetest.REGISTER_URL.length() +
+                    geetestId.length() + 24);
 
             sb.append(Geetest.API_BASE_URL);
             sb.append(Geetest.REGISTER_URL);
@@ -430,7 +431,7 @@ public class GeetestClient {
         }
 
         public final static String buildValidateUrl(){
-            StringBuilder sb = new StringBuilder();
+            StringBuffer sb = new StringBuffer(Geetest.API_BASE_URL.length() + Geetest.VALIDATE_URL.length());
 
             sb.append(Geetest.API_BASE_URL);
             sb.append(Geetest.VALIDATE_URL);

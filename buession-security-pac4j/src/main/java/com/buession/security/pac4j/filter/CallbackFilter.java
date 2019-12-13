@@ -24,7 +24,6 @@
  */
 package com.buession.security.pac4j.filter;
 
-import com.buession.security.pac4j.context.ShiroSessionStore;
 import com.buession.security.pac4j.engine.ShiroCallbackLogic;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.JEEContext;
@@ -125,9 +124,8 @@ public class CallbackFilter extends AbstractPac4jFilter {
 
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
-        final SessionStore<JEEContext> sessionStore = getConfig().getSessionStore();
-        final JEEContext context = new JEEContext(request, response, sessionStore != null ? sessionStore :
-                ShiroSessionStore.INSTANCE);
+        final SessionStore<JEEContext> sessionStore = getSessionStore();
+        final JEEContext context = new JEEContext(request, response, sessionStore);
         final HttpActionAdapter<Object, JEEContext> adapter = httpActionAdapter != null ? httpActionAdapter :
                 JEEHttpActionAdapter.INSTANCE;
 
