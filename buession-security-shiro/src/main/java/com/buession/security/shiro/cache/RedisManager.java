@@ -24,7 +24,7 @@
  */
 package com.buession.security.shiro.cache;
 
-import com.buession.core.Status;
+import com.buession.lang.Status;
 
 import java.util.Set;
 

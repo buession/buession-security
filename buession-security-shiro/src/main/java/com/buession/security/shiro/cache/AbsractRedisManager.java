@@ -24,9 +24,9 @@
  */
 package com.buession.security.shiro.cache;
 
-import com.buession.core.Status;
 import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
+import com.buession.lang.Status;
 import com.buession.redis.Constants;
 import com.buession.redis.RedisTemplate;
 import com.buession.redis.client.RedisClient;

@@ -24,10 +24,10 @@
  */
 package com.buession.security.geetest;
 
-import com.buession.core.Status;
 import com.buession.core.validator.Validate;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
+import com.buession.lang.Status;
 import com.buession.security.geetest.core.ClientType;
 import com.buession.security.mcrypt.MD5Mcrypt;
 import com.fasterxml.jackson.core.type.TypeReference;

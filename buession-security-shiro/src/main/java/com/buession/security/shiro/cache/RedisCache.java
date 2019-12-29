@@ -275,14 +275,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     }
 
     private final static List<String> getRealmNames(PrincipalCollection key){
-        List<String> realms = new ArrayList<>();
-
-        Set<String> realmNames = key.getRealmNames();
-        for(String realmName : realmNames){
-            realms.add(realmName);
-        }
-
-        return realms;
+        return new ArrayList<>(key.getRealmNames());
     }
 
     private final static String joinRealmNames(List<String> realms){
