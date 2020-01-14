@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.core;
@@ -33,30 +33,30 @@ import com.buession.core.validator.Validate;
  */
 public class Desensitization {
 
-    /**
-     * 多字符串进行脱敏处理
-     *
-     * @param str
-     *         字符串
-     * @param length
-     *         隐藏字符串长度
-     *
-     * @return 脱敏后的字符串
-     */
-    public final static String encode(final String str, final int length){
-        if(Validate.isEmpty(str)){
-            return str;
-        }else{
-            int start = (str.length() - length) / 2;
-            int end = start + length;
-            char[] result = new char[str.length()];
+	/**
+	 * 多字符串进行脱敏处理
+	 *
+	 * @param str
+	 * 		字符串
+	 * @param length
+	 * 		隐藏字符串长度
+	 *
+	 * @return 脱敏后的字符串
+	 */
+	public final static String encode(final String str, final int length){
+		if(Validate.isEmpty(str)){
+			return str;
+		}else{
+			int start = (str.length() - length) / 2;
+			int end = start + length;
+			char[] result = new char[str.length()];
 
-            for(int i = 0; i < str.length(); i++){
-                result[i] = i >= start && i < end ? '*' : str.charAt(i);
-            }
+			for(int i = 0, l = str.length(); i < l; i++){
+				result[i] = i >= start && i < end ? '*' : str.charAt(i);
+			}
 
-            return new String(result);
-        }
-    }
+			return new String(result);
+		}
+	}
 
 }

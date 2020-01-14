@@ -19,12 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.serializer;
 
-import com.buession.core.exception.SerializationException;
+import com.buession.core.serializer.SerializerException;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -34,23 +34,24 @@ import java.nio.charset.StandardCharsets;
  */
 public class StringSerializer implements RedisSerializer<String> {
 
-    private Charset charset = StandardCharsets.UTF_8;
+	private Charset charset = StandardCharsets.UTF_8;
 
-    public Charset getCharset(){
-        return charset;
-    }
+	public Charset getCharset(){
+		return charset;
+	}
 
-    public void setCharset(Charset charset){
-        this.charset = charset;
-    }
+	public void setCharset(Charset charset){
+		this.charset = charset;
+	}
 
-    @Override
-    public byte[] serialize(String v) throws SerializationException{
-        return (v == null ? null : v.getBytes(charset));
-    }
+	@Override
+	public byte[] serialize(String v) throws SerializerException{
+		return (v == null ? null : v.getBytes(charset));
+	}
 
-    @Override
-    public String deserialize(byte[] bytes) throws SerializationException{
-        return (bytes == null ? null : new String(bytes, charset));
-    }
+	@Override
+	public String deserialize(byte[] bytes) throws SerializerException{
+		return (bytes == null ? null : new String(bytes, charset));
+	}
+
 }

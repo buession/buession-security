@@ -19,20 +19,20 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.serializer;
 
-import com.buession.core.exception.SerializationException;
+import com.buession.core.serializer.SerializerException;
 
 /**
  * @author Yong.Teng
  */
 public interface RedisSerializer<V> {
 
-    byte[] serialize(V v) throws SerializationException;
+	byte[] serialize(V v) throws SerializerException;
 
-    V deserialize(byte[] bytes) throws SerializationException;
+	V deserialize(byte[] bytes) throws SerializerException;
 
 }

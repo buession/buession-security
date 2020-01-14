@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.geetest;
@@ -29,16 +29,16 @@ package com.buession.security.geetest;
  */
 public class Geetest {
 
-    public final static String NAME = "geetest";
+	public final static String NAME = "geetest";
 
-    public final static String VERSION = "4.0";
+	public final static String VERSION = "4.0";
 
-    public final static String SDK_LANG = "java";
+	public final static String SDK_LANG = "java";
 
-    public final static String API_BASE_URL = "http://api.geetest.com";
+	public final static String API_BASE_URL = "http://api.geetest.com";
 
-    public final static String REGISTER_URL = "/register.php";
+	public final static String REGISTER_URL = API_BASE_URL + "/register.php";
 
-    public final static String VALIDATE_URL = "/validate.php";
+	public final static String VALIDATE_URL = API_BASE_URL + "/validate.php";
 
 }
