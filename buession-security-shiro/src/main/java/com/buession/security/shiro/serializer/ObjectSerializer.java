@@ -33,15 +33,15 @@ import com.buession.core.serializer.SerializerException;
  */
 public class ObjectSerializer implements RedisSerializer<Object> {
 
-	private final static ByteArraySerializer serialize = new DefaultByteArraySerializer();
-
 	@Override
 	public byte[] serialize(Object object) throws SerializerException{
+		ByteArraySerializer serialize = new DefaultByteArraySerializer();
 		return serialize.serializeAsBytes(object);
 	}
 
 	@Override
 	public Object deserialize(byte[] bytes) throws SerializerException{
+		ByteArraySerializer serialize = new DefaultByteArraySerializer();
 		return serialize.unserialize(bytes);
 	}
 

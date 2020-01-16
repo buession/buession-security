@@ -19,12 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.cache;
 
-import com.buession.core.exception.SerializationException;
+import com.buession.core.serializer.SerializerException;
 import com.buession.core.validator.Validate;
 import com.buession.security.shiro.Constants;
 import com.buession.security.shiro.serializer.ObjectSerializer;
@@ -115,7 +115,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
                     sessions.add(session);
                 }
             }
-        }catch(SerializationException e){
+        }catch(SerializerException e){
             logger.error("get active sessions error.");
         }
         return sessions;
@@ -135,7 +135,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 
         try{
             redisManager.delete(getSessionKey(session.getId()));
-        }catch(SerializationException e){
+        }catch(SerializerException e){
             logger.error("delete session error: {}. session id: {}", e.getMessage(), session.getId());
         }
     }
@@ -173,7 +173,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
         try{
             session = (Session) valueSerializer.deserialize(redisManager.get(getSessionKey(sessionId)));
             setSessionToThreadLocal(sessionId, session);
-        }catch(SerializationException e){
+        }catch(SerializerException e){
             logger.error("read session error: {}. session id: {}", e.getMessage(), sessionId);
         }
 
@@ -196,7 +196,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
         try{
             key = getSessionKey(session.getId());
             value = valueSerializer.serialize(session);
-        }catch(SerializationException e){
+        }catch(SerializerException e){
             logger.error("serialize session error: {}. session id: {}", e.getMessage(), session.getId());
             throw new UnknownSessionException(e);
         }
@@ -245,7 +245,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
         sessionMap.put(sessionId, sessionInMemory);
     }
 
-    private byte[] getSessionKey(Serializable sessionId) throws SerializationException{
+    private byte[] getSessionKey(Serializable sessionId) throws SerializerException{
         final String key = keyPrefix == null ? sessionId.toString() : keyPrefix + sessionId;
         return keySerializer.serialize(key);
     }
