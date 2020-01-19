@@ -25,6 +25,7 @@
 package com.buession.security.shiro.cache;
 
 import com.buession.core.serializer.SerializerException;
+import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
 import com.buession.security.shiro.Constants;
 import com.buession.security.shiro.serializer.ObjectSerializer;
@@ -41,6 +42,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Yong.Teng
@@ -73,9 +75,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	}
 
 	public void setRedisManager(final RedisManager redisManager){
-		if(redisManager == null){
-			throw new IllegalArgumentException("RedisManager could not be null.");
-		}
+		Assert.isNull(redisManager, "RedisManager could not be null.");
 		this.redisManager = redisManager;
 	}
 
@@ -98,10 +98,10 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	@Override
 	public Set<K> keys(){
 		logger.debug("Get RedisCache Keys");
-		Set<byte[]> keys = null;
+		Set<byte[]> keys;
 
 		try{
-			byte[] pattern = keySerializer.serialize((keyPrefix == null ? "" : keyPrefix) + "*");
+			byte[] pattern = keySerializer.serialize(makeKey("*"));
 			keys = redisManager.keys(pattern);
 		}catch(SerializerException e){
 			logger.error("Get cache keys error", e);
@@ -133,7 +133,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		}
 
 		try{
-			return (V) valueSerializer.deserialize(redisManager.get(makeKey(key)));
+			return (V) valueSerializer.deserialize(redisManager.get(buildKey(key)));
 		}catch(SerializerException e){
 			logger.error("Get cache error", e);
 			throw new CacheException(e);
@@ -149,7 +149,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		}
 
 		try{
-			redisManager.set(makeKey(key), valueSerializer.serialize(value), expire);
+			redisManager.set(buildKey(key), valueSerializer.serialize(value), expire);
 			return value;
 		}catch(SerializerException e){
 			logger.error("Put cache error", e);
@@ -165,7 +165,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		}
 
 		try{
-			byte[] cacheKey = makeKey(key);
+			byte[] cacheKey = buildKey(key);
 			byte[] rawValue = redisManager.get(cacheKey);
 			V previous = (V) valueSerializer.deserialize(rawValue);
 
@@ -184,7 +184,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		Set<byte[]> keys = null;
 
 		try{
-			byte[] pattern = keySerializer.serialize((keyPrefix == null ? "" : keyPrefix) + "*");
+			byte[] pattern = keySerializer.serialize(makeKey("*"));
 			keys = redisManager.keys(pattern);
 		}catch(SerializerException e){
 			logger.error("Clear cache keys failure", e);
@@ -210,10 +210,10 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	@Override
 	public Collection<V> values(){
 		logger.debug("Get RedisCache Values");
-		Set<byte[]> keys = null;
+		Set<byte[]> keys;
 
 		try{
-			byte[] pattern = keySerializer.serialize((keyPrefix == null ? "" : keyPrefix) + "*");
+			byte[] pattern = keySerializer.serialize(makeKey("*"));
 			keys = redisManager.keys(pattern);
 		}catch(SerializerException e){
 			logger.error("Get cache values error", e);
@@ -237,24 +237,22 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		return Collections.unmodifiableList(values);
 	}
 
-	protected final byte[] makeKey(K key) throws SerializerException{
+	protected final byte[] buildKey(K key) throws SerializerException{
 		if(key == null){
 			return null;
 		}
 
-		Object redisKey = key;
+		String redisKey;
 		if(this.keySerializer instanceof StringSerializer){
 			redisKey = getStringRedisKey(key);
-		}
-
-		if(!(redisKey instanceof String)){
+		}else{
 			redisKey = key.toString();
 		}
 
-		return keySerializer.serialize((keyPrefix == null ? "" : keyPrefix) + redisKey);
+		return keySerializer.serialize(makeKey(redisKey));
 	}
 
-	private Object getStringRedisKey(K key){
+	protected String getStringRedisKey(K key){
 		String redisKey;
 
 		if(key instanceof PrincipalCollection){
@@ -266,24 +264,30 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		return redisKey;
 	}
 
-	private final static String getRedisKeyFromPrincipalCollection(PrincipalCollection key){
+	protected static String getRedisKeyFromPrincipalCollection(PrincipalCollection key){
 		List<String> realmNames = getRealmNames(key);
 		Collections.sort(realmNames);
 		return joinRealmNames(realmNames);
 	}
 
-	private final static List<String> getRealmNames(PrincipalCollection key){
+	protected static List<String> getRealmNames(PrincipalCollection key){
 		return new ArrayList<>(key.getRealmNames());
 	}
 
-	private final static String joinRealmNames(List<String> realms){
-		StringBuilder sb = new StringBuilder();
+	protected static String joinRealmNames(List<String> realms){
+		return realms.stream().collect(Collectors.joining(""));
+	}
 
-		for(String realm : realms){
-			sb.append(realm);
+	protected String makeKey(final String key){
+		if(keyPrefix == null){
+			return key;
+		}else{
+			StringBuilder sb = new StringBuilder();
+
+			sb.append(keyPrefix).append(key);
+
+			return sb.toString();
 		}
-
-		return sb.toString();
 	}
 
 }

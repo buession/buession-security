@@ -25,6 +25,7 @@
 package com.buession.security.shiro.cache;
 
 import com.buession.core.serializer.SerializerException;
+import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
 import com.buession.security.shiro.Constants;
 import com.buession.security.shiro.serializer.ObjectSerializer;
@@ -48,206 +49,220 @@ import java.util.Set;
  */
 public class RedisSessionDAO extends AbstractSessionDAO {
 
-    private final static StringSerializer keySerializer = new StringSerializer();
+	private final static StringSerializer keySerializer = new StringSerializer();
 
-    private final static ObjectSerializer valueSerializer = new ObjectSerializer();
+	private final static ObjectSerializer valueSerializer = new ObjectSerializer();
 
-    private RedisManager redisManager;
+	private RedisManager redisManager;
 
-    private String keyPrefix = Constants.DEFAULT_KEY_PREFIX;
+	private String keyPrefix = Constants.DEFAULT_KEY_PREFIX;
 
-    private int expire = Constants.DEFAULT_EXPIRE;
+	private int expire = Constants.DEFAULT_EXPIRE;
 
-    private long sessionInMemoryTimeout = Constants.DEFAULT_SESSION_IN_MEMORY_TIMEOUT;
+	private long sessionInMemoryTimeout = Constants.DEFAULT_SESSION_IN_MEMORY_TIMEOUT;
 
-    private static ThreadLocal<Map<Serializable, SessionInMemory>> sessionsInThread = new ThreadLocal<>();
+	private static ThreadLocal<Map<Serializable, SessionInMemory>> sessionsInThread = new ThreadLocal<>();
 
-    private final static Logger logger = LoggerFactory.getLogger(RedisSessionDAO.class);
+	private final static Logger logger = LoggerFactory.getLogger(RedisSessionDAO.class);
 
-    public RedisSessionDAO(){
-    }
+	public RedisSessionDAO(){
+	}
 
-    public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire){
-        setRedisManager(redisManager);
-        this.keyPrefix = keyPrefix;
-        this.expire = expire;
-    }
+	public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire){
+		setRedisManager(redisManager);
+		this.keyPrefix = keyPrefix;
+		this.expire = expire;
+	}
 
-    public RedisManager getRedisManager(){
-        return redisManager;
-    }
+	public RedisManager getRedisManager(){
+		return redisManager;
+	}
 
-    public void setRedisManager(RedisManager redisManager){
-        if(redisManager == null){
-            throw new IllegalArgumentException("RedisManager could not be null.");
-        }
-        this.redisManager = redisManager;
-    }
+	public void setRedisManager(RedisManager redisManager){
+		Assert.isNull(redisManager, "RedisManager could not be null.");
+		this.redisManager = redisManager;
+	}
 
-    public String getKeyPrefix(){
-        return keyPrefix;
-    }
+	public String getKeyPrefix(){
+		return keyPrefix;
+	}
 
-    public void setKeyPrefix(String keyPrefix){
-        this.keyPrefix = keyPrefix;
-    }
+	public void setKeyPrefix(String keyPrefix){
+		this.keyPrefix = keyPrefix;
+	}
 
-    public int getExpire(){
-        return expire;
-    }
+	public int getExpire(){
+		return expire;
+	}
 
-    public void setExpire(final int expire){
-        this.expire = expire;
-    }
+	public void setExpire(final int expire){
+		this.expire = expire;
+	}
 
-    @Override
-    public Collection<Session> getActiveSessions(){
-        Set<Session> sessions = new HashSet<>();
-        byte[] pattern;
+	@Override
+	public Collection<Session> getActiveSessions(){
+		Set<Session> sessions = new HashSet<>();
+		byte[] pattern;
 
-        try{
-            pattern = keySerializer.serialize(keyPrefix == null ? "*" : keyPrefix + "*");
-            Set<byte[]> keys = redisManager.keys(pattern);
+		try{
+			pattern = keySerializer.serialize(makeKey("*"));
+			Set<byte[]> keys = redisManager.keys(pattern);
 
-            if(Validate.isEmpty(keys) == false){
-                for(byte[] key : keys){
-                    Session session = (Session) valueSerializer.deserialize(redisManager.get(key));
-                    sessions.add(session);
-                }
-            }
-        }catch(SerializerException e){
-            logger.error("get active sessions error.");
-        }
-        return sessions;
-    }
+			if(Validate.isEmpty(keys) == false){
+				for(byte[] key : keys){
+					Session session = (Session) valueSerializer.deserialize(redisManager.get(key));
+					sessions.add(session);
+				}
+			}
+		}catch(SerializerException e){
+			logger.error("get active sessions error.");
+		}
+		return sessions;
+	}
 
-    @Override
-    public void update(Session session) throws UnknownSessionException{
-        saveSession(session);
-    }
+	@Override
+	public void update(Session session) throws UnknownSessionException{
+		saveSession(session);
+	}
 
-    @Override
-    public void delete(Session session){
-        if(session == null || session.getId() == null){
-            logger.error("session or session id is null");
-            return;
-        }
+	@Override
+	public void delete(Session session){
+		if(session == null || session.getId() == null){
+			logger.error("session or session id is null");
+			return;
+		}
 
-        try{
-            redisManager.delete(getSessionKey(session.getId()));
-        }catch(SerializerException e){
-            logger.error("delete session error: {}. session id: {}", e.getMessage(), session.getId());
-        }
-    }
+		try{
+			redisManager.delete(getSessionKey(session.getId()));
+		}catch(SerializerException e){
+			logger.error("delete session error: {}. session id: {}", e.getMessage(), session.getId());
+		}
+	}
 
-    @Override
-    protected Serializable doCreate(Session session){
-        if(session == null){
-            logger.error("session is null");
-            throw new UnknownSessionException("session is null");
-        }
+	@Override
+	protected Serializable doCreate(Session session){
+		if(session == null){
+			logger.error("session is null");
+			throw new UnknownSessionException("session is null");
+		}
 
-        Serializable sessionId = generateSessionId(session);
+		Serializable sessionId = generateSessionId(session);
 
-        assignSessionId(session, sessionId);
-        saveSession(session);
+		assignSessionId(session, sessionId);
+		saveSession(session);
 
-        return sessionId;
-    }
+		return sessionId;
+	}
 
-    @Override
-    protected Session doReadSession(Serializable sessionId){
-        if(sessionId == null){
-            logger.error("session id is null");
-            return null;
-        }
+	@Override
+	protected Session doReadSession(Serializable sessionId){
+		if(sessionId == null){
+			logger.error("session id is null");
+			return null;
+		}
 
-        Session session = getSessionFromThreadLocal(sessionId);
+		Session session = getSessionFromThreadLocal(sessionId);
 
-        if(session != null){
-            return session;
-        }
+		if(session != null){
+			return session;
+		}
 
-        logger.debug("Read session from redis");
+		logger.debug("Read session from redis");
 
-        try{
-            session = (Session) valueSerializer.deserialize(redisManager.get(getSessionKey(sessionId)));
-            setSessionToThreadLocal(sessionId, session);
-        }catch(SerializerException e){
-            logger.error("read session error: {}. session id: {}", e.getMessage(), sessionId);
-        }
+		try{
+			byte[] value = redisManager.get(getSessionKey(sessionId));
 
-        return session;
-    }
+			if(value != null){
+				session = (Session) valueSerializer.deserialize(value);
+				setSessionToThreadLocal(sessionId, session);
+			}
+		}catch(SerializerException e){
+			logger.error("read session error: {}. session id: {}", e.getMessage(), sessionId);
+		}
 
-    private void saveSession(Session session) throws UnknownSessionException{
-        if(session == null || session.getId() == null){
-            logger.error("session or session id is null");
-            throw new UnknownSessionException("session or session id is null");
-        }
+		return session;
+	}
 
-        if(expire * Constants.MILLISECONDS_IN_A_SECOND < session.getTimeout()){
-            logger.warn("Redis session expire time: {} is less than Session timeout: {}. It may cause some problems"
-                    + ".", expire * Constants.MILLISECONDS_IN_A_SECOND, session.getTimeout());
-        }
+	protected void saveSession(Session session) throws UnknownSessionException{
+		if(session == null || session.getId() == null){
+			logger.error("session or session id is null");
+			throw new UnknownSessionException("session or session id is null");
+		}
 
-        byte[] key;
-        byte[] value;
-        try{
-            key = getSessionKey(session.getId());
-            value = valueSerializer.serialize(session);
-        }catch(SerializerException e){
-            logger.error("serialize session error: {}. session id: {}", e.getMessage(), session.getId());
-            throw new UnknownSessionException(e);
-        }
+		final long timeout = expire * Constants.MILLISECONDS_IN_A_SECOND;
+		if(timeout < session.getTimeout()){
+			logger.warn("Read session expire time: {} is less than Session timeout: {}. It may cause some problems" +
+					".", timeout, session.getTimeout());
+		}
 
-        //session.setTimeout(expire * Constants.MILLISECONDS_IN_A_SECOND);
-        redisManager.set(key, value, expire);
-    }
+		byte[] key;
+		byte[] value;
 
-    private Session getSessionFromThreadLocal(Serializable sessionId){
-        Session s = null;
+		try{
+			key = getSessionKey(session.getId());
+			value = valueSerializer.serialize(session);
+		}catch(SerializerException e){
+			logger.error("serialize session error: {}. session id: {}", e.getMessage(), session.getId());
+			throw new UnknownSessionException(e);
+		}
 
-        if(sessionsInThread.get() == null){
-            return null;
-        }
+		//session.setTimeout(expire * Constants.MILLISECONDS_IN_A_SECOND);
+		redisManager.set(key, value, expire);
+	}
 
-        Map<Serializable, SessionInMemory> sessionMap = sessionsInThread.get();
-        SessionInMemory sessionInMemory = sessionMap.get(sessionId);
-        if(sessionInMemory == null){
-            return null;
-        }
+	protected Session getSessionFromThreadLocal(Serializable sessionId){
+		Session s = null;
 
-        Date now = new Date();
-        long duration = now.getTime() - sessionInMemory.getCreateTime().getTime();
+		if(sessionsInThread.get() == null){
+			return null;
+		}
 
-        if(duration < sessionInMemoryTimeout){
-            s = sessionInMemory.getSession();
-            logger.debug("read session from memory");
-        }else{
-            sessionMap.remove(sessionId);
-        }
+		Map<Serializable, SessionInMemory> sessionMap = sessionsInThread.get();
+		SessionInMemory sessionInMemory = sessionMap.get(sessionId);
+		if(sessionInMemory == null){
+			return null;
+		}
 
-        return s;
-    }
+		long duration = System.currentTimeMillis() - sessionInMemory.getCreateTime().getTime();
 
-    private void setSessionToThreadLocal(Serializable sessionId, Session session){
-        Map<Serializable, SessionInMemory> sessionMap = sessionsInThread.get();
-        if(sessionMap == null){
-            sessionMap = new HashMap<>(16);
-            sessionsInThread.set(sessionMap);
-        }
+		if(duration < sessionInMemoryTimeout){
+			s = sessionInMemory.getSession();
+			logger.debug("read session from memory");
+		}else{
+			sessionMap.remove(sessionId);
+		}
 
-        SessionInMemory sessionInMemory = new SessionInMemory();
-        sessionInMemory.setCreateTime(new Date());
-        sessionInMemory.setSession(session);
+		return s;
+	}
 
-        sessionMap.put(sessionId, sessionInMemory);
-    }
+	protected void setSessionToThreadLocal(Serializable sessionId, Session session){
+		Map<Serializable, SessionInMemory> sessionMap = sessionsInThread.get();
+		if(sessionMap == null){
+			sessionMap = new HashMap<>(32, 0.8F);
+			sessionsInThread.set(sessionMap);
+		}
 
-    private byte[] getSessionKey(Serializable sessionId) throws SerializerException{
-        final String key = keyPrefix == null ? sessionId.toString() : keyPrefix + sessionId;
-        return keySerializer.serialize(key);
-    }
+		SessionInMemory sessionInMemory = new SessionInMemory();
+		sessionInMemory.setCreateTime(new Date());
+		sessionInMemory.setSession(session);
+
+		sessionMap.put(sessionId, sessionInMemory);
+	}
+
+	protected byte[] getSessionKey(Serializable sessionId) throws SerializerException{
+		return keySerializer.serialize(makeKey(sessionId.toString()));
+	}
+
+	protected String makeKey(final String key){
+		if(keyPrefix == null){
+			return key;
+		}else{
+			StringBuilder sb = new StringBuilder();
+
+			sb.append(keyPrefix).append(key);
+
+			return sb.toString();
+		}
+	}
 
 }

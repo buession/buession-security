@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.cache;
@@ -37,59 +37,72 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class RedisCacheManager implements CacheManager {
 
-    private final ConcurrentMap<String, Cache> caches = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, Cache> caches = new ConcurrentHashMap<>(64, 0.8F);
 
-    private RedisManager redisManager;
+	private RedisManager redisManager;
 
-    private String keyPrefix = Constants.DEFAULT_KEY_PREFIX;
+	private String keyPrefix = Constants.DEFAULT_KEY_PREFIX;
 
-    private int expire = Constants.DEFAULT_EXPIRE;
+	private int expire = Constants.DEFAULT_EXPIRE;
 
-    public RedisCacheManager(){
-    }
+	public RedisCacheManager(){
+	}
 
-    public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire){
-        setRedisManager(redisManager);
-        this.keyPrefix = keyPrefix;
-        this.expire = expire;
-    }
+	public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire){
+		setRedisManager(redisManager);
+		this.keyPrefix = keyPrefix;
+		this.expire = expire;
+	}
 
-    public RedisManager getRedisManager(){
-        return redisManager;
-    }
+	public RedisManager getRedisManager(){
+		return redisManager;
+	}
 
-    public void setRedisManager(RedisManager redisManager){
-        if(redisManager == null){
-            throw new IllegalArgumentException("RedisManager could not be null.");
-        }
-        this.redisManager = redisManager;
-    }
+	public void setRedisManager(RedisManager redisManager){
+		if(redisManager == null){
+			throw new IllegalArgumentException("RedisManager could not be null.");
+		}
+		this.redisManager = redisManager;
+	}
 
-    public String getKeyPrefix(){
-        return keyPrefix;
-    }
+	public String getKeyPrefix(){
+		return keyPrefix;
+	}
 
-    public void setKeyPrefix(String keyPrefix){
-        this.keyPrefix = keyPrefix;
-    }
+	public void setKeyPrefix(String keyPrefix){
+		this.keyPrefix = keyPrefix;
+	}
 
-    public int getExpire(){
-        return expire;
-    }
+	public int getExpire(){
+		return expire;
+	}
 
-    public void setExpire(final int expire){
-        this.expire = expire;
-    }
+	public void setExpire(final int expire){
+		this.expire = expire;
+	}
 
-    @Override
-    public <K, V> Cache<K, V> getCache(String name) throws CacheException{
-        Cache cache = caches.get(name);
+	@Override
+	public <K, V> Cache<K, V> getCache(String name) throws CacheException{
+		Cache cache = caches.get(name);
 
-        if(cache == null){
-            cache = new RedisCache<K, V>(redisManager, keyPrefix == null ? name : keyPrefix + ":" + name, expire);
-            caches.put(name, cache);
-        }
+		if(cache == null){
+			cache = new RedisCache<K, V>(redisManager, makeKey(name), expire);
+			caches.put(name, cache);
+		}
 
-        return cache;
-    }
+		return cache;
+	}
+
+	protected String makeKey(final String key){
+		if(keyPrefix == null){
+			return key;
+		}else{
+			StringBuilder sb = new StringBuilder();
+
+			sb.append(keyPrefix).append(key);
+
+			return sb.toString();
+		}
+	}
+
 }
