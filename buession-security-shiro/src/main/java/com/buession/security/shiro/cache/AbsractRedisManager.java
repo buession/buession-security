@@ -42,93 +42,93 @@ import java.util.Set;
  */
 public abstract class AbsractRedisManager implements RedisManager {
 
-    protected static final int DEFAULT_RETURN_KEYS_COUNT = 100;
+	protected final static int DEFAULT_RETURN_KEYS_COUNT = 100;
 
-    private int returnKeysCount = DEFAULT_RETURN_KEYS_COUNT;
+	private int returnKeysCount = DEFAULT_RETURN_KEYS_COUNT;
 
-    private RedisTemplate redisTemplate;
+	private RedisTemplate redisTemplate;
 
-    public AbsractRedisManager(){
+	public AbsractRedisManager(){
 
-    }
+	}
 
-    public AbsractRedisManager(RedisTemplate redisTemplate){
-        setRedisTemplate(redisTemplate);
-    }
+	public AbsractRedisManager(RedisTemplate redisTemplate){
+		setRedisTemplate(redisTemplate);
+	}
 
-    public RedisTemplate getRedisTemplate(){
-        return redisTemplate;
-    }
+	public RedisTemplate getRedisTemplate(){
+		return redisTemplate;
+	}
 
-    public void setRedisTemplate(RedisTemplate redisTemplate){
-        Assert.isNull(redisTemplate, "RedisTemplate could not be null.");
-        this.redisTemplate = redisTemplate;
-    }
+	public void setRedisTemplate(RedisTemplate redisTemplate){
+		Assert.isNull(redisTemplate, "RedisTemplate could not be null.");
+		this.redisTemplate = redisTemplate;
+	}
 
-    public int getReturnKeysCount(){
-        return returnKeysCount;
-    }
+	public int getReturnKeysCount(){
+		return returnKeysCount;
+	}
 
-    public void setReturnKeysCount(int returnKeysCount){
-        this.returnKeysCount = returnKeysCount;
-    }
+	public void setReturnKeysCount(int returnKeysCount){
+		this.returnKeysCount = returnKeysCount;
+	}
 
-    @Override
-    public Set<byte[]> keys(byte[] pattern){
-        Set<byte[]> keys = new HashSet<>();
+	@Override
+	public Set<byte[]> keys(byte[] pattern){
+		Set<byte[]> keys = new HashSet<>();
 
-        byte[] cursor = Constants.SCAN_POINTER_START_BINARY;
-        ScanResult<List<byte[]>> scanResult;
+		byte[] cursor = Constants.SCAN_POINTER_START_BINARY;
+		ScanResult<List<byte[]>> scanResult;
 
-        do{
-            scanResult = redisTemplate.scan(cursor, returnKeysCount);
+		do{
+			scanResult = redisTemplate.scan(cursor, returnKeysCount);
 
-            if(Validate.isEmpty(scanResult.getResults()) == false){
-                keys.addAll(scanResult.getResults());
-            }
+			if(Validate.isEmpty(scanResult.getResults()) == false){
+				keys.addAll(scanResult.getResults());
+			}
 
-            cursor = scanResult.getCursor();
-        }while(scanResult.getCursorAsString().compareTo(Constants.SCAN_POINTER_START) > 0);
+			cursor = scanResult.getCursor();
+		}while(scanResult.getCursorAsString().compareTo(Constants.SCAN_POINTER_START) > 0);
 
-        return keys;
-    }
+		return keys;
+	}
 
-    @Override
-    public byte[] set(byte[] key, byte[] value, int expire){
-        if(redisTemplate.set(key, value) == Status.SUCCESS){
-            if(expire != 0){
-                redisTemplate.expire(key, expire);
-            }
-            return value;
-        }else{
-            return null;
-        }
-    }
+	@Override
+	public byte[] set(byte[] key, byte[] value, int expire){
+		if(redisTemplate.set(key, value) == Status.SUCCESS){
+			if(expire != 0){
+				redisTemplate.expire(key, expire);
+			}
+			return value;
+		}else{
+			return null;
+		}
+	}
 
-    @Override
-    public byte[] get(byte[] key){
-        return redisTemplate.get(key);
-    }
+	@Override
+	public byte[] get(byte[] key){
+		return redisTemplate.get(key);
+	}
 
-    @Override
-    public Status delete(byte[] key){
-        return redisTemplate.del(key);
-    }
+	@Override
+	public Status delete(byte[] key){
+		return redisTemplate.del(key);
+	}
 
-    @Override
-    public Status delete(byte[]... keys){
-        return Status.valueOf(redisTemplate.del(keys) > 0);
-    }
+	@Override
+	public Status delete(byte[]... keys){
+		return Status.valueOf(redisTemplate.del(keys) > 0);
+	}
 
-    @Override
-    public Long dbSize(){
-        RedisClient redisClient = redisTemplate.getClient();
+	@Override
+	public Long dbSize(){
+		RedisClient redisClient = redisTemplate.getClient();
 
-        try{
-            return redisClient.dbSize();
-        }catch(NotSupportedCommandException e){
-            return null;
-        }
-    }
+		try{
+			return redisClient.dbSize();
+		}catch(NotSupportedCommandException e){
+			return null;
+		}
+	}
 
 }

@@ -24,6 +24,7 @@
  */
 package com.buession.security.shiro.support.velocity;
 
+import com.buession.core.utils.StringUtils;
 import com.buession.core.validator.Validate;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -112,6 +113,10 @@ public class ShiroPermission {
 	 * @return 用户属性
 	 */
 	public Object getPrincipalProperty(String property){
+		if(Validate.hasText(property) == false){
+			new IllegalArgumentException("property must be contains character.");
+		}
+
 		Subject subject = SecurityUtils.getSubject();
 
 		if(subject == null){
@@ -125,7 +130,7 @@ public class ShiroPermission {
 			PropertyDescriptor[] propertyDescriptors = bi.getPropertyDescriptors();
 
 			for(PropertyDescriptor pd : propertyDescriptors){
-				if(pd.getName().equals(property) == true){
+				if(property.equals(pd.getName()) == true){
 					return pd.getReadMethod().invoke(principal, (Object[]) null);
 				}
 			}
@@ -183,7 +188,7 @@ public class ShiroPermission {
 				delimiter = ROLE_NAMES_DELIMITER;
 			}
 
-			String[] roleNamesArray = roleNames.split(delimiter);
+			String[] roleNamesArray = StringUtils.split(roleNames, delimiter);
 			for(String role : roleNamesArray){
 				if(subject.hasRole(role.trim()) == true){
 					return true;
@@ -301,7 +306,7 @@ public class ShiroPermission {
 				delimiter = PERMISSION_NAMES_DELIMITER;
 			}
 
-			String[] permissionsArray = permissions.split(delimiter);
+			String[] permissionsArray = StringUtils.split(permissions, delimiter);
 			for(String permission : permissionsArray){
 				if(permission != null && subject.isPermitted(permission.trim()) == true){
 					return true;

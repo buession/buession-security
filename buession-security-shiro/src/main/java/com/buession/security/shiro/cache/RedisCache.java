@@ -25,10 +25,10 @@
 package com.buession.security.shiro.cache;
 
 import com.buession.core.serializer.SerializerException;
+import com.buession.core.utils.ArrayUtils;
 import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
 import com.buession.security.shiro.Constants;
-import com.buession.security.shiro.serializer.ObjectSerializer;
 import com.buession.security.shiro.serializer.StringSerializer;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
@@ -42,7 +42,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Yong.Teng
@@ -52,10 +51,6 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	private RedisManager redisManager;
 
 	private String keyPrefix = Constants.DEFAULT_KEY_PREFIX;
-
-	private StringSerializer keySerializer = new StringSerializer();
-
-	private ObjectSerializer valueSerializer = new ObjectSerializer();
 
 	private int expire = 0;
 
@@ -96,12 +91,13 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	}
 
 	@Override
+	@SuppressWarnings({"unchecked"})
 	public Set<K> keys(){
 		logger.debug("Get RedisCache Keys");
 		Set<byte[]> keys;
 
 		try{
-			byte[] pattern = keySerializer.serialize(makeKey("*"));
+			byte[] pattern = Constants.KEY_SERIALIZER.serialize(makeKey("*"));
 			keys = redisManager.keys(pattern);
 		}catch(SerializerException e){
 			logger.error("Get cache keys error", e);
@@ -115,7 +111,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
 			try{
 				for(byte[] key : keys){
-					newKeys.add((K) keySerializer.deserialize(key));
+					newKeys.add((K) Constants.KEY_SERIALIZER.deserialize(key));
 				}
 			}catch(SerializerException e){
 				logger.error("deserialize keys error", e);
@@ -126,6 +122,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	}
 
 	@Override
+	@SuppressWarnings({"unchecked"})
 	public V get(K key) throws CacheException{
 		logger.debug("Get RedisCache: {}", key);
 		if(key == null){
@@ -133,7 +130,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		}
 
 		try{
-			return (V) valueSerializer.deserialize(redisManager.get(buildKey(key)));
+			return (V) Constants.VALUE_SERIALIZER.deserialize(redisManager.get(buildKey(key)));
 		}catch(SerializerException e){
 			logger.error("Get cache error", e);
 			throw new CacheException(e);
@@ -141,6 +138,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	}
 
 	@Override
+	@SuppressWarnings({"unchecked"})
 	public V put(K key, V value) throws CacheException{
 		logger.debug("Put RedisCache: {} => {}", key, value);
 		if(key == null){
@@ -149,7 +147,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		}
 
 		try{
-			redisManager.set(buildKey(key), valueSerializer.serialize(value), expire);
+			redisManager.set(buildKey(key), Constants.VALUE_SERIALIZER.serialize(value), expire);
 			return value;
 		}catch(SerializerException e){
 			logger.error("Put cache error", e);
@@ -158,6 +156,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	}
 
 	@Override
+	@SuppressWarnings({"unchecked"})
 	public V remove(K key) throws CacheException{
 		logger.debug("Remove RedisCache: {}", key);
 		if(key == null){
@@ -167,7 +166,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		try{
 			byte[] cacheKey = buildKey(key);
 			byte[] rawValue = redisManager.get(cacheKey);
-			V previous = (V) valueSerializer.deserialize(rawValue);
+			V previous = (V) Constants.VALUE_SERIALIZER.deserialize(rawValue);
 
 			redisManager.delete(cacheKey);
 
@@ -184,7 +183,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		Set<byte[]> keys = null;
 
 		try{
-			byte[] pattern = keySerializer.serialize(makeKey("*"));
+			byte[] pattern = Constants.KEY_SERIALIZER.serialize(makeKey("*"));
 			keys = redisManager.keys(pattern);
 		}catch(SerializerException e){
 			logger.error("Clear cache keys failure", e);
@@ -208,12 +207,13 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	}
 
 	@Override
+	@SuppressWarnings({"unchecked"})
 	public Collection<V> values(){
 		logger.debug("Get RedisCache Values");
 		Set<byte[]> keys;
 
 		try{
-			byte[] pattern = keySerializer.serialize(makeKey("*"));
+			byte[] pattern = Constants.KEY_SERIALIZER.serialize(makeKey("*"));
 			keys = redisManager.keys(pattern);
 		}catch(SerializerException e){
 			logger.error("Get cache values error", e);
@@ -224,7 +224,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
 		try{
 			for(byte[] key : keys){
-				V value = (V) valueSerializer.deserialize(redisManager.get(key));
+				V value = (V) Constants.VALUE_SERIALIZER.deserialize(redisManager.get(key));
 
 				if(value != null){
 					values.add(value);
@@ -243,13 +243,13 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		}
 
 		String redisKey;
-		if(this.keySerializer instanceof StringSerializer){
+		if(Constants.KEY_SERIALIZER instanceof StringSerializer){
 			redisKey = getStringRedisKey(key);
 		}else{
 			redisKey = key.toString();
 		}
 
-		return keySerializer.serialize(makeKey(redisKey));
+		return Constants.KEY_SERIALIZER.serialize(makeKey(redisKey));
 	}
 
 	protected String getStringRedisKey(K key){
@@ -265,24 +265,16 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	}
 
 	protected static String getRedisKeyFromPrincipalCollection(PrincipalCollection key){
-		List<String> realmNames = getRealmNames(key);
+		List<String> realmNames = new ArrayList<>(key.getRealmNames());
 		Collections.sort(realmNames);
-		return joinRealmNames(realmNames);
-	}
-
-	protected static List<String> getRealmNames(PrincipalCollection key){
-		return new ArrayList<>(key.getRealmNames());
-	}
-
-	protected static String joinRealmNames(List<String> realms){
-		return realms.stream().collect(Collectors.joining(""));
+		return ArrayUtils.toString(realmNames, "");
 	}
 
 	protected String makeKey(final String key){
-		if(keyPrefix == null){
+		if(Validate.isEmpty(keyPrefix)){
 			return key;
 		}else{
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder(keyPrefix.length() + key.length());
 
 			sb.append(keyPrefix).append(key);
 

@@ -19,24 +19,33 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro;
+
+import com.buession.security.shiro.serializer.ObjectSerializer;
+import com.buession.security.shiro.serializer.StringSerializer;
 
 /**
  * @author Yong.Teng
  */
 public class Constants {
 
-    public final static String DEFAULT_KEY_PREFIX = "buession_shiro_redis_session:";
+	public final static String DEFAULT_KEY_PREFIX = "buession_shiro_redis_session:";
 
-    public final static int DEFAULT_EXPIRE = 1800;
+	public final static int DEFAULT_EXPIRE = 1800;
 
-    public final static long DEFAULT_SESSION_IN_MEMORY_TIMEOUT = 1000L;
+	public final static int DEFAULT_TIMEOUT = 1000;
 
-    public final static int MILLISECONDS_IN_A_SECOND = 1000;
+	public final static long DEFAULT_SESSION_IN_MEMORY_TIMEOUT = 1000L;
 
-    public final static String ALL_PERMISSION = "*:*";
+	public final static int MILLISECONDS_IN_A_SECOND_TIMEOUT = 1000;
+
+	public final static String ALL_PERMISSION = "*:*";
+
+	public final static StringSerializer KEY_SERIALIZER = new StringSerializer();
+
+	public final static ObjectSerializer VALUE_SERIALIZER = new ObjectSerializer();
 
 }

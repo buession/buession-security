@@ -24,20 +24,22 @@
  */
 package com.buession.security.shiro.cache;
 
+import com.buession.core.utils.Assert;
+import com.buession.core.validator.Validate;
 import com.buession.security.shiro.Constants;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Yong.Teng
  */
 public class RedisCacheManager implements CacheManager {
 
-	private final ConcurrentMap<String, Cache> caches = new ConcurrentHashMap<>(64, 0.8F);
+	private final ThreadLocal<Map<String, Cache>> caches = new ThreadLocal<>();
 
 	private RedisManager redisManager;
 
@@ -59,9 +61,7 @@ public class RedisCacheManager implements CacheManager {
 	}
 
 	public void setRedisManager(RedisManager redisManager){
-		if(redisManager == null){
-			throw new IllegalArgumentException("RedisManager could not be null.");
-		}
+		Assert.isNull(redisManager, "RedisManager could not be null.");
 		this.redisManager = redisManager;
 	}
 
@@ -82,22 +82,34 @@ public class RedisCacheManager implements CacheManager {
 	}
 
 	@Override
+	@SuppressWarnings({"unchecked"})
 	public <K, V> Cache<K, V> getCache(String name) throws CacheException{
-		Cache cache = caches.get(name);
+		Map<String, Cache> sessionMap = caches.get();
+		Cache<K, V> cache;
 
-		if(cache == null){
-			cache = new RedisCache<K, V>(redisManager, makeKey(name), expire);
-			caches.put(name, cache);
+		if(sessionMap == null){
+			sessionMap = new HashMap<>(32, 0.8F);
+			cache = new RedisCache<>(redisManager, makeKey(name), expire);
+
+			sessionMap.put(name, cache);
+			caches.set(sessionMap);
+		}else{
+			cache = (Cache<K, V>) sessionMap.get(name);
+
+			if(cache == null){
+				cache = new RedisCache<>(redisManager, makeKey(name), expire);
+				sessionMap.put(name, cache);
+			}
 		}
 
 		return cache;
 	}
 
 	protected String makeKey(final String key){
-		if(keyPrefix == null){
+		if(Validate.isEmpty(keyPrefix)){
 			return key;
 		}else{
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder(keyPrefix.length() + key.length());
 
 			sb.append(keyPrefix).append(key);
 
