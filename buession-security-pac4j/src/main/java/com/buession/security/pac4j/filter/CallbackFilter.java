@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.filter;
@@ -47,90 +47,88 @@ import java.io.IOException;
  */
 public class CallbackFilter extends AbstractPac4jFilter {
 
-    private String defaultUrl;
+	private String defaultUrl;
 
-    private Boolean saveInSession;
+	private Boolean saveInSession;
 
-    private Boolean multiProfile;
+	private Boolean multiProfile;
 
-    private String defaultClient;
+	private String defaultClient;
 
-    private CallbackLogic<Object, JEEContext> callbackLogic;
+	private CallbackLogic<Object, JEEContext> callbackLogic = new ShiroCallbackLogic<>();
 
-    private HttpActionAdapter<Object, JEEContext> httpActionAdapter;
+	private HttpActionAdapter<Object, JEEContext> httpActionAdapter;
 
-    public CallbackFilter(){
-        callbackLogic = new ShiroCallbackLogic<>();
-    }
+	public CallbackFilter(){
+	}
 
-    public CallbackFilter(Config config){
-        super(config);
-        callbackLogic = new ShiroCallbackLogic<>();
-    }
+	public CallbackFilter(Config config){
+		super(config);
+	}
 
-    public String getDefaultUrl(){
-        return defaultUrl;
-    }
+	public String getDefaultUrl(){
+		return defaultUrl;
+	}
 
-    public void setDefaultUrl(String defaultUrl){
-        this.defaultUrl = defaultUrl;
-    }
+	public void setDefaultUrl(String defaultUrl){
+		this.defaultUrl = defaultUrl;
+	}
 
-    public Boolean getSaveInSession(){
-        return saveInSession;
-    }
+	public Boolean getSaveInSession(){
+		return saveInSession;
+	}
 
-    public void setSaveInSession(Boolean saveInSession){
-        this.saveInSession = saveInSession;
-    }
+	public void setSaveInSession(Boolean saveInSession){
+		this.saveInSession = saveInSession;
+	}
 
-    public Boolean getMultiProfile(){
-        return multiProfile;
-    }
+	public Boolean getMultiProfile(){
+		return multiProfile;
+	}
 
-    public void setMultiProfile(Boolean multiProfile){
-        this.multiProfile = multiProfile;
-    }
+	public void setMultiProfile(Boolean multiProfile){
+		this.multiProfile = multiProfile;
+	}
 
-    public String getDefaultClient(){
-        return defaultClient;
-    }
+	public String getDefaultClient(){
+		return defaultClient;
+	}
 
-    public void setDefaultClient(String defaultClient){
-        this.defaultClient = defaultClient;
-    }
+	public void setDefaultClient(String defaultClient){
+		this.defaultClient = defaultClient;
+	}
 
-    public CallbackLogic<Object, JEEContext> getCallbackLogic(){
-        return callbackLogic;
-    }
+	public CallbackLogic<Object, JEEContext> getCallbackLogic(){
+		return callbackLogic;
+	}
 
-    public void setCallbackLogic(CallbackLogic<Object, JEEContext> callbackLogic){
-        this.callbackLogic = callbackLogic;
-    }
+	public void setCallbackLogic(CallbackLogic<Object, JEEContext> callbackLogic){
+		this.callbackLogic = callbackLogic;
+	}
 
-    public HttpActionAdapter<Object, JEEContext> getHttpActionAdapter(){
-        return httpActionAdapter;
-    }
+	public HttpActionAdapter<Object, JEEContext> getHttpActionAdapter(){
+		return httpActionAdapter;
+	}
 
-    public void setHttpActionAdapter(HttpActionAdapter<Object, JEEContext> httpActionAdapter){
-        this.httpActionAdapter = httpActionAdapter;
-    }
+	public void setHttpActionAdapter(HttpActionAdapter<Object, JEEContext> httpActionAdapter){
+		this.httpActionAdapter = httpActionAdapter;
+	}
 
-    @Override
-    public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final
-    FilterChain filterChain) throws IOException, ServletException{
-        CommonHelper.assertNotNull("callbackLogic", callbackLogic);
-        CommonHelper.assertNotNull("config", getConfig());
+	@Override
+	public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain
+			filterChain) throws IOException, ServletException{
+		CommonHelper.assertNotNull("callbackLogic", callbackLogic);
+		CommonHelper.assertNotNull("config", getConfig());
 
-        final HttpServletRequest request = (HttpServletRequest) servletRequest;
-        final HttpServletResponse response = (HttpServletResponse) servletResponse;
-        final SessionStore<JEEContext> sessionStore = getSessionStore();
-        final JEEContext context = new JEEContext(request, response, sessionStore);
-        final HttpActionAdapter<Object, JEEContext> adapter = httpActionAdapter != null ? httpActionAdapter :
-                JEEHttpActionAdapter.INSTANCE;
+		final HttpServletRequest request = (HttpServletRequest) servletRequest;
+		final HttpServletResponse response = (HttpServletResponse) servletResponse;
+		final SessionStore<JEEContext> sessionStore = getSessionStore();
+		final JEEContext context = new JEEContext(request, response, sessionStore);
+		final HttpActionAdapter<Object, JEEContext> adapter = httpActionAdapter != null ? httpActionAdapter :
+				JEEHttpActionAdapter.INSTANCE;
 
-        callbackLogic.perform(context, getConfig(), adapter, getDefaultUrl(), getSaveInSession(), getMultiProfile(),
-                false, getDefaultClient());
-    }
+		callbackLogic.perform(context, getConfig(), adapter, getDefaultUrl(), getSaveInSession(), getMultiProfile(),
+				false, getDefaultClient());
+	}
 
 }

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.subject;
@@ -39,61 +39,62 @@ import java.util.Optional;
  */
 public class Pac4jPrincipal implements Principal, Serializable {
 
-    private final static long serialVersionUID = 96494800982373373L;
+	private final static long serialVersionUID = 96494800982373373L;
 
-    private final String principalNameAttribute;
+	private final String principalNameAttribute;
 
-    private final List<CommonProfile> profiles;
+	private final List<CommonProfile> profiles;
 
-    public Pac4jPrincipal(final List<CommonProfile> profiles){
-        this.principalNameAttribute = null;
-        this.profiles = profiles;
-    }
+	public Pac4jPrincipal(final List<CommonProfile> profiles){
+		this.principalNameAttribute = null;
+		this.profiles = profiles;
+	}
 
-    public Pac4jPrincipal(final List<CommonProfile> profiles, String principalNameAttribute){
-        this.principalNameAttribute = Validate.hasText(principalNameAttribute) ? principalNameAttribute.trim() : null;
-        this.profiles = profiles;
-    }
+	public Pac4jPrincipal(final List<CommonProfile> profiles, String principalNameAttribute){
+		this.principalNameAttribute = Validate.hasText(principalNameAttribute) ? principalNameAttribute.trim() : null;
+		this.profiles = profiles;
+	}
 
-    @Override
-    public String getName(){
-        Optional<CommonProfile> profile = getProfile();
-        if(null == principalNameAttribute){
-            return profile.get().getId();
-        }
+	@Override
+	public String getName(){
+		Optional<CommonProfile> profile = getProfile();
+		if(null == principalNameAttribute){
+			return profile.get().getId();
+		}
 
-        Object value = profile.get().getAttribute(principalNameAttribute);
-        return null == value ? null : String.valueOf(value);
-    }
+		Object value = profile.get().getAttribute(principalNameAttribute);
+		return null == value ? null : String.valueOf(value);
+	}
 
-    public Optional<CommonProfile> getProfile(){
-        return Optional.ofNullable(ProfileHelper.flatIntoOneProfile(profiles).get());
-    }
+	public Optional<CommonProfile> getProfile(){
+		return Optional.ofNullable(ProfileHelper.flatIntoOneProfile(profiles).get());
+	}
 
-    public Optional<List<CommonProfile>> getProfiles(){
-        return Optional.of(profiles);
-    }
+	public Optional<List<CommonProfile>> getProfiles(){
+		return Optional.of(profiles);
+	}
 
-    @Override
-    public boolean equals(Object o){
-        if(this == o){
-            return true;
-        }
-        if(o == null || getClass() != o.getClass()){
-            return false;
-        }
+	@Override
+	public boolean equals(Object o){
+		if(this == o){
+			return true;
+		}
+		if(o == null || getClass() != o.getClass()){
+			return false;
+		}
 
-        final Pac4jPrincipal that = (Pac4jPrincipal) o;
-        return profiles != null ? profiles.equals(that.profiles) : that.profiles == null;
-    }
+		final Pac4jPrincipal that = (Pac4jPrincipal) o;
+		return profiles != null ? profiles.equals(that.profiles) : that.profiles == null;
+	}
 
-    @Override
-    public int hashCode(){
-        return profiles != null ? profiles.hashCode() : 0;
-    }
+	@Override
+	public int hashCode(){
+		return profiles != null ? profiles.hashCode() : 0;
+	}
 
-    @Override
-    public String toString(){
-        return CommonHelper.toNiceString(this.getClass(), "profiles", getProfiles());
-    }
+	@Override
+	public String toString(){
+		return CommonHelper.toNiceString(getClass(), "profiles", getProfiles());
+	}
+
 }

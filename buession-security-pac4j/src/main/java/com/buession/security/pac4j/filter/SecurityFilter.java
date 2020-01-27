@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.filter;
@@ -46,81 +46,79 @@ import java.io.IOException;
  */
 public class SecurityFilter extends AbstractPac4jFilter {
 
-    private String clients;
+	private String clients;
 
-    private String authorizers;
+	private String authorizers;
 
-    private String matchers;
+	private String matchers;
 
-    private Boolean multiProfile;
+	private Boolean multiProfile;
 
-    private SecurityLogic<Object, JEEContext> securityLogic;
+	private SecurityLogic<Object, JEEContext> securityLogic = new ShiroSecurityLogic<>();
 
-    public SecurityFilter(){
-        securityLogic = new ShiroSecurityLogic<>();
-    }
+	public SecurityFilter(){
+	}
 
-    public SecurityFilter(Config config){
-        super(config);
-        securityLogic = new ShiroSecurityLogic<>();
-    }
+	public SecurityFilter(Config config){
+		super(config);
+	}
 
-    public String getClients(){
-        return clients;
-    }
+	public String getClients(){
+		return clients;
+	}
 
-    public void setClients(String clients){
-        this.clients = clients;
-    }
+	public void setClients(String clients){
+		this.clients = clients;
+	}
 
-    public String getAuthorizers(){
-        return authorizers;
-    }
+	public String getAuthorizers(){
+		return authorizers;
+	}
 
-    public void setAuthorizers(String authorizers){
-        this.authorizers = authorizers;
-    }
+	public void setAuthorizers(String authorizers){
+		this.authorizers = authorizers;
+	}
 
-    public String getMatchers(){
-        return matchers;
-    }
+	public String getMatchers(){
+		return matchers;
+	}
 
-    public void setMatchers(String matchers){
-        this.matchers = matchers;
-    }
+	public void setMatchers(String matchers){
+		this.matchers = matchers;
+	}
 
-    public Boolean getMultiProfile(){
-        return multiProfile;
-    }
+	public Boolean getMultiProfile(){
+		return multiProfile;
+	}
 
-    public void setMultiProfile(Boolean multiProfile){
-        this.multiProfile = multiProfile;
-    }
+	public void setMultiProfile(Boolean multiProfile){
+		this.multiProfile = multiProfile;
+	}
 
-    public SecurityLogic<Object, JEEContext> getSecurityLogic(){
-        return securityLogic;
-    }
+	public SecurityLogic<Object, JEEContext> getSecurityLogic(){
+		return securityLogic;
+	}
 
-    public void setSecurityLogic(SecurityLogic<Object, JEEContext> securityLogic){
-        this.securityLogic = securityLogic;
-    }
+	public void setSecurityLogic(SecurityLogic<Object, JEEContext> securityLogic){
+		this.securityLogic = securityLogic;
+	}
 
-    @Override
-    public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final
-    FilterChain filterChain) throws IOException, ServletException{
-        CommonHelper.assertNotNull("securityLogic", securityLogic);
-        CommonHelper.assertNotNull("config", getConfig());
+	@Override
+	public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain
+			filterChain) throws IOException, ServletException{
+		CommonHelper.assertNotNull("securityLogic", securityLogic);
+		CommonHelper.assertNotNull("config", getConfig());
 
-        final HttpServletRequest request = (HttpServletRequest) servletRequest;
-        final HttpServletResponse response = (HttpServletResponse) servletResponse;
-        final SessionStore<JEEContext> sessionStore = getSessionStore();
-        final JEEContext context = new JEEContext(request, response, sessionStore);
+		final HttpServletRequest request = (HttpServletRequest) servletRequest;
+		final HttpServletResponse response = (HttpServletResponse) servletResponse;
+		final SessionStore<JEEContext> sessionStore = getSessionStore();
+		final JEEContext context = new JEEContext(request, response, sessionStore);
 
-        securityLogic.perform(context, getConfig(), (ctx, profiles, parameters)->{
-            filterChain.doFilter(request, response);
-            return ctx;
+		securityLogic.perform(context, getConfig(), (ctx, profiles, parameters)->{
+			filterChain.doFilter(request, response);
+			return ctx;
 
-        }, JEEHttpActionAdapter.INSTANCE, getClients(), getAuthorizers(), getMatchers(), getMultiProfile());
-    }
+		}, JEEHttpActionAdapter.INSTANCE, getClients(), getAuthorizers(), getMatchers(), getMultiProfile());
+	}
 
 }

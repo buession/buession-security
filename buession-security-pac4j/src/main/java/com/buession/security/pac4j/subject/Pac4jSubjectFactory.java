@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.subject;
@@ -29,26 +29,34 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.SubjectContext;
 import org.apache.shiro.web.mgt.DefaultWebSubjectFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Yong.Teng
  */
 public class Pac4jSubjectFactory extends DefaultWebSubjectFactory {
 
-    @Override
-    public Subject createSubject(SubjectContext context){
-        if(context.isAuthenticated()){
-            AuthenticationToken token = context.getAuthenticationToken();
+	private final static Logger logger = LoggerFactory.getLogger(Pac4jSubjectFactory.class);
 
-            if(token != null && token instanceof Pac4jToken){
-                final Pac4jToken clientToken = (Pac4jToken) token;
-                if(clientToken.isRememberMe()){
-                    context.setAuthenticated(false);
-                }
-            }
-        }
+	@Override
+	public Subject createSubject(SubjectContext context){
+		logger.info("Create subject by: {}", context);
+		if(context.isAuthenticated()){
+			logger.info("Subject context is authenticated");
+			AuthenticationToken token = context.getAuthenticationToken();
 
-        return super.createSubject(context);
-    }
+			if(token != null && token instanceof Pac4jToken){
+				logger.info("Authentication token instanceof {}", Pac4jToken.class.getName());
+				final Pac4jToken clientToken = (Pac4jToken) token;
+				if(clientToken.isRememberMe()){
+					logger.info("Token is remember me");
+					context.setAuthenticated(false);
+				}
+			}
+		}
+
+		return super.createSubject(context);
+	}
 
 }

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.realm;
@@ -47,57 +47,56 @@ import java.util.Set;
  */
 public class Pac4jRealm extends AuthorizingRealm {
 
-    private String principalNameAttribute;
+	private String principalNameAttribute;
 
-    public Pac4jRealm(){
-        setAuthenticationTokenClass(Pac4jToken.class);
-    }
+	public Pac4jRealm(){
+		setAuthenticationTokenClass(Pac4jToken.class);
+	}
 
-    public String getPrincipalNameAttribute(){
-        return principalNameAttribute;
-    }
+	public String getPrincipalNameAttribute(){
+		return principalNameAttribute;
+	}
 
-    public void setPrincipalNameAttribute(String principalNameAttribute){
-        this.principalNameAttribute = principalNameAttribute;
-    }
+	public void setPrincipalNameAttribute(String principalNameAttribute){
+		this.principalNameAttribute = principalNameAttribute;
+	}
 
-    @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken authenticationToken) throws
-            AuthenticationException{
-        final Pac4jToken token = (Pac4jToken) authenticationToken;
-        final List<CommonProfile> profiles = token.getProfiles();
+	@Override
+	protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken authenticationToken) throws
+			AuthenticationException{
+		final Pac4jToken token = (Pac4jToken) authenticationToken;
+		final List<CommonProfile> profiles = token.getProfiles();
+		final Pac4jPrincipal principal = new Pac4jPrincipal(profiles, principalNameAttribute);
+		final PrincipalCollection principalCollection = new SimplePrincipalCollection(principal, getName());
 
-        final Pac4jPrincipal principal = new Pac4jPrincipal(profiles, principalNameAttribute);
-        final PrincipalCollection principalCollection = new SimplePrincipalCollection(principal, getName());
+		return new SimpleAuthenticationInfo(principalCollection, profiles.hashCode());
+	}
 
-        return new SimpleAuthenticationInfo(principalCollection, profiles.hashCode());
-    }
+	@Override
+	protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals){
+		final Set<String> roles = new HashSet<>();
+		final Set<String> permissions = new HashSet<>();
+		final Pac4jPrincipal principal = principals.oneByType(Pac4jPrincipal.class);
 
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals){
-        final Set<String> roles = new HashSet<>();
-        final Set<String> permissions = new HashSet<>();
-        final Pac4jPrincipal principal = principals.oneByType(Pac4jPrincipal.class);
+		if(principal != null){
+			final Optional<List<CommonProfile>> profiles = principal.getProfiles();
 
-        if(principal != null){
-            final Optional<List<CommonProfile>> profiles = principal.getProfiles();
+			if(profiles != null){
+				for(CommonProfile profile : profiles.get()){
+					if(profile != null){
+						roles.addAll(profile.getRoles());
+						permissions.addAll(profile.getPermissions());
+					}
+				}
+			}
+		}
 
-            if(profiles != null){
-                for(CommonProfile profile : profiles.get()){
-                    if(profile != null){
-                        roles.addAll(profile.getRoles());
-                        permissions.addAll(profile.getPermissions());
-                    }
-                }
-            }
-        }
+		final SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 
-        final SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+		simpleAuthorizationInfo.addRoles(roles);
+		simpleAuthorizationInfo.addStringPermissions(permissions);
 
-        simpleAuthorizationInfo.addRoles(roles);
-        simpleAuthorizationInfo.addStringPermissions(permissions);
-
-        return simpleAuthorizationInfo;
-    }
+		return simpleAuthorizationInfo;
+	}
 
 }

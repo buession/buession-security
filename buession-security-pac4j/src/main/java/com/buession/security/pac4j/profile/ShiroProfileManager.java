@@ -24,38 +24,79 @@
  */
 package com.buession.security.pac4j.profile;
 
-import com.buession.security.pac4j.utils.ShiroHelper;
+import com.buession.core.utils.MapUtils;
+import com.buession.core.validator.Validate;
+import com.buession.security.pac4j.token.Pac4jToken;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.subject.Subject;
+import org.pac4j.core.authorization.authorizer.Authorizer;
+import org.pac4j.core.authorization.authorizer.IsFullyAuthenticatedAuthorizer;
+import org.pac4j.core.authorization.authorizer.IsRememberedAuthorizer;
 import org.pac4j.core.context.WebContext;
+import org.pac4j.core.exception.TechnicalException;
+import org.pac4j.core.exception.http.HttpAction;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author Yong.Teng
  */
 public class ShiroProfileManager extends ProfileManager<CommonProfile> {
 
-    public ShiroProfileManager(final WebContext context){
-        super(context);
-    }
+	private final static Authorizer<CommonProfile> IS_REMEMBERED_AUTHORIZER = new IsRememberedAuthorizer<>();
 
-    @Override
-    public void save(final boolean saveInSession, final CommonProfile profile, final boolean multiProfile){
-        super.save(saveInSession, profile, multiProfile);
+	private final static Authorizer<CommonProfile> IS_FULLY_AUTHENTICATED_AUTHORIZER = new
+			IsFullyAuthenticatedAuthorizer<>();
 
-        try{
-            ShiroHelper.populateSubject(retrieveAll(saveInSession));
-        }catch(final AuthenticationException e){
-            super.remove(saveInSession);
-            throw e;
-        }
-    }
+	private final static Logger logger = LoggerFactory.getLogger(ShiroProfileManager.class);
 
-    @Override
-    public void remove(final boolean removeFromSession){
-        super.remove(removeFromSession);
-        SecurityUtils.getSubject().logout();
-    }
+	public ShiroProfileManager(final WebContext context){
+		super(context);
+	}
+
+	@Override
+	public void save(final boolean saveInSession, final CommonProfile profile, final boolean multiProfile){
+		logger.info("Save profile: {} with multi profile is {}", profile, Boolean.toString(multiProfile));
+		super.save(saveInSession, profile, multiProfile);
+
+		try{
+			populateSubject(retrieveAll(saveInSession));
+		}catch(AuthenticationException e){
+			super.remove(saveInSession);
+			throw e;
+		}
+	}
+
+	@Override
+	public void remove(final boolean removeFromSession){
+		super.remove(removeFromSession);
+		SecurityUtils.getSubject().logout();
+	}
+
+	protected void populateSubject(final LinkedHashMap<String, CommonProfile> profiles){
+		logger.info("Populate subject: {}", profiles);
+		if(Validate.isEmpty(profiles)){
+			return;
+		}
+
+		final List<CommonProfile> listProfiles = MapUtils.toList(profiles);
+		final Subject subject = SecurityUtils.getSubject();
+
+		try{
+			if(IS_FULLY_AUTHENTICATED_AUTHORIZER.isAuthorized(context, listProfiles)){
+				subject.login(new Pac4jToken(listProfiles, false));
+			}else if(IS_REMEMBERED_AUTHORIZER.isAuthorized(context, listProfiles)){
+				subject.login(new Pac4jToken(listProfiles, true));
+			}
+		}catch(HttpAction e){
+			throw new TechnicalException(e);
+		}
+	}
 
 }

@@ -42,78 +42,79 @@ import java.util.stream.Collectors;
  */
 public class ShiroSessionStore implements SessionStore<JEEContext> {
 
-    public final static ShiroSessionStore INSTANCE = new ShiroSessionStore();
+	public final static ShiroSessionStore INSTANCE = new ShiroSessionStore();
 
-    private final static Logger logger = LoggerFactory.getLogger(ShiroSessionStore.class);
+	private final static Logger logger = LoggerFactory.getLogger(ShiroSessionStore.class);
 
-    @Override
-    public String getOrCreateSessionId(JEEContext context){
-        final Session session = getSession(true);
-        return session == null ? null : session.getId().toString();
-    }
+	@Override
+	public String getOrCreateSessionId(JEEContext context){
+		final Session session = getSession(true);
+		return session == null ? null : session.getId().toString();
+	}
 
-    @Override
-    public Optional<Object> get(JEEContext context, String key){
-        final Session session = getSession(false);
-        return session == null ? Optional.empty() : Optional.ofNullable(session.getAttribute(key));
-    }
+	@Override
+	public Optional<Object> get(JEEContext context, String key){
+		final Session session = getSession(false);
+		return session == null ? Optional.empty() : Optional.ofNullable(session.getAttribute(key));
+	}
 
-    @Override
-    public void set(JEEContext context, String key, Object value){
-        final Session session = getSession(true);
-        if(session == null){
-            return;
-        }
+	@Override
+	public void set(JEEContext context, String key, Object value){
+		final Session session = getSession(true);
+		if(session == null){
+			return;
+		}
 
-        if(value == null){
-            session.removeAttribute(key);
-        }else{
-            try{
-                session.setAttribute(key, value);
-            }catch(UnavailableSecurityManagerException e){
-                logger.warn("Should happen just once at startup in some specific case of Shiro Spring " +
-                        "configuration", e);
-            }
-        }
-    }
+		if(value == null){
+			session.removeAttribute(key);
+		}else{
+			try{
+				session.setAttribute(key, value);
+			}catch(UnavailableSecurityManagerException e){
+				logger.warn("Should happen just once at startup in some specific case of Shiro Spring configuration",
+						e);
+			}
+		}
+	}
 
-    @Override
-    public boolean destroySession(JEEContext context){
-        getSession(true).stop();
-        return true;
-    }
+	@Override
+	public boolean destroySession(JEEContext context){
+		getSession(true).stop();
+		return true;
+	}
 
-    @Override
-    public Optional getTrackableSession(JEEContext context){
-        return Optional.ofNullable(getSession(true));
-    }
+	@Override
+	public Optional getTrackableSession(JEEContext context){
+		//return Optional.ofNullable(getSession(true));
+		return Optional.empty();
+	}
 
-    @Override
-    public Optional<SessionStore<JEEContext>> buildFromTrackableSession(JEEContext context, Object trackableSession){
-        return Optional.empty();
-    }
+	@Override
+	public Optional<SessionStore<JEEContext>> buildFromTrackableSession(JEEContext context, Object trackableSession){
+		return Optional.empty();
+	}
 
-    @Override
-    public boolean renewSession(JEEContext context){
-        final Session session = getSession(false);
-        if(session == null){
-            return true;
-        }
+	@Override
+	public boolean renewSession(JEEContext context){
+		final Session session = getSession(false);
+		if(session == null){
+			return true;
+		}
 
-        logger.debug("Discard old session: {}", session.getId());
-        final Map<Object, Object> attributes = Collections.list(Collections.enumeration(session.getAttributeKeys()))
-                .stream().collect(Collectors.toMap(k->k, session::getAttribute, (a, b)->b));
+		logger.debug("Discard old session: {}", session.getId());
+		final Map<Object, Object> attributes = Collections.list(Collections.enumeration(session.getAttributeKeys()))
+				.stream().collect(Collectors.toMap(k->k, session::getAttribute, (a, b)->b));
 
-        session.stop();
+		session.stop();
 
-        final Session newSession = getSession(true);
-        logger.debug("And copy all data to the new one: {}", newSession.getId());
-        attributes.forEach((k, v)->newSession.setAttribute(k, v));
-        return true;
-    }
+		final Session newSession = getSession(true);
+		logger.debug("And copy all data to the new one: {}", newSession.getId());
+		attributes.forEach((k, v)->newSession.setAttribute(k, v));
+		return true;
+	}
 
-    protected Session getSession(final boolean createSession){
-        return SecurityUtils.getSubject().getSession(createSession);
-    }
+	protected Session getSession(final boolean createSession){
+		return SecurityUtils.getSubject().getSession(createSession);
+	}
 
 }

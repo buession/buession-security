@@ -40,8 +40,6 @@ public class Constants {
 
 	public final static long DEFAULT_SESSION_IN_MEMORY_TIMEOUT = 1000L;
 
-	public final static int MILLISECONDS_IN_A_SECOND_TIMEOUT = 1000;
-
 	public final static String ALL_PERMISSION = "*:*";
 
 	public final static StringSerializer KEY_SERIALIZER = new StringSerializer();

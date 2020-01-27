@@ -24,10 +24,14 @@
  */
 package com.buession.security.shiro;
 
+import java.io.Serializable;
+
 /**
  * @author Yong.Teng
  */
-public class Cookie {
+public class Cookie implements Serializable {
+
+	private final static long serialVersionUID = -4209730152769024787L;
 
 	private String name;
 
