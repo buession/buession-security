@@ -26,34 +26,45 @@ package com.buession.security.shiro.cache;
 
 import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
-import com.buession.security.shiro.Constants;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
-import org.apache.shiro.cache.CacheManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author Yong.Teng
  */
-public class RedisCacheManager implements CacheManager {
+public class RedisCacheManager extends AbstractCacheManager {
 
-	private final ThreadLocal<Map<String, Cache>> caches = new ThreadLocal<>();
+	private final ConcurrentMap<String, Cache> caches = new ConcurrentHashMap<>();
 
 	private RedisManager redisManager;
 
-	private String keyPrefix = Constants.DEFAULT_KEY_PREFIX;
-
-	private int expire = Constants.DEFAULT_EXPIRE;
+	private final static Logger logger = LoggerFactory.getLogger(RedisCacheManager.class);
 
 	public RedisCacheManager(){
+		super();
+	}
+
+	public RedisCacheManager(String keyPrefix, int expire){
+		super(keyPrefix, expire);
+	}
+
+	public RedisCacheManager(String keyPrefix, int expire, String principalIdFieldName){
+		super(keyPrefix, expire, principalIdFieldName);
 	}
 
 	public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire){
+		this(keyPrefix, expire);
 		setRedisManager(redisManager);
-		this.keyPrefix = keyPrefix;
-		this.expire = expire;
+	}
+
+	public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName){
+		this(keyPrefix, expire, principalIdFieldName);
+		this.redisManager = redisManager;
 	}
 
 	public RedisManager getRedisManager(){
@@ -65,40 +76,18 @@ public class RedisCacheManager implements CacheManager {
 		this.redisManager = redisManager;
 	}
 
-	public String getKeyPrefix(){
-		return keyPrefix;
-	}
-
-	public void setKeyPrefix(String keyPrefix){
-		this.keyPrefix = keyPrefix;
-	}
-
-	public int getExpire(){
-		return expire;
-	}
-
-	public void setExpire(final int expire){
-		this.expire = expire;
-	}
-
 	@Override
 	@SuppressWarnings({"unchecked"})
 	public <K, V> Cache<K, V> getCache(String name) throws CacheException{
-		Map<String, Cache> sessionMap = caches.get();
-		Cache<K, V> cache;
+		logger.debug("Get cache, name: ", name);
 
-		if(sessionMap == null){
-			sessionMap = new HashMap<>(32, 0.8F);
-			cache = new RedisCache<>(redisManager, makeKey(name), expire);
+		Cache<K, V> cache = caches.get(name);
 
-			sessionMap.put(name, cache);
-			caches.set(sessionMap);
-		}else{
-			cache = (Cache<K, V>) sessionMap.get(name);
+		if(cache == null){
+			cache = new RedisCache<>(redisManager, makeKey(name), getExpire(), getPrincipalIdFieldName());
 
 			if(cache == null){
-				cache = new RedisCache<>(redisManager, makeKey(name), expire);
-				sessionMap.put(name, cache);
+				caches.put(name, cache);
 			}
 		}
 
@@ -106,12 +95,12 @@ public class RedisCacheManager implements CacheManager {
 	}
 
 	protected String makeKey(final String key){
-		if(Validate.isEmpty(keyPrefix)){
+		if(Validate.isEmpty(getKeyPrefix())){
 			return key;
 		}else{
-			StringBuilder sb = new StringBuilder(keyPrefix.length() + key.length());
+			StringBuilder sb = new StringBuilder(getKeyPrefix().length() + key.length());
 
-			sb.append(keyPrefix).append(key);
+			sb.append(getKeyPrefix()).append(':').append(key).append(':');
 
 			return sb.toString();
 		}

@@ -25,17 +25,20 @@
 package com.buession.security.shiro.cache;
 
 import com.buession.core.serializer.SerializerException;
-import com.buession.core.utils.ArrayUtils;
 import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
 import com.buession.security.shiro.Constants;
+import com.buession.security.shiro.exception.CacheManagerPrincipalIdNotAssignedException;
+import com.buession.security.shiro.exception.PrincipalIdNullException;
+import com.buession.security.shiro.exception.PrincipalInstanceException;
 import com.buession.security.shiro.serializer.StringSerializer;
-import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -46,23 +49,31 @@ import java.util.Set;
 /**
  * @author Yong.Teng
  */
-public class RedisCache<K, V> implements Cache<K, V> {
+public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 	private RedisManager redisManager;
-
-	private String keyPrefix = Constants.DEFAULT_KEY_PREFIX;
-
-	private int expire = 0;
 
 	private final static Logger logger = LoggerFactory.getLogger(RedisCache.class);
 
 	public RedisCache(){
 	}
 
+	public RedisCache(String keyPrefix, int expire){
+		super(keyPrefix, expire);
+	}
+
+	public RedisCache(String keyPrefix, int expire, String principalIdFieldName){
+		super(keyPrefix, expire, principalIdFieldName);
+	}
+
 	public RedisCache(RedisManager redisManager, String keyPrefix, int expire){
+		this(keyPrefix, expire);
 		setRedisManager(redisManager);
-		this.keyPrefix = keyPrefix;
-		this.expire = expire;
+	}
+
+	public RedisCache(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName){
+		this(keyPrefix, expire, principalIdFieldName);
+		setRedisManager(redisManager);
 	}
 
 	public RedisManager getRedisManager(){
@@ -74,22 +85,6 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		this.redisManager = redisManager;
 	}
 
-	public String getKeyPrefix(){
-		return keyPrefix;
-	}
-
-	public void setKeyPrefix(String keyPrefix){
-		this.keyPrefix = keyPrefix;
-	}
-
-	public int getExpire(){
-		return expire;
-	}
-
-	public void setExpire(final int expire){
-		this.expire = expire;
-	}
-
 	@Override
 	@SuppressWarnings({"unchecked"})
 	public Set<K> keys(){
@@ -97,7 +92,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		Set<byte[]> keys;
 
 		try{
-			byte[] pattern = Constants.KEY_SERIALIZER.serialize(makeKey("*"));
+			byte[] pattern = makeKey("*");
 			keys = redisManager.keys(pattern);
 		}catch(SerializerException e){
 			logger.error("Get cache keys error", e);
@@ -130,7 +125,14 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		}
 
 		try{
-			return (V) Constants.VALUE_SERIALIZER.deserialize(redisManager.get(buildKey(key)));
+			byte[] redisKey = makeKey(key);
+			byte[] rawValue = redisManager.get(redisKey);
+
+			if(rawValue == null){
+				return null;
+			}
+
+			return (V) Constants.VALUE_SERIALIZER.deserialize(rawValue);
 		}catch(SerializerException e){
 			logger.error("Get cache error", e);
 			throw new CacheException(e);
@@ -147,7 +149,10 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		}
 
 		try{
-			redisManager.set(buildKey(key), Constants.VALUE_SERIALIZER.serialize(value), expire);
+			byte[] redisKey = makeKey(key);
+			byte[] rawValue = Constants.VALUE_SERIALIZER.serialize(value);
+
+			redisManager.set(redisKey, rawValue, getExpire());
 			return value;
 		}catch(SerializerException e){
 			logger.error("Put cache error", e);
@@ -164,7 +169,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		}
 
 		try{
-			byte[] cacheKey = buildKey(key);
+			byte[] cacheKey = makeKey(key);
 			byte[] rawValue = redisManager.get(cacheKey);
 			V previous = (V) Constants.VALUE_SERIALIZER.deserialize(rawValue);
 
@@ -183,7 +188,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		Set<byte[]> keys = null;
 
 		try{
-			byte[] pattern = Constants.KEY_SERIALIZER.serialize(makeKey("*"));
+			byte[] pattern = makeKey("*");
 			keys = redisManager.keys(pattern);
 		}catch(SerializerException e){
 			logger.error("Clear cache keys failure", e);
@@ -213,7 +218,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		Set<byte[]> keys;
 
 		try{
-			byte[] pattern = Constants.KEY_SERIALIZER.serialize(makeKey("*"));
+			byte[] pattern = makeKey("*");
 			keys = redisManager.keys(pattern);
 		}catch(SerializerException e){
 			logger.error("Get cache values error", e);
@@ -225,10 +230,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		try{
 			for(byte[] key : keys){
 				V value = (V) Constants.VALUE_SERIALIZER.deserialize(redisManager.get(key));
-
-				if(value != null){
-					values.add(value);
-				}
+				values.add(value);
 			}
 		}catch(SerializerException e){
 			logger.error("deserialize values error", e);
@@ -237,7 +239,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		return Collections.unmodifiableList(values);
 	}
 
-	protected final byte[] buildKey(K key) throws SerializerException{
+	protected final byte[] makeKey(K key) throws SerializerException{
 		if(key == null){
 			return null;
 		}
@@ -249,7 +251,24 @@ public class RedisCache<K, V> implements Cache<K, V> {
 			redisKey = key.toString();
 		}
 
-		return Constants.KEY_SERIALIZER.serialize(makeKey(redisKey));
+		return makeKey(redisKey);
+	}
+
+	protected final byte[] makeKey(String key) throws SerializerException{
+		if(key == null){
+			return null;
+		}
+
+		StringBuilder sb = new StringBuilder(getKeyPrefix().length() + key.length());
+
+
+		if(Validate.isEmpty(getKeyPrefix()) == false){
+			sb.append(getKeyPrefix());
+		}
+
+		sb.append(key);
+
+		return Constants.KEY_SERIALIZER.serialize(sb.toString());
 	}
 
 	protected String getStringRedisKey(K key){
@@ -264,22 +283,55 @@ public class RedisCache<K, V> implements Cache<K, V> {
 		return redisKey;
 	}
 
-	protected static String getRedisKeyFromPrincipalCollection(PrincipalCollection key){
-		List<String> realmNames = new ArrayList<>(key.getRealmNames());
-		Collections.sort(realmNames);
-		return ArrayUtils.toString(realmNames, "");
+	protected String getRedisKeyFromPrincipalCollection(PrincipalCollection principalCollection){
+		Object principalObject = principalCollection.getPrimaryPrincipal();
+		if(principalObject instanceof String){
+			return principalObject.toString();
+		}
+
+		Method principalIdGetter = getPrincipalIdGetter(principalObject);
+		String redisKey;
+
+		try{
+			Object idObj = principalIdGetter.invoke(principalObject);
+			if(idObj == null){
+				throw new PrincipalIdNullException(principalObject.getClass(), getPrincipalIdFieldName());
+			}
+			redisKey = idObj.toString();
+		}catch(IllegalAccessException e){
+			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName(), e);
+		}catch(InvocationTargetException e){
+			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName(), e);
+		}
+		return redisKey;
 	}
 
-	protected String makeKey(final String key){
-		if(Validate.isEmpty(keyPrefix)){
-			return key;
-		}else{
-			StringBuilder sb = new StringBuilder(keyPrefix.length() + key.length());
+	private Method getPrincipalIdGetter(Object principalObject){
+		Method principalIdGetter;
+		String principalIdMethodName = getPrincipalIdMethodName();
 
-			sb.append(keyPrefix).append(key);
-
-			return sb.toString();
+		try{
+			principalIdGetter = principalObject.getClass().getMethod(principalIdMethodName);
+		}catch(NoSuchMethodException e){
+			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName());
 		}
+
+		return principalIdGetter;
+	}
+
+	private String getPrincipalIdMethodName(){
+		String principalIdFieldName = getPrincipalIdFieldName();
+
+		if(Validate.hasText(principalIdFieldName) == false){
+			throw new CacheManagerPrincipalIdNotAssignedException();
+		}
+
+		StringBuilder sb = new StringBuilder(principalIdFieldName.length() + 3);
+
+		sb.append("get");
+		sb.append(principalIdFieldName.substring(0, 1).toUpperCase()).append(principalIdFieldName.substring(1));
+
+		return sb.toString();
 	}
 
 }

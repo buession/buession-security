@@ -22,69 +22,11 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.filter;
-
-import com.buession.security.pac4j.context.ShiroSessionStore;
-import org.pac4j.core.config.Config;
-import org.pac4j.core.context.JEEContext;
-import org.pac4j.core.context.session.SessionStore;
-import org.pac4j.core.http.adapter.HttpActionAdapter;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
+package com.buession.security.shiro.cache;
 
 /**
  * @author Yong.Teng
  */
-public abstract class AbstractPac4jFilter implements Filter {
-
-	private Config config;
-
-	private SessionStore<JEEContext> sessionStore = null;
-
-	private HttpActionAdapter<Object, JEEContext> httpActionAdapter;
-
-	public AbstractPac4jFilter(){
-	}
-
-	public AbstractPac4jFilter(Config config){
-		this.config = config;
-	}
-
-	public Config getConfig(){
-		return config;
-	}
-
-	public void setConfig(Config config){
-		this.config = config;
-	}
-
-	public HttpActionAdapter<Object, JEEContext> getHttpActionAdapter(){
-		return httpActionAdapter;
-	}
-
-	public void setHttpActionAdapter(HttpActionAdapter<Object, JEEContext> httpActionAdapter){
-		this.httpActionAdapter = httpActionAdapter;
-	}
-
-	@Override
-	public void init(final FilterConfig filterConfig) throws ServletException{
-	}
-
-	@Override
-	public void destroy(){
-	}
-
-	protected SessionStore<JEEContext> getSessionStore(){
-		if(sessionStore == null){
-			sessionStore = getConfig().getSessionStore();
-			if(sessionStore == null){
-				sessionStore = new ShiroSessionStore();
-			}
-		}
-
-		return sessionStore;
-	}
+public interface Cache<K, V> extends org.apache.shiro.cache.Cache<K, V> {
 
 }

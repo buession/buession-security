@@ -57,8 +57,6 @@ public class CallbackFilter extends AbstractPac4jFilter {
 
 	private CallbackLogic<Object, JEEContext> callbackLogic = new ShiroCallbackLogic<>();
 
-	private HttpActionAdapter<Object, JEEContext> httpActionAdapter;
-
 	public CallbackFilter(){
 	}
 
@@ -106,14 +104,6 @@ public class CallbackFilter extends AbstractPac4jFilter {
 		this.callbackLogic = callbackLogic;
 	}
 
-	public HttpActionAdapter<Object, JEEContext> getHttpActionAdapter(){
-		return httpActionAdapter;
-	}
-
-	public void setHttpActionAdapter(HttpActionAdapter<Object, JEEContext> httpActionAdapter){
-		this.httpActionAdapter = httpActionAdapter;
-	}
-
 	@Override
 	public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain
 			filterChain) throws IOException, ServletException{
@@ -124,8 +114,8 @@ public class CallbackFilter extends AbstractPac4jFilter {
 		final HttpServletResponse response = (HttpServletResponse) servletResponse;
 		final SessionStore<JEEContext> sessionStore = getSessionStore();
 		final JEEContext context = new JEEContext(request, response, sessionStore);
-		final HttpActionAdapter<Object, JEEContext> adapter = httpActionAdapter != null ? httpActionAdapter :
-				JEEHttpActionAdapter.INSTANCE;
+		final HttpActionAdapter<Object, JEEContext> adapter = getHttpActionAdapter() != null ? getHttpActionAdapter()
+				: JEEHttpActionAdapter.INSTANCE;
 
 		callbackLogic.perform(context, getConfig(), adapter, getDefaultUrl(), getSaveInSession(), getMultiProfile(),
 				false, getDefaultClient());

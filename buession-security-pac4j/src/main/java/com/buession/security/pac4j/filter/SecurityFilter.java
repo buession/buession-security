@@ -29,6 +29,7 @@ import org.pac4j.core.config.Config;
 import org.pac4j.core.context.JEEContext;
 import org.pac4j.core.context.session.SessionStore;
 import org.pac4j.core.engine.SecurityLogic;
+import org.pac4j.core.http.adapter.HttpActionAdapter;
 import org.pac4j.core.http.adapter.JEEHttpActionAdapter;
 import org.pac4j.core.util.CommonHelper;
 
@@ -113,12 +114,13 @@ public class SecurityFilter extends AbstractPac4jFilter {
 		final HttpServletResponse response = (HttpServletResponse) servletResponse;
 		final SessionStore<JEEContext> sessionStore = getSessionStore();
 		final JEEContext context = new JEEContext(request, response, sessionStore);
+		final HttpActionAdapter<Object, JEEContext> adapter = getHttpActionAdapter() != null ? getHttpActionAdapter()
+				: JEEHttpActionAdapter.INSTANCE;
 
 		securityLogic.perform(context, getConfig(), (ctx, profiles, parameters)->{
 			filterChain.doFilter(request, response);
 			return ctx;
-
-		}, JEEHttpActionAdapter.INSTANCE, getClients(), getAuthorizers(), getMatchers(), getMultiProfile());
+		}, adapter, getClients(), getAuthorizers(), getMatchers(), getMultiProfile());
 	}
 
 }

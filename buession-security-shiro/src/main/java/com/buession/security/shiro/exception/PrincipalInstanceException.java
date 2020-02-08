@@ -22,69 +22,33 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.filter;
-
-import com.buession.security.pac4j.context.ShiroSessionStore;
-import org.pac4j.core.config.Config;
-import org.pac4j.core.context.JEEContext;
-import org.pac4j.core.context.session.SessionStore;
-import org.pac4j.core.http.adapter.HttpActionAdapter;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
+package com.buession.security.shiro.exception;
 
 /**
  * @author Yong.Teng
  */
-public abstract class AbstractPac4jFilter implements Filter {
+public class PrincipalInstanceException extends RuntimeException {
 
-	private Config config;
-
-	private SessionStore<JEEContext> sessionStore = null;
-
-	private HttpActionAdapter<Object, JEEContext> httpActionAdapter;
-
-	public AbstractPac4jFilter(){
+	public PrincipalInstanceException(Class clazz, String idMethodName){
+		super(formatMessage(clazz, idMethodName));
 	}
 
-	public AbstractPac4jFilter(Config config){
-		this.config = config;
+	public PrincipalInstanceException(Class clazz, String idMethodName, Exception e){
+		super(formatMessage(clazz, idMethodName), e);
 	}
 
-	public Config getConfig(){
-		return config;
-	}
+	protected static String formatMessage(Class clazz, String idMethodName){
+		StringBuilder sb = new StringBuilder();
 
-	public void setConfig(Config config){
-		this.config = config;
-	}
+		sb.append(clazz).append(" must has getter for field: ").append(idMethodName).append("; ");
+		sb.append("We need a field to identify this Cache Object. ");
+		sb.append("So you need to defined an id field which you can get unique id to identify this principal. ");
+		sb.append("For example, ").append("if you use UserInfo as Principal class, ");
+		sb.append("the id field maybe userId, email, etc. For example, getUserId(), getEmail(), etc.\n");
+		sb.append("Default value is \"id\", ");
+		sb.append("that means your principal object has a method called \"getId()\"");
 
-	public HttpActionAdapter<Object, JEEContext> getHttpActionAdapter(){
-		return httpActionAdapter;
-	}
-
-	public void setHttpActionAdapter(HttpActionAdapter<Object, JEEContext> httpActionAdapter){
-		this.httpActionAdapter = httpActionAdapter;
-	}
-
-	@Override
-	public void init(final FilterConfig filterConfig) throws ServletException{
-	}
-
-	@Override
-	public void destroy(){
-	}
-
-	protected SessionStore<JEEContext> getSessionStore(){
-		if(sessionStore == null){
-			sessionStore = getConfig().getSessionStore();
-			if(sessionStore == null){
-				sessionStore = new ShiroSessionStore();
-			}
-		}
-
-		return sessionStore;
+		return sb.toString();
 	}
 
 }

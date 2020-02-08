@@ -32,14 +32,6 @@ import com.buession.security.shiro.serializer.StringSerializer;
  */
 public class Constants {
 
-	public final static String DEFAULT_KEY_PREFIX = "buession_shiro_redis_session:";
-
-	public final static int DEFAULT_EXPIRE = 1800;
-
-	public final static int DEFAULT_TIMEOUT = 1000;
-
-	public final static long DEFAULT_SESSION_IN_MEMORY_TIMEOUT = 1000L;
-
 	public final static String ALL_PERMISSION = "*:*";
 
 	public final static StringSerializer KEY_SERIALIZER = new StringSerializer();

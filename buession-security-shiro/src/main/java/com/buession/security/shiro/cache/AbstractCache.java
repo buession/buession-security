@@ -22,69 +22,58 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.filter;
+package com.buession.security.shiro.cache;
 
-import com.buession.security.pac4j.context.ShiroSessionStore;
-import org.pac4j.core.config.Config;
-import org.pac4j.core.context.JEEContext;
-import org.pac4j.core.context.session.SessionStore;
-import org.pac4j.core.http.adapter.HttpActionAdapter;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
+import com.buession.core.validator.Validate;
 
 /**
  * @author Yong.Teng
  */
-public abstract class AbstractPac4jFilter implements Filter {
+public abstract class AbstractCache<K, V> implements Cache<K, V> {
 
-	private Config config;
+	private String keyPrefix = CacheManager.DEFAULT_KEY_PREFIX;
 
-	private SessionStore<JEEContext> sessionStore = null;
+	private int expire = CacheManager.DEFAULT_EXPIRE;
 
-	private HttpActionAdapter<Object, JEEContext> httpActionAdapter;
+	private String principalIdFieldName = CacheManager.DEFAULT_PRINCIPAL_ID_FIELD_NAME;
 
-	public AbstractPac4jFilter(){
+	public AbstractCache(){
 	}
 
-	public AbstractPac4jFilter(Config config){
-		this.config = config;
+	public AbstractCache(String keyPrefix, int expire){
+		this.keyPrefix = keyPrefix;
+		this.expire = expire;
 	}
 
-	public Config getConfig(){
-		return config;
+	public AbstractCache(String keyPrefix, int expire, String principalIdFieldName){
+		this(keyPrefix, expire);
+		setPrincipalIdFieldName(principalIdFieldName);
 	}
 
-	public void setConfig(Config config){
-		this.config = config;
+	public String getKeyPrefix(){
+		return keyPrefix;
 	}
 
-	public HttpActionAdapter<Object, JEEContext> getHttpActionAdapter(){
-		return httpActionAdapter;
+	public void setKeyPrefix(String keyPrefix){
+		this.keyPrefix = keyPrefix;
 	}
 
-	public void setHttpActionAdapter(HttpActionAdapter<Object, JEEContext> httpActionAdapter){
-		this.httpActionAdapter = httpActionAdapter;
+	public int getExpire(){
+		return expire;
 	}
 
-	@Override
-	public void init(final FilterConfig filterConfig) throws ServletException{
+	public void setExpire(int expire){
+		this.expire = expire;
 	}
 
-	@Override
-	public void destroy(){
+	public String getPrincipalIdFieldName(){
+		return principalIdFieldName;
 	}
 
-	protected SessionStore<JEEContext> getSessionStore(){
-		if(sessionStore == null){
-			sessionStore = getConfig().getSessionStore();
-			if(sessionStore == null){
-				sessionStore = new ShiroSessionStore();
-			}
+	public void setPrincipalIdFieldName(String principalIdFieldName){
+		if(Validate.hasText(principalIdFieldName)){
+			this.principalIdFieldName = principalIdFieldName;
 		}
-
-		return sessionStore;
 	}
 
 }

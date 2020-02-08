@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.cache;
@@ -95,14 +95,8 @@ public abstract class AbsractRedisManager implements RedisManager {
 
 	@Override
 	public byte[] set(byte[] key, byte[] value, int expire){
-		if(redisTemplate.set(key, value) == Status.SUCCESS){
-			if(expire != 0){
-				redisTemplate.expire(key, expire);
-			}
-			return value;
-		}else{
-			return null;
-		}
+		Status result = expire == 0 ? redisTemplate.set(key, value) : redisTemplate.setEx(key, value, expire);
+		return result == Status.SUCCESS ? value : null;
 	}
 
 	@Override

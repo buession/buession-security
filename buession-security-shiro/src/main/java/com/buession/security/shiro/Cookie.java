@@ -98,9 +98,8 @@ public class Cookie implements Serializable {
 	}
 
 	public Cookie(String name, String domain, String path, int maxAge, boolean secure){
-		this(name, domain, path);
+		this(name, domain, path, secure);
 		this.maxAge = maxAge;
-		this.secure = secure;
 	}
 
 	public String getName(){

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.context;
@@ -32,7 +32,7 @@ import org.pac4j.core.context.session.SessionStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,8 +41,6 @@ import java.util.stream.Collectors;
  * @author Yong.Teng
  */
 public class ShiroSessionStore implements SessionStore<JEEContext> {
-
-	public final static ShiroSessionStore INSTANCE = new ShiroSessionStore();
 
 	private final static Logger logger = LoggerFactory.getLogger(ShiroSessionStore.class);
 
@@ -85,7 +83,6 @@ public class ShiroSessionStore implements SessionStore<JEEContext> {
 
 	@Override
 	public Optional getTrackableSession(JEEContext context){
-		//return Optional.ofNullable(getSession(true));
 		return Optional.empty();
 	}
 
@@ -102,8 +99,8 @@ public class ShiroSessionStore implements SessionStore<JEEContext> {
 		}
 
 		logger.debug("Discard old session: {}", session.getId());
-		final Map<Object, Object> attributes = Collections.list(Collections.enumeration(session.getAttributeKeys()))
-				.stream().collect(Collectors.toMap(k->k, session::getAttribute, (a, b)->b));
+		final Map<Object, Object> attributes = (new ArrayList<>(session.getAttributeKeys())).stream().collect
+				(Collectors.toMap(k->k, session::getAttribute, (a, b)->b));
 
 		session.stop();
 

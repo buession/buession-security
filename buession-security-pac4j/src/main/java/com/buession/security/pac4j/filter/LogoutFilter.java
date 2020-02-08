@@ -30,6 +30,7 @@ import org.pac4j.core.context.JEEContext;
 import org.pac4j.core.context.session.SessionStore;
 import org.pac4j.core.engine.DefaultLogoutLogic;
 import org.pac4j.core.engine.LogoutLogic;
+import org.pac4j.core.http.adapter.HttpActionAdapter;
 import org.pac4j.core.http.adapter.JEEHttpActionAdapter;
 import org.pac4j.core.util.CommonHelper;
 
@@ -116,9 +117,11 @@ public class LogoutFilter extends AbstractPac4jFilter {
 		final HttpServletResponse response = (HttpServletResponse) servletResponse;
 		final SessionStore<JEEContext> sessionStore = getSessionStore();
 		final JEEContext context = new JEEContext(request, response, sessionStore);
+		final HttpActionAdapter<Object, JEEContext> adapter = getHttpActionAdapter() != null ? getHttpActionAdapter()
+				: JEEHttpActionAdapter.INSTANCE;
 
-		logoutLogic.perform(context, getConfig(), JEEHttpActionAdapter.INSTANCE, getDefaultUrl(), getLogoutUrlPattern
-				(), getLocalLogout(), true, getCentralLogout());
+		logoutLogic.perform(context, getConfig(), adapter, getDefaultUrl(), getLogoutUrlPattern(), getLocalLogout(),
+				true, getCentralLogout());
 	}
 
 }

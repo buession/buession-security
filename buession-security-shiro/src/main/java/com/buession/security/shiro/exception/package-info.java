@@ -19,38 +19,10 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.shiro.cache;
-
-import org.apache.shiro.session.Session;
-
-import java.util.Date;
-
 /**
  * @author Yong.Teng
  */
-public class SessionInMemory {
-
-    private Session session;
-
-    private Date createTime;
-
-    public Session getSession(){
-        return session;
-    }
-
-    public void setSession(Session session){
-        this.session = session;
-    }
-
-    public Date getCreateTime(){
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime){
-        this.createTime = createTime;
-    }
-
-}
+package com.buession.security.shiro.exception;
