@@ -44,7 +44,7 @@ public class PrincipalInstanceException extends RuntimeException {
 		sb.append("We need a field to identify this Cache Object. ");
 		sb.append("So you need to defined an id field which you can get unique id to identify this principal. ");
 		sb.append("For example, ").append("if you use UserInfo as Principal class, ");
-		sb.append("the id field maybe userId, email, etc. For example, getUserId(), getEmail(), etc.\n");
+		sb.append("the id field maybe userId, email, etc. For example, getUserId(), getEmail(), etc.");
 		sb.append("Default value is \"id\", ");
 		sb.append("that means your principal object has a method called \"getId()\"");
 
