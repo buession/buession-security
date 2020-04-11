@@ -24,7 +24,6 @@
  */
 package com.buession.security.shiro.session;
 
-import com.buession.security.shiro.Constants;
 import com.buession.security.shiro.cache.MemorySession;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
@@ -126,7 +125,6 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 
 		return sessionId;
 	}
-
 
 	@Override
 	protected Session doReadSession(Serializable sessionId){

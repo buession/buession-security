@@ -209,28 +209,30 @@ class RSAMcrypt extends AbstractMcrypt {
 
 	private final Key getKey(){
 		String salt = getSalt();
-		if(salt == null){
-			salt = "";
+		StringBuilder sb = new StringBuilder();
+
+		if(salt != null){
+			sb.append(salt);
 		}
 
 		int saltLength = salt.length();
 		if(saltLength < 16){
 			for(int i = 1; i <= 16 - saltLength; i++){
-				salt += " ";
+				sb.append(" ");
 			}
 		}else if(saltLength < 24){
 			for(int i = 1; i <= 24 - saltLength; i++){
-				salt += " ";
+				sb.append(" ");
 			}
 		}else if(saltLength < 32){
 			for(int i = 1; i <= 32 - saltLength; i++){
-				salt += " ";
+				sb.append(" ");
 			}
 		}else if(saltLength > 32){
-			salt = salt.substring(0, 31);
+			sb.append(salt, 0, 31);
 		}
 
-		return new SecretKeySpec(salt.getBytes(getCharset()), Algo.RSA.name());// 转换为RSA专用密钥
+		return new SecretKeySpec(sb.toString().getBytes(getCharset()), Algo.RSA.name());// 转换为RSA专用密钥
 	}
 
 	private final byte[] encode(final Key key, final byte[] data){

@@ -7,13 +7,13 @@
 		<groupId>com.buession</groupId>
 		<artifactId>parent</artifactId>
 		<relativePath/>
-		<version>1.1.0</version>
+		<version>1.1.2</version>
 	</parent>
 	<groupId>com.buession.security</groupId>
 	<artifactId>buession-security-parent</artifactId>
 	<url>https://github.com/buession/buession-security</url>
 	<description>Buession Security Framework Parent</description>
-	<version>1.1.0</version>
+	<version>1.1.2</version>
 	<packaging>pom</packaging>
 
 	<organization>
@@ -51,10 +51,6 @@
 		<module>../buession-security-spring</module>
 	</modules>
 
-	<properties>
-		<shiro.version>1.4.2</shiro.version>
-	</properties>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -66,27 +62,6 @@
 				<groupId>com.buession</groupId>
 				<artifactId>buession-json</artifactId>
 				<version>${buession.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.shiro</groupId>
-				<artifactId>shiro-core</artifactId>
-				<version>${shiro.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.shiro</groupId>
-				<artifactId>shiro-aspectj</artifactId>
-				<version>${shiro.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.shiro</groupId>
-				<artifactId>shiro-spring</artifactId>
-				<version>${shiro.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.shiro</groupId>
-				<artifactId>shiro-web</artifactId>
-				<version>${shiro.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -105,6 +80,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

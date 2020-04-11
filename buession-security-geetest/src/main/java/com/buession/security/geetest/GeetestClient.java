@@ -29,8 +29,8 @@ import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
 import com.buession.lang.Status;
 import com.buession.security.geetest.core.ClientType;
+import com.buession.security.geetest.core.EnhencedResult;
 import com.buession.security.mcrypt.MD5Mcrypt;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.buession.security.geetest.core.ProcessResult;
@@ -230,13 +230,10 @@ public class GeetestClient {
 
 			logger.debug("Enhenced Validate response: {}", response);
 
-			Map<String, Object> returnMap = OBJECT_MAPPER.readValue(response.getBody(), new TypeReference<Map<String,
-					Object>>() {
-
-			});
+			EnhencedResult returnMap = OBJECT_MAPPER.readValue(response.getBody(), EnhencedResult.class);
 
 			final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-			return Status.valueOf(md5Mcrypt.encode(seccode).equals(returnMap.get("seccode")));
+			return Status.valueOf(md5Mcrypt.encode(seccode).equals(returnMap.getSeccode()));
 		}catch(Exception e){
 			logger.error("Enhenced Validate failure: {}", e);
 		}

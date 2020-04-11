@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.geetest.core;
@@ -29,28 +29,29 @@ package com.buession.security.geetest.core;
  */
 public enum ClientType {
 
-    /**
-     * 电脑上的浏览器
-     */
-    WEB("web"),
+	/**
+	 * 电脑上的浏览器
+	 */
+	WEB("web"),
 
-    /**
-     * 手机上的浏览器，包括移动应用内完全内置的 web view
-     */
-    H5("h5"),
+	/**
+	 * 手机上的浏览器，包括移动应用内完全内置的 web view
+	 */
+	H5("h5"),
 
-    /**
-     * 通过原生 SDK 植入 APP 应用的方式
-     */
-    NATIVE("native");
+	/**
+	 * 通过原生 SDK 植入 APP 应用的方式
+	 */
+	NATIVE("native");
 
-    private String value;
+	private String value;
 
-    ClientType(String value){
-        this.value = value;
-    }
+	ClientType(String value){
+		this.value = value;
+	}
 
-    public String getValue(){
-        return value;
-    }
+	public String getValue(){
+		return value;
+	}
+
 }

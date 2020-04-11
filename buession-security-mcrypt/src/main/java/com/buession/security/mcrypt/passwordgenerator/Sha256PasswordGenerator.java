@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt.passwordgenerator;
@@ -31,21 +31,22 @@ import com.buession.security.mcrypt.Sha256Mcrypt;
  */
 public class Sha256PasswordGenerator extends AbstractPasswordGenerator {
 
-    /**
-     * 密码加密
-     *
-     * @param password
-     *         原始密码
-     * @param salt
-     *         salt
-     *
-     * @return 加密后的密码
-     */
-    @Override
-    public String digestEncoded(final String password, final String salt){
-        Sha256Mcrypt sha256Mcrypt = new Sha256Mcrypt();
+	/**
+	 * 密码加密
+	 *
+	 * @param password
+	 * 		原始密码
+	 * @param salt
+	 * 		salt
+	 *
+	 * @return 加密后的密码
+	 */
+	@Override
+	public String digestEncoded(final String password, final String salt){
+		Sha256Mcrypt sha256Mcrypt = new Sha256Mcrypt();
 
-        sha256Mcrypt.setSalt(salt);
-        return sha256Mcrypt.encode(password);
-    }
+		sha256Mcrypt.setSalt(salt);
+		return sha256Mcrypt.encode(password);
+	}
+
 }

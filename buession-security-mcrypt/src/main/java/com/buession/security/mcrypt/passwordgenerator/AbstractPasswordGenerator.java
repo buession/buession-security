@@ -24,6 +24,8 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
+import com.buession.core.utils.Assert;
+
 import java.util.Random;
 
 /**
@@ -33,99 +35,12 @@ import java.util.Random;
  */
 public abstract class AbstractPasswordGenerator implements PasswordGenerator {
 
-	private final static char[] CHARS = {
-			'a',
-			'b',
-			'c',
-			'd',
-			'e',
-			'f',
-			'g',
-			'h',
-			'i',
-			'j',
-			'k',
-			'l',
-			'm',
-			'n',
-			'o',
+	private final static char[] CHARS = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
 			'p',
-			'q',
-			'r',
-			's',
-			't',
-			'u',
-			'v',
-			'w',
-			'x',
-			'y',
-			'z',
-			'A',
-			'B',
-			'C',
-			'D',
-			'E',
-			'F',
-			'G',
-			'H',
-			'I',
-			'J',
-			'K',
-			'L',
-			'M',
-			'N',
-			'O',
-			'P',
-			'Q',
-			'R',
-			'S',
-			'T',
-			'U',
-			'V',
-			'W',
-			'X',
-			'Y',
-			'Z',
-			'1',
-			'2',
-			'3',
-			'4',
-			'5',
-			'6',
-			'7',
-			'8',
-			'9',
-			'0',
-			'~',
-			'!',
-			'@',
-			'#',
-			'$',
-			'%',
-			'^',
-			'&',
-			'*',
-			'(',
-			')',
-			'_',
-			'-',
-			'+',
-			'=',
-			'{',
-			'}',
-			'[',
-			']',
-			'|',
-			'\\',
-			'/',
-			':',
-			';',
-			'<',
-			'>',
-			'?',
-			',',
-			'.'
-	};
+			'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+			'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6',
+			'7', '8', '9', '0', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '}',
+			'[', ']', '|', '\\', '/', ':', ';', '<', '>', '?', ',', '.'};
 
 	/**
 	 * 生成随机密码
@@ -137,9 +52,7 @@ public abstract class AbstractPasswordGenerator implements PasswordGenerator {
 	 */
 	@Override
 	public String generatorRandomPassword(final int length){
-		if(length <= 0){
-			throw new IllegalArgumentException("Password length cloud less than or equal to 0.");
-		}
+		Assert.isZeroNegative(length, "Password length cloud less than or equal to 0.");
 
 		StringBuilder sb = new StringBuilder(length);
 		Random random = new Random();

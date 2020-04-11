@@ -24,6 +24,8 @@
  */
 package com.buession.security.shiro;
 
+import com.buession.security.core.SameSite;
+
 import java.io.Serializable;
 
 /**
@@ -43,7 +45,15 @@ public class Cookie implements Serializable {
 
 	private boolean secure;
 
+	private boolean httpOnly;
+
+	private SameSite sameSite;
+
 	public Cookie(){
+	}
+
+	public Cookie(String name){
+		this.name = name;
 	}
 
 	public Cookie(String name, int maxAge){
@@ -59,6 +69,11 @@ public class Cookie implements Serializable {
 	public Cookie(String name, int maxAge, boolean secure){
 		this(name, maxAge);
 		this.secure = secure;
+	}
+
+	public Cookie(String name, int maxAge, boolean secure, boolean httpOnly){
+		this(name, maxAge, secure);
+		this.httpOnly = httpOnly;
 	}
 
 	public Cookie(String name, String domain){
@@ -77,8 +92,7 @@ public class Cookie implements Serializable {
 	}
 
 	public Cookie(String name, String domain, int maxAge, boolean secure){
-		this(name, domain);
-		this.maxAge = maxAge;
+		this(name, domain, maxAge);
 		this.secure = secure;
 	}
 
@@ -97,9 +111,25 @@ public class Cookie implements Serializable {
 		this.secure = secure;
 	}
 
-	public Cookie(String name, String domain, String path, int maxAge, boolean secure){
+	public Cookie(String name, String domain, String path, boolean secure, boolean httpOnly){
 		this(name, domain, path, secure);
-		this.maxAge = maxAge;
+		this.httpOnly = httpOnly;
+	}
+
+	public Cookie(String name, String domain, String path, int maxAge, boolean secure){
+		this(name, domain, path, maxAge);
+		this.secure = secure;
+	}
+
+	public Cookie(String name, String domain, String path, int maxAge, boolean secure, boolean httpOnly){
+		this(name, domain, path, maxAge, secure);
+		this.httpOnly = httpOnly;
+	}
+
+	public Cookie(String name, String domain, String path, int maxAge, boolean secure, boolean httpOnly, SameSite
+			sameSite){
+		this(name, domain, path, maxAge, secure, httpOnly);
+		this.sameSite = sameSite;
 	}
 
 	public String getName(){
@@ -146,4 +176,23 @@ public class Cookie implements Serializable {
 		this.secure = secure;
 	}
 
+	public boolean isHttpOnly(){
+		return getHttpOnly();
+	}
+
+	public boolean getHttpOnly(){
+		return httpOnly;
+	}
+
+	public void setHttpOnly(boolean httpOnly){
+		this.httpOnly = httpOnly;
+	}
+
+	public SameSite getSameSite(){
+		return sameSite;
+	}
+
+	public void setSameSite(SameSite sameSite){
+		this.sameSite = sameSite;
+	}
 }

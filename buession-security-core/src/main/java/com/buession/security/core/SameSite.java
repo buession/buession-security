@@ -22,31 +22,17 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt.passwordgenerator;
-
-import com.buession.security.mcrypt.Sha512Mcrypt;
+package com.buession.security.core;
 
 /**
  * @author Yong.Teng
  */
-public class Sha512PasswordGenerator extends AbstractPasswordGenerator {
+public enum SameSite {
 
-	/**
-	 * 密码加密
-	 *
-	 * @param password
-	 * 		原始密码
-	 * @param salt
-	 * 		salt
-	 *
-	 * @return 加密后的密码
-	 */
-	@Override
-	public String digestEncoded(final String password, final String salt){
-		Sha512Mcrypt sha512Mcrypt = new Sha512Mcrypt();
+	NONE,
 
-		sha512Mcrypt.setSalt(salt);
-		return sha512Mcrypt.encode(password);
-	}
+	LAX,
+
+	STRICT
 
 }

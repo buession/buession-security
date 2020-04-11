@@ -79,6 +79,7 @@ public class Pac4jPrincipal implements Principal, Serializable {
 		if(this == o){
 			return true;
 		}
+
 		if(o == null || getClass() != o.getClass()){
 			return false;
 		}

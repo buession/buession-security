@@ -22,31 +22,25 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt.passwordgenerator;
+package com.buession.security.geetest.core;
 
-import com.buession.security.mcrypt.Sha512Mcrypt;
+import java.io.Serializable;
 
 /**
  * @author Yong.Teng
  */
-public class Sha512PasswordGenerator extends AbstractPasswordGenerator {
+public class EnhencedResult implements Serializable {
 
-	/**
-	 * 密码加密
-	 *
-	 * @param password
-	 * 		原始密码
-	 * @param salt
-	 * 		salt
-	 *
-	 * @return 加密后的密码
-	 */
-	@Override
-	public String digestEncoded(final String password, final String salt){
-		Sha512Mcrypt sha512Mcrypt = new Sha512Mcrypt();
+	private final static long serialVersionUID = 402465840048648582L;
 
-		sha512Mcrypt.setSalt(salt);
-		return sha512Mcrypt.encode(password);
+	private String seccode;
+
+	public String getSeccode(){
+		return seccode;
+	}
+
+	public void setSeccode(String seccode){
+		this.seccode = seccode;
 	}
 
 }
