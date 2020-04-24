@@ -2,8 +2,8 @@
 
 Maven 中央仓库搜索
 
-- [https://search.maven.org/search?q=g:com.buession.security](https://search.maven.org/search?q=g:com.buession.security)
-- [https://mvnrepository.com/search?q=com.buession.security](https://mvnrepository.com/search?q=com.buession.security)
+- [https://search.maven.org/search?q=g:com.buession.security](https://search.maven.org/search?q=g:com.buession.security){:target="_blank"}
+- [https://mvnrepository.com/search?q=com.buession.security](https://mvnrepository.com/search?q=com.buession.security){:target="_blank"}
 
 **手动编译**
 
