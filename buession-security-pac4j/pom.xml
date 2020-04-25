@@ -7,7 +7,7 @@
 		<groupId>com.buession.security</groupId>
 		<artifactId>buession-security-parent</artifactId>
 		<relativePath>../buession-security-parent</relativePath>
-		<version>1.1.2</version>
+		<version>1.1.3</version>
 	</parent>
 	<artifactId>buession-security-pac4j</artifactId>
 	<url>https://github.com/buession/buession-security</url>
@@ -145,7 +145,7 @@
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
