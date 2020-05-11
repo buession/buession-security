@@ -24,6 +24,7 @@
  */
 package com.buession.security.mcrypt;
 
+import com.buession.core.utils.StringUtils;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -33,23 +34,17 @@ import java.nio.charset.StandardCharsets;
  */
 public class TempTest {
 
-    @Test
-    public void test(){
-        Sha512Mcrypt sha512Mcrypt = new Sha512Mcrypt(StandardCharsets.UTF_8, "bQbyCowWYouzBVTujmZr");
-        String secret = "e2Sbg68MYBFfn6BEnuSyEhldCB2P1xej1WuLOH5W";
-        String signature = "ND3MahI1e9AB0TDn";
-        long timestamp = 1574776747;
+	@Test
+	public void test(){
+		String key = "tfdTy9plMWKE0ubX2amN";
+		String secret = "Vc5pEAzjlL1rhWEuVfY5V8lnwQgzhG4ErmU5r76X5Gxx9xZTZZ";
+		String signature = "5ih0LxX12ubG3Cff82W1NqaXwlDkt79b";
 
-        System.out.println(sha512Mcrypt.encode(secret + signature + timestamp));
+		DiscuzMycrypt discuzMycrypt = new DiscuzMycrypt();
+		System.out.println("Key: " + discuzMycrypt.encode(key));
 
-        Sha512Mcrypt sha512Mcrypt2 = new Sha512Mcrypt(StandardCharsets.UTF_8);
-        String key2 = "bQbyCowWYouzBVTujmZr";
-        String secret2 = "e2Sbg68MYBFfn6BEnuSyEhldCB2P1xej1WuLOH5W";
-        String signature2 = "ND3MahI1e9AB0TDn";
-        long timestamp2 = 1574776747;
-
-        System.out.println(sha512Mcrypt2.encode(key2 + secret2 + signature2 + timestamp2));
-        System.out.println("");
-    }
+		Sha512Mcrypt sha512Mcrypt = new Sha512Mcrypt(StandardCharsets.UTF_8, key);
+		System.out.println("Token： " + sha512Mcrypt.encode(key + secret + StringUtils.reverse(signature)));
+	}
 
 }
