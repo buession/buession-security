@@ -49,7 +49,6 @@ public abstract class AbsractRedisManager implements RedisManager {
 	private RedisTemplate redisTemplate;
 
 	public AbsractRedisManager(){
-
 	}
 
 	public AbsractRedisManager(RedisTemplate redisTemplate){

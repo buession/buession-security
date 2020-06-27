@@ -185,6 +185,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	protected void removeExpiredSessionInMemory(Map<Serializable, MemorySession> sessionMap){
 		logger.debug("Remove expired session in memory.");
 		Iterator<Serializable> iterator = sessionMap.keySet().iterator();
+
 		while(iterator.hasNext()){
 			Serializable sessionId = iterator.next();
 			MemorySession memorySession = sessionMap.get(sessionId);

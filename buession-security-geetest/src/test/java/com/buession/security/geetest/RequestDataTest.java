@@ -22,69 +22,33 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.geetest.core;
+package com.buession.security.geetest;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.buession.security.geetest.core.ClientType;
+import com.buession.security.geetest.core.RequestData;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Test;
 
 /**
  * @author Yong.Teng
  */
-public class ProcessResult {
+public class RequestDataTest {
 
-    private boolean success;
+	@Test
+	public void json() throws JsonProcessingException{
+		RequestData requestData = new RequestData();
 
-    private String gt;
+		requestData.setUserId("ueerid");
+		requestData.setClientType(ClientType.H5);
+		requestData.setIpAddress("127.0.0.1");
 
-    private String challenge;
+		ObjectMapper objectMapper = new ObjectMapper();
+		String str = objectMapper.writeValueAsString(requestData);
+		System.out.println(str);
 
-    @JsonProperty(value = "new_captcha")
-    private Boolean newCaptcha;
-
-    @JsonProperty(value = "session_id")
-    private String sessionId;
-
-    public boolean getSuccess(){
-        return success;
-    }
-
-    public boolean isSuccess(){
-        return getSuccess();
-    }
-
-    public void setSuccess(boolean success){
-        this.success = success;
-    }
-
-    public String getGt(){
-        return gt;
-    }
-
-    public void setGt(String gt){
-        this.gt = gt;
-    }
-
-    public String getChallenge(){
-        return challenge;
-    }
-
-    public void setChallenge(String challenge){
-        this.challenge = challenge;
-    }
-
-    public Boolean getNewCaptcha(){
-        return newCaptcha;
-    }
-
-    public void setNewCaptcha(Boolean newCaptcha){
-        this.newCaptcha = newCaptcha;
-    }
-
-    public String getSessionId(){
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId){
-        this.sessionId = sessionId;
-    }
+		RequestData requestData1 = objectMapper.readValue(str, RequestData.class);
+		System.out.println(requestData1.getIpAddress());
+	}
 
 }

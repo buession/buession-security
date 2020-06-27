@@ -32,7 +32,6 @@ import org.pac4j.core.context.session.SessionStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -99,7 +98,7 @@ public class ShiroSessionStore implements SessionStore<JEEContext> {
 		}
 
 		logger.debug("Discard old session: {}", session.getId());
-		final Map<Object, Object> attributes = (new ArrayList<>(session.getAttributeKeys())).stream().collect
+		final Map<Object, Object> attributes = session.getAttributeKeys().stream().collect
 				(Collectors.toMap(k->k, session::getAttribute, (a, b)->b));
 
 		session.stop();
