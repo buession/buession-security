@@ -301,8 +301,8 @@ public class GeetestClient {
 			if(processResult.getChallenge().length() == CHALLENGE_LENGTH){
 				final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
 
-				this.response = getSuccessPreProcessResult(md5Mcrypt.encode(processResult.getChallenge() +
-						geetestKey));
+				this.response =
+						getSuccessPreProcessResult(md5Mcrypt.encode(processResult.getChallenge() + geetestKey));
 
 				return Status.SUCCESS;
 			}else{
@@ -342,12 +342,11 @@ public class GeetestClient {
 	 */
 	protected ProcessResult getFailPreProcessResult(){
 		final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-		StringBuilder challenge = new StringBuilder();
+		StringBuilder challenge = new StringBuilder(36);
 		String s1 = md5Mcrypt.encode(random(100));
 		String s2 = md5Mcrypt.encode(random(100));
 
-		challenge.append(s1);
-		challenge.append(s2, 0, 2);
+		challenge.append(s1).append(s2, 0, 2);
 
 		ProcessResult processResult = new ProcessResult();
 
@@ -375,14 +374,12 @@ public class GeetestClient {
 		return Validate.hasText(challenge) && Validate.hasText(validate) && Validate.hasText(seccode);
 	}
 
-	protected final static boolean checkResultByPrivate(final String geetestKey, final String challenge, final String
-			validate){
+	protected final static boolean checkResultByPrivate(final String geetestKey, final String challenge,
+			final String validate){
 		final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
 		final StringBuilder sb = new StringBuilder(geetestKey.length() + Geetest.NAME.length() + challenge.length());
 
-		sb.append(geetestKey);
-		sb.append(Geetest.NAME);
-		sb.append(challenge);
+		sb.append(geetestKey).append(Geetest.NAME).append(challenge);
 
 		return validate.equals(md5Mcrypt.encode(sb.toString()));
 	}
@@ -393,29 +390,24 @@ public class GeetestClient {
 
 	protected final static class URLBuilder {
 
-		public final static String buildRegisterUrl(final String geetestId, final ClientType clientType, final String
-				userId, final String ip){
+		public final static String buildRegisterUrl(final String geetestId, final ClientType clientType,
+				final String userId, final String ip){
 			final StringBuilder sb = new StringBuilder(Geetest.REGISTER_URL.length() + geetestId.length() + 24);
 
-			sb.append(Geetest.REGISTER_URL);
-			sb.append('?');
-			sb.append("gt=");
-			sb.append(geetestId);
+			sb.append(Geetest.REGISTER_URL).append('?');
+			sb.append("gt=").append(geetestId);
 			sb.append("&json_format=1");
 
 			if(userId != null){
-				sb.append("&user_id=");
-				sb.append(userId);
+				sb.append("&user_id=").append(userId);
 			}
 
 			if(clientType != null){
-				sb.append("&client_type=");
-				sb.append(clientType.getValue());
+				sb.append("&client_type=").append(clientType.getValue());
 			}
 
 			if(ip != null){
-				sb.append("&ip_address=");
-				sb.append(ip);
+				sb.append("&ip_address=").append(ip);
 			}
 
 			return sb.toString();

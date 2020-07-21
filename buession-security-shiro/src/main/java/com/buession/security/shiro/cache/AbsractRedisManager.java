@@ -82,7 +82,7 @@ public abstract class AbsractRedisManager implements RedisManager {
 		do{
 			scanResult = redisTemplate.scan(cursor, returnKeysCount);
 
-			if(Validate.isEmpty(scanResult.getResults()) == false){
+			if(Validate.isNotEmpty(scanResult.getResults())){
 				keys.addAll(scanResult.getResults());
 			}
 

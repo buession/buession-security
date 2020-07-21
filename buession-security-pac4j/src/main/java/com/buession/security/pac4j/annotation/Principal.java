@@ -22,62 +22,26 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt.passwordgenerator;
+package com.buession.security.pac4j.annotation;
 
-import com.buession.core.utils.Assert;
+import org.springframework.web.bind.annotation.ValueConstants;
 
-import java.util.Random;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * 密码生成器抽象类
- *
  * @author Yong.Teng
  */
-public abstract class AbstractPasswordGenerator implements PasswordGenerator {
+@Target({ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Principal {
 
-	private final static char[] CHARS = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-			'p',
-			'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-			'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6',
-			'7', '8', '9', '0', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '}',
-			'[', ']', '|', '\\', '/', ':', ';', '<', '>', '?', ',', '.'};
+	String id() default ValueConstants.DEFAULT_NONE;
 
-	/**
-	 * 生成随机密码
-	 *
-	 * @param length
-	 * 		长度
-	 *
-	 * @return 随机密码
-	 */
-	@Override
-	public String generatorRandomPassword(final int length){
-		Assert.isZeroNegative(length, "Password length cloud less than or equal to 0.");
-
-		StringBuilder sb = new StringBuilder(length);
-		Random random = new Random();
-
-		for(int i = 0; i < length; i++){
-			int j = random.nextInt(CHARS.length);
-			sb.append(CHARS[j]);
-		}
-
-		return sb.toString();
-	}
-
-	/**
-	 * 密码加密
-	 *
-	 * @param password
-	 * 		原始密码
-	 * @param salt
-	 * 		salt
-	 *
-	 * @return 加密后的密码
-	 */
-	@Override
-	public byte[] digestEncoded(final byte[] password, final byte[] salt){
-		return digestEncoded(new String(password), new String(salt)).getBytes();
-	}
+	String realName() default ValueConstants.DEFAULT_NONE;
 
 }

@@ -1,33 +1,35 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership.
- * The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work for additional information regarding
+ * copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with the License. You may obtain
+ * a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
- * =========================================================================================================
+ * =================================================================================================
  *
  * This software consists of voluntary contributions made by many individuals on behalf of the
  * Apache Software Foundation. For more information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- * +-------------------------------------------------------------------------------------------------------+
- * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
- * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
- * +-------------------------------------------------------------------------------------------------------+
+ * +------------------------------------------------------------------------------------------------+
+ * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
+ * | Author: Yong.Teng <webmaster@buession.com> 													|
+ * | Copyright @ 2013-2020 Buession.com Inc.														|
+ * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
 
+import com.buession.core.datetime.DateTime;
 import com.buession.core.utils.Assert;
 import com.buession.core.utils.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.buession.lang.Constants;
 
 import java.nio.charset.Charset;
 
@@ -43,8 +45,6 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	private final static MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
 
 	private final static Base64Mcrypt base64Mcrypt = new Base64Mcrypt();
-
-	private final static Logger logger = LoggerFactory.getLogger(DiscuzMycrypt.class);
 
 	public DiscuzMycrypt(){
 		super(null);
@@ -102,11 +102,11 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 
 		String key = md5(md5(getRealSalt()));
 		String keya = md5(StringUtils.substr(key, 16, 16));
-		String keyb = StringUtils.substr(md5(microtime()), -4);
+		String keyb = StringUtils.substr(md5(StringUtils.replace(DateTime.microtime(), " ", ".")), -4);
 		String keyc = getResultKey(key, keyb);
 
 		s = StringUtils.repeat('0', 10) + StringUtils.substr(md5(s + keya), 0, 16) + s;
-		s = StringUtils.replace(base64Mcrypt.encode(mod(s, keyc)), "=", "");
+		s = StringUtils.replace(base64Mcrypt.encode(mod(s, keyc)), "=", Constants.EMPTY_STRING);
 
 		StringBuilder sb = new StringBuilder(keyb.length() + s.length());
 
@@ -141,12 +141,12 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 
 		String s1 = StringUtils.substr(result, 0, 10);
 		String s2 = StringUtils.substr(result, 26);
-		long j = Integer.valueOf(s1);
+		long j = Long.valueOf(s1);
 		String k1 = md5Mcrypt.encode(s2 + keya);
 		long timestamp = System.currentTimeMillis() / 1000;
 
 		return (j == 0 || j - timestamp > 0) && StringUtils.substr(result, 10, 16).equals(StringUtils.substr(k1, 0,
-				16)) ? s2 : "";
+				16)) ? s2 : Constants.EMPTY_STRING;
 	}
 
 	private final static String md5(final String str){
@@ -157,8 +157,7 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 		if(key.length() <= 16){
 			return md5(key + StringUtils.substr(str, 0, 16) + StringUtils.substr(str, 16));
 		}else{
-			return md5(StringUtils.substr(key, 0, 16) + StringUtils.substr(key, 0, 16) + (StringUtils.substr(key, 16))
-					+ StringUtils.substr(str, 16));
+			return md5(StringUtils.substr(key, 0, 16) + StringUtils.substr(key, 0, 16) + (StringUtils.substr(key, 16)) + StringUtils.substr(str, 16));
 		}
 	}
 
@@ -167,23 +166,11 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 		StringBuilder sb = new StringBuilder(strLength);
 
 		for(int i = 0; i < strLength; i++){
-			int j = (int) str.charAt(i);
-			int k = (int) key.charAt(i % 32);
+			int j = str.charAt(i);
+			int k = key.charAt(i % 32);
 
 			sb.append((char) (j ^ k));
 		}
-
-		return sb.toString();
-	}
-
-	private final static String microtime(){
-		long timestamp = System.currentTimeMillis();
-
-		StringBuilder sb = new StringBuilder(24);
-
-		sb.append(timestamp / 1000);
-		sb.append('.');
-		sb.append(timestamp % 1000 * 1000);
 
 		return sb.toString();
 	}

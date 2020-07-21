@@ -25,6 +25,8 @@
 package com.buession.security.mcrypt;
 
 import com.buession.core.binary.HexConvert;
+import com.buession.core.utils.Assert;
+import com.buession.lang.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -218,15 +220,15 @@ class RSAMcrypt extends AbstractMcrypt {
 		int saltLength = salt.length();
 		if(saltLength < 16){
 			for(int i = 1; i <= 16 - saltLength; i++){
-				sb.append(" ");
+				sb.append(Constants.EMPTY_CHAR);
 			}
 		}else if(saltLength < 24){
 			for(int i = 1; i <= 24 - saltLength; i++){
-				sb.append(" ");
+				sb.append(Constants.EMPTY_CHAR);
 			}
 		}else if(saltLength < 32){
 			for(int i = 1; i <= 32 - saltLength; i++){
-				sb.append(" ");
+				sb.append(Constants.EMPTY_CHAR);
 			}
 		}else if(saltLength > 32){
 			sb.append(salt, 0, 31);
@@ -236,9 +238,7 @@ class RSAMcrypt extends AbstractMcrypt {
 	}
 
 	private final byte[] encode(final Key key, final byte[] data){
-		if(data == null){
-			throw new IllegalArgumentException("RSAMcrypt encode object could not be null");
-		}
+		Assert.isNull(data, "RSAMcrypt encode object could not be null");
 
 		try{
 			cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化为加密模式的密码器
@@ -256,13 +256,10 @@ class RSAMcrypt extends AbstractMcrypt {
 	}
 
 	private final byte[] decode(final Key key, final byte[] data){
-		if(data == null){
-			throw new IllegalArgumentException("RSAMcrypt decode object could not be null");
-		}
+		Assert.isNull(data, "RSAMcrypt decode object could not be null");
 
 		try{
 			cipher.init(Cipher.DECRYPT_MODE, key);// 初始化为解密模式的密码器
-
 			return cipher.doFinal(data); // 明文
 		}catch(InvalidKeyException e){
 			logger.error(e.getMessage());

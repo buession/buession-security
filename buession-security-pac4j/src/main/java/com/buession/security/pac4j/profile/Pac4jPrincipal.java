@@ -22,62 +22,91 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt.passwordgenerator;
+package com.buession.security.pac4j.profile;
 
-import com.buession.core.utils.Assert;
-
-import java.util.Random;
+import java.util.Objects;
 
 /**
- * 密码生成器抽象类
- *
  * @author Yong.Teng
  */
-public abstract class AbstractPasswordGenerator implements PasswordGenerator {
+public class Pac4jPrincipal<T> {
 
-	private final static char[] CHARS = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-			'p',
-			'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-			'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6',
-			'7', '8', '9', '0', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '}',
-			'[', ']', '|', '\\', '/', ':', ';', '<', '>', '?', ',', '.'};
+	private T id;
 
-	/**
-	 * 生成随机密码
-	 *
-	 * @param length
-	 * 		长度
-	 *
-	 * @return 随机密码
-	 */
-	@Override
-	public String generatorRandomPassword(final int length){
-		Assert.isZeroNegative(length, "Password length cloud less than or equal to 0.");
+	private String username;
 
-		StringBuilder sb = new StringBuilder(length);
-		Random random = new Random();
+	private String realName;
 
-		for(int i = 0; i < length; i++){
-			int j = random.nextInt(CHARS.length);
-			sb.append(CHARS[j]);
-		}
-
-		return sb.toString();
+	public Pac4jPrincipal(){
 	}
 
-	/**
-	 * 密码加密
-	 *
-	 * @param password
-	 * 		原始密码
-	 * @param salt
-	 * 		salt
-	 *
-	 * @return 加密后的密码
-	 */
+	public Pac4jPrincipal(T id, String username, String realName){
+		this.id = id;
+		this.username = username;
+		this.realName = realName;
+	}
+
+	public T getId(){
+		return id;
+	}
+
+	public void setId(T id){
+		this.id = id;
+	}
+
+	public String getUsername(){
+		return username;
+	}
+
+	public void setUsername(String username){
+		this.username = username;
+	}
+
+	public String getRealName(){
+		return realName;
+	}
+
+	public void setRealName(String realName){
+		this.realName = realName;
+	}
+
 	@Override
-	public byte[] digestEncoded(final byte[] password, final byte[] salt){
-		return digestEncoded(new String(password), new String(salt)).getBytes();
+	public int hashCode(){
+		return Objects.hash(id, username, realName);
+	}
+
+	@Override
+	public boolean equals(Object o){
+		if(this == o){
+			return true;
+		}
+
+		if(o == null || getClass() != o.getClass()){
+			return false;
+		}
+
+		Pac4jPrincipal that = (Pac4jPrincipal) o;
+
+		if(Objects.equals(id, that.id)){
+			if(Objects.equals(username, that.username)){
+				if(Objects.equals(realName, that.realName)){
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public String toString(){
+		final StringBuilder sb = new StringBuilder(32);
+
+		sb.append("id: ").append(id).append(", ");
+		sb.append("username: ").append(username).append(", ");
+		sb.append("realName: ").append(realName);
+
+		return sb.toString();
 	}
 
 }

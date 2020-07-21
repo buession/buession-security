@@ -1,26 +1,28 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership.
- * The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work for additional information regarding
+ * copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with the License. You may obtain
+ * a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
- * =========================================================================================================
+ * =================================================================================================
  *
  * This software consists of voluntary contributions made by many individuals on behalf of the
  * Apache Software Foundation. For more information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- * +-------------------------------------------------------------------------------------------------------+
- * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
- * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
- * +-------------------------------------------------------------------------------------------------------+
+ * +------------------------------------------------------------------------------------------------+
+ * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
+ * | Author: Yong.Teng <webmaster@buession.com> 													|
+ * | Copyright @ 2013-2020 Buession.com Inc.														|
+ * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
 
@@ -95,7 +97,7 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	 */
 	public AbstractMcrypt(final Algo algo, final String characterEncoding){
 		this.algo = algo;
-		if(Validate.hasText(characterEncoding) == true){
+		if(Validate.hasText(characterEncoding)){
 			this.charset = Charset.forName(characterEncoding);
 		}
 	}
@@ -291,8 +293,8 @@ public abstract class AbstractMcrypt implements Mcrypt {
 		Assert.isNull(algo, "Algo could not be null");
 
 		try{
-			MessageDigest messageDigest = provider == null ? MessageDigest.getInstance(algo.getName()) : MessageDigest
-					.getInstance(algo.getName(), provider);
+			MessageDigest messageDigest = provider == null ? MessageDigest.getInstance(algo.getName()) :
+					MessageDigest.getInstance(algo.getName(), provider);
 
 			if(object instanceof char[]){
 				return encode(new String((char[]) object), messageDigest);
@@ -336,7 +338,7 @@ public abstract class AbstractMcrypt implements Mcrypt {
 
 	protected String getRealSalt(){
 		String salt = getSalt();
-		return salt == null ? "" : salt;
+		return salt == null ? Constants.EMPTY_STRING : salt;
 	}
 
 	/**
@@ -350,7 +352,7 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	 * @return 加密后的字符串
 	 */
 	private String encode(String str, final MessageDigest messageDigest){
-		if(StringUtils.isEmpty(salt) == false){
+		if(StringUtils.isNotEmpty(salt)){
 			messageDigest.reset();
 
 			if(charset == null){

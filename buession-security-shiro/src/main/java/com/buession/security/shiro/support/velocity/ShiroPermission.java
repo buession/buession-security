@@ -24,6 +24,7 @@
  */
 package com.buession.security.shiro.support.velocity;
 
+import com.buession.core.utils.Assert;
 import com.buession.core.utils.StringUtils;
 import com.buession.core.validator.Validate;
 import org.apache.shiro.SecurityUtils;
@@ -61,7 +62,7 @@ public class ShiroPermission {
 	 */
 	public boolean isAuthenticated(){
 		Subject subject = SecurityUtils.getSubject();
-		return subject != null && subject.isAuthenticated() == true;
+		return subject != null && subject.isAuthenticated();
 	}
 
 	/**
@@ -113,9 +114,7 @@ public class ShiroPermission {
 	 * @return 用户属性
 	 */
 	public Object getPrincipalProperty(String property){
-		if(Validate.hasText(property) == false){
-			new IllegalArgumentException("property must be contains character.");
-		}
+		Assert.isBlank(property, "property must be contains character.");
 
 		Subject subject = SecurityUtils.getSubject();
 
@@ -155,7 +154,7 @@ public class ShiroPermission {
 	 */
 	public boolean hasRole(String role){
 		Subject subject = SecurityUtils.getSubject();
-		return subject != null && subject.hasRole(role) == true;
+		return subject != null && subject.hasRole(role);
 	}
 
 	/**
@@ -167,14 +166,14 @@ public class ShiroPermission {
 	 * @return 用户是否不具备某角色
 	 */
 	public boolean lacksRole(String role){
-		return hasRole(role) != true;
+		return hasRole(role) == false;
 	}
 
 	/**
 	 * 验证用户是否具有以下任意一个角色。
 	 *
 	 * @param roleNames
-	 * 		以 delimeter 为分隔符的角色列表
+	 * 		以 delimiter 为分隔符的角色列表
 	 * @param delimiter
 	 * 		角色列表分隔符
 	 *
@@ -188,12 +187,7 @@ public class ShiroPermission {
 				delimiter = ROLE_NAMES_DELIMITER;
 			}
 
-			String[] roleNamesArray = StringUtils.split(roleNames, delimiter);
-			for(String role : roleNamesArray){
-				if(subject.hasRole(role.trim()) == true){
-					return true;
-				}
-			}
+			return hasAnyRoles(StringUtils.split(roleNames, delimiter));
 		}
 
 		return false;
@@ -203,7 +197,7 @@ public class ShiroPermission {
 	 * 验证用户是否具有以下任意一个角色。
 	 *
 	 * @param roleNames
-	 * 		以 ROLE_NAMES_DELIMETER 为分隔符的角色列表
+	 * 		以 ROLE_NAMES_DELIMITER 为分隔符的角色列表
 	 *
 	 * @return 用户是否具有以下任意一个角色
 	 */
@@ -228,7 +222,7 @@ public class ShiroPermission {
 
 		if(subject != null){
 			for(String role : roleNames){
-				if(role != null && subject.hasRole(role.trim()) == true){
+				if(role != null && subject.hasRole(role.trim())){
 					return true;
 				}
 			}
@@ -254,7 +248,7 @@ public class ShiroPermission {
 
 		if(subject != null){
 			for(String role : roleNames){
-				if(role != null && subject.hasRole(role.trim()) == true){
+				if(role != null && subject.hasRole(role.trim())){
 					return true;
 				}
 			}
@@ -285,14 +279,14 @@ public class ShiroPermission {
 	 * @return 用户是否不具备某权限
 	 */
 	public boolean lacksPermission(String permission){
-		return hasPermission(permission) != true;
+		return hasPermission(permission) == false;
 	}
 
 	/**
 	 * 验证用户是否具有以下任意一个权限。
 	 *
 	 * @param permissions
-	 * 		以 delimeter 为分隔符的权限列表
+	 * 		以 delimiter 为分隔符的权限列表
 	 * @param delimiter
 	 * 		权限列表分隔符
 	 *
@@ -306,12 +300,7 @@ public class ShiroPermission {
 				delimiter = PERMISSION_NAMES_DELIMITER;
 			}
 
-			String[] permissionsArray = StringUtils.split(permissions, delimiter);
-			for(String permission : permissionsArray){
-				if(permission != null && subject.isPermitted(permission.trim()) == true){
-					return true;
-				}
-			}
+			return hasAnyPermissions(StringUtils.split(permissions, delimiter));
 		}
 
 		return false;
@@ -321,7 +310,7 @@ public class ShiroPermission {
 	 * 验证用户是否具有以下任意一个权限。
 	 *
 	 * @param permissions
-	 * 		以 PERMISSION_NAMES_DELIMETER 为分隔符的权限列表
+	 * 		以 PERMISSION_NAMES_DELIMITER 为分隔符的权限列表
 	 *
 	 * @return 用户是否具有以下任意一个权限
 	 */
@@ -346,7 +335,7 @@ public class ShiroPermission {
 
 		if(subject != null){
 			for(String permission : permissions){
-				if(permission != null && subject.isPermitted(permission.trim()) == true){
+				if(permission != null && subject.isPermitted(permission.trim())){
 					return true;
 				}
 			}
@@ -372,7 +361,7 @@ public class ShiroPermission {
 
 		if(subject != null){
 			for(String permission : permissions){
-				if(permission != null && subject.isPermitted(permission.trim()) == true){
+				if(permission != null && subject.isPermitted(permission.trim())){
 					return true;
 				}
 			}

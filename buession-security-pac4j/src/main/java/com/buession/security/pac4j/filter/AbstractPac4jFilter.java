@@ -76,6 +76,7 @@ public abstract class AbstractPac4jFilter implements Filter {
 	public void destroy(){
 	}
 
+	@SuppressWarnings({"unchecked"})
 	protected SessionStore<JEEContext> getSessionStore(){
 		if(sessionStore == null){
 			sessionStore = getConfig().getSessionStore();

@@ -32,6 +32,7 @@ import org.pac4j.core.util.CommonHelper;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -85,7 +86,7 @@ public class Pac4jPrincipal implements Principal, Serializable {
 		}
 
 		final Pac4jPrincipal that = (Pac4jPrincipal) o;
-		return profiles != null ? profiles.equals(that.profiles) : that.profiles == null;
+		return Objects.equals(profiles, that.profiles);
 	}
 
 	@Override

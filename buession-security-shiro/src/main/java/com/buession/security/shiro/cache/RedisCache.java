@@ -244,13 +244,8 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 			return null;
 		}
 
-		String redisKey;
-		if(Constants.KEY_SERIALIZER instanceof StringSerializer){
-			redisKey = getStringRedisKey(key);
-		}else{
-			redisKey = key.toString();
-		}
-
+		String redisKey = Constants.KEY_SERIALIZER instanceof StringSerializer ? getStringRedisKey(key) :
+				key.toString();
 		return makeKey(redisKey);
 	}
 
@@ -261,8 +256,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 		StringBuilder sb = new StringBuilder(getKeyPrefix().length() + key.length());
 
-
-		if(Validate.isEmpty(getKeyPrefix()) == false){
+		if(Validate.isNotEmpty(getKeyPrefix())){
 			sb.append(getKeyPrefix());
 		}
 
@@ -272,14 +266,8 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	}
 
 	protected String getStringRedisKey(K key){
-		String redisKey;
-
-		if(key instanceof PrincipalCollection){
-			redisKey = getRedisKeyFromPrincipalCollection((PrincipalCollection) key);
-		}else{
-			redisKey = key.toString();
-		}
-
+		String redisKey = key instanceof PrincipalCollection ?
+				getRedisKeyFromPrincipalCollection((PrincipalCollection) key) : key.toString();
 		return redisKey;
 	}
 
@@ -294,9 +282,11 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 		try{
 			Object idObj = principalIdGetter.invoke(principalObject);
+			
 			if(idObj == null){
 				throw new PrincipalIdNullException(principalObject.getClass(), getPrincipalIdFieldName());
 			}
+
 			redisKey = idObj.toString();
 		}catch(IllegalAccessException e){
 			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName(), e);
