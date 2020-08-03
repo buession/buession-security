@@ -26,8 +26,10 @@
  */
 package com.buession.security.mcrypt;
 
-import com.buession.core.binary.HexConvert;
 import com.buession.core.utils.Assert;
+import com.buession.core.utils.ObjectUtils;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -167,8 +169,10 @@ public final class DESMcrypt extends AbstractMcrypt {
 			SecureRandom sr = new SecureRandom();
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey, sr);
 
-			byte[] result = cipher.doFinal(HexConvert.object2Byte(object, getCharset()));
-			return result == null ? null : HexConvert.byte2Hex(result);
+			byte[] result = cipher.doFinal(getCharset() == null ? ObjectUtils.toByte(object) :
+					ObjectUtils.toByte(object, getCharset()));
+
+			return result == null ? null : Hex.encodeHexString(result);
 		}catch(IllegalBlockSizeException e){
 			logger.error(e.getMessage());
 		}catch(BadPaddingException e){
@@ -205,7 +209,7 @@ public final class DESMcrypt extends AbstractMcrypt {
 			SecureRandom sr = new SecureRandom();
 			cipher.init(Cipher.DECRYPT_MODE, secretKey, sr);
 
-			byte[] result = cipher.doFinal(HexConvert.hex2Byte(cs.toString()));
+			byte[] result = cipher.doFinal(Hex.decodeHex(cs.toString()));
 			return result == null ? null : new String(result, getCharset());
 		}catch(IllegalBlockSizeException e){
 			logger.error(e.getMessage());
@@ -216,6 +220,8 @@ public final class DESMcrypt extends AbstractMcrypt {
 		}catch(NoSuchAlgorithmException e){
 			logger.error(e.getMessage());
 		}catch(InvalidKeyException e){
+			logger.error(e.getMessage());
+		}catch(DecoderException e){
 			logger.error(e.getMessage());
 		}
 

@@ -29,24 +29,47 @@ import com.buession.security.core.SameSite;
 import java.io.Serializable;
 
 /**
+ * Cookie
+ *
  * @author Yong.Teng
  */
 public class Cookie implements Serializable {
 
 	private final static long serialVersionUID = -4209730152769024787L;
 
+	/**
+	 * Cookie 名称
+	 */
 	private String name;
 
+	/**
+	 * Cookie 作用域
+	 */
 	private String domain;
 
+	/**
+	 * Cookie 作用路径
+	 */
 	private String path;
 
+	/**
+	 * Cookie 最大有效期
+	 */
 	private int maxAge;
 
+	/**
+	 * 是否启用 Secure cookie
+	 */
 	private boolean secure;
 
+	/**
+	 * 是否开启 HttpOnly
+	 */
 	private boolean httpOnly;
 
+	/**
+	 * 限制第三方 Cookie 方式
+	 */
 	private SameSite sameSite;
 
 	public Cookie(){
@@ -126,8 +149,8 @@ public class Cookie implements Serializable {
 		this.httpOnly = httpOnly;
 	}
 
-	public Cookie(String name, String domain, String path, int maxAge, boolean secure, boolean httpOnly, SameSite
-			sameSite){
+	public Cookie(String name, String domain, String path, int maxAge, boolean secure, boolean httpOnly,
+			SameSite sameSite){
 		this(name, domain, path, maxAge, secure, httpOnly);
 		this.sameSite = sameSite;
 	}
@@ -195,4 +218,5 @@ public class Cookie implements Serializable {
 	public void setSameSite(SameSite sameSite){
 		this.sameSite = sameSite;
 	}
+
 }

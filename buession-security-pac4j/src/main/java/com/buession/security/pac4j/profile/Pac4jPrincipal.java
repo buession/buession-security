@@ -87,15 +87,8 @@ public class Pac4jPrincipal<T> {
 
 		Pac4jPrincipal that = (Pac4jPrincipal) o;
 
-		if(Objects.equals(id, that.id)){
-			if(Objects.equals(username, that.username)){
-				if(Objects.equals(realName, that.realName)){
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return Objects.equals(id, that.id) && Objects.equals(username, that.username) && Objects.equals(realName,
+				that.realName);
 	}
 
 	@Override

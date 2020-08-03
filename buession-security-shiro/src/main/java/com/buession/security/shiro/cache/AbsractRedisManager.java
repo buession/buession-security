@@ -25,6 +25,7 @@
 package com.buession.security.shiro.cache;
 
 import com.buession.core.utils.Assert;
+import com.buession.core.utils.StatusUtils;
 import com.buession.core.validator.Validate;
 import com.buession.lang.Status;
 import com.buession.redis.Constants;
@@ -110,7 +111,7 @@ public abstract class AbsractRedisManager implements RedisManager {
 
 	@Override
 	public Status delete(byte[]... keys){
-		return Status.valueOf(redisTemplate.del(keys) > 0);
+		return StatusUtils.valueOf(redisTemplate.del(keys) > 0);
 	}
 
 	@Override

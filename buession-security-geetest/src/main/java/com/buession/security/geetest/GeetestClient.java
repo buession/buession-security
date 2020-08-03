@@ -24,6 +24,7 @@
  */
 package com.buession.security.geetest;
 
+import com.buession.core.utils.StatusUtils;
 import com.buession.core.validator.Validate;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
@@ -233,7 +234,7 @@ public class GeetestClient {
 			EnhencedResult returnMap = OBJECT_MAPPER.readValue(response.getBody(), EnhencedResult.class);
 
 			final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-			return Status.valueOf(md5Mcrypt.encode(seccode).equals(returnMap.getSeccode()));
+			return StatusUtils.valueOf(md5Mcrypt.encode(seccode).equals(returnMap.getSeccode()));
 		}catch(Exception e){
 			logger.error("Enhenced Validate failure: {}", e);
 		}
@@ -255,7 +256,7 @@ public class GeetestClient {
 	 */
 	public Status failbackValidateRequest(String challenge, String validate, String seccode){
 		logger.debug("in failback validate");
-		return Status.valueOf(requestIsLegal(challenge, validate, seccode));
+		return StatusUtils.valueOf(requestIsLegal(challenge, validate, seccode));
 	}
 
 	/**

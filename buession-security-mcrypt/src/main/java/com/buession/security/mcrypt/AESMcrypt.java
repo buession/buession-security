@@ -26,9 +26,11 @@
  */
 package com.buession.security.mcrypt;
 
-import com.buession.core.binary.HexConvert;
 import com.buession.core.utils.Assert;
+import com.buession.core.utils.ObjectUtils;
 import com.buession.lang.Constants;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -169,11 +171,12 @@ public final class AESMcrypt extends AbstractMcrypt {
 			return null;
 		}
 
-		byte[] result = encode(key, HexConvert.object2Byte(object));
+		byte[] result = encode(key, getCharset() == null ? ObjectUtils.toByte(object) : ObjectUtils.toByte(object,
+				getCharset()));
 
 		logger.debug("Mcrypt encode string <{}> by algo <AES>, salt <{}>", object, getRealSalt());
 
-		return result == null ? null : HexConvert.byte2Hex(result);
+		return result == null ? null : Hex.encodeHexString(result);
 	}
 
 	/**
@@ -192,11 +195,16 @@ public final class AESMcrypt extends AbstractMcrypt {
 			return null;
 		}
 
-		byte[] result = decode(key, HexConvert.hex2Byte(cs.toString()));
-
 		logger.debug("Mcrypt decode string <{}> by algo <AES>, salt <{}>", cs, getRealSalt());
 
-		return result == null ? null : new String(result);
+		try{
+			byte[] result = decode(key, Hex.decodeHex(cs.toString()));
+			return result == null ? null : new String(result);
+		}catch(DecoderException e){
+			logger.error(e.getMessage());
+		}
+
+		return null;
 	}
 
 	private final static Cipher initCipher(){
