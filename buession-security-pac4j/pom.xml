@@ -54,6 +54,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.buession</groupId>
+			<artifactId>buession-beans</artifactId>
+			<version>${buession.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.buession</groupId>
 			<artifactId>buession-web</artifactId>
 			<version>${buession.version}</version>
 			<scope>compile</scope>

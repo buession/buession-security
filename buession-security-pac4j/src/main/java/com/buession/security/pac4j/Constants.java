@@ -24,4 +24,19 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.profile.utils;
+package com.buession.security.pac4j;
+
+/**
+ * @author Yong.Teng
+ */
+public interface Constants {
+
+	String CAS = "cas";
+
+	String REST = "rest";
+
+	String JWT = "jwt";
+
+	String OAUTH2 = "oauth2";
+
+}

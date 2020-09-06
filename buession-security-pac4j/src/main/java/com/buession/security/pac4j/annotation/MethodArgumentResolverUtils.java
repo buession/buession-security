@@ -26,8 +26,8 @@
  */
 package com.buession.security.pac4j.annotation;
 
-import com.buession.core.reflect.FieldUtils;
 import com.buession.core.utils.Assert;
+import com.buession.core.utils.FieldUtils;
 import org.pac4j.core.profile.CommonProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

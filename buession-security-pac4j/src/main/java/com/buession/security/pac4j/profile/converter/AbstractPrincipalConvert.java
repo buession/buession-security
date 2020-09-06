@@ -24,15 +24,16 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.profile.utils;
+package com.buession.security.pac4j.profile.converter;
 
-import com.buession.core.converter.Converter;
-import com.buession.core.utils.ReflectUtils;
+import com.buession.beans.BeanResolver;
+import com.buession.beans.DefaultBeanResolver;
 import com.buession.security.pac4j.subject.Pac4jPrincipal;
 import org.pac4j.core.profile.CommonProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.security.Principal;
 import java.util.HashMap;
@@ -42,11 +43,21 @@ import java.util.Optional;
 /**
  * @author Yong.Teng
  */
-public class PrincipalConvert<T> implements Converter<Principal, T> {
+public abstract class AbstractPrincipalConvert<T> implements PrincipalConvert<T> {
 
 	private ThreadLocal<Map<String, T>> PRINCIPAL_CACHE = ThreadLocal.withInitial(()->new HashMap<>());
 
-	private final static Logger logger = LoggerFactory.getLogger(PrincipalConvert.class);
+	private BeanResolver beanResolver = new DefaultBeanResolver();
+
+	private final static Logger logger = LoggerFactory.getLogger(AbstractPrincipalConvert.class);
+
+	public BeanResolver getBeanResolver(){
+		return beanResolver;
+	}
+
+	public void setBeanResolver(BeanResolver beanResolver){
+		this.beanResolver = beanResolver;
+	}
 
 	@Override
 	public T convert(final Principal source){
@@ -54,7 +65,7 @@ public class PrincipalConvert<T> implements Converter<Principal, T> {
 			return null;
 		}
 
-		if(source.getClass().isAssignableFrom(Pac4jPrincipal.class) == false){
+		if(Pac4jPrincipal.class.isAssignableFrom(source.getClass()) == false){
 			logger.warn("{} is not assignable from {}.", source.getClass().getName(), Pac4jPrincipal.class.getName());
 			return null;
 		}
@@ -70,7 +81,7 @@ public class PrincipalConvert<T> implements Converter<Principal, T> {
 
 		CommonProfile profile = optional.get();
 
-		Map<String, T> principals = PRINCIPAL_CACHE.get();
+		Map<String, T> principals = null;// PRINCIPAL_CACHE.get();
 
 		if(principals != null){
 			T principal = principals.get(profile.getId());
@@ -80,22 +91,27 @@ public class PrincipalConvert<T> implements Converter<Principal, T> {
 			}
 		}
 
-		return ReflectUtils.setter(profile.getAttributes(), newInstance(getClass()));
-	}
-
-	@SuppressWarnings("unchecked")
-	private T newInstance(Class<? extends Converter> clazz){
-		Class<T> clz = (Class<T>) ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[1];
-
 		try{
-			return clz.newInstance();
-		}catch(InstantiationException e){
-			logger.error("New the instance of {} is failure: {}", clz.getName(), e.getMessage());
+			T object = getInstance();
+			beanResolver.populate(object, profile.getAttributes());
+			PRINCIPAL_CACHE.get().put(profile.getId(), object);
 		}catch(IllegalAccessException e){
-			logger.error("New the instance of {} is failure: {}", clz.getName(), e.getMessage());
+			logger.error("CommonProfile convert to {} error: {}.", getType().getName(), e.getMessage());
+		}catch(InvocationTargetException e){
+			logger.error("CommonProfile convert to {} error: {}.", getType().getName(), e.getMessage());
+		}catch(InstantiationException e){
+			logger.error("CommonProfile convert to {} error: {}.", getType().getName(), e.getMessage());
 		}
 
 		return null;
+	}
+
+	protected T getInstance() throws IllegalAccessException, InstantiationException{
+		return getType().newInstance();
+	}
+
+	protected Class<T> getType(){
+		return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
 }
