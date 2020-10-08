@@ -81,7 +81,7 @@ public abstract class AbstractPrincipalConvert<T> implements PrincipalConvert<T>
 
 		CommonProfile profile = optional.get();
 
-		Map<String, T> principals = null;// PRINCIPAL_CACHE.get();
+		Map<String, T> principals = PRINCIPAL_CACHE.get();
 
 		if(principals != null){
 			T principal = principals.get(profile.getId());
@@ -93,8 +93,11 @@ public abstract class AbstractPrincipalConvert<T> implements PrincipalConvert<T>
 
 		try{
 			T object = getInstance();
+			
 			beanResolver.populate(object, profile.getAttributes());
 			PRINCIPAL_CACHE.get().put(profile.getId(), object);
+
+			return object;
 		}catch(IllegalAccessException e){
 			logger.error("CommonProfile convert to {} error: {}.", getType().getName(), e.getMessage());
 		}catch(InvocationTargetException e){
