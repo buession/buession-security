@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<name>Buession Security Parent</name>
+	<name>Buession Security Web</name>
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.buession</groupId>
-		<artifactId>parent</artifactId>
-		<relativePath/>
+		<groupId>com.buession.security</groupId>
+		<artifactId>buession-security-parent</artifactId>
+		<relativePath>../buession-security-parent</relativePath>
 		<version>1.2.0</version>
 	</parent>
-	<groupId>com.buession.security</groupId>
-	<artifactId>buession-security-parent</artifactId>
+	<artifactId>buession-security-web</artifactId>
 	<url>https://github.com/buession/buession-security</url>
-	<description>Buession Security Framework Parent</description>
-	<version>1.2.0</version>
-	<packaging>pom</packaging>
+	<description>Buession Security Framework For Web</description>
+	<packaging>jar</packaging>
 
 	<organization>
 		<name>buession.com Inc.</name>
@@ -42,37 +40,58 @@
 		<url>https://github.com/buession/buession-security</url>
 	</scm>
 
-	<modules>
-		<module>../buession-security-core</module>
-		<module>../buession-security-geetest</module>
-		<module>../buession-security-mcrypt</module>
-		<module>../buession-security-pac4j</module>
-		<module>../buession-security-shiro</module>
-		<module>../buession-security-spring</module>
-		<module>../buession-security-web</module>
-	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>com.buession.security</groupId>
+			<artifactId>buession-security-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.buession</groupId>
-				<artifactId>buession-core</artifactId>
-				<version>${buession.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.buession</groupId>
-				<artifactId>buession-json</artifactId>
-				<version>${buession.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.owasp.antisamy</groupId>
+			<artifactId>antisamy</artifactId>
+			<version>1.5.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
 
 	<build>
-		<finalName>buession-security-parent</finalName>
+		<finalName>buession-security-web</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -88,15 +107,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>sonatype-nexus-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>sonatype-nexus-staging</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
 </project>
