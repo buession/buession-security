@@ -47,7 +47,7 @@ import java.util.Map;
  */
 public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 
-	private AntiSamy antiSamy = new AntiSamy();
+	private AntiSamy antiSamy;
 
 	private Policy policy;
 
@@ -60,9 +60,9 @@ public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 	public Policy getPolicy() throws FileNotFoundException{
 		if(policy == null){
 			try{
-				policy = Policy.getInstance("classpath:/antisamy.xml");
+				policy = Policy.getInstance();
 			}catch(PolicyException e){
-				throw new FileNotFoundException("Policy file 'classpath:/antisamy.xml' not be found.");
+				throw new FileNotFoundException("Policy file 'resources/antisamy.xml' not be found.");
 			}
 		}
 
@@ -83,6 +83,7 @@ public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 	@Override
 	public String[] getParameterValues(String name){
 		String[] values = super.getParameterValues(name);
+
 		if(Validate.isEmpty(values)){
 			return values;
 		}
@@ -112,22 +113,20 @@ public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 	}
 
 	protected String[] xssClean(String[] values){
-		if(Validate.isEmpty(values)){
-			return values;
-		}else{
+		if(Validate.isNotEmpty(values)){
 			for(int i = 0; i < values.length; i++){
 				values[i] = xssClean(values[i]);
 			}
-
-			return values;
 		}
+
+		return values;
 	}
 
 	protected String xssClean(String value){
 		final CleanResults cleanResults;
 
 		try{
-			cleanResults = antiSamy.scan(value, policy);
+			cleanResults = getAntiSamy().scan(value);
 			return cleanResults.getCleanHTML();
 		}catch(ScanException e){
 			logger.warn("AntiSamy scan error: {}.", e.getMessage(), e);
@@ -136,6 +135,19 @@ public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 		}
 
 		return value;
+	}
+
+	protected AntiSamy getAntiSamy(){
+		if(antiSamy == null){
+			try{
+				antiSamy = new AntiSamy(getPolicy());
+			}catch(FileNotFoundException e){
+				antiSamy = new AntiSamy();
+				logger.error(e.getMessage());
+			}
+		}
+
+		return antiSamy;
 	}
 
 }
