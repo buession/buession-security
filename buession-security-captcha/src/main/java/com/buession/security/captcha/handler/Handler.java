@@ -24,6 +24,7 @@
  */
 package com.buession.security.captcha.handler;
 
+import com.buession.lang.Status;
 import com.buession.security.captcha.session.Session;
 
 import java.io.IOException;
@@ -51,6 +52,16 @@ public interface Handler {
 	 * 		Session
 	 */
 	void setSession(Session session);
+
+	/**
+	 * 验证验证码
+	 *
+	 * @param code
+	 * 		待验证的值
+	 *
+	 * @return 成功返回 Status.SUCCESS；失败，则返回 Status.FAILURE
+	 */
+	Status validate(String code);
 
 	/**
 	 * 绘制验证码

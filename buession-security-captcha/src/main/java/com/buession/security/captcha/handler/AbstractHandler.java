@@ -25,6 +25,7 @@
 package com.buession.security.captcha.handler;
 
 import com.buession.core.utils.Assert;
+import com.buession.lang.Status;
 import com.buession.security.captcha.handler.generator.PngGenerator;
 import com.buession.security.captcha.handler.generator.Generator;
 import com.buession.security.captcha.session.Session;
@@ -98,6 +99,22 @@ public abstract class AbstractHandler implements Handler {
 	public void setSession(Session session){
 		Assert.isNull(session, "Session cloud not be null.");
 		this.session = session;
+	}
+
+	@Override
+	public Status validate(String code){
+		if(session == null){
+			return Status.FAILURE;
+		}
+
+		String value = session.get();
+		if(value == null){
+			return Status.FAILURE;
+		}
+
+		Status result = value.equalsIgnoreCase(code) ? Status.SUCCESS : Status.FAILURE;
+		session.destroy();
+		return result;
 	}
 
 	/**
