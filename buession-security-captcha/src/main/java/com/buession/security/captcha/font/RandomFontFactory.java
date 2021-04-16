@@ -160,11 +160,12 @@ public class RandomFontFactory extends AbstractFontFactory {
 	public List<String> getFamilies(){
 		return families;
 	}
-
+	
 	/**
 	 * 设置字体列表
 	 *
-	 * @return 字体列表
+	 * @param families
+	 * 		字体列表
 	 */
 	public void setFamilies(List<String> families){
 		this.families = families;

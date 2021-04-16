@@ -21,7 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2020 Buession.com Inc.														|
+ * | Copyright @ 2013-2021 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -381,9 +381,9 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	private static String getFormattedText(byte[] bytes){
 		final StringBuilder buffer = new StringBuilder(bytes.length * 2);
 
-		for(int j = 0; j < bytes.length; j++){
-			buffer.append(Constants.HEX_DIGITS[(bytes[j] >> 4) & 0x0f]);
-			buffer.append(Constants.HEX_DIGITS[bytes[j] & 0x0f]);
+		for(byte b : bytes){
+			buffer.append(Constants.HEX_DIGITS[(b >> 4) & 0x0f]);
+			buffer.append(Constants.HEX_DIGITS[b & 0x0f]);
 		}
 
 		return buffer.toString();
