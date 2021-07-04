@@ -29,7 +29,8 @@ import com.buession.redis.RedisTemplate;
 /**
  * @author Yong.Teng
  */
-public class DefaultRedisManager extends AbsractRedisManager {
+@Deprecated
+public class DefaultRedisManager extends com.buession.security.shiro.DefaultRedisManager {
 
 	public DefaultRedisManager(){
 		super();

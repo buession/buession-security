@@ -27,10 +27,12 @@ package com.buession.security.shiro.cache;
 import com.buession.core.serializer.SerializerException;
 import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
-import com.buession.security.shiro.Constants;
+import com.buession.security.shiro.RedisManager;
 import com.buession.security.shiro.exception.CacheManagerPrincipalIdNotAssignedException;
 import com.buession.security.shiro.exception.PrincipalIdNullException;
 import com.buession.security.shiro.exception.PrincipalInstanceException;
+import com.buession.security.shiro.serializer.ObjectSerializer;
+import com.buession.security.shiro.serializer.RedisSerializer;
 import com.buession.security.shiro.serializer.StringSerializer;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -51,29 +53,194 @@ import java.util.Set;
  */
 public class RedisCache<K, V> extends AbstractCache<K, V> {
 
+	/**
+	 * Redis 管理器
+	 */
 	private RedisManager redisManager;
+
+	/**
+	 * Key 序列化对象
+	 */
+	private RedisSerializer<String> keySerializer = new StringSerializer();
+
+	/**
+	 * 值序列化对象
+	 */
+	private RedisSerializer<Object> valueSerializer = new ObjectSerializer<>();
 
 	private final static Logger logger = LoggerFactory.getLogger(RedisCache.class);
 
+	/**
+	 * 构造函数
+	 */
 	public RedisCache(){
 	}
 
+	/**
+	 * 构造函数
+	 *
+	 * @param keyPrefix
+	 * 		Key 前缀
+	 * @param expire
+	 * 		有效期
+	 */
 	public RedisCache(String keyPrefix, int expire){
 		super(keyPrefix, expire);
 	}
 
+	/**
+	 * 构造函数
+	 *
+	 * @param keyPrefix
+	 * 		Key 前缀
+	 * @param expire
+	 * 		有效期
+	 * @param principalIdFieldName
+	 * 		Principal Id 字段名称
+	 */
 	public RedisCache(String keyPrefix, int expire, String principalIdFieldName){
 		super(keyPrefix, expire, principalIdFieldName);
 	}
 
+	/**
+	 * 构造函数
+	 *
+	 * @param redisManager
+	 * 		Redis 管理器
+	 * @param keyPrefix
+	 * 		Key 前缀
+	 * @param expire
+	 * 		有效期
+	 */
 	public RedisCache(RedisManager redisManager, String keyPrefix, int expire){
 		this(keyPrefix, expire);
 		setRedisManager(redisManager);
 	}
 
+	/**
+	 * 构造函数
+	 *
+	 * @param redisManager
+	 * 		Redis 管理器
+	 * @param keyPrefix
+	 * 		Key 前缀
+	 * @param expire
+	 * 		有效期
+	 * @param principalIdFieldName
+	 * 		Principal Id 字段名称
+	 */
 	public RedisCache(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName){
 		this(keyPrefix, expire, principalIdFieldName);
 		setRedisManager(redisManager);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param keySerializer
+	 * 		Key 序列化对象
+	 * @param valueSerializer
+	 * 		值序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public RedisCache(RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer){
+		setKeySerializer(keySerializer);
+		setValueSerializer(valueSerializer);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param keyPrefix
+	 * 		Key 前缀
+	 * @param expire
+	 * 		有效期
+	 * @param keySerializer
+	 * 		Key 序列化对象
+	 * @param valueSerializer
+	 * 		值序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public RedisCache(String keyPrefix, int expire, RedisSerializer<String> keySerializer,
+					  RedisSerializer<Object> valueSerializer){
+		super(keyPrefix, expire);
+		setKeySerializer(keySerializer);
+		setValueSerializer(valueSerializer);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param keyPrefix
+	 * 		Key 前缀
+	 * @param expire
+	 * 		有效期
+	 * @param principalIdFieldName
+	 * 		Principal Id 字段名称
+	 * @param keySerializer
+	 * 		Key 序列化对象
+	 * @param valueSerializer
+	 * 		值序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public RedisCache(String keyPrefix, int expire, String principalIdFieldName, RedisSerializer<String> keySerializer
+			, RedisSerializer<Object> valueSerializer){
+		super(keyPrefix, expire, principalIdFieldName);
+		setKeySerializer(keySerializer);
+		setValueSerializer(valueSerializer);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param redisManager
+	 * 		Redis 管理器
+	 * @param keyPrefix
+	 * 		Key 前缀
+	 * @param expire
+	 * 		有效期
+	 * @param keySerializer
+	 * 		Key 序列化对象
+	 * @param valueSerializer
+	 * 		值序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public RedisCache(RedisManager redisManager, String keyPrefix, int expire, RedisSerializer<String> keySerializer,
+					  RedisSerializer<Object> valueSerializer){
+		this(keyPrefix, expire);
+		setRedisManager(redisManager);
+		setKeySerializer(keySerializer);
+		setValueSerializer(valueSerializer);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param redisManager
+	 * 		Redis 管理器
+	 * @param keyPrefix
+	 * 		Key 前缀
+	 * @param expire
+	 * 		有效期
+	 * @param principalIdFieldName
+	 * 		Principal Id 字段名称
+	 * @param keySerializer
+	 * 		Key 序列化对象
+	 * @param valueSerializer
+	 * 		值序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public RedisCache(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName,
+					  RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer){
+		this(keyPrefix, expire, principalIdFieldName);
+		setRedisManager(redisManager);
+		setKeySerializer(keySerializer);
+		setValueSerializer(valueSerializer);
 	}
 
 	public RedisManager getRedisManager(){
@@ -83,6 +250,54 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	public void setRedisManager(final RedisManager redisManager){
 		Assert.isNull(redisManager, "RedisManager could not be null.");
 		this.redisManager = redisManager;
+	}
+
+	/**
+	 * 获取 Key 序列化对象
+	 *
+	 * @return Key 序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public RedisSerializer<String> getKeySerializer(){
+		return keySerializer;
+	}
+
+	/**
+	 * 设置 Key 序列化对象
+	 *
+	 * @param keySerializer
+	 * 		Key 序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public void setKeySerializer(RedisSerializer<String> keySerializer){
+		Assert.isNull(keySerializer, "Key serializer could not be null.");
+		this.keySerializer = keySerializer;
+	}
+
+	/**
+	 * 获取值序列化对象
+	 *
+	 * @return 值序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public RedisSerializer<Object> getValueSerializer(){
+		return valueSerializer;
+	}
+
+	/**
+	 * 设置值序列化对象
+	 *
+	 * @param valueSerializer
+	 * 		值序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public void setValueSerializer(RedisSerializer<Object> valueSerializer){
+		Assert.isNull(valueSerializer, "Value serializer could not be null.");
+		this.valueSerializer = valueSerializer;
 	}
 
 	@Override
@@ -106,7 +321,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 			try{
 				for(byte[] key : keys){
-					newKeys.add((K) Constants.KEY_SERIALIZER.deserialize(key));
+					newKeys.add((K) keySerializer.deserialize(key));
 				}
 			}catch(SerializerException e){
 				logger.error("deserialize keys error", e);
@@ -125,14 +340,13 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		}
 
 		try{
-			byte[] redisKey = makeKey(key);
-			byte[] rawValue = redisManager.get(redisKey);
+			byte[] rawValue = redisManager.get(makeKey(key));
 
 			if(rawValue == null){
 				return null;
 			}
 
-			return (V) Constants.VALUE_SERIALIZER.deserialize(rawValue);
+			return (V) valueSerializer.deserialize(rawValue);
 		}catch(SerializerException e){
 			logger.error("Get cache error", e);
 			throw new CacheException(e);
@@ -150,7 +364,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 		try{
 			byte[] redisKey = makeKey(key);
-			byte[] rawValue = Constants.VALUE_SERIALIZER.serialize(value);
+			byte[] rawValue = valueSerializer.serialize(value);
 
 			redisManager.set(redisKey, rawValue, getExpire());
 			return value;
@@ -171,7 +385,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		try{
 			byte[] cacheKey = makeKey(key);
 			byte[] rawValue = redisManager.get(cacheKey);
-			V previous = (V) Constants.VALUE_SERIALIZER.deserialize(rawValue);
+			V previous = (V) valueSerializer.deserialize(rawValue);
 
 			redisManager.delete(cacheKey);
 
@@ -229,7 +443,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 		try{
 			for(byte[] key : keys){
-				V value = (V) Constants.VALUE_SERIALIZER.deserialize(redisManager.get(key));
+				V value = (V) valueSerializer.deserialize(redisManager.get(key));
 				values.add(value);
 			}
 		}catch(SerializerException e){
@@ -244,8 +458,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 			return null;
 		}
 
-		String redisKey = Constants.KEY_SERIALIZER instanceof StringSerializer ? getStringRedisKey(key) :
-				key.toString();
+		String redisKey = keySerializer instanceof StringSerializer ? getStringRedisKey(key) : key.toString();
 		return makeKey(redisKey);
 	}
 
@@ -254,7 +467,8 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 			return null;
 		}
 
-		StringBuilder sb = new StringBuilder(getKeyPrefix().length() + key.length());
+		StringBuilder sb = new StringBuilder(getKeyPrefix() == null ? key.length() :
+				getKeyPrefix().length() + key.length());
 
 		if(Validate.isNotEmpty(getKeyPrefix())){
 			sb.append(getKeyPrefix());
@@ -262,13 +476,12 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 		sb.append(key);
 
-		return Constants.KEY_SERIALIZER.serialize(sb.toString());
+		return keySerializer.serialize(sb.toString());
 	}
 
 	protected String getStringRedisKey(K key){
-		String redisKey = key instanceof PrincipalCollection ?
-				getRedisKeyFromPrincipalCollection((PrincipalCollection) key) : key.toString();
-		return redisKey;
+		return key instanceof PrincipalCollection ? getRedisKeyFromPrincipalCollection((PrincipalCollection) key) :
+				key.toString();
 	}
 
 	protected String getRedisKeyFromPrincipalCollection(PrincipalCollection principalCollection){
@@ -282,7 +495,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 		try{
 			Object idObj = principalIdGetter.invoke(principalObject);
-			
+
 			if(idObj == null){
 				throw new PrincipalIdNullException(principalObject.getClass(), getPrincipalIdFieldName());
 			}

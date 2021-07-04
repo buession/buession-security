@@ -22,14 +22,13 @@
  * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.shiro.cache;
+package com.buession.security.shiro;
 
 import com.buession.core.utils.Assert;
 import com.buession.core.utils.StatusUtils;
 import com.buession.core.validator.Validate;
 import com.buession.lang.Status;
 import com.buession.redis.RedisTemplate;
-import com.buession.redis.client.RedisClient;
 import com.buession.redis.core.Constants;
 import com.buession.redis.core.ScanResult;
 import com.buession.redis.exception.NotSupportedCommandException;
@@ -39,36 +38,76 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Redis 管理器抽象类
+ *
  * @author Yong.Teng
+ * @since 1.2.2
  */
-public abstract class AbsractRedisManager implements RedisManager {
+public abstract class AbstractRedisManager implements RedisManager {
 
+	/**
+	 * 默认返回 Key 数量
+	 */
 	protected final static int DEFAULT_RETURN_KEYS_COUNT = 100;
 
+	/**
+	 * 返回 Key 数量
+	 */
 	private int returnKeysCount = DEFAULT_RETURN_KEYS_COUNT;
 
 	private RedisTemplate redisTemplate;
 
-	public AbsractRedisManager(){
+	/**
+	 * 构造函数
+	 */
+	public AbstractRedisManager(){
 	}
 
-	public AbsractRedisManager(RedisTemplate redisTemplate){
+	/**
+	 * 构造函数
+	 *
+	 * @param redisTemplate
+	 *        {@link RedisTemplate}
+	 */
+	public AbstractRedisManager(RedisTemplate redisTemplate){
 		setRedisTemplate(redisTemplate);
 	}
 
+	/**
+	 * 返回 {@link RedisTemplate}
+	 *
+	 * @return {@link RedisTemplate}
+	 */
 	public RedisTemplate getRedisTemplate(){
 		return redisTemplate;
 	}
 
+	/**
+	 * 设置 {@link RedisTemplate}
+	 *
+	 * @param redisTemplate
+	 *        {@link RedisTemplate}
+	 */
 	public void setRedisTemplate(RedisTemplate redisTemplate){
 		Assert.isNull(redisTemplate, "RedisTemplate could not be null.");
 		this.redisTemplate = redisTemplate;
 	}
 
+	/**
+	 * 返回返回 Key 数量
+	 *
+	 * @return 返回 Key 数量
+	 */
 	public int getReturnKeysCount(){
 		return returnKeysCount;
 	}
 
+	/**
+	 * 设置返回 Key 数量
+	 *
+	 * @param returnKeysCount
+	 * 		返回 Key 数量
+	 */
 	public void setReturnKeysCount(int returnKeysCount){
 		this.returnKeysCount = returnKeysCount;
 	}
@@ -116,10 +155,8 @@ public abstract class AbsractRedisManager implements RedisManager {
 
 	@Override
 	public Long dbSize(){
-		RedisClient redisClient = redisTemplate.getClient();
-
 		try{
-			return redisClient.dbSize();
+			return redisTemplate.dbSize();
 		}catch(NotSupportedCommandException e){
 			return null;
 		}

@@ -22,20 +22,42 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.shiro.cache;
+package com.buession.security.shiro.session;
 
 import org.apache.shiro.session.Session;
 
 import java.util.Date;
 
 /**
+ * 内存 Session
+ *
  * @author Yong.Teng
+ * @since 1.2.2
  */
 public class MemorySession {
 
 	private Session session;
 
 	private Date createTime;
+
+	/**
+	 * 构造函数
+	 */
+	public MemorySession(){
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param session
+	 * 		Session
+	 * @param createTime
+	 * 		创建时间
+	 */
+	public MemorySession(Session session, Date createTime){
+		this.session = session;
+		this.createTime = createTime;
+	}
 
 	public Session getSession(){
 		return session;

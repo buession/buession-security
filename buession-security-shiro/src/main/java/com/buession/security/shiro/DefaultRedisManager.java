@@ -22,19 +22,31 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.shiro.cache;
+package com.buession.security.shiro;
 
 import com.buession.redis.RedisTemplate;
 
 /**
+ * 默认 Redis 管理器
+ *
  * @author Yong.Teng
+ * @since 1.2.2
  */
-public class DefaultRedisManager extends AbsractRedisManager {
+public class DefaultRedisManager extends AbstractRedisManager {
 
+	/**
+	 * 构造函数
+	 */
 	public DefaultRedisManager(){
 		super();
 	}
 
+	/**
+	 * 构造函数
+	 *
+	 * @param redisTemplate
+	 *        {@link RedisTemplate}
+	 */
 	public DefaultRedisManager(final RedisTemplate redisTemplate){
 		super(redisTemplate);
 	}

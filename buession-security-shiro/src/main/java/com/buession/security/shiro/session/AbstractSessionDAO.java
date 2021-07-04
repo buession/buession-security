@@ -24,23 +24,18 @@
  */
 package com.buession.security.shiro.session;
 
-import com.buession.security.shiro.cache.MemorySession;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Collection;
 
 /**
  * @author Yong.Teng
  */
-public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.eis.AbstractSessionDAO implements
-		SessionDAO {
+public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.eis.AbstractSessionDAO implements SessionDAO {
 
 	private String keyPrefix = DEFAULT_SESSION_KEY_PREFIX;
 
@@ -50,7 +45,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 
 	private long sessionInMemoryTimeout = DEFAULT_SESSION_IN_MEMORY_TIMEOUT;
 
-	private static ThreadLocal<Map<Serializable, MemorySession>> sessionsInThread = new ThreadLocal<>();
+	private static MemorySessionDAO memorySessionDao;
 
 	private final static Logger logger = LoggerFactory.getLogger(AbstractSessionDAO.class);
 
@@ -63,8 +58,8 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 		this.expire = expire;
 	}
 
-	public AbstractSessionDAO(String keyPrefix, int expire, boolean sessionInMemoryEnabled, long
-			sessionInMemoryTimeout){
+	public AbstractSessionDAO(String keyPrefix, int expire, boolean sessionInMemoryEnabled,
+							  long sessionInMemoryTimeout){
 		this(keyPrefix, expire);
 		this.sessionInMemoryEnabled = sessionInMemoryEnabled;
 		this.sessionInMemoryTimeout = sessionInMemoryTimeout;
@@ -104,106 +99,107 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 
 	@Override
 	public void update(Session session) throws UnknownSessionException{
-		saveSession(session);
+		logger.debug("Update session: {}.", session == null ? "null" : session.getId());
+		removeExpiredSessionInMemory();
+
+		if(session == null || session.getId() == null){
+			logger.error("session or session id is null");
+			throw new UnknownSessionException("session or session id is null");
+		}
+
+		doSaveSession(session);
 
 		if(sessionInMemoryEnabled){
-			setSessionToThreadLocal(session.getId(), session);
+			getMemorySessionDao().save(session);
 		}
 	}
 
 	@Override
+	public Collection<Session> getActiveSessions(){
+		logger.debug("Get active sessions.");
+		removeExpiredSessionInMemory();
+
+		return doGetActiveSessions();
+	}
+
+	@Override
+	public void delete(Session session){
+		logger.debug("Delete session: {}.", session == null ? "null" : session.getId());
+		removeExpiredSessionInMemory();
+
+		if(session == null || session.getId() == null){
+			logger.error("session or session id is null.");
+			return;
+		}
+
+		doDeleteSession(session);
+	}
+
+	@Override
 	protected Serializable doCreate(Session session){
+		logger.debug("Create session: {}.", session == null ? "null" : session.getId());
+		removeExpiredSessionInMemory();
+
 		if(session == null){
-			logger.error("session is null");
+			logger.error("session is null.");
 			throw new UnknownSessionException("session is null");
 		}
 
 		Serializable sessionId = generateSessionId(session);
 
 		assignSessionId(session, sessionId);
-		saveSession(session);
+		doSaveSession(session);
 
 		return sessionId;
 	}
 
+	protected abstract void doSaveSession(final Session session) throws UnknownSessionException;
+
 	@Override
 	protected Session doReadSession(Serializable sessionId){
+		logger.debug("Read session: {}.", sessionId);
+		removeExpiredSessionInMemory();
+
 		if(sessionId == null){
-			logger.error("session id is null");
+			logger.error("session id is null.");
 			return null;
 		}
 
-		Session session = getSessionFromThreadLocal(sessionId);
-		return session == null ? getSession(sessionId) : session;
-	}
+		Session session;
 
-	protected abstract Session getSession(Serializable sessionId);
-
-	protected abstract void saveSession(Session session) throws UnknownSessionException;
-
-	protected Session getSessionFromThreadLocal(Serializable sessionId){
-		Map<Serializable, MemorySession> sessionMap = sessionsInThread.get();
-
-		if(sessionMap == null){
-			return null;
+		if(sessionInMemoryEnabled){
+			session = getMemorySessionDao().read(sessionId);
+			if(session != null){
+				return session;
+			}
 		}
 
-		MemorySession memorySession = sessionMap.get(sessionId);
-		if(memorySession == null){
-			return null;
+		session = doReadSpecialSession(sessionId);
+		if(sessionInMemoryEnabled){
+			getMemorySessionDao().save(session);
 		}
-
-		long liveTime = getMemorySessionLiveTime(memorySession);
-		if(liveTime > sessionInMemoryTimeout){
-			sessionMap.remove(sessionId);
-			return null;
-		}
-
-		Session session = memorySession.getSession();
-		logger.debug("read session from memory");
 
 		return session;
 	}
 
-	protected void setSessionToThreadLocal(Serializable sessionId, Session session){
-		Map<Serializable, MemorySession> sessionMap = sessionsInThread.get();
+	protected abstract Session doReadSpecialSession(Serializable sessionId);
 
-		if(sessionMap == null){
-			sessionMap = new HashMap<>(32, 0.8F);
-			sessionsInThread.set(sessionMap);
-		}
+	protected abstract Collection<Session> doGetActiveSessions();
 
-		removeExpiredSessionInMemory(sessionMap);
+	protected abstract void doDeleteSession(Session session);
 
-		MemorySession memorySession = new MemorySession();
-		memorySession.setCreateTime(new Date());
-		memorySession.setSession(session);
-
-		sessionMap.put(sessionId, memorySession);
-	}
-
-	protected void removeExpiredSessionInMemory(Map<Serializable, MemorySession> sessionMap){
-		logger.debug("Remove expired session in memory.");
-		Iterator<Serializable> iterator = sessionMap.keySet().iterator();
-
-		while(iterator.hasNext()){
-			Serializable sessionId = iterator.next();
-			MemorySession memorySession = sessionMap.get(sessionId);
-
-			if(memorySession == null){
-				iterator.remove();
-				continue;
-			}
-
-			long liveTime = getMemorySessionLiveTime(memorySession);
-			if(liveTime > sessionInMemoryTimeout){
-				iterator.remove();
-			}
+	protected void removeExpiredSessionInMemory(){
+		if(sessionInMemoryEnabled){
+			getMemorySessionDao().clearExpiredSession();
 		}
 	}
 
-	protected long getMemorySessionLiveTime(MemorySession memorySession){
-		return System.currentTimeMillis() - memorySession.getCreateTime().getTime();
+	private MemorySessionDAO getMemorySessionDao(){
+		if(memorySessionDao == null){
+			memorySessionDao = new MemorySessionDAO(sessionInMemoryTimeout);
+		}
+
+		return memorySessionDao;
 	}
 
 }

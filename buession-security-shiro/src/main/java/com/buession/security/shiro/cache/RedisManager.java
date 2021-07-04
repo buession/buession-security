@@ -24,25 +24,10 @@
  */
 package com.buession.security.shiro.cache;
 
-import com.buession.lang.Status;
-
-import java.util.Set;
-
 /**
  * @author Yong.Teng
  */
-public interface RedisManager {
-
-    Set<byte[]> keys(byte[] pattern);
-
-    byte[] set(byte[] key, byte[] value, int expire);
-
-    byte[] get(byte[] key);
-
-    Status delete(byte[] key);
-
-    Status delete(byte[]... keys);
-
-    Long dbSize();
+@Deprecated
+public interface RedisManager extends com.buession.security.shiro.RedisManager {
 
 }

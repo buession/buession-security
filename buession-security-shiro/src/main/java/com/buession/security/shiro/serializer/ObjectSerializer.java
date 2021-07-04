@@ -31,16 +31,16 @@ import com.buession.core.serializer.SerializerException;
 /**
  * @author Yong.Teng
  */
-public class ObjectSerializer implements RedisSerializer<Object> {
+public class ObjectSerializer<T> implements RedisSerializer<T> {
 
 	@Override
-	public byte[] serialize(Object object) throws SerializerException{
+	public byte[] serialize(T object) throws SerializerException{
 		ByteArraySerializer serialize = new DefaultByteArraySerializer();
 		return serialize.serializeAsBytes(object);
 	}
 
 	@Override
-	public Object deserialize(byte[] bytes) throws SerializerException{
+	public T deserialize(byte[] bytes) throws SerializerException{
 		ByteArraySerializer serialize = new DefaultByteArraySerializer();
 		return serialize.unserialize(bytes);
 	}

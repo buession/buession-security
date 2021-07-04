@@ -22,27 +22,79 @@
  * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.shiro.cache;
+package com.buession.security.shiro;
 
 import com.buession.lang.Status;
 
 import java.util.Set;
 
 /**
+ * Redis 管理器
+ *
  * @author Yong.Teng
+ * @since 1.2.2
  */
 public interface RedisManager {
 
-    Set<byte[]> keys(byte[] pattern);
+	/**
+	 * 根据模式获取所有 Key
+	 *
+	 * @param pattern
+	 * 		模式
+	 *
+	 * @return 根据模式查询到的所有 Key
+	 */
+	Set<byte[]> keys(byte[] pattern);
 
-    byte[] set(byte[] key, byte[] value, int expire);
+	/**
+	 * 将值 value 关联到 key，并返回 value
+	 *
+	 * @param key
+	 * 		Key
+	 * @param value
+	 * 		值
+	 * @param expire
+	 * 		过期时间
+	 *
+	 * @return value
+	 */
+	byte[] set(byte[] key, byte[] value, int expire);
 
-    byte[] get(byte[] key);
+	/**
+	 * 获取 Key 的值
+	 *
+	 * @param key
+	 * 		Key
+	 *
+	 * @return Key 的值
+	 */
+	byte[] get(byte[] key);
 
-    Status delete(byte[] key);
+	/**
+	 * 删除 Key
+	 *
+	 * @param key
+	 * 		Key
+	 *
+	 * @return 操作结果
+	 */
+	Status delete(byte[] key);
 
-    Status delete(byte[]... keys);
+	/**
+	 * 批量删除 Key
+	 *
+	 * @param keys
+	 * 		Key
+	 *
+	 * @return 操作结果
+	 */
+	Status delete(byte[]... keys);
 
-    Long dbSize();
+	/**
+	 * 获取 db 大小
+	 *
+	 * @return db 大小
+	 */
+	Long dbSize();
 
 }

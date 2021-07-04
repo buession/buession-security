@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.session;
@@ -27,8 +27,10 @@ package com.buession.security.shiro.session;
 import com.buession.core.serializer.SerializerException;
 import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
-import com.buession.security.shiro.Constants;
-import com.buession.security.shiro.cache.RedisManager;
+import com.buession.security.shiro.RedisManager;
+import com.buession.security.shiro.serializer.ObjectSerializer;
+import com.buession.security.shiro.serializer.RedisSerializer;
+import com.buession.security.shiro.serializer.StringSerializer;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.slf4j.Logger;
@@ -44,7 +46,20 @@ import java.util.Set;
  */
 public class RedisSessionDAO extends AbstractSessionDAO {
 
+	/**
+	 * Redis 管理器
+	 */
 	private RedisManager redisManager;
+
+	/**
+	 * Key 序列化对象
+	 */
+	private RedisSerializer<String> keySerializer = new StringSerializer();
+
+	/**
+	 * 值序列化对象
+	 */
+	private RedisSerializer<Session> valueSerializer = new ObjectSerializer<>();
 
 	private final static Logger logger = LoggerFactory.getLogger(RedisSessionDAO.class);
 
@@ -80,80 +95,64 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		this.redisManager = redisManager;
 	}
 
-	@Override
-	public Collection<Session> getActiveSessions(){
-		Set<Session> sessions = new HashSet<>();
-		byte[] pattern;
+	/**
+	 * 获取 Key 序列化对象
+	 *
+	 * @return Key 序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public RedisSerializer<String> getKeySerializer(){
+		return keySerializer;
+	}
 
-		try{
-			pattern = Constants.KEY_SERIALIZER.serialize(makeKey("*"));
-			Set<byte[]> keys = redisManager.keys(pattern);
+	/**
+	 * 设置 Key 序列化对象
+	 *
+	 * @param keySerializer
+	 * 		Key 序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public void setKeySerializer(RedisSerializer<String> keySerializer){
+		Assert.isNull(keySerializer, "Key serializer could not be null.");
+		this.keySerializer = keySerializer;
+	}
 
-			if(Validate.isEmpty(keys) == false){
-				for(byte[] key : keys){
-					byte[] value = redisManager.get(key);
-					Session session = (Session) Constants.VALUE_SERIALIZER.deserialize(value);
+	/**
+	 * 获取值序列化对象
+	 *
+	 * @return 值序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public RedisSerializer<Session> getValueSerializer(){
+		return valueSerializer;
+	}
 
-					sessions.add(session);
-				}
-			}
-		}catch(SerializerException e){
-			logger.error("get active sessions error.");
-		}
-		return sessions;
+	/**
+	 * 设置值序列化对象
+	 *
+	 * @param valueSerializer
+	 * 		值序列化对象
+	 *
+	 * @since 1.2.2
+	 */
+	public void setValueSerializer(RedisSerializer<Session> valueSerializer){
+		Assert.isNull(valueSerializer, "Value serializer could not be null.");
+		this.valueSerializer = valueSerializer;
 	}
 
 	@Override
-	public void delete(Session session){
-		if(session == null || session.getId() == null){
-			logger.error("session or session id is null");
-			return;
-		}
-
-		try{
-			redisManager.delete(getSessionKey(session.getId()));
-		}catch(SerializerException e){
-			logger.error("delete session error: {}. session id: {}", e.getMessage(), session.getId());
-		}
-	}
-
-	@Override
-	protected Session getSession(Serializable sessionId){
-		Session session = null;
-
-		logger.debug("Read session from redis");
-
-		try{
-			byte[] value = redisManager.get(getSessionKey(sessionId));
-
-			if(value != null){
-				session = (Session) Constants.VALUE_SERIALIZER.deserialize(value);
-				if(isSessionInMemoryEnabled()){
-					setSessionToThreadLocal(sessionId, session);
-				}
-			}
-		}catch(SerializerException e){
-			logger.error("read session error: {}. session id: {}", e.getMessage(), sessionId);
-		}
-
-		return session;
-	}
-
-	@Override
-	protected void saveSession(Session session) throws UnknownSessionException{
-		if(session == null || session.getId() == null){
-			logger.error("session or session id is null");
-			throw new UnknownSessionException("session or session id is null");
-		}
-
+	protected void doSaveSession(final Session session) throws UnknownSessionException{
 		byte[] key;
 		byte[] value;
 
 		try{
 			key = getSessionKey(session.getId());
-			value = Constants.VALUE_SERIALIZER.serialize(session);
+			value = valueSerializer.serialize(session);
 		}catch(SerializerException e){
-			logger.error("serialize session error: {}. session id: {}", e.getMessage(), session.getId());
+			logger.error("serialize session: {} error: {}.", session.getId(), e.getMessage());
 			throw new UnknownSessionException(e);
 		}
 
@@ -174,20 +173,61 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		redisManager.set(key, value, expire);
 	}
 
+	@Override
+	protected Session doReadSpecialSession(Serializable sessionId){
+		Session session = null;
+
+		try{
+			byte[] key = getSessionKey(sessionId);
+			byte[] value = redisManager.get(key);
+
+			if(value != null){
+				session = valueSerializer.deserialize(value);
+			}
+		}catch(SerializerException e){
+			logger.error("read session: {} error: {}.", sessionId, e.getMessage());
+		}
+
+		return session;
+	}
+
+	@Override
+	protected Collection<Session> doGetActiveSessions(){
+		Set<Session> sessions = new HashSet<>();
+		byte[] pattern;
+
+		try{
+			pattern = keySerializer.serialize(makeKey(Validate.hasText(getKeyPrefix()) ? getKeyPrefix() : "*"));
+			Set<byte[]> keys = redisManager.keys(pattern);
+
+			if(Validate.isNotEmpty(keys)){
+				for(byte[] key : keys){
+					byte[] value = redisManager.get(key);
+					Session session = valueSerializer.deserialize(value);
+					sessions.add(session);
+				}
+			}
+		}catch(SerializerException e){
+			logger.error("get active sessions error.");
+		}
+		return sessions;
+	}
+
+	@Override
+	public void doDeleteSession(Session session){
+		try{
+			redisManager.delete(getSessionKey(session.getId()));
+		}catch(SerializerException e){
+			logger.error("delete session: {}, error: {}.", session.getId(), e.getMessage());
+		}
+	}
+
 	protected byte[] getSessionKey(Serializable sessionId) throws SerializerException{
-		return Constants.KEY_SERIALIZER.serialize(makeKey(sessionId.toString()));
+		return keySerializer.serialize(makeKey(sessionId.toString()));
 	}
 
 	protected String makeKey(final String key){
-		if(Validate.isEmpty(getKeyPrefix())){
-			return key;
-		}else{
-			StringBuilder sb = new StringBuilder(getKeyPrefix().length() + key.length());
-
-			sb.append(getKeyPrefix()).append(key);
-
-			return sb.toString();
-		}
+		return Validate.isEmpty(getKeyPrefix()) ? key : getKeyPrefix() + key;
 	}
 
 }
