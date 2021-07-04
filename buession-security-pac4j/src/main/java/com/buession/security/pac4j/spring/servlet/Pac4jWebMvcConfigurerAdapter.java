@@ -22,10 +22,14 @@
  * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.spring;
+package com.buession.security.pac4j.spring.servlet;
 
+import com.buession.security.pac4j.annotation.servlet.PrincipalMethodArgumentResolver;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 /**
  * @author Yong.Teng
@@ -33,5 +37,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class Pac4jWebMvcConfigurerAdapter implements WebMvcConfigurer {
+
+	@Override
+	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers){
+		argumentResolvers.add(new PrincipalMethodArgumentResolver());
+	}
 
 }
