@@ -7,7 +7,7 @@
 		<groupId>com.buession.security</groupId>
 		<artifactId>buession-security-parent</artifactId>
 		<relativePath>../buession-security-parent</relativePath>
-		<version>1.2.1</version>
+		<version>1.2.2</version>
 	</parent>
 	<artifactId>buession-security-geetest</artifactId>
 	<url>https://github.com/buession/buession-security</url>
@@ -45,11 +45,23 @@
 			<groupId>com.buession.security</groupId>
 			<artifactId>buession-security-core</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.buession.security</groupId>
 			<artifactId>buession-security-mcrypt</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>

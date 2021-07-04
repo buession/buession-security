@@ -7,7 +7,7 @@
 		<groupId>com.buession.security</groupId>
 		<artifactId>buession-security-parent</artifactId>
 		<relativePath>../buession-security-parent</relativePath>
-		<version>1.2.1</version>
+		<version>1.2.2</version>
 	</parent>
 	<artifactId>buession-security-shiro</artifactId>
 	<url>https://github.com/buession/buession-security</url>
@@ -68,6 +68,13 @@
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>

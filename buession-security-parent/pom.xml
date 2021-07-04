@@ -7,13 +7,13 @@
 		<groupId>com.buession</groupId>
 		<artifactId>parent</artifactId>
 		<relativePath/>
-		<version>1.2.1</version>
+		<version>1.2.2</version>
 	</parent>
 	<groupId>com.buession.security</groupId>
 	<artifactId>buession-security-parent</artifactId>
 	<url>https://github.com/buession/buession-security</url>
 	<description>Buession Security Framework Parent</description>
-	<version>1.2.1</version>
+	<version>1.2.2</version>
 	<packaging>pom</packaging>
 
 	<organization>

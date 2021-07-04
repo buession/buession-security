@@ -19,23 +19,30 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2019 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.shiro;
+package com.buession.security.shiro.cache;
 
-import com.buession.security.shiro.serializer.ObjectSerializer;
-import com.buession.security.shiro.serializer.StringSerializer;
+import com.buession.lang.Status;
+
+import java.util.Set;
 
 /**
  * @author Yong.Teng
  */
-public class Constants {
+public interface RedisManager {
 
-	public final static String ALL_PERMISSION = "*:*";
+    Set<byte[]> keys(byte[] pattern);
 
-	public final static StringSerializer KEY_SERIALIZER = new StringSerializer();
+    byte[] set(byte[] key, byte[] value, int expire);
 
-	public final static ObjectSerializer VALUE_SERIALIZER = new ObjectSerializer();
+    byte[] get(byte[] key);
+
+    Status delete(byte[] key);
+
+    Status delete(byte[]... keys);
+
+    Long dbSize();
 
 }

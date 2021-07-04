@@ -19,87 +19,27 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.profile;
+package com.buession.security.pac4j.annotation;
 
-import java.util.Objects;
+import com.buession.security.pac4j.subject.Pac4jPrincipal;
+import org.apache.shiro.SecurityUtils;
+import org.pac4j.core.profile.CommonProfile;
+
+import java.util.Optional;
 
 /**
  * @author Yong.Teng
  */
-public class Pac4jPrincipal<T> {
+public class ProfileUtils {
 
-	private T id;
+	public static CommonProfile getCurrent(){
+		Pac4jPrincipal principal = (Pac4jPrincipal) SecurityUtils.getSubject().getPrincipal();
+		Optional<CommonProfile> optional = principal.getProfile();
 
-	private String username;
-
-	private String realName;
-
-	public Pac4jPrincipal(){
-	}
-
-	public Pac4jPrincipal(T id, String username, String realName){
-		this.id = id;
-		this.username = username;
-		this.realName = realName;
-	}
-
-	public T getId(){
-		return id;
-	}
-
-	public void setId(T id){
-		this.id = id;
-	}
-
-	public String getUsername(){
-		return username;
-	}
-
-	public void setUsername(String username){
-		this.username = username;
-	}
-
-	public String getRealName(){
-		return realName;
-	}
-
-	public void setRealName(String realName){
-		this.realName = realName;
-	}
-
-	@Override
-	public int hashCode(){
-		return Objects.hash(id, username, realName);
-	}
-
-	@Override
-	public boolean equals(Object o){
-		if(this == o){
-			return true;
-		}
-
-		if(o == null || getClass() != o.getClass()){
-			return false;
-		}
-
-		Pac4jPrincipal that = (Pac4jPrincipal) o;
-
-		return Objects.equals(id, that.id) && Objects.equals(username, that.username) && Objects.equals(realName,
-				that.realName);
-	}
-
-	@Override
-	public String toString(){
-		final StringBuilder sb = new StringBuilder(32);
-
-		sb.append("id: ").append(id).append(", ");
-		sb.append("username: ").append(username).append(", ");
-		sb.append("realName: ").append(realName);
-
-		return sb.toString();
+		return optional.get();
 	}
 
 }
