@@ -22,10 +22,24 @@
  * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.annotation.exception;/**
- * 
- *
+package com.buession.security.pac4j.annotation.exception;
+
+import org.springframework.core.NestedRuntimeException;
+
+/**
  * @author Yong.Teng
  * @since 1.2.2
- */public class PrincipalMismatchException {
+ */
+public class PrincipalMismatchException extends NestedRuntimeException {
+
+	private static final long serialVersionUID = 7865621848349672408L;
+
+	public PrincipalMismatchException(String message){
+		super(message);
+	}
+
+	public PrincipalMismatchException(String message, Throwable cause){
+		super(message, cause);
+	}
+
 }

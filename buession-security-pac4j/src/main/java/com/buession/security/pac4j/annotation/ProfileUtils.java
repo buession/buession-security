@@ -19,38 +19,15 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.annotation;
 
-import com.buession.security.pac4j.subject.Pac4jPrincipal;
-import org.apache.shiro.SecurityUtils;
-import org.pac4j.core.profile.CommonProfile;
-
-import java.util.Optional;
-
 /**
  * @author Yong.Teng
  */
-public class ProfileUtils {
-
-	private final static ThreadLocal<CommonProfile> PROFILES_CACHE = new ThreadLocal<>();
-
-	public static CommonProfile getCurrent(){
-		CommonProfile profile = PROFILES_CACHE.get();
-
-		if(profile == null){
-			Pac4jPrincipal principal = (Pac4jPrincipal) SecurityUtils.getSubject().getPrincipal();
-			Optional<CommonProfile> optional = principal.getProfile();
-
-			profile = optional.get();
-			if(profile != null){
-				PROFILES_CACHE.set(profile);
-			}
-		}
-
-		return profile;
-	}
+@Deprecated
+public class ProfileUtils extends com.buession.security.pac4j.profile.ProfileUtils {
 
 }

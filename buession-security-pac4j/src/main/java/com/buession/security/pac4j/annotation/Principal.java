@@ -44,4 +44,11 @@ public @interface Principal {
 
 	String realName() default ValueConstants.DEFAULT_NONE;
 
+	/**
+	 * @return 是否必须
+	 *
+	 * @since 1.2.2
+	 */
+	boolean required() default true;
+
 }
