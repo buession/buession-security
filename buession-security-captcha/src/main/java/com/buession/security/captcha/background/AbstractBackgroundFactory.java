@@ -76,7 +76,8 @@ public abstract class AbstractBackgroundFactory implements BackgroundFactory {
 		graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
 
 		if(getAlpha() >= 0F){
-			((Graphics2D) graphics).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
+			AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha());
+			((Graphics2D) graphics).setComposite(alphaComposite);
 		}
 	}
 
