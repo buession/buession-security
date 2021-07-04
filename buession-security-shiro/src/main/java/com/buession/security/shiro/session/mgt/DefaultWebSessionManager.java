@@ -22,10 +22,71 @@
  * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.shiro.session.mgt;/**
- * 
+package com.buession.security.shiro.session.mgt;
+
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.UnknownSessionException;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.web.session.mgt.WebSessionKey;
+import org.apache.shiro.web.util.WebUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+
+/**
+ * 默认 Web Session 管理器，替代 shiro 的默认 Web Session 管理器，
+ * 以优化在每个 request 周期内，不用每次取 sessionDAO 中读取，而从 request attribute 中返回
  *
  * @author Yong.Teng
  * @since 1.2.2
- */public class DefaultWebSessionManager {
+ */
+public class DefaultWebSessionManager extends org.apache.shiro.web.session.mgt.DefaultWebSessionManager {
+
+	private final static Logger logger = LoggerFactory.getLogger(DefaultWebSessionManager.class);
+
+	/**
+	 * 构造函数
+	 */
+	public DefaultWebSessionManager(){
+		super();
+	}
+
+	@Override
+	protected Session retrieveSession(SessionKey sessionKey) throws UnknownSessionException{
+		Serializable sessionId = getSessionId(sessionKey);
+		if(sessionId == null){
+			logger.debug("Unable to resolve session ID from SessionKey [{}].  Returning null to indicate a " +
+					"session could not be found.", sessionKey);
+			return null;
+		}
+
+		String sessionIdValue = sessionId.toString();
+
+		HttpServletRequest request = null;
+		if(sessionKey instanceof WebSessionKey){
+			request = WebUtils.getHttpRequest(sessionKey);
+
+			if(request != null){
+				Object s = request.getAttribute(sessionIdValue);
+				if(s != null){
+					return (Session) s;
+				}
+			}
+		}
+
+		Session s = retrieveSessionFromDataSource(sessionId);
+		if(s == null){
+			//session ID was provided, meaning one is expected to be found, but we couldn't find one:
+			throw new UnknownSessionException("Could not find session with ID [" + sessionId + "]");
+		}
+
+		if(request != null){
+			request.setAttribute(sessionIdValue, s);
+		}
+
+		return s;
+	}
+
 }
