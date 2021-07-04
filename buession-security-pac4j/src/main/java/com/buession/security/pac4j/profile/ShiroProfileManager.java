@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.profile;
@@ -51,8 +51,8 @@ public class ShiroProfileManager extends ProfileManager<CommonProfile> {
 
 	private final static Authorizer<CommonProfile> IS_REMEMBERED_AUTHORIZER = new IsRememberedAuthorizer<>();
 
-	private final static Authorizer<CommonProfile> IS_FULLY_AUTHENTICATED_AUTHORIZER = new
-			IsFullyAuthenticatedAuthorizer<>();
+	private final static Authorizer<CommonProfile> IS_FULLY_AUTHENTICATED_AUTHORIZER =
+			new IsFullyAuthenticatedAuthorizer<>();
 
 	private final static Logger logger = LoggerFactory.getLogger(ShiroProfileManager.class);
 
@@ -62,7 +62,10 @@ public class ShiroProfileManager extends ProfileManager<CommonProfile> {
 
 	@Override
 	public void save(final boolean saveInSession, final CommonProfile profile, final boolean multiProfile){
-		logger.info("Save profile: {} with multi profile is {}", profile, Boolean.toString(multiProfile));
+		if(logger.isInfoEnabled()){
+			logger.info("Save profile: {} with multi profile is {}", profile, multiProfile);
+		}
+
 		super.save(saveInSession, profile, multiProfile);
 
 		try{
@@ -80,7 +83,10 @@ public class ShiroProfileManager extends ProfileManager<CommonProfile> {
 	}
 
 	protected void populateSubject(final LinkedHashMap<String, CommonProfile> profiles){
-		logger.info("Populate subject: {}", profiles);
+		if(logger.isInfoEnabled()){
+			logger.info("Populate subject: {}", profiles);
+		}
+
 		if(Validate.isEmpty(profiles)){
 			return;
 		}
