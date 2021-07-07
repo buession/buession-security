@@ -57,8 +57,8 @@ public class DefaultWebSessionManager extends org.apache.shiro.web.session.mgt.D
 	protected Session retrieveSession(SessionKey sessionKey) throws UnknownSessionException{
 		Serializable sessionId = getSessionId(sessionKey);
 		if(sessionId == null){
-			logger.debug("Unable to resolve session ID from SessionKey [{}].  Returning null to indicate a " +
-					"session could not be found.", sessionKey);
+			logger.debug("Unable to resolve session ID from SessionKey [{}]. Returning null to indicate a session " +
+					"could not be found.", sessionKey);
 			return null;
 		}
 
