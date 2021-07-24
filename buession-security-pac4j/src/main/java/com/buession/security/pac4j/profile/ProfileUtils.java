@@ -68,7 +68,7 @@ public class ProfileUtils {
 	 * @return 用户 Profile
 	 */
 	public static CommonProfile getProfileFromPac4jPrincipal(Pac4jPrincipal principal){
-		return principal.getProfile().get();
+		return principal.getProfile().isPresent() ? principal.getProfile().get() : null;
 	}
 
 	/**
@@ -179,15 +179,21 @@ public class ProfileUtils {
 			InvocationTargetException{
 		T instance = type.newInstance();
 
-		beanResolver.populate(instance, profile.getAttributes());
+		try{
+			beanResolver.populate(instance, profile.getAttributes());
+		}catch(NoSuchMethodException e){
+			throw new InvocationTargetException(e, e.getMessage());
+		}
 
 		if(Map.class.isAssignableFrom(type)){
+			Map map = (Map) instance;
+
 			if(Validate.hasText(idFieldName)){
-				((Map) instance).put(idFieldName, getId(profile, idFieldName));
+				map.put(idFieldName, getId(profile, idFieldName));
 			}
 
 			if(Validate.hasText(realNameFieldName)){
-				((Map) instance).put(realNameFieldName, getRealName(profile, realNameFieldName));
+				map.put(realNameFieldName, getRealName(profile, realNameFieldName));
 			}
 		}else{
 			if(Validate.hasText(idFieldName)){
@@ -213,7 +219,7 @@ public class ProfileUtils {
 		return instance;
 	}
 
-	private final static String getId(final CommonProfile profile, final String idField){
+	private static String getId(final CommonProfile profile, final String idField){
 		if(Validate.hasText(idField)){
 			Object id = profile.getAttribute(idField);
 			return id == null ? null : id.toString();
@@ -222,7 +228,7 @@ public class ProfileUtils {
 		}
 	}
 
-	private final static String getRealName(final CommonProfile profile, final String realNameField){
+	private static String getRealName(final CommonProfile profile, final String realNameField){
 		if(Validate.hasText(realNameField)){
 			Object realName = profile.getAttribute(realNameField);
 			return realName == null ? null : realName.toString();

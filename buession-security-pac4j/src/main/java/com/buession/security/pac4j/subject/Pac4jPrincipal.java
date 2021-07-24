@@ -19,12 +19,13 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.subject;
 
 import com.buession.core.validator.Validate;
+import org.pac4j.core.profile.BasicUserProfile;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileHelper;
 import org.pac4j.core.util.CommonHelper;
@@ -60,10 +61,10 @@ public class Pac4jPrincipal implements Principal, Serializable {
 	public String getName(){
 		Optional<CommonProfile> profile = getProfile();
 		if(null == principalNameAttribute){
-			return profile.get().getId();
+			return profile.map(BasicUserProfile::getId).orElse(null);
 		}
 
-		Object value = profile.get().getAttribute(principalNameAttribute);
+		Object value = profile.map(commonProfile->commonProfile.getAttribute(principalNameAttribute)).orElse(null);
 		return null == value ? null : String.valueOf(value);
 	}
 
@@ -76,22 +77,22 @@ public class Pac4jPrincipal implements Principal, Serializable {
 	}
 
 	@Override
-	public boolean equals(Object o){
-		if(this == o){
+	public boolean equals(Object obj){
+		if(this == obj){
 			return true;
 		}
 
-		if(o == null || getClass() != o.getClass()){
-			return false;
+		if(obj instanceof Pac4jPrincipal){
+			final Pac4jPrincipal that = (Pac4jPrincipal) obj;
+			return Objects.deepEquals(profiles, that.profiles);
 		}
 
-		final Pac4jPrincipal that = (Pac4jPrincipal) o;
-		return Objects.equals(profiles, that.profiles);
+		return false;
 	}
 
 	@Override
 	public int hashCode(){
-		return profiles != null ? profiles.hashCode() : 0;
+		return Objects.hashCode(profiles);
 	}
 
 	@Override

@@ -31,6 +31,7 @@ import com.buession.security.pac4j.annotation.Principal;
 import com.buession.security.pac4j.profile.ProfileUtils;
 import com.buession.web.method.MethodParameterUtils;
 import com.buession.web.servlet.method.AbstractHandlerMethodArgumentResolver;
+import org.pac4j.core.profile.CommonProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -74,16 +75,16 @@ public class PrincipalMethodArgumentResolver extends AbstractHandlerMethodArgume
 	}
 
 	protected <T> Object read(MethodParameter methodParameter, Principal principal, Class<T> paramType) throws MethodArgumentTypeMismatchException{
-		Object result = null;
+		CommonProfile profile = ProfileUtils.getCurrent();
+
+		if(profile == null && checkRequired(methodParameter, principal)){
+			throw new MethodArgumentTypeMismatchException("Principal is missing: " + methodParameter.getExecutable().toGenericString(), methodParameter.getNestedParameterType(), methodParameter.getParameterName(), methodParameter, null);
+		}
 
 		try{
-			result = ProfileUtils.convert(ProfileUtils.getCurrent(), paramType,
+			return ProfileUtils.convert(ProfileUtils.getCurrent(), paramType,
 					ValueConstants.DEFAULT_NONE.equals(principal.id()) ? null : principal.id(),
 					ValueConstants.DEFAULT_NONE.equals(principal.realName()) ? null : principal.realName());
-
-			if(result == null && checkRequired(methodParameter, principal)){
-				throw new MethodArgumentTypeMismatchException("Principal is missing: " + methodParameter.getExecutable().toGenericString(), methodParameter.getNestedParameterType(), methodParameter.getParameterName(), methodParameter, null);
-			}
 		}catch(InstantiationException e){
 			logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
 		}catch(IllegalAccessException e){
@@ -92,7 +93,7 @@ public class PrincipalMethodArgumentResolver extends AbstractHandlerMethodArgume
 			logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
 		}
 
-		return result;
+		return null;
 	}
 
 	protected static boolean checkRequired(MethodParameter parameter, Principal principal){

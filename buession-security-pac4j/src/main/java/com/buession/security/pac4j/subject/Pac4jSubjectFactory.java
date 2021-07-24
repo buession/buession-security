@@ -48,7 +48,7 @@ public class Pac4jSubjectFactory extends DefaultWebSubjectFactory {
 			logger.info("Subject context is authenticated");
 			AuthenticationToken token = context.getAuthenticationToken();
 
-			if(token != null && token instanceof Pac4jToken){
+			if(token instanceof Pac4jToken){
 				logger.info("Authentication token instanceof {}", Pac4jToken.class.getName());
 				final Pac4jToken clientToken = (Pac4jToken) token;
 				if(clientToken.isRememberMe()){

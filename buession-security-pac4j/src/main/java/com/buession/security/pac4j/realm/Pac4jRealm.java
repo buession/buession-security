@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.realm;
@@ -62,8 +62,7 @@ public class Pac4jRealm extends AuthorizingRealm {
 	}
 
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken authenticationToken) throws
-			AuthenticationException{
+	protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken authenticationToken) throws AuthenticationException{
 		final Pac4jToken token = (Pac4jToken) authenticationToken;
 		final List<CommonProfile> profiles = token.getProfiles();
 		final Pac4jPrincipal principal = new Pac4jPrincipal(profiles, principalNameAttribute);
@@ -81,7 +80,7 @@ public class Pac4jRealm extends AuthorizingRealm {
 		if(principal != null){
 			final Optional<List<CommonProfile>> profiles = principal.getProfiles();
 
-			if(profiles != null){
+			if(profiles.isPresent()){
 				for(CommonProfile profile : profiles.get()){
 					if(profile != null){
 						roles.addAll(profile.getRoles());

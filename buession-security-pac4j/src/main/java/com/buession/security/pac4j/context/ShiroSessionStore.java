@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.context;
@@ -97,14 +97,21 @@ public class ShiroSessionStore implements SessionStore<JEEContext> {
 			return true;
 		}
 
-		logger.debug("Discard old session: {}", session.getId());
-		final Map<Object, Object> attributes = session.getAttributeKeys().stream().collect
-				(Collectors.toMap(k->k, session::getAttribute, (a, b)->b));
+		if(logger.isDebugEnabled()){
+			logger.debug("Discard old session: {}", session.getId());
+		}
+
+		final Map<Object, Object> attributes = session.getAttributeKeys().stream().collect(Collectors.toMap(k->k,
+				session::getAttribute, (a, b)->b));
 
 		session.stop();
 
 		final Session newSession = getSession(true);
-		logger.debug("And copy all data to the new one: {}", newSession.getId());
+
+		if(logger.isDebugEnabled()){
+			logger.debug("And copy all data to the new one: {}", newSession.getId());
+		}
+
 		attributes.forEach((k, v)->newSession.setAttribute(k, v));
 		return true;
 	}
