@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.geetest;
@@ -29,7 +29,6 @@ import com.buession.core.validator.Validate;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
 import com.buession.lang.Status;
-import com.buession.security.geetest.core.ClientType;
 import com.buession.security.geetest.core.EnhencedResult;
 import com.buession.security.mcrypt.MD5Mcrypt;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -310,7 +309,7 @@ public class GeetestClient {
 				logger.error("gtServer register challenge error");
 			}
 		}catch(Exception e){
-			logger.error("gtServer register challenge error: {}", e);
+			logger.error("gtServer register challenge error: {}", e.getMessage());
 		}
 
 		return Status.FAILURE;
@@ -371,12 +370,12 @@ public class GeetestClient {
 	 *
 	 * @return 检测结果
 	 */
-	protected final static boolean requestIsLegal(String challenge, String validate, String seccode){
+	protected static boolean requestIsLegal(String challenge, String validate, String seccode){
 		return Validate.hasText(challenge) && Validate.hasText(validate) && Validate.hasText(seccode);
 	}
 
-	protected final static boolean checkResultByPrivate(final String geetestKey, final String challenge,
-			final String validate){
+	protected static boolean checkResultByPrivate(final String geetestKey, final String challenge,
+												  final String validate){
 		final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
 		final StringBuilder sb = new StringBuilder(geetestKey.length() + Geetest.NAME.length() + challenge.length());
 
@@ -385,35 +384,8 @@ public class GeetestClient {
 		return validate.equals(md5Mcrypt.encode(sb.toString()));
 	}
 
-	protected final static long random(final int divisor){
+	protected static long random(final int divisor){
 		return Math.round(Math.random() * divisor);
-	}
-
-	protected final static class URLBuilder {
-
-		public final static String buildRegisterUrl(final String geetestId, final ClientType clientType,
-				final String userId, final String ip){
-			final StringBuilder sb = new StringBuilder(Geetest.REGISTER_URL.length() + geetestId.length() + 24);
-
-			sb.append(Geetest.REGISTER_URL).append('?');
-			sb.append("gt=").append(geetestId);
-			sb.append("&json_format=1");
-
-			if(userId != null){
-				sb.append("&user_id=").append(userId);
-			}
-
-			if(clientType != null){
-				sb.append("&client_type=").append(clientType.getValue());
-			}
-
-			if(ip != null){
-				sb.append("&ip_address=").append(ip);
-			}
-
-			return sb.toString();
-		}
-
 	}
 
 }

@@ -22,10 +22,37 @@
  * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.geetest;/**
- * 
- *
+package com.buession.security.geetest;
+
+import com.buession.security.geetest.core.ClientType;
+
+/**
  * @author Yong.Teng
  * @since 1.3.0
- */public class URLBuilder {
+ */
+class URLBuilder {
+
+	public static String buildRegisterUrl(final String geetestId, final ClientType clientType, final String userId,
+										  final String ip){
+		final StringBuilder sb = new StringBuilder(Geetest.REGISTER_URL.length() + geetestId.length() + 24);
+
+		sb.append(Geetest.REGISTER_URL).append('?');
+		sb.append("gt=").append(geetestId);
+		sb.append("&json_format=1");
+
+		if(userId != null){
+			sb.append("&user_id=").append(userId);
+		}
+
+		if(clientType != null){
+			sb.append("&client_type=").append(clientType.getValue());
+		}
+
+		if(ip != null){
+			sb.append("&ip_address=").append(ip);
+		}
+
+		return sb.toString();
+	}
+
 }
