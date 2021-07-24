@@ -1,0 +1,7 @@
+Buession Security Web Changelog
+===========================
+
+
+Changes in version 1.3.0 (2021-07-12)
+-------------------------------------
+*【管理】逐步规范化 changelog 和 测试用例

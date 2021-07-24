@@ -7,7 +7,7 @@
 		<groupId>com.buession.security</groupId>
 		<artifactId>buession-security-parent</artifactId>
 		<relativePath>../buession-security-parent</relativePath>
-		<version>1.2.2</version>
+		<version>1.3.0</version>
 	</parent>
 	<artifactId>buession-security-shiro</artifactId>
 	<url>https://github.com/buession/buession-security</url>
@@ -119,6 +119,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
