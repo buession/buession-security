@@ -21,7 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2020 Buession.com Inc.														|
+ * | Copyright @ 2013-2021 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -94,7 +94,9 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	public String encode(final Object object){
 		Assert.isNull(object, "Mcrypt encode object could not be null.");
 
-		logger.debug("Mcrypt encode string <{}> by algo <base64>, salt <{}>", object, getSalt());
+		if(logger.isDebugEnabled()){
+			logger.debug("Mcrypt encode string <{}> by algo <base64>, salt <{}>", object, getSalt());
+		}
 
 		return Base64.encodeBase64String((object2String(object) + (getSalt() == null ? "" : getSalt())).getBytes(getCharset()));
 	}
@@ -111,7 +113,11 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	@Override
 	public String decode(final CharSequence cs){
 		Assert.isNull(cs, "Mcrypt decode object could not be null.");
-		logger.debug("Mcrypt decode string <{}> by algo <base64>, salt <{}>", cs, getSalt());
+
+		if(logger.isDebugEnabled()){
+			logger.debug("Mcrypt decode string <{}> by algo <base64>, salt <{}>", cs, getSalt());
+		}
+
 		return new String(Base64.decodeBase64(cs.toString()), getCharset());
 	}
 

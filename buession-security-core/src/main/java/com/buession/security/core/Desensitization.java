@@ -43,7 +43,7 @@ public class Desensitization {
 	 *
 	 * @return 脱敏后的字符串
 	 */
-	public final static String encode(final String str, final int length){
+	public static String encode(final String str, final int length){
 		if(Validate.isEmpty(str)){
 			return str;
 		}else{

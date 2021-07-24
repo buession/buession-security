@@ -324,7 +324,7 @@ public abstract class AbstractMcrypt implements Mcrypt {
 		throw new UnsupportedOperationException("Algo '" + algo + "' unsupported decode");
 	}
 
-	protected final static String object2String(final Object object){
+	protected static String object2String(final Object object){
 		Assert.isNull(object, "Mcrypt encode object could not be null");
 
 		if(object instanceof char[]){
@@ -368,7 +368,9 @@ public abstract class AbstractMcrypt implements Mcrypt {
 			messageDigest.update(str.getBytes(charset));
 		}
 
-		logger.debug("Mcrypt encode string <{}> by algo <{}>, salt <{}>", str, algo, salt);
+		if(logger.isDebugEnabled()){
+			logger.debug("Mcrypt encode string <{}> by algo <{}>, salt <{}>", str, algo, salt);
+		}
 
 		return getFormattedText(messageDigest.digest());
 	}

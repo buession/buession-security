@@ -21,7 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2020 Buession.com Inc.														|
+ * | Copyright @ 2013-2021 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -141,7 +141,7 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 
 		String s1 = StringUtils.substr(result, 0, 10);
 		String s2 = StringUtils.substr(result, 26);
-		long j = Long.valueOf(s1);
+		long j = Long.parseLong(s1);
 		String k1 = md5Mcrypt.encode(s2 + keya);
 		long timestamp = System.currentTimeMillis() / 1000;
 
@@ -149,11 +149,11 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 				16)) ? s2 : Constants.EMPTY_STRING;
 	}
 
-	private final static String md5(final String str){
+	private static String md5(final String str){
 		return md5Mcrypt.encode(str == null ? "" : str).toLowerCase();
 	}
 
-	private final static String getResultKey(final String str, final String key){
+	private static String getResultKey(final String str, final String key){
 		if(key.length() <= 16){
 			return md5(key + StringUtils.substr(str, 0, 16) + StringUtils.substr(str, 16));
 		}else{
@@ -161,7 +161,7 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 		}
 	}
 
-	private final static String mod(final String str, final String key){
+	private static String mod(final String str, final String key){
 		int strLength = str.length();
 		StringBuilder sb = new StringBuilder(strLength);
 

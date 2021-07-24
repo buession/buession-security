@@ -21,7 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2020 Buession.com Inc.														|
+ * | Copyright @ 2013-2021 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -167,14 +167,13 @@ public final class AESMcrypt extends AbstractMcrypt {
 	@Override
 	public String encode(final Object object){
 		Key key = getKey();
-		if(key == null){
-			return null;
-		}
 
 		byte[] result = encode(key, getCharset() == null ? ObjectUtils.toByte(object) : ObjectUtils.toByte(object,
 				getCharset()));
 
-		logger.debug("Mcrypt encode string <{}> by algo <AES>, salt <{}>", object, getRealSalt());
+		if(logger.isDebugEnabled()){
+			logger.debug("Mcrypt encode string <{}> by algo <AES>, salt <{}>", object, getRealSalt());
+		}
 
 		return result == null ? null : Hex.encodeHexString(result);
 	}
@@ -191,9 +190,6 @@ public final class AESMcrypt extends AbstractMcrypt {
 	@Override
 	public String decode(final CharSequence cs){
 		Key key = getKey();
-		if(key == null){
-			return null;
-		}
 
 		logger.debug("Mcrypt decode string <{}> by algo <AES>, salt <{}>", cs, getRealSalt());
 
@@ -207,7 +203,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 		return null;
 	}
 
-	private final static Cipher initCipher(){
+	private static Cipher initCipher(){
 		if(cipher == null){
 			try{
 				cipher = Cipher.getInstance(Algo.AES.getName());
@@ -221,7 +217,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 		return cipher;
 	}
 
-	private final Key getKey(){
+	private Key getKey(){
 		String salt = getSalt();
 		int saltLength = salt.length();
 		StringBuilder sb = new StringBuilder(saltLength * 2);
@@ -240,7 +236,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 		return new SecretKeySpec(sb.toString().getBytes(getCharset()), Algo.AES.getName());
 	}
 
-	private final byte[] encode(final Key key, final byte[] data){
+	private byte[] encode(final Key key, final byte[] data){
 		Assert.isNull(data, "Mcrypt decode object could not be null");
 
 		try{
@@ -257,7 +253,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 		return null;
 	}
 
-	private final byte[] decode(final Key key, final byte[] data){
+	private byte[] decode(final Key key, final byte[] data){
 		Assert.isNull(data, "Mcrypt decode object could not be null.");
 
 		try{

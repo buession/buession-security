@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -163,14 +163,13 @@ class RSAMcrypt extends AbstractMcrypt {
 	@Override
 	public String encode(final Object object){
 		Key key = getKey();
-		if(key == null){
-			return null;
-		}
 
 		byte[] result = encode(key, getCharset() == null ? ObjectUtils.toByte(object) : ObjectUtils.toByte(object,
 				getCharset()));
 
-		logger.debug("RSAMcrypt encode string <{}> by algo <RSA>, salt <{}>", object, getSalt());
+		if(logger.isDebugEnabled()){
+			logger.debug("RSAMcrypt encode string <{}> by algo <RSA>, salt <{}>", object, getSalt());
+		}
 
 		return result == null ? null : Hex.encodeHexString(result);
 	}
@@ -191,7 +190,9 @@ class RSAMcrypt extends AbstractMcrypt {
 			return null;
 		}
 
-		logger.debug("RSAMcrypt decode string <{}> by algo <RSA>, salt <{}>", cs, getSalt());
+		if(logger.isDebugEnabled()){
+			logger.debug("RSAMcrypt decode string <{}> by algo <RSA>, salt <{}>", cs, getSalt());
+		}
 
 		try{
 			byte[] result = decode(key, Hex.decodeHex(cs.toString()));
@@ -203,7 +204,7 @@ class RSAMcrypt extends AbstractMcrypt {
 		return null;
 	}
 
-	private final static Cipher initCipher(){
+	private static Cipher initCipher(){
 		if(cipher == null){
 			try{
 				cipher = Cipher.getInstance(Algo.RSA.getName());
@@ -217,7 +218,7 @@ class RSAMcrypt extends AbstractMcrypt {
 		return cipher;
 	}
 
-	private final Key getKey(){
+	private Key getKey(){
 		String salt = getSalt();
 		StringBuilder sb = new StringBuilder();
 
@@ -245,7 +246,7 @@ class RSAMcrypt extends AbstractMcrypt {
 		return new SecretKeySpec(sb.toString().getBytes(getCharset()), Algo.RSA.name());// 转换为RSA专用密钥
 	}
 
-	private final byte[] encode(final Key key, final byte[] data){
+	private byte[] encode(final Key key, final byte[] data){
 		Assert.isNull(data, "RSAMcrypt encode object could not be null");
 
 		try{
@@ -263,7 +264,7 @@ class RSAMcrypt extends AbstractMcrypt {
 		return null;
 	}
 
-	private final byte[] decode(final Key key, final byte[] data){
+	private byte[] decode(final Key key, final byte[] data){
 		Assert.isNull(data, "RSAMcrypt decode object could not be null");
 
 		try{

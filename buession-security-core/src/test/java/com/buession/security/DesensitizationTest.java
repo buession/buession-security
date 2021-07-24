@@ -25,6 +25,7 @@
 package com.buession.security;
 
 import com.buession.security.core.Desensitization;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -32,16 +33,10 @@ import org.junit.Test;
  */
 public class DesensitizationTest {
 
-    @Test
-    public void encode(){
-        System.out.println(Desensitization.encode("13800138000", 4));
-        System.out.println(Desensitization.encode("13800138000", 3));
-        System.out.println(Desensitization.encode("1380013800", 4));
-        System.out.println(Desensitization.encode("1380013800", 3));
-        System.out.println(Desensitization.encode("1234", 4));
-        System.out.println(Desensitization.encode("1234", 5));
-        System.out.println(Desensitization.encode("1234", 2));
-        System.out.println(Desensitization.encode("1234", 1));
-    }
+	@Test
+	public void encode(){
+		Assert.assertEquals("1380***8000", Desensitization.encode("13800138000", 3));
+		Assert.assertEquals("0138***38000", Desensitization.encode("013800138000", 3));
+	}
 
 }
