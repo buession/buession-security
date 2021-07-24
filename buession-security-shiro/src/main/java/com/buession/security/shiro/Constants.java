@@ -22,10 +22,13 @@
  * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.shiro;/**
- * 
- *
+package com.buession.security.shiro;
+
+/**
  * @author Yong.Teng
- * @since 
- */public class Constants {
+ */
+public class Constants {
+
+	public final static String ALL_PERMISSION = "*:*";
+
 }
