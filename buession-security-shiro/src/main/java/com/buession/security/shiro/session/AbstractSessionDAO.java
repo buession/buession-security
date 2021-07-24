@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.session;
@@ -110,7 +110,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 		doSaveSession(session);
 
 		if(sessionInMemoryEnabled){
-			getMemorySessionDao().save(session);
+			getMemorySessionDAO().save(session);
 		}
 	}
 
@@ -168,7 +168,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 		Session session;
 
 		if(sessionInMemoryEnabled){
-			session = getMemorySessionDao().read(sessionId);
+			session = getMemorySessionDAO().read(sessionId);
 			if(session != null){
 				return session;
 			}
@@ -176,7 +176,9 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 
 		session = doReadSpecialSession(sessionId);
 		if(sessionInMemoryEnabled){
-			getMemorySessionDao().save(session);
+			if(session != null){
+				getMemorySessionDAO().save(session);
+			}
 		}
 
 		return session;
@@ -190,11 +192,11 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 
 	protected void removeExpiredSessionInMemory(){
 		if(sessionInMemoryEnabled){
-			getMemorySessionDao().clearExpiredSession();
+			getMemorySessionDAO().clearExpiredSession();
 		}
 	}
 
-	private MemorySessionDAO getMemorySessionDao(){
+	private MemorySessionDAO getMemorySessionDAO(){
 		if(memorySessionDao == null){
 			memorySessionDao = new MemorySessionDAO(sessionInMemoryTimeout);
 		}
