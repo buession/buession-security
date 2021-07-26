@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro;
@@ -150,7 +150,7 @@ public class Cookie implements Serializable {
 	}
 
 	public Cookie(String name, String domain, String path, int maxAge, boolean secure, boolean httpOnly,
-			SameSite sameSite){
+				  SameSite sameSite){
 		this(name, domain, path, maxAge, secure, httpOnly);
 		this.sameSite = sameSite;
 	}

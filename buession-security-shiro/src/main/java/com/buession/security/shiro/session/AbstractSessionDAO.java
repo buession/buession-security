@@ -99,7 +99,9 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 
 	@Override
 	public void update(Session session) throws UnknownSessionException{
-		logger.debug("Update session: {}.", session == null ? "null" : session.getId());
+		if(logger.isDebugEnabled()){
+			logger.debug("Update session: {}.", session == null ? "null" : session.getId());
+		}
 		removeExpiredSessionInMemory();
 
 		if(session == null || session.getId() == null){
@@ -124,7 +126,9 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 
 	@Override
 	public void delete(Session session){
-		logger.debug("Delete session: {}.", session == null ? "null" : session.getId());
+		if(logger.isDebugEnabled()){
+			logger.debug("Delete session: {}.", session == null ? "null" : session.getId());
+		}
 		removeExpiredSessionInMemory();
 
 		if(session == null || session.getId() == null){
@@ -137,7 +141,9 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 
 	@Override
 	protected Serializable doCreate(Session session){
-		logger.debug("Create session: {}.", session == null ? "null" : session.getId());
+		if(logger.isDebugEnabled()){
+			logger.debug("Create session: {}.", session == null ? "null" : session.getId());
+		}
 		removeExpiredSessionInMemory();
 
 		if(session == null){
@@ -157,7 +163,9 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 
 	@Override
 	protected Session doReadSession(Serializable sessionId){
-		logger.debug("Read session: {}.", sessionId);
+		if(logger.isDebugEnabled()){
+			logger.debug("Read session: {}.", sessionId);
+		}
 		removeExpiredSessionInMemory();
 
 		if(sessionId == null){

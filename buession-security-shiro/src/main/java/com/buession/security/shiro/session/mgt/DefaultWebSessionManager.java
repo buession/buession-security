@@ -76,17 +76,17 @@ public class DefaultWebSessionManager extends org.apache.shiro.web.session.mgt.D
 			}
 		}
 
-		Session s = retrieveSessionFromDataSource(sessionId);
-		if(s == null){
+		Session session = retrieveSessionFromDataSource(sessionId);
+		if(session == null){
 			//session ID was provided, meaning one is expected to be found, but we couldn't find one:
 			throw new UnknownSessionException("Could not find session with ID [" + sessionId + "]");
 		}
 
 		if(request != null){
-			request.setAttribute(sessionIdValue, s);
+			request.setAttribute(sessionIdValue, session);
 		}
 
-		return s;
+		return session;
 	}
 
 }

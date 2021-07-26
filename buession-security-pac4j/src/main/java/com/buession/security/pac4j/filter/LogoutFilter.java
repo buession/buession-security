@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.filter;
@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * @author Yong.Teng
@@ -108,8 +109,8 @@ public class LogoutFilter extends AbstractPac4jFilter {
 	}
 
 	@Override
-	public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain
-			filterChain) throws IOException, ServletException{
+	public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse,
+						 final FilterChain filterChain) throws IOException, ServletException{
 		CommonHelper.assertNotNull("logoutLogic", logoutLogic);
 		CommonHelper.assertNotNull("config", getConfig());
 
@@ -117,8 +118,8 @@ public class LogoutFilter extends AbstractPac4jFilter {
 		final HttpServletResponse response = (HttpServletResponse) servletResponse;
 		final SessionStore<JEEContext> sessionStore = getSessionStore();
 		final JEEContext context = new JEEContext(request, response, sessionStore);
-		final HttpActionAdapter<Object, JEEContext> adapter = getHttpActionAdapter() != null ? getHttpActionAdapter()
-				: JEEHttpActionAdapter.INSTANCE;
+		final HttpActionAdapter<Object, JEEContext> adapter =
+				Optional.ofNullable(getHttpActionAdapter()).orElse(JEEHttpActionAdapter.INSTANCE);
 
 		logoutLogic.perform(context, getConfig(), adapter, getDefaultUrl(), getLogoutUrlPattern(), getLocalLogout(),
 				true, getCentralLogout());

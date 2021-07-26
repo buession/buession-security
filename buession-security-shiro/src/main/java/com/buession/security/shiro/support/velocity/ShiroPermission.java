@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2021 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.support.velocity;
@@ -72,7 +72,7 @@ public class ShiroPermission {
 	 */
 	public boolean isNotAuthenticated(){
 		Subject subject = SecurityUtils.getSubject();
-		return subject == null || subject.isAuthenticated() == false;
+		return subject != null && subject.isAuthenticated();
 	}
 
 	/**
@@ -129,16 +129,20 @@ public class ShiroPermission {
 			PropertyDescriptor[] propertyDescriptors = bi.getPropertyDescriptors();
 
 			for(PropertyDescriptor pd : propertyDescriptors){
-				if(property.equals(pd.getName()) == true){
+				if(property.equals(pd.getName())){
 					return pd.getReadMethod().invoke(principal, (Object[]) null);
 				}
 			}
 
-			logger.trace("Property [{}] not found in principal of type [{}]", property, principal.getClass().getName
-					());
+			if(logger.isTraceEnabled()){
+				logger.trace("Property [{}] not found in principal of type [{}]", property,
+						principal.getClass().getName());
+			}
 		}catch(Exception e){
-			logger.trace("Error reading property [{}] from principal of type [{}]", property, principal.getClass()
-					.getName());
+			if(logger.isTraceEnabled()){
+				logger.trace("Error reading property [{}] from principal of type [{}]", property,
+						principal.getClass().getName());
+			}
 		}
 
 		return null;
@@ -183,7 +187,7 @@ public class ShiroPermission {
 		Subject subject = SecurityUtils.getSubject();
 
 		if(subject != null){
-			if(Validate.hasText(delimiter) == false){
+			if(Validate.isBlank(delimiter)){
 				delimiter = ROLE_NAMES_DELIMITER;
 			}
 
@@ -296,7 +300,7 @@ public class ShiroPermission {
 		Subject subject = SecurityUtils.getSubject();
 
 		if(subject != null){
-			if(Validate.hasText(delimiter) == false){
+			if(Validate.isBlank(delimiter)){
 				delimiter = PERMISSION_NAMES_DELIMITER;
 			}
 

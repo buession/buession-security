@@ -60,7 +60,7 @@ public class Pac4jPrincipal implements Principal, Serializable {
 	@Override
 	public String getName(){
 		Optional<CommonProfile> profile = getProfile();
-		if(null == principalNameAttribute){
+		if(principalNameAttribute == null){
 			return profile.map(BasicUserProfile::getId).orElse(null);
 		}
 
@@ -69,7 +69,7 @@ public class Pac4jPrincipal implements Principal, Serializable {
 	}
 
 	public Optional<CommonProfile> getProfile(){
-		return Optional.ofNullable(ProfileHelper.flatIntoOneProfile(profiles).get());
+		return ProfileHelper.flatIntoOneProfile(profiles);
 	}
 
 	public Optional<List<CommonProfile>> getProfiles(){

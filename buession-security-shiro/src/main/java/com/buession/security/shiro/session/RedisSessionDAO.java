@@ -156,7 +156,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 			throw new UnknownSessionException(e);
 		}
 
-		int millisecondsInASecond = 1000;
+		long millisecondsInASecond = 1000L;
 		int expire = getExpire();
 
 		if(expire == DEFAULT_EXPIRE){
@@ -166,8 +166,10 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 
 		long millisecondsExpire = expire * millisecondsInASecond;
 		if(expire != NO_EXPIRE && millisecondsExpire < session.getTimeout()){
-			logger.warn("Redis session expire time: {} is less than Session timeout: {}. It may cause some problems.",
-					millisecondsExpire, session.getTimeout());
+			if(logger.isWarnEnabled()){
+				logger.warn("Redis session expire time: {} is less than Session timeout: {}. It may cause some " +
+						"problems.", millisecondsExpire, session.getTimeout());
+			}
 		}
 
 		redisManager.set(key, value, expire);
@@ -197,7 +199,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		byte[] pattern;
 
 		try{
-			pattern = keySerializer.serialize(makeKey(Validate.hasText(getKeyPrefix()) ? getKeyPrefix() : "*"));
+			pattern = keySerializer.serialize(makeKey(getKeyPrefix() != null ? getKeyPrefix() : "*"));
 			Set<byte[]> keys = redisManager.keys(pattern);
 
 			if(Validate.isNotEmpty(keys)){

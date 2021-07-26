@@ -52,7 +52,7 @@ public class ShiroSessionStore implements SessionStore<JEEContext> {
 	@Override
 	public Optional<Object> get(JEEContext context, String key){
 		final Session session = getSession(false);
-		return session == null ? Optional.empty() : Optional.ofNullable(session.getAttribute(key));
+		return Optional.ofNullable(session == null ? null : session.getAttribute(key));
 	}
 
 	@Override

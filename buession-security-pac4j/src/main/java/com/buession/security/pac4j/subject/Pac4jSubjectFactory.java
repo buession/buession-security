@@ -49,7 +49,10 @@ public class Pac4jSubjectFactory extends DefaultWebSubjectFactory {
 			AuthenticationToken token = context.getAuthenticationToken();
 
 			if(token instanceof Pac4jToken){
-				logger.info("Authentication token instanceof {}", Pac4jToken.class.getName());
+				if(logger.isInfoEnabled()){
+					logger.info("Authentication token instanceof {}", Pac4jToken.class.getName());
+				}
+
 				final Pac4jToken clientToken = (Pac4jToken) token;
 				if(clientToken.isRememberMe()){
 					logger.info("Token is remember me");

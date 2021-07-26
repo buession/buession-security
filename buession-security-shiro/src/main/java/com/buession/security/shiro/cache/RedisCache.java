@@ -525,7 +525,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	private String getPrincipalIdMethodName(){
 		String principalIdFieldName = getPrincipalIdFieldName();
 
-		if(Validate.hasText(principalIdFieldName) == false){
+		if(Validate.isBlank(principalIdFieldName)){
 			throw new CacheManagerPrincipalIdNotAssignedException();
 		}
 
