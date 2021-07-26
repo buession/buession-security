@@ -7,4 +7,5 @@ Changes in version 1.3.0 (2021-07-12)
 *【变化】移除静态方法上的 final 关键字
 *【修复】从 SessionDao 中读取 session 为 null 时，保存到 MemorySessionDAO 空指针异常
 *【修复】恢复 1.2.2 版本误删常量类 Constants
+*【修复】ProfileUtils.getProfileFromPac4jPrincipal 当 Pac4jPrincipal 为 null 时，空指针异常
 *【管理】逐步规范化 changelog 和 测试用例

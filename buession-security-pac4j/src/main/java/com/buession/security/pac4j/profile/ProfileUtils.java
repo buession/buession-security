@@ -68,7 +68,7 @@ public class ProfileUtils {
 	 * @return 用户 Profile
 	 */
 	public static CommonProfile getProfileFromPac4jPrincipal(Pac4jPrincipal principal){
-		return principal.getProfile().isPresent() ? principal.getProfile().get() : null;
+		return principal != null ? principal.getProfile().orElse(null) : null;
 	}
 
 	/**
@@ -221,8 +221,7 @@ public class ProfileUtils {
 
 	private static String getId(final CommonProfile profile, final String idField){
 		if(Validate.hasText(idField)){
-			Object id = profile.getAttribute(idField);
-			return id == null ? null : id.toString();
+			return getProfileStringAttribute(profile, idField);
 		}else{
 			return profile.getId();
 		}
@@ -230,11 +229,18 @@ public class ProfileUtils {
 
 	private static String getRealName(final CommonProfile profile, final String realNameField){
 		if(Validate.hasText(realNameField)){
-			Object realName = profile.getAttribute(realNameField);
-			return realName == null ? null : realName.toString();
+			return getProfileStringAttribute(profile, realNameField);
 		}else{
 			return StringUtils.join(profile.getFirstName(), profile.getFamilyName());
 		}
+	}
+
+	private static String getProfileStringAttribute(final CommonProfile profile, final String field){
+		return asString(profile.getAttribute(field));
+	}
+
+	private static String asString(final Object obj){
+		return obj == null ? null : obj.toString();
 	}
 
 }
