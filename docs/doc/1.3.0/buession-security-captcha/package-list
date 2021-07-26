@@ -1,0 +1,13 @@
+com.buession.security.captcha
+com.buession.security.captcha.background
+com.buession.security.captcha.color
+com.buession.security.captcha.core
+com.buession.security.captcha.filter
+com.buession.security.captcha.filter.operation
+com.buession.security.captcha.font
+com.buession.security.captcha.handler
+com.buession.security.captcha.handler.generator
+com.buession.security.captcha.servlet
+com.buession.security.captcha.session
+com.buession.security.captcha.text
+com.buession.security.captcha.word
