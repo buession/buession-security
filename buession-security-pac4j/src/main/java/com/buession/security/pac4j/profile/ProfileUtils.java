@@ -26,17 +26,14 @@ package com.buession.security.pac4j.profile;
 
 import com.buession.beans.BeanResolver;
 import com.buession.beans.DefaultBeanResolver;
-import com.buession.core.utils.FieldUtils;
 import com.buession.core.utils.StringUtils;
 import com.buession.core.validator.Validate;
 import com.buession.security.pac4j.subject.Pac4jPrincipal;
 import org.apache.shiro.SecurityUtils;
 import org.pac4j.core.profile.CommonProfile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -47,7 +44,9 @@ import java.util.Map;
  */
 public class ProfileUtils {
 
-	private final static Logger logger = LoggerFactory.getLogger(ProfileUtils.class);
+	private final static String ROLES_FIELD = "roles";
+
+	private final static String PERMISSIONS_FIELD = "permissions";
 
 	/**
 	 * 获取当前登录用户 Profile
@@ -178,42 +177,23 @@ public class ProfileUtils {
 								String realNameFieldName) throws InstantiationException, IllegalAccessException,
 			InvocationTargetException{
 		T instance = type.newInstance();
+		Map<String, Object> attributes = new LinkedHashMap<>(profile.getAttributes());
 
-		try{
-			beanResolver.populate(instance, profile.getAttributes());
-		}catch(NoSuchMethodException e){
-			throw new InvocationTargetException(e, e.getMessage());
+		if(Validate.hasText(idFieldName)){
+			attributes.put(idFieldName, getId(profile, idFieldName));
 		}
 
-		if(Map.class.isAssignableFrom(type)){
-			Map map = (Map) instance;
+		if(Validate.hasText(realNameFieldName)){
+			attributes.put(realNameFieldName, getRealName(profile, realNameFieldName));
+		}
 
-			if(Validate.hasText(idFieldName)){
-				map.put(idFieldName, getId(profile, idFieldName));
-			}
+		attributes.put(ROLES_FIELD, profile.getRoles());
+		attributes.put(PERMISSIONS_FIELD, profile.getPermissions());
 
-			if(Validate.hasText(realNameFieldName)){
-				map.put(realNameFieldName, getRealName(profile, realNameFieldName));
-			}
-		}else{
-			if(Validate.hasText(idFieldName)){
-				Field idField = FieldUtils.getField(type, idFieldName, true);
-
-				if(idField != null){
-					try{
-						FieldUtils.writeField(instance, idFieldName, idField.getType().cast(getId(profile,
-								idFieldName)), true);
-					}catch(Exception e){
-						if(logger.isErrorEnabled()){
-							logger.error("Write {}::{} failure: {}", type.getName(), idFieldName, e.getMessage());
-						}
-					}
-				}
-			}
-
-			if(Validate.hasText(realNameFieldName)){
-				FieldUtils.writeField(instance, realNameFieldName, getRealName(profile, realNameFieldName), true);
-			}
+		try{
+			beanResolver.populate(instance, attributes);
+		}catch(NoSuchMethodException e){
+			throw new InvocationTargetException(e, e.getMessage());
 		}
 
 		return instance;
