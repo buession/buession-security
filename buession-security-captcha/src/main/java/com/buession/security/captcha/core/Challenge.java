@@ -32,27 +32,63 @@ package com.buession.security.captcha.core;
  */
 public class Challenge {
 
+	/**
+	 * 验证码文本
+	 */
 	private String text;
 
+	/**
+	 * 验证码值
+	 */
 	private String value;
 
+	/**
+	 * 构造函数
+	 *
+	 * @param text
+	 * 		验证码文本
+	 * @param value
+	 * 		验证码值
+	 */
 	public Challenge(String text, String value){
 		this.text = text;
 		this.value = value;
 	}
 
+	/**
+	 * 返回验证码文本
+	 *
+	 * @return 验证码文本
+	 */
 	public String getText(){
 		return text;
 	}
 
+	/**
+	 * 设置验证码文本
+	 *
+	 * @param text
+	 * 		验证码文本
+	 */
 	public void setText(String text){
 		this.text = text;
 	}
 
+	/**
+	 * 返回验证码值
+	 *
+	 * @return 验证码值
+	 */
 	public String getValue(){
 		return value;
 	}
 
+	/**
+	 * 设置验证码值
+	 *
+	 * @param value
+	 * 		验证码值
+	 */
 	public void setValue(String value){
 		this.value = value;
 	}
