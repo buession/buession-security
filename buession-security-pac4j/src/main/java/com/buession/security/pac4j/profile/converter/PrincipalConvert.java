@@ -33,6 +33,7 @@ import java.security.Principal;
 /**
  * @author Yong.Teng
  */
+@FunctionalInterface
 public interface PrincipalConvert<T> extends Converter<Principal, T> {
 
 }
