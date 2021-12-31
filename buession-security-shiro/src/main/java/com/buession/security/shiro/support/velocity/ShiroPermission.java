@@ -28,6 +28,7 @@ import com.buession.core.utils.Assert;
 import com.buession.core.utils.StringUtils;
 import com.buession.core.validator.Validate;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.Subject;
 import org.apache.velocity.tools.Scope;
 import org.apache.velocity.tools.config.DefaultKey;
@@ -38,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -96,6 +98,18 @@ public class ShiroPermission {
 	}
 
 	/**
+	 * 验证用户是通过记住我登录的
+	 *
+	 * @return 用户是通过记住我登录的
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean isRemembered(){
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null && subject.isRemembered();
+	}
+
+	/**
 	 * 返回用户 Principal。
 	 *
 	 * @return 用户 Principal
@@ -135,13 +149,11 @@ public class ShiroPermission {
 			}
 
 			if(logger.isTraceEnabled()){
-				logger.trace("Property [{}] not found in principal of type [{}]", property,
-						principal.getClass().getName());
+				logger.trace("Property [{}] not found in principal of type [{}]", property, principal.getClass().getName());
 			}
 		}catch(Exception e){
 			if(logger.isTraceEnabled()){
-				logger.trace("Error reading property [{}] from principal of type [{}]", property,
-						principal.getClass().getName());
+				logger.trace("Error reading property [{}] from principal of type [{}]", property, principal.getClass().getName());
 			}
 		}
 
@@ -151,26 +163,26 @@ public class ShiroPermission {
 	/**
 	 * 验证用户是否具备某角色。
 	 *
-	 * @param role
+	 * @param roleName
 	 * 		角色名称
 	 *
 	 * @return 用户是否具备某角色
 	 */
-	public boolean hasRole(String role){
+	public boolean hasRole(String roleName){
 		Subject subject = SecurityUtils.getSubject();
-		return subject != null && subject.hasRole(role);
+		return subject != null && subject.hasRole(roleName);
 	}
 
 	/**
 	 * 验证用户是否不具备某角色，与 hasRole 逻辑相反。
 	 *
-	 * @param role
+	 * @param roleName
 	 * 		角色名称
 	 *
 	 * @return 用户是否不具备某角色
 	 */
-	public boolean lacksRole(String role){
-		return hasRole(role) == false;
+	public boolean lacksRole(String roleName){
+		return hasRole(roleName) == false;
 	}
 
 	/**
@@ -183,18 +195,25 @@ public class ShiroPermission {
 	 *
 	 * @return 用户是否具有以下任意一个角色
 	 */
+	@Deprecated
 	public boolean hasAnyRoles(String roleNames, String delimiter){
-		Subject subject = SecurityUtils.getSubject();
+		return hasAnyRole(roleNames, delimiter);
+	}
 
-		if(subject != null){
-			if(Validate.isBlank(delimiter)){
-				delimiter = ROLE_NAMES_DELIMITER;
-			}
-
-			return hasAnyRoles(StringUtils.split(roleNames, delimiter));
-		}
-
-		return false;
+	/**
+	 * 验证用户是否具有以下任意一个角色。
+	 *
+	 * @param roleNames
+	 * 		以 delimiter 为分隔符的角色列表
+	 * @param delimiter
+	 * 		角色列表分隔符
+	 *
+	 * @return 用户是否具有以下任意一个角色
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasAnyRole(String roleNames, String delimiter){
+		return hasAnyRole(spitToken(roleNames, delimiter, ROLE_NAMES_DELIMITER));
 	}
 
 	/**
@@ -205,8 +224,23 @@ public class ShiroPermission {
 	 *
 	 * @return 用户是否具有以下任意一个角色
 	 */
+	@Deprecated
 	public boolean hasAnyRoles(String roleNames){
-		return hasAnyRoles(roleNames, ROLE_NAMES_DELIMITER);
+		return hasAnyRole(roleNames);
+	}
+
+	/**
+	 * 验证用户是否具有以下任意一个角色。
+	 *
+	 * @param roleNames
+	 * 		以 ROLE_NAMES_DELIMITER 为分隔符的角色列表
+	 *
+	 * @return 用户是否具有以下任意一个角色
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasAnyRole(String roleNames){
+		return hasAnyRole(roleNames, ROLE_NAMES_DELIMITER);
 	}
 
 	/**
@@ -217,7 +251,22 @@ public class ShiroPermission {
 	 *
 	 * @return 用户是否具有以下任意一个角色
 	 */
+	@Deprecated
 	public boolean hasAnyRoles(Collection<String> roleNames){
+		return hasAnyRole(roleNames);
+	}
+
+	/**
+	 * 验证用户是否具有以下任意一个角色。
+	 *
+	 * @param roleNames
+	 * 		角色列表
+	 *
+	 * @return 用户是否具有以下任意一个角色
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasAnyRole(Collection<String> roleNames){
 		if(Validate.isEmpty(roleNames)){
 			return false;
 		}
@@ -243,7 +292,22 @@ public class ShiroPermission {
 	 *
 	 * @return 用户是否具有以下任意一个角色
 	 */
-	public boolean hasAnyRoles(String[] roleNames){
+	@Deprecated
+	public boolean hasAnyRoles(String... roleNames){
+		return hasAnyRole(roleNames);
+	}
+
+	/**
+	 * 验证用户是否具有以下任意一个角色。
+	 *
+	 * @param roleNames
+	 * 		角色列表
+	 *
+	 * @return 用户是否具有以下任意一个角色
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasAnyRole(String... roleNames){
 		if(Validate.isEmpty(roleNames)){
 			return false;
 		}
@@ -259,6 +323,69 @@ public class ShiroPermission {
 		}
 
 		return false;
+	}
+
+	/**
+	 * 验证用户是否具有以下所有角色。
+	 *
+	 * @param roleNames
+	 * 		以 delimiter 为分隔符的角色列表
+	 * @param delimiter
+	 * 		角色列表分隔符
+	 *
+	 * @return 用户是否具有以下所有角色
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasRolesAll(String roleNames, String delimiter){
+		return hasRolesAll(spitToken(roleNames, delimiter, ROLE_NAMES_DELIMITER));
+	}
+
+	/**
+	 * 验证用户是否具有以下所有角色。
+	 *
+	 * @param roleNames
+	 * 		以 ROLE_NAMES_DELIMITER 为分隔符的角色列表
+	 *
+	 * @return 用户是否具有以下所有角色
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasRolesAll(String roleNames){
+		return hasRolesAll(roleNames, ROLE_NAMES_DELIMITER);
+	}
+
+	/**
+	 * 验证用户是否具有以下所有角色。
+	 *
+	 * @param roleNames
+	 * 		角色列表
+	 *
+	 * @return 用户是否具有以下所有角色
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasRolesAll(Collection<String> roleNames){
+		if(Validate.isEmpty(roleNames)){
+			return false;
+		}
+
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null && subject.hasAllRoles(roleNames);
+	}
+
+	/**
+	 * 验证用户是否具有以下所有角色。
+	 *
+	 * @param roleNames
+	 * 		角色列表
+	 *
+	 * @return 用户是否具有以下所有角色
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasRolesAll(String... roleNames){
+		return Validate.isNotEmpty(roleNames) && hasRolesAll(Arrays.asList(roleNames));
 	}
 
 	/**
@@ -270,6 +397,21 @@ public class ShiroPermission {
 	 * @return 用户是否具备某权限
 	 */
 	public boolean hasPermission(String permission){
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null && subject.isPermitted(permission);
+	}
+
+	/**
+	 * 验证用户是否具备某权限。
+	 *
+	 * @param permission
+	 * 		权限
+	 *
+	 * @return 用户是否具备某权限
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasPermission(Permission permission){
 		Subject subject = SecurityUtils.getSubject();
 		return subject != null && subject.isPermitted(permission);
 	}
@@ -296,18 +438,25 @@ public class ShiroPermission {
 	 *
 	 * @return 用户是否具有以下任意一个权限
 	 */
+	@Deprecated
 	public boolean hasAnyPermissions(String permissions, String delimiter){
-		Subject subject = SecurityUtils.getSubject();
+		return hasAnyPermission(permissions, delimiter);
+	}
 
-		if(subject != null){
-			if(Validate.isBlank(delimiter)){
-				delimiter = PERMISSION_NAMES_DELIMITER;
-			}
-
-			return hasAnyPermissions(StringUtils.split(permissions, delimiter));
-		}
-
-		return false;
+	/**
+	 * 验证用户是否具有以下任意一个权限。
+	 *
+	 * @param permissions
+	 * 		以 delimiter 为分隔符的权限列表
+	 * @param delimiter
+	 * 		权限列表分隔符
+	 *
+	 * @return 用户是否具有以下任意一个权限
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasAnyPermission(String permissions, String delimiter){
+		return hasAnyPermission(spitToken(permissions, delimiter, PERMISSION_NAMES_DELIMITER));
 	}
 
 	/**
@@ -318,8 +467,21 @@ public class ShiroPermission {
 	 *
 	 * @return 用户是否具有以下任意一个权限
 	 */
+	@Deprecated
 	public boolean hasAnyPermissions(String permissions){
-		return hasAnyPermissions(permissions, PERMISSION_NAMES_DELIMITER);
+		return hasAnyPermission(permissions);
+	}
+
+	/**
+	 * 验证用户是否具有以下任意一个权限。
+	 *
+	 * @param permissions
+	 * 		以 PERMISSION_NAMES_DELIMITER 为分隔符的权限列表
+	 *
+	 * @return 用户是否具有以下任意一个权限
+	 */
+	public boolean hasAnyPermission(String permissions){
+		return hasAnyPermission(permissions, PERMISSION_NAMES_DELIMITER);
 	}
 
 	/**
@@ -330,7 +492,22 @@ public class ShiroPermission {
 	 *
 	 * @return 用户是否具有以下任意一个权限
 	 */
+	@Deprecated
 	public boolean hasAnyPermissions(Collection<String> permissions){
+		return hasAnyPermission(permissions);
+	}
+
+	/**
+	 * 验证用户是否具有以下任意一个权限。
+	 *
+	 * @param permissions
+	 * 		权限列表
+	 *
+	 * @return 用户是否具有以下任意一个权限
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasAnyPermission(Collection<String> permissions){
 		if(Validate.isEmpty(permissions)){
 			return false;
 		}
@@ -356,7 +533,22 @@ public class ShiroPermission {
 	 *
 	 * @return 用户是否具有以下任意一个权限
 	 */
-	public boolean hasAnyPermissions(String[] permissions){
+	@Deprecated
+	public boolean hasAnyPermissions(String... permissions){
+		return hasAnyPermission(permissions);
+	}
+
+	/**
+	 * 验证用户是否具有以下任意一个权限。
+	 *
+	 * @param permissions
+	 * 		权限列表
+	 *
+	 * @return 用户是否具有以下任意一个权限
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasAnyPermission(String... permissions){
 		if(Validate.isEmpty(permissions)){
 			return false;
 		}
@@ -372,6 +564,135 @@ public class ShiroPermission {
 		}
 
 		return false;
+	}
+
+	/**
+	 * 验证用户是否具有以下任意一个权限。
+	 *
+	 * @param permissions
+	 * 		权限列表
+	 *
+	 * @return 用户是否具有以下任意一个权限
+	 *
+	 * @since 1.3.2
+	 */
+	@Deprecated
+	public boolean hasAnyPermissions(Permission... permissions){
+		return hasAnyPermission(permissions);
+	}
+
+	/**
+	 * 验证用户是否具有以下任意一个权限。
+	 *
+	 * @param permissions
+	 * 		权限列表
+	 *
+	 * @return 用户是否具有以下任意一个权限
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasAnyPermission(Permission... permissions){
+		if(Validate.isEmpty(permissions)){
+			return false;
+		}
+
+		Subject subject = SecurityUtils.getSubject();
+
+		if(subject != null){
+			for(Permission permission : permissions){
+				if(permission != null && subject.isPermitted(permission)){
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * 验证用户是否具有以下所有权限。
+	 *
+	 * @param permissions
+	 * 		以 delimiter 为分隔符的权限列表
+	 * @param delimiter
+	 * 		权限列表分隔符
+	 *
+	 * @return 用户是否具有以下所有权限
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasPermissionsAll(String permissions, String delimiter){
+		return hasPermissionsAll(spitToken(permissions, delimiter, PERMISSION_NAMES_DELIMITER));
+	}
+
+	/**
+	 * 验证用户是否具有以下所有权限。
+	 *
+	 * @param permissions
+	 * 		以 PERMISSION_NAMES_DELIMITER 为分隔符的权限列表
+	 *
+	 * @return 用户是否具有以下所有权限
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasPermissionsAll(String permissions){
+		return hasPermissionsAll(permissions, PERMISSION_NAMES_DELIMITER);
+	}
+
+	/**
+	 * 验证用户是否具有以下所有权限。
+	 *
+	 * @param permissions
+	 * 		权限列表
+	 *
+	 * @return 用户是否具有以下所有权限
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasPermissionsAll(Collection<String> permissions){
+		return permissions != null && hasPermissionsAll(permissions.toArray(new String[]{}));
+	}
+
+	/**
+	 * 验证用户是否具有以下所有权限。
+	 *
+	 * @param permissions
+	 * 		权限列表
+	 *
+	 * @return 用户是否具有以下所有权限
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasPermissionsAll(String... permissions){
+		if(Validate.isEmpty(permissions)){
+			return false;
+		}
+
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null && subject.isPermittedAll(permissions);
+	}
+
+	/**
+	 * 验证用户是否具有以下所有权限。
+	 *
+	 * @param permissions
+	 * 		权限列表
+	 *
+	 * @return 用户是否具有以下所有权限
+	 *
+	 * @since 1.3.2
+	 */
+	public boolean hasPermissionsAll(Permission... permissions){
+		if(Validate.isEmpty(permissions)){
+			return false;
+		}
+
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null && subject.isPermittedAll(Arrays.asList(permissions));
+	}
+
+	private static String[] spitToken(final String str, final String delimiter, final String defaultDelimiter){
+		return StringUtils.split(str, Validate.isBlank(delimiter) ? defaultDelimiter : delimiter);
 	}
 
 }
