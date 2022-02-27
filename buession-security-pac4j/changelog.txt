@@ -2,14 +2,15 @@ Buession Security Pac4j Changelog
 ===========================
 
 
-Changes in version 1.3.2 (2021-11-10)
+Changes in version 1.3.3 (2022-02-22)
 -------------------------------------
 
+Changes in version 1.3.2 (2021-11-10)
+-------------------------------------
 
 Changes in version 1.3.1 (2021-07-27)
 -------------------------------------
 *【修复】ProfileUtils 和注解 @Principal 无法返回 roles 和 permissions 的 bug
-
 
 Changes in version 1.3.0 (2021-07-12)
 -------------------------------------
