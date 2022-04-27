@@ -25,7 +25,7 @@
 package com.buession.security.geetest;
 
 import com.buession.security.geetest.core.ClientType;
-import com.buession.security.geetest.core.RequestData;
+import com.buession.security.geetest.core.RequestV3Data;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class RequestDataTest {
 
 	@Test
 	public void json() throws JsonProcessingException{
-		RequestData requestData = new RequestData();
+		RequestV3Data requestData = new RequestV3Data();
 
 		requestData.setUserId("ueerid");
 		requestData.setClientType(ClientType.H5);
@@ -47,7 +47,7 @@ public class RequestDataTest {
 		String str = objectMapper.writeValueAsString(requestData);
 		System.out.println(str);
 
-		RequestData requestData1 = objectMapper.readValue(str, RequestData.class);
+		RequestV3Data requestData1 = objectMapper.readValue(str, RequestV3Data.class);
 		System.out.println(requestData1.getIpAddress());
 	}
 
