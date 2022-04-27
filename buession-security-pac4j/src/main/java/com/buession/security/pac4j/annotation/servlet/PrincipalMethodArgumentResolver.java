@@ -21,7 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2021 Buession.com Inc.														|
+ * | Copyright @ 2013-2022 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.annotation.servlet;
@@ -43,7 +43,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Resolves method arguments annotated with an {@link Principal}
@@ -62,8 +61,7 @@ public class PrincipalMethodArgumentResolver extends AbstractHandlerMethodArgume
 	}
 
 	@Override
-	public Object resolveArgument(MethodParameter methodParameter, @Nullable ModelAndViewContainer mavContainer,
-								  NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception{
+	public Object resolveArgument(MethodParameter methodParameter, @Nullable ModelAndViewContainer mavContainer, NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception{
 		HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
 		Assert.isNull(servletRequest, "No HttpServletRequest");
 
@@ -82,14 +80,10 @@ public class PrincipalMethodArgumentResolver extends AbstractHandlerMethodArgume
 		}
 
 		try{
-			return ProfileUtils.convert(ProfileUtils.getCurrent(), paramType,
-					ValueConstants.DEFAULT_NONE.equals(principal.id()) ? null : principal.id(),
-					ValueConstants.DEFAULT_NONE.equals(principal.realName()) ? null : principal.realName());
+			return ProfileUtils.convert(ProfileUtils.getCurrent(), paramType, ValueConstants.DEFAULT_NONE.equals(principal.id()) ? null : principal.id(), ValueConstants.DEFAULT_NONE.equals(principal.realName()) ? null : principal.realName());
 		}catch(InstantiationException e){
 			logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
 		}catch(IllegalAccessException e){
-			logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
-		}catch(InvocationTargetException e){
 			logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
 		}
 

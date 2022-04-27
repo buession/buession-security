@@ -21,10 +21,35 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.spring.web.csrf;/**
- * 
+ */
+package com.buession.security.spring.web.csrf;
+
+/**
+ * Csrf Token Repository
  *
  * @author Yong.Teng
  * @since 2.0.0
- */public interface CsrfTokenRepository {
+ */
+public interface CsrfTokenRepository {
+
+	/**
+	 * 默认 Csrf Cookie 名称
+	 */
+	String DEFAULT_CSRF_COOKIE_NAME = "XSRF-TOKEN";
+
+	/**
+	 * 默认 Csrf Session 名称
+	 */
+	String DEFAULT_CSRF_SESSION_ATTRIBUTE_NAME = CsrfTokenRepository.class.getName() + ".CSRF_TOKEN";
+
+	/**
+	 * 默认 Csrf 参数名称
+	 */
+	String DEFAULT_CSRF_PARAMETER_NAME = "_csrf";
+
+	/**
+	 * 默认 Csrf 响应头名称
+	 */
+	String DEFAULT_CSRF_HEADER_NAME = "X-Xsrf-Token";
+
 }
