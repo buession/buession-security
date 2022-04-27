@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.serializer;
@@ -33,16 +33,16 @@ import com.buession.core.serializer.SerializerException;
  */
 public class ObjectSerializer<T> implements RedisSerializer<T> {
 
+	private final static ByteArraySerializer SERIALIZER = new DefaultByteArraySerializer();
+
 	@Override
 	public byte[] serialize(T object) throws SerializerException{
-		ByteArraySerializer serialize = new DefaultByteArraySerializer();
-		return serialize.serializeAsBytes(object);
+		return SERIALIZER.serializeAsBytes(object);
 	}
 
 	@Override
 	public T deserialize(byte[] bytes) throws SerializerException{
-		ByteArraySerializer serialize = new DefaultByteArraySerializer();
-		return serialize.unserialize(bytes);
+		return SERIALIZER.unserialize(bytes);
 	}
 
 }

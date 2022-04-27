@@ -34,7 +34,7 @@ import org.apache.shiro.web.servlet.Cookie;
  * @author Yong.Teng
  * @since 1.3.3
  */
-public class SameSiteToShiroSameSiteOptions implements Converter<SameSite, Cookie.SameSiteOptions> {
+public class SameSiteToShiroSameSiteOptionsConverter implements Converter<SameSite, Cookie.SameSiteOptions> {
 
 	@Override
 	public Cookie.SameSiteOptions convert(SameSite sameSite){

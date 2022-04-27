@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2021 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.session;
@@ -80,8 +80,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		setRedisManager(redisManager);
 	}
 
-	public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire, boolean sessionInMemoryEnabled,
-						   long sessionInMemoryTimeout){
+	public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire, boolean sessionInMemoryEnabled, long sessionInMemoryTimeout){
 		this(keyPrefix, expire, sessionInMemoryEnabled, sessionInMemoryTimeout);
 		this.redisManager = redisManager;
 	}
@@ -167,8 +166,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		long millisecondsExpire = expire * millisecondsInASecond;
 		if(expire != NO_EXPIRE && millisecondsExpire < session.getTimeout()){
 			if(logger.isWarnEnabled()){
-				logger.warn("Redis session expire time: {} is less than Session timeout: {}. It may cause some " +
-						"problems.", millisecondsExpire, session.getTimeout());
+				logger.warn("Redis session expire time: {} is less than Session timeout: {}. It may cause some " + "problems.", millisecondsExpire, session.getTimeout());
 			}
 		}
 

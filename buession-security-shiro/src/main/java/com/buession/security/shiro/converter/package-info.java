@@ -23,8 +23,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  */
 /**
- * 
- *
  * @author Yong.Teng
  * @since 1.3.3
- */package com.buession.security.shiro.converter;
+ */
+package com.buession.security.shiro.converter;
