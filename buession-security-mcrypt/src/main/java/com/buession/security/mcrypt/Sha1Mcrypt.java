@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -34,96 +34,117 @@ import java.security.Provider;
  */
 public final class Sha1Mcrypt extends AbstractMcrypt {
 
-    public Sha1Mcrypt(){
-        super(Algo.SHA1);
-    }
+	/**
+	 * 构造函数
+	 */
+	public Sha1Mcrypt(){
+		super(Algo.SHA1);
+	}
 
-    /**
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public Sha1Mcrypt(final Provider provider){
-        super(Algo.SHA1, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public Sha1Mcrypt(final Provider provider){
+		super(Algo.SHA1, provider);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     */
-    public Sha1Mcrypt(final String characterEncoding){
-        super(Algo.SHA1, characterEncoding);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 */
+	public Sha1Mcrypt(final String characterEncoding){
+		super(Algo.SHA1, characterEncoding);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     */
-    public Sha1Mcrypt(final Charset charset){
-        super(Algo.SHA1, charset);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 */
+	public Sha1Mcrypt(final Charset charset){
+		super(Algo.SHA1, charset);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public Sha1Mcrypt(final String characterEncoding, final Provider provider){
-        this(characterEncoding, null, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public Sha1Mcrypt(final String characterEncoding, final Provider provider){
+		this(characterEncoding, null, provider);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public Sha1Mcrypt(final Charset charset, final Provider provider){
-        this(charset, null, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public Sha1Mcrypt(final Charset charset, final Provider provider){
+		this(charset, null, provider);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     */
-    public Sha1Mcrypt(final String characterEncoding, final String salt){
-        this(characterEncoding, salt, null);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public Sha1Mcrypt(final String characterEncoding, final String salt){
+		this(characterEncoding, salt, null);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     */
-    public Sha1Mcrypt(final Charset charset, final String salt){
-        this(charset, salt, null);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public Sha1Mcrypt(final Charset charset, final String salt){
+		this(charset, salt, null);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public Sha1Mcrypt(final String characterEncoding, final String salt, final Provider provider){
-        super(Algo.SHA1, characterEncoding, salt, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public Sha1Mcrypt(final String characterEncoding, final String salt, final Provider provider){
+		super(Algo.SHA1, characterEncoding, salt, provider);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public Sha1Mcrypt(final Charset charset, final String salt, final Provider provider){
-        super(Algo.SHA1, charset, salt, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public Sha1Mcrypt(final Charset charset, final String salt, final Provider provider){
+		super(Algo.SHA1, charset, salt, provider);
+	}
 
 }

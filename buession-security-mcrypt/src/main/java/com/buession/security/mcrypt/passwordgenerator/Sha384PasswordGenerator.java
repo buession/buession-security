@@ -24,29 +24,19 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.Sha224Mcrypt;
+import com.buession.security.mcrypt.Sha384Mcrypt;
 
 /**
- * SHA-224 密码生成器
+ * SHA-384 密码生成器
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class Sha224PasswordGenerator extends AbstractPasswordGenerator {
+public class Sha384PasswordGenerator extends AbstractPasswordGenerator {
 
-	/**
-	 * 密码加密
-	 *
-	 * @param password
-	 * 		原始密码
-	 * @param salt
-	 * 		salt
-	 *
-	 * @return 加密后的密码
-	 */
 	@Override
 	public String digestEncoded(final String password, final String salt){
-		Sha224Mcrypt sha256Mcrypt = new Sha224Mcrypt();
+		Sha384Mcrypt sha256Mcrypt = new Sha384Mcrypt();
 
 		sha256Mcrypt.setSalt(salt);
 		return sha256Mcrypt.encode(password);

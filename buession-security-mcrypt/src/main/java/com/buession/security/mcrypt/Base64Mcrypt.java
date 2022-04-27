@@ -21,15 +21,13 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2021 Buession.com Inc.														|
+ * | Copyright @ 2013-2022 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
 
@@ -40,13 +38,16 @@ import java.nio.charset.Charset;
  */
 public final class Base64Mcrypt extends AbstractMcrypt {
 
-	private final static Logger logger = LoggerFactory.getLogger(Base64Mcrypt.class);
-
+	/**
+	 * 构造函数
+	 */
 	public Base64Mcrypt(){
 		super(Algo.BASE64);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
@@ -55,6 +56,8 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 */
@@ -63,6 +66,8 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 * @param salt
@@ -73,6 +78,8 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 * @param salt
@@ -82,42 +89,15 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 		super(Algo.BASE64, charset, salt);
 	}
 
-	/**
-	 * 对象加密
-	 *
-	 * @param object
-	 * 		需要加密的字符串
-	 *
-	 * @return 加密后的字符串
-	 */
 	@Override
 	public String encode(final Object object){
 		Assert.isNull(object, "Mcrypt encode object could not be null.");
-
-		if(logger.isDebugEnabled()){
-			logger.debug("Mcrypt encode string <{}> by algo <base64>, salt <{}>", object, getSalt());
-		}
-
-		return Base64.encodeBase64String((object2String(object) + (getSalt() == null ? "" : getSalt())).getBytes(getCharset()));
+		return Base64.encodeBase64String((object2String(object) + getRealSalt()).getBytes(getCharset()));
 	}
 
-	/**
-	 * 字符串解密
-	 * 该方法需要提供信息摘要算法支持双向解密才可用
-	 *
-	 * @param cs
-	 * 		要被解密的 char 值序列
-	 *
-	 * @return 解密后的字符串
-	 */
 	@Override
 	public String decode(final CharSequence cs){
 		Assert.isNull(cs, "Mcrypt decode object could not be null.");
-
-		if(logger.isDebugEnabled()){
-			logger.debug("Mcrypt decode string <{}> by algo <base64>, salt <{}>", cs, getSalt());
-		}
-
 		return new String(Base64.decodeBase64(cs.toString()), getCharset());
 	}
 

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt.passwordgenerator;
@@ -27,20 +27,12 @@ package com.buession.security.mcrypt.passwordgenerator;
 import com.buession.security.mcrypt.Sha512Mcrypt;
 
 /**
+ * SHA-512 密码生成器
+ *
  * @author Yong.Teng
  */
 public class Sha512PasswordGenerator extends AbstractPasswordGenerator {
 
-	/**
-	 * 密码加密
-	 *
-	 * @param password
-	 * 		原始密码
-	 * @param salt
-	 * 		salt
-	 *
-	 * @return 加密后的密码
-	 */
 	@Override
 	public String digestEncoded(final String password, final String salt){
 		Sha512Mcrypt sha512Mcrypt = new Sha512Mcrypt();

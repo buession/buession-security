@@ -28,82 +28,101 @@ import java.nio.charset.Charset;
 import java.security.Provider;
 
 /**
- * SHA-224 加密对象
+ * SHA-384 加密对象
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public final class Sha224Mcrypt extends AbstractMcrypt {
+public final class Sha384Mcrypt extends AbstractMcrypt {
 
-	public Sha224Mcrypt(){
-		super(Algo.SHA224);
+	/**
+	 * 构造函数
+	 */
+	public Sha384Mcrypt(){
+		super(Algo.SHA384);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public Sha224Mcrypt(final Provider provider){
-		super(Algo.SHA224, provider);
+	public Sha384Mcrypt(final Provider provider){
+		super(Algo.SHA384, provider);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
-	public Sha224Mcrypt(final String characterEncoding){
-		super(Algo.SHA224, characterEncoding);
+	public Sha384Mcrypt(final String characterEncoding){
+		super(Algo.SHA384, characterEncoding);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 */
-	public Sha224Mcrypt(final Charset charset){
-		super(Algo.SHA224, charset);
+	public Sha384Mcrypt(final Charset charset){
+		super(Algo.SHA384, charset);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public Sha224Mcrypt(final String characterEncoding, final Provider provider){
+	public Sha384Mcrypt(final String characterEncoding, final Provider provider){
 		this(characterEncoding, null, provider);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public Sha224Mcrypt(final Charset charset, final Provider provider){
+	public Sha384Mcrypt(final Charset charset, final Provider provider){
 		this(charset, null, provider);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public Sha224Mcrypt(final String characterEncoding, final String salt){
+	public Sha384Mcrypt(final String characterEncoding, final String salt){
 		this(characterEncoding, salt, null);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public Sha224Mcrypt(final Charset charset, final String salt){
+	public Sha384Mcrypt(final Charset charset, final String salt){
 		this(charset, salt, null);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 * @param salt
@@ -111,11 +130,13 @@ public final class Sha224Mcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public Sha224Mcrypt(final String characterEncoding, final String salt, final Provider provider){
-		super(Algo.SHA224, characterEncoding, salt, provider);
+	public Sha384Mcrypt(final String characterEncoding, final String salt, final Provider provider){
+		super(Algo.SHA384, characterEncoding, salt, provider);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 * @param salt
@@ -123,8 +144,8 @@ public final class Sha224Mcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public Sha224Mcrypt(final Charset charset, final String salt, final Provider provider){
-		super(Algo.SHA224, charset, salt, provider);
+	public Sha384Mcrypt(final Charset charset, final String salt, final Provider provider){
+		super(Algo.SHA384, charset, salt, provider);
 	}
 
 }

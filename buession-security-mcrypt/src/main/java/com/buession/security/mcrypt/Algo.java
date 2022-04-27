@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -29,32 +29,34 @@ package com.buession.security.mcrypt;
  */
 public enum Algo {
 
-    AES("AES"),
+	AES("AES"),
 
-    DES("DES"),
+	DES("DES"),
 
-    RSA("RSA"),
+	MD5("MD5"),
 
-    MD5("MD5"),
+	SHA("SHA"),
 
-    SHA("SHA"),
+	SHA1("SHA-1"),
 
-    SHA1("SHA-1"),
+	SHA224("SHA-224"),
 
-    SHA256("SHA-256"),
+	SHA256("SHA-256"),
 
-    SHA512("SHA-512"),
+	SHA384("SHA-384"),
 
-    BASE64("BASE64");
+	SHA512("SHA-512"),
 
-    private String name;
+	BASE64("BASE64");
 
-    Algo(String name){
-        this.name = name;
-    }
+	private final String name;
 
-    public String getName(){
-        return name;
-    }
+	Algo(final String name){
+		this.name = name;
+	}
+
+	public String getName(){
+		return name;
+	}
 
 }

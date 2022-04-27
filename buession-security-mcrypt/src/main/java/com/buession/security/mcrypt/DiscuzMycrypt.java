@@ -21,7 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2021 Buession.com Inc.														|
+ * | Copyright @ 2013-2022 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -46,11 +46,16 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 
 	private final static Base64Mcrypt base64Mcrypt = new Base64Mcrypt();
 
+	/**
+	 * 构造函数
+	 */
 	public DiscuzMycrypt(){
 		super(null);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
@@ -59,6 +64,8 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 */
@@ -67,6 +74,8 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 * @param salt
@@ -77,6 +86,8 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 * @param salt
@@ -86,14 +97,6 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 		super(null, charset, salt);
 	}
 
-	/**
-	 * 对象加密
-	 *
-	 * @param object
-	 * 		需要加密的字符串
-	 *
-	 * @return 加密后的字符串
-	 */
 	@Override
 	public String encode(final Object object){
 		Assert.isNull(object, "Mcrypt encode object could not be null");
@@ -115,15 +118,6 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 		return sb.toString();
 	}
 
-	/**
-	 * 字符串解密
-	 * 该方法需要提供信息摘要算法支持双向解密才可用
-	 *
-	 * @param cs
-	 * 		要被解密的 char 值序列
-	 *
-	 * @return 解密后的字符串
-	 */
 	@Override
 	public String decode(final CharSequence cs){
 		Assert.isNull(cs, "Mcrypt decode object could not be null");
@@ -150,14 +144,15 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	}
 
 	private static String md5(final String str){
-		return md5Mcrypt.encode(str == null ? "" : str).toLowerCase();
+		return md5Mcrypt.encode(str == null ? Constants.EMPTY_STRING : str).toLowerCase();
 	}
 
 	private static String getResultKey(final String str, final String key){
 		if(key.length() <= 16){
 			return md5(key + StringUtils.substr(str, 0, 16) + StringUtils.substr(str, 16));
 		}else{
-			return md5(StringUtils.substr(key, 0, 16) + StringUtils.substr(key, 0, 16) + (StringUtils.substr(key, 16)) + StringUtils.substr(str, 16));
+			return md5(StringUtils.substr(key, 0, 16) + StringUtils.substr(key, 0, 16) + (StringUtils.substr(key, 16)) +
+					StringUtils.substr(str, 16));
 		}
 	}
 

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -34,96 +34,117 @@ import java.security.Provider;
  */
 public final class MD5Mcrypt extends AbstractMcrypt {
 
-    public MD5Mcrypt(){
-        super(Algo.MD5);
-    }
+	/**
+	 * 构造函数
+	 */
+	public MD5Mcrypt(){
+		super(Algo.MD5);
+	}
 
-    /**
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public MD5Mcrypt(final Provider provider){
-        super(Algo.MD5, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public MD5Mcrypt(final Provider provider){
+		super(Algo.MD5, provider);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     */
-    public MD5Mcrypt(final String characterEncoding){
-        super(Algo.MD5, characterEncoding);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 */
+	public MD5Mcrypt(final String characterEncoding){
+		super(Algo.MD5, characterEncoding);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     */
-    public MD5Mcrypt(final Charset charset){
-        super(Algo.MD5, charset);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 */
+	public MD5Mcrypt(final Charset charset){
+		super(Algo.MD5, charset);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public MD5Mcrypt(final String characterEncoding, final Provider provider){
-        this(characterEncoding, null, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public MD5Mcrypt(final String characterEncoding, final Provider provider){
+		this(characterEncoding, null, provider);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public MD5Mcrypt(final Charset charset, final Provider provider){
-        this(charset, null, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public MD5Mcrypt(final Charset charset, final Provider provider){
+		this(charset, null, provider);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     */
-    public MD5Mcrypt(final String characterEncoding, final String salt){
-        this(characterEncoding, salt, null);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public MD5Mcrypt(final String characterEncoding, final String salt){
+		this(characterEncoding, salt, null);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     */
-    public MD5Mcrypt(final Charset charset, final String salt){
-        this(charset, salt, null);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public MD5Mcrypt(final Charset charset, final String salt){
+		this(charset, salt, null);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public MD5Mcrypt(final String characterEncoding, final String salt, final Provider provider){
-        super(Algo.MD5, characterEncoding, salt, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public MD5Mcrypt(final String characterEncoding, final String salt, final Provider provider){
+		super(Algo.MD5, characterEncoding, salt, provider);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public MD5Mcrypt(final Charset charset, final String salt, final Provider provider){
-        super(Algo.MD5, charset, salt, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public MD5Mcrypt(final Charset charset, final String salt, final Provider provider){
+		super(Algo.MD5, charset, salt, provider);
+	}
 
 }

@@ -21,7 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2021 Buession.com Inc.														|
+ * | Copyright @ 2013-2022 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -33,6 +33,8 @@ import com.buession.lang.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -67,10 +69,15 @@ public abstract class AbstractMcrypt implements Mcrypt {
 
 	private final static Logger logger = LoggerFactory.getLogger(AbstractMcrypt.class);
 
+	/**
+	 * 构造函数
+	 */
 	public AbstractMcrypt(){
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param algo
 	 * 		请求算法的名称
 	 */
@@ -79,6 +86,8 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param algo
 	 * 		请求算法的名称
 	 * @param provider
@@ -90,6 +99,8 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param algo
 	 * 		请求算法的名称
 	 * @param characterEncoding
@@ -103,6 +114,8 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param algo
 	 * 		请求算法的名称
 	 * @param charset
@@ -114,6 +127,8 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param algo
 	 * 		请求算法的名称
 	 * @param characterEncoding
@@ -127,6 +142,8 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param algo
 	 * 		请求算法的名称
 	 * @param charset
@@ -140,6 +157,8 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param algo
 	 * 		请求算法的名称
 	 * @param characterEncoding
@@ -153,6 +172,8 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param algo
 	 * 		请求算法的名称
 	 * @param charset
@@ -166,6 +187,8 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param algo
 	 * 		请求算法的名称
 	 * @param characterEncoding
@@ -181,6 +204,8 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param algo
 	 * 		请求算法的名称
 	 * @param charset
@@ -324,7 +349,7 @@ public abstract class AbstractMcrypt implements Mcrypt {
 		throw new UnsupportedOperationException("Algo '" + algo + "' unsupported decode");
 	}
 
-	protected static String object2String(final Object object){
+	protected String object2String(final Object object){
 		Assert.isNull(object, "Mcrypt encode object could not be null");
 
 		if(object instanceof char[]){
@@ -333,6 +358,30 @@ public abstract class AbstractMcrypt implements Mcrypt {
 			return new String((byte[]) object);
 		}else{
 			return object.toString();
+		}
+	}
+
+	protected byte[] object2Bytes(final Object object){
+		Assert.isNull(object, "Mcrypt encode object could not be null");
+
+		if(object instanceof char[]){
+			char[] chars = (char[]) object;
+			Charset cs = getCharset() == null ? Charset.defaultCharset() : getCharset();
+			CharBuffer cb = CharBuffer.allocate(chars.length);
+
+			cb.put(chars);
+			cb.flip();
+
+			ByteBuffer buffer = cs.encode(cb);
+
+			return buffer.array();
+		}else if(object instanceof byte[]){
+			return (byte[]) object;
+		}else if(object instanceof String){
+			return getCharset() == null ? ((String) object).getBytes() : ((String) object).getBytes(getCharset());
+		}else{
+			String str = object.toString();
+			return getCharset() == null ? str.getBytes() : str.getBytes(getCharset());
 		}
 	}
 
@@ -366,10 +415,6 @@ public abstract class AbstractMcrypt implements Mcrypt {
 			messageDigest.update(str.getBytes());
 		}else{
 			messageDigest.update(str.getBytes(charset));
-		}
-
-		if(logger.isDebugEnabled()){
-			logger.debug("Mcrypt encode string <{}> by algo <{}>, salt <{}>", str, algo, salt);
 		}
 
 		return getFormattedText(messageDigest.digest());

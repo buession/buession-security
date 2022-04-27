@@ -21,25 +21,25 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2021 Buession.com Inc.														|
+ * | Copyright @ 2013-2022 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
-import com.buession.core.utils.ObjectUtils;
-import com.buession.lang.Constants;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
+import com.buession.core.utils.StringUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -47,50 +47,71 @@ import java.security.Provider;
 
 /**
  * AES 加密对象
+ * slat 不足 16 位，以空格填充；slat 超过 16 位将截取前 16 位
+ * 加密结果以 Base64 返回
  *
  * @author Yong.Teng
  */
 public final class AESMcrypt extends AbstractMcrypt {
 
-	public final static int KEY_LENGTH = 16;
+	/**
+	 * 加密模式
+	 *
+	 * @since 2.0.0
+	 */
+	private Mode mode = Mode.ECB;
 
-	private static Cipher cipher = null;
+	/**
+	 * 补码方式
+	 *
+	 * @since 2.0.0
+	 */
+	private Padding padding = Padding.PKCS5_PADDING;
+
+	private Cipher cipher = null;
 
 	private final static Logger logger = LoggerFactory.getLogger(AESMcrypt.class);
 
+	/**
+	 * 构造函数
+	 */
 	public AESMcrypt(){
 		super(Algo.AES);
-		initCipher();
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
 	public AESMcrypt(final Provider provider){
 		super(Algo.AES, provider);
-		initCipher();
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
 	public AESMcrypt(final String characterEncoding){
 		super(Algo.AES, characterEncoding);
-		initCipher();
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 */
 	public AESMcrypt(final Charset charset){
 		super(Algo.AES, charset);
-		initCipher();
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 * @param provider
@@ -101,6 +122,8 @@ public final class AESMcrypt extends AbstractMcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 * @param provider
@@ -111,26 +134,32 @@ public final class AESMcrypt extends AbstractMcrypt {
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 * @param salt
 	 * 		加密密钥
 	 */
 	public AESMcrypt(final String characterEncoding, final String salt){
-		this(characterEncoding, salt, null);
+		this(characterEncoding, salt, (Provider) null);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 * @param salt
 	 * 		加密密钥
 	 */
 	public AESMcrypt(final Charset charset, final String salt){
-		this(charset, salt, null);
+		this(charset, salt, (Provider) null);
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param characterEncoding
 	 * 		字符编码
 	 * @param salt
@@ -140,10 +169,11 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 */
 	public AESMcrypt(final String characterEncoding, final String salt, final Provider provider){
 		super(Algo.AES, characterEncoding, salt, provider);
-		initCipher();
 	}
 
 	/**
+	 * 构造函数
+	 *
 	 * @param charset
 	 * 		字符编码
 	 * @param salt
@@ -153,121 +183,591 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 */
 	public AESMcrypt(final Charset charset, final String salt, final Provider provider){
 		super(Algo.AES, charset, salt, provider);
-		initCipher();
 	}
 
 	/**
-	 * 对象加密
+	 * 构造函数
 	 *
-	 * @param object
-	 * 		需要加密的字符串
-	 *
-	 * @return 加密后的字符串
+	 * @param mode
+	 * 		加密模式
 	 */
+	public AESMcrypt(final Mode mode){
+		this();
+		this.mode = mode;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param mode
+	 * 		加密模式
+	 */
+	public AESMcrypt(final Provider provider, final Mode mode){
+		this(provider);
+		this.mode = mode;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param mode
+	 * 		加密模式
+	 */
+	public AESMcrypt(final String characterEncoding, final Mode mode){
+		this(characterEncoding);
+		this.mode = mode;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param mode
+	 * 		加密模式
+	 */
+	public AESMcrypt(final Charset charset, final Mode mode){
+		this(charset);
+		this.mode = mode;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param mode
+	 * 		加密模式
+	 */
+	public AESMcrypt(final String characterEncoding, final Provider provider, final Mode mode){
+		this(characterEncoding, provider);
+		this.mode = mode;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param mode
+	 * 		加密模式
+	 */
+	public AESMcrypt(final Charset charset, final Provider provider, final Mode mode){
+		this(charset, provider);
+		this.mode = mode;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param mode
+	 * 		加密模式
+	 */
+	public AESMcrypt(final String characterEncoding, final String salt, final Mode mode){
+		this(characterEncoding, salt);
+		this.mode = mode;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param mode
+	 * 		加密模式
+	 */
+	public AESMcrypt(final Charset charset, final String salt, final Mode mode){
+		this(charset, salt);
+		this.mode = mode;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param mode
+	 * 		加密模式
+	 */
+	public AESMcrypt(final String characterEncoding, final String salt, final Provider provider, final Mode mode){
+		this(characterEncoding, salt, provider);
+		this.mode = mode;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param mode
+	 * 		加密模式
+	 */
+	public AESMcrypt(final Charset charset, final String salt, final Provider provider, final Mode mode){
+		this(charset, salt, provider);
+		this.mode = mode;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Padding padding){
+		this();
+		this.padding = padding;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Provider provider, final Padding padding){
+		this(provider);
+		this.padding = padding;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final String characterEncoding, final Padding padding){
+		this(characterEncoding);
+		this.padding = padding;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Charset charset, final Padding padding){
+		this(charset);
+		this.padding = padding;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final String characterEncoding, final Provider provider, final Padding padding){
+		this(characterEncoding, provider);
+		this.padding = padding;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Charset charset, final Provider provider, final Padding padding){
+		this(charset, provider);
+		this.padding = padding;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final String characterEncoding, final String salt, final Padding padding){
+		this(characterEncoding, salt);
+		this.padding = padding;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Charset charset, final String salt, final Padding padding){
+		this(charset, salt);
+		this.padding = padding;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final String characterEncoding, final String salt, final Provider provider, final Padding padding){
+		this(characterEncoding, salt, provider);
+		this.padding = padding;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Charset charset, final String salt, final Provider provider, final Padding padding){
+		this(charset, salt, provider);
+		this.padding = padding;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Mode mode, final Padding padding){
+		this(mode);
+		this.padding = padding;
+	}
+
+	/**
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Provider provider, final Mode mode, final Padding padding){
+		this(provider, mode);
+		this.padding = padding;
+	}
+
+	/**
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final String characterEncoding, final Mode mode, final Padding padding){
+		this(characterEncoding, mode);
+		this.padding = padding;
+	}
+
+	/**
+	 * @param charset
+	 * 		字符编码
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Charset charset, final Mode mode, final Padding padding){
+		this(charset, mode);
+		this.padding = padding;
+	}
+
+	/**
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final String characterEncoding, final Provider provider, final Mode mode, final Padding padding){
+		this(characterEncoding, null, provider, mode);
+		this.padding = padding;
+	}
+
+	/**
+	 * @param charset
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Charset charset, final Provider provider, final Mode mode, final Padding padding){
+		this(charset, provider, mode);
+		this.padding = padding;
+	}
+
+	/**
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final String characterEncoding, final String salt, final Mode mode, final Padding padding){
+		this(characterEncoding, salt, mode);
+		this.padding = padding;
+	}
+
+	/**
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Charset charset, final String salt, final Mode mode, final Padding padding){
+		this(charset, salt, mode);
+		this.padding = padding;
+	}
+
+	/**
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final String characterEncoding, final String salt, final Provider provider, final
+	Mode mode, final Padding padding){
+		this(characterEncoding, salt, provider, mode);
+		this.padding = padding;
+	}
+
+	/**
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 */
+	public AESMcrypt(final Charset charset, final String salt, final Provider provider, final
+	Mode mode, final Padding padding){
+		this(charset, salt, provider, mode);
+		this.padding = padding;
+	}
+
 	@Override
 	public String encode(final Object object){
-		Key key = getKey();
-
-		byte[] result = encode(key, getCharset() == null ? ObjectUtils.toByte(object) : ObjectUtils.toByte(object,
-				getCharset()));
-
-		if(logger.isDebugEnabled()){
-			logger.debug("Mcrypt encode string <{}> by algo <AES>, salt <{}>", object, getRealSalt());
-		}
-
-		return result == null ? null : Hex.encodeHexString(result);
-	}
-
-	/**
-	 * 字符串解密
-	 * 该方法需要提供信息摘要算法支持双向解密才可用
-	 *
-	 * @param cs
-	 * 		要被解密的 char 值序列
-	 *
-	 * @return 解密后的字符串
-	 */
-	@Override
-	public String decode(final CharSequence cs){
-		Key key = getKey();
-
-		logger.debug("Mcrypt decode string <{}> by algo <AES>, salt <{}>", cs, getRealSalt());
+		Assert.isNull(object, "Mcrypt encode object could not be null");
 
 		try{
-			byte[] result = decode(key, Hex.decodeHex(cs.toString()));
-			return result == null ? null : new String(result);
-		}catch(DecoderException e){
+			Key key = getKey();
+
+			initCipher();
+
+			// 初始化为加密模式的密码器
+			cipher.init(Cipher.ENCRYPT_MODE, key);
+
+			byte[] result = cipher.doFinal(object2Bytes(object));
+			return Base64.encodeBase64String(result);
+		}catch(InvalidKeyException e){
+			logger.error(e.getMessage());
+		}catch(IllegalBlockSizeException e){
+			logger.error(e.getMessage());
+		}catch(BadPaddingException e){
+			logger.error(e.getMessage());
+		}catch(NoSuchAlgorithmException e){
+			logger.error(e.getMessage());
+		}catch(NoSuchPaddingException e){
 			logger.error(e.getMessage());
 		}
 
 		return null;
 	}
 
-	private static Cipher initCipher(){
+	@Override
+	public String decode(final CharSequence cs){
+		Assert.isNull(cs, "Mcrypt decode object could not be null");
+
+		try{
+			Key key = getKey();
+
+			initCipher();
+
+			// 初始化为解密模式的密码器
+			cipher.init(Cipher.DECRYPT_MODE, key);
+
+			// 明文
+			byte[] result = cipher.doFinal(Base64.decodeBase64(cs.toString()));
+			return new String(result);
+		}catch(InvalidKeyException e){
+			logger.error(e.getMessage());
+		}catch(IllegalBlockSizeException e){
+			logger.error(e.getMessage());
+		}catch(BadPaddingException e){
+			logger.error(e.getMessage());
+		}catch(NoSuchAlgorithmException e){
+			logger.error(e.getMessage());
+		}catch(NoSuchPaddingException e){
+			logger.error(e.getMessage());
+		}
+
+		return null;
+	}
+
+	private Cipher initCipher() throws NoSuchAlgorithmException, NoSuchPaddingException{
 		if(cipher == null){
-			try{
-				cipher = Cipher.getInstance(Algo.AES.getName());
-			}catch(NoSuchAlgorithmException e){
-				logger.error(e.getMessage());
-			}catch(NoSuchPaddingException e){
-				logger.error(e.getMessage());
-			}
+			cipher = Cipher.getInstance(Algo.AES.getName() + "/" + mode.name() + "/" + padding.getValue());
 		}
 
 		return cipher;
 	}
 
-	private Key getKey(){
-		String salt = getSalt();
-		int saltLength = salt.length();
-		StringBuilder sb = new StringBuilder(saltLength * 2);
+	private Key getKey() throws NoSuchAlgorithmException{
+		String salt = getRealSalt();
+		KeyGenerator keyGenerator = KeyGenerator.getInstance(Algo.AES.getName());
 
-		if(saltLength < KEY_LENGTH){
-			sb.append(salt);
-			for(int i = 1; i <= KEY_LENGTH - saltLength; i++){
-				sb.append(Constants.EMPTY_CHAR);
-			}
-		}else if(saltLength > KEY_LENGTH){
-			sb.append(salt, 0, KEY_LENGTH);
-		}else{
-			sb.append(salt);
+		keyGenerator.init(128);
+
+		if(salt.length() < 16){
+			salt += StringUtils.repeat(' ', 16 - salt.length());
+		}else if(salt.length() > 16){
+			salt = StringUtils.substr(salt, 0, 16);
 		}
 
-		return new SecretKeySpec(sb.toString().getBytes(getCharset()), Algo.AES.getName());
+		return new SecretKeySpec(salt.getBytes(StandardCharsets.UTF_8), Algo.AES.getName());
 	}
 
-	private byte[] encode(final Key key, final byte[] data){
-		Assert.isNull(data, "Mcrypt decode object could not be null");
+	/**
+	 * 加密模式
+	 *
+	 * @since 2.0.0
+	 */
+	public enum Mode {
 
-		try{
-			cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化为加密模式的密码器
-			return cipher.doFinal(data);
-		}catch(InvalidKeyException e){
-			logger.error(e.getMessage());
-		}catch(IllegalBlockSizeException e){
-			logger.error(e.getMessage());
-		}catch(BadPaddingException e){
-			logger.error(e.getMessage());
+		ECB("Electronic Codebook Book", "电码本模式"),
+
+		CBC("Cipher Block Chaining", "密码分组链接模式"),
+
+		CTR("Counter", "计算器模式"),
+
+		CFB("Cipher FeedBack", "密码反馈模式"),
+
+		OFB("Output FeedBack", "输出反馈模式");
+
+		private final String value;
+
+		private final String name;
+
+		Mode(final String value, final String name){
+			this.value = value;
+			this.name = name;
 		}
 
-		return null;
+		public String getValue(){
+			return value;
+		}
+
+		public String getName(){
+			return name;
+		}
+
 	}
 
-	private byte[] decode(final Key key, final byte[] data){
-		Assert.isNull(data, "Mcrypt decode object could not be null.");
+	/**
+	 * 补码方式
+	 *
+	 * @since 2.0.0
+	 */
+	public enum Padding {
 
-		try{
-			cipher.init(Cipher.DECRYPT_MODE, key);// 初始化为解密模式的密码器
-			return cipher.doFinal(data); // 明文
-		}catch(InvalidKeyException e){
-			logger.error(e.getMessage());
-		}catch(IllegalBlockSizeException e){
-			logger.error(e.getMessage());
-		}catch(BadPaddingException e){
-			logger.error(e.getMessage());
+		NO_PADDING("NoPadding"),
+
+		ZERO_PADDING("ZeroPadding"),
+
+		PKCS5_PADDING("PKCS5Padding"),
+
+		PKCS7_PADDING("PKCS7Padding"),
+
+		ISO10126_PADDING("ISO10126Padding"),
+
+		ANSIX923_PADDING("ANSIX923Padding");
+
+		private final String value;
+
+		Padding(final String value){
+			this.value = value;
 		}
 
-		return null;
+		public String getValue(){
+			return value;
+		}
+
 	}
 
 }

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -28,102 +28,124 @@ import java.nio.charset.Charset;
 import java.security.Provider;
 
 /**
- * SHA-256 加密对象
+ * SHA-224 加密对象
  *
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public final class Sha256Mcrypt extends AbstractMcrypt {
+public final class Sha224Mcrypt extends AbstractMcrypt {
 
-    public Sha256Mcrypt(){
-        super(Algo.SHA256);
-    }
+	/**
+	 * 构造函数
+	 */
+	public Sha224Mcrypt(){
+		super(Algo.SHA224);
+	}
 
-    /**
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public Sha256Mcrypt(final Provider provider){
-        super(Algo.SHA256, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public Sha224Mcrypt(final Provider provider){
+		super(Algo.SHA224, provider);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     */
-    public Sha256Mcrypt(final String characterEncoding){
-        super(Algo.SHA256, characterEncoding);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 */
+	public Sha224Mcrypt(final String characterEncoding){
+		super(Algo.SHA224, characterEncoding);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     */
-    public Sha256Mcrypt(final Charset charset){
-        super(Algo.SHA256, charset);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 */
+	public Sha224Mcrypt(final Charset charset){
+		super(Algo.SHA224, charset);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public Sha256Mcrypt(final String characterEncoding, final Provider provider){
-        this(characterEncoding, null, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public Sha224Mcrypt(final String characterEncoding, final Provider provider){
+		this(characterEncoding, null, provider);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public Sha256Mcrypt(final Charset charset, final Provider provider){
-        this(charset, null, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public Sha224Mcrypt(final Charset charset, final Provider provider){
+		this(charset, null, provider);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     */
-    public Sha256Mcrypt(final String characterEncoding, final String salt){
-        this(characterEncoding, salt, null);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public Sha224Mcrypt(final String characterEncoding, final String salt){
+		this(characterEncoding, salt, null);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     */
-    public Sha256Mcrypt(final Charset charset, final String salt){
-        this(charset, salt, null);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public Sha224Mcrypt(final Charset charset, final String salt){
+		this(charset, salt, null);
+	}
 
-    /**
-     * @param characterEncoding
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public Sha256Mcrypt(final String characterEncoding, final String salt, final Provider provider){
-        super(Algo.SHA256, characterEncoding, salt, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public Sha224Mcrypt(final String characterEncoding, final String salt, final Provider provider){
+		super(Algo.SHA224, characterEncoding, salt, provider);
+	}
 
-    /**
-     * @param charset
-     *         字符编码
-     * @param salt
-     *         加密密钥
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    public Sha256Mcrypt(final Charset charset, final String salt, final Provider provider){
-        super(Algo.SHA256, charset, salt, provider);
-    }
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public Sha224Mcrypt(final Charset charset, final String salt, final Provider provider){
+		super(Algo.SHA224, charset, salt, provider);
+	}
 
 }
