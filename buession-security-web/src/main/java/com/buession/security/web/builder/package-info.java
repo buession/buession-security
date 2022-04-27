@@ -26,4 +26,4 @@
  * @author Yong.Teng
  * @since 2.0.0
  */
-package com.buession.security.web.builders;
+package com.buession.security.web.builder;

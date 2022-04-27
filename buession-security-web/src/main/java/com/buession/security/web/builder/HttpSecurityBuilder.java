@@ -22,7 +22,7 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.builders;
+package com.buession.security.web.builder;
 
 import com.buession.security.web.config.ContentSecurityPolicy;
 import com.buession.security.web.config.Csrf;

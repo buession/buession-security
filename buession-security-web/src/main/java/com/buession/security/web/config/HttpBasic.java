@@ -21,10 +21,59 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.web.config;/**
- * 
+ */
+package com.buession.security.web.config;
+
+/**
+ * Http Basic 验证
+ * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication"
+ * target="_blank">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication</a></p>
  *
  * @author Yong.Teng
  * @since 2.0.0
- */public class HttpBasic {
+ */
+public class HttpBasic {
+
+	/**
+	 * 是否启用 Http Basic 验证
+	 */
+	private boolean enable = false;
+
+	/**
+	 * 返回是否启用 Http Basic 验证
+	 *
+	 * @return 是否启用 Http Basic 验证
+	 */
+	public boolean isEnable(){
+		return getEnable();
+	}
+
+	/**
+	 * 返回是否启用 Http Basic 验证
+	 *
+	 * @return 是否启用 Http Basic 验证
+	 */
+	public boolean getEnable(){
+		return enable;
+	}
+
+	/**
+	 * 设置是否启用 Http Basic 验证
+	 *
+	 * @param enable
+	 * 		是否启用 Http Basic 验证
+	 */
+	public void setEnable(boolean enable){
+		this.enable = enable;
+	}
+
+	@Override
+	public String toString(){
+		final ConfigStringBuilder sb = ConfigStringBuilder.create("HttpBasic");
+
+		sb.set("enable", enable);
+
+		return sb.toString();
+	}
+
 }

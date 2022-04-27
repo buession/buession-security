@@ -22,10 +22,10 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.builders.reactive;
+package com.buession.security.web.builder.reactive;
 
 import com.buession.core.validator.Validate;
-import com.buession.security.web.builders.HttpSecurityBuilder;
+import com.buession.security.web.builder.HttpSecurityBuilder;
 import com.buession.security.web.config.ContentSecurityPolicy;
 import com.buession.security.web.config.Csrf;
 import com.buession.security.web.config.FrameOptions;

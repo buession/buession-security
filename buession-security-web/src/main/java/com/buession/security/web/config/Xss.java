@@ -21,10 +21,111 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.web.config;/**
- * 
+ */
+package com.buession.security.web.config;
+
+/**
+ * XSS 配置
+ * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-XSS-Protection"
+ * target="_blank">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-XSS-Protection</a></p>
  *
  * @author Yong.Teng
  * @since 2.0.0
- */public class Xss {
+ */
+public class Xss {
+
+	/**
+	 * 是否启用 Xss 配置
+	 */
+	private boolean enable = true;
+
+	private boolean block;
+
+	private boolean enabledProtection;
+
+	/**
+	 * XSS 策略配置文件路径
+	 */
+	private String policyConfigLocation;
+
+	/**
+	 * 返回是否启用 Xss 配置
+	 *
+	 * @return 是否启用 Xss 配置
+	 */
+	public boolean isEnable(){
+		return getEnable();
+	}
+
+	/**
+	 * 返回是否启用 Xss 配置
+	 *
+	 * @return 是否启用 Xss 配置
+	 */
+	public boolean getEnable(){
+		return enable;
+	}
+
+	/**
+	 * 配置是否启用 Xss 配置
+	 *
+	 * @param enable
+	 * 		是否启用 Xss 配置
+	 */
+	public void setEnable(boolean enable){
+		this.enable = enable;
+	}
+
+	public boolean isBlock(){
+		return getBlock();
+	}
+
+	public boolean getBlock(){
+		return block;
+	}
+
+	public void setBlock(boolean block){
+		this.block = block;
+	}
+
+	public boolean isEnabledProtection(){
+		return getEnabledProtection();
+	}
+
+	public boolean getEnabledProtection(){
+		return enabledProtection;
+	}
+
+	public void setEnabledProtection(boolean enabledProtection){
+		this.enabledProtection = enabledProtection;
+	}
+
+	/**
+	 * 返回 XSS 策略配置文件路径
+	 *
+	 * @return XSS 策略配置文件路径
+	 */
+	public String getPolicyConfigLocation(){
+		return policyConfigLocation;
+	}
+
+	/**
+	 * 设置 XSS 策略配置文件路径
+	 *
+	 * @param policyConfigLocation
+	 * 		XSS 策略配置文件路径
+	 */
+	public void setPolicyConfigLocation(String policyConfigLocation){
+		this.policyConfigLocation = policyConfigLocation;
+	}
+
+	@Override
+	public String toString(){
+		final ConfigStringBuilder sb = ConfigStringBuilder.create("Xss = ");
+
+		sb.set("enable", enable).set("block", block);
+		sb.set("enabledProtection", enabledProtection).set("policyConfigLocation", policyConfigLocation);
+
+		return sb.build();
+	}
 }

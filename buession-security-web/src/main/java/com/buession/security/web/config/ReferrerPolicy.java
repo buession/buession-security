@@ -21,10 +21,101 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.web.config;/**
- * 
+ */
+package com.buession.security.web.config;
+
+/**
+ * ReferrerPolicy 配置
  *
  * @author Yong.Teng
  * @since 2.0.0
- */public class ReferrerPolicy {
+ */
+public class ReferrerPolicy {
+
+	/**
+	 * 是否启用 ReferrerPolicy
+	 */
+	private boolean enable = true;
+
+	private ReferrerPolicy.Policy policy = ReferrerPolicy.Policy.NO_REFERRER;
+
+	/**
+	 * 返回是否启用 ReferrerPolicy
+	 *
+	 * @return 是否启用 ReferrerPolicy
+	 */
+	public boolean isEnable(){
+		return getEnable();
+	}
+
+	/**
+	 * 返回是否启用 ReferrerPolicy
+	 *
+	 * @return 是否启用 ReferrerPolicy
+	 */
+	public boolean getEnable(){
+		return enable;
+	}
+
+	/**
+	 * 配置是否启用 ReferrerPolicy
+	 *
+	 * @param enable
+	 * 		是否启用 ReferrerPolicy
+	 */
+	public void setEnable(boolean enable){
+		this.enable = enable;
+	}
+
+	public ReferrerPolicy.Policy getPolicy(){
+		return policy;
+	}
+
+	public void setPolicy(ReferrerPolicy.Policy policy){
+		this.policy = policy;
+	}
+
+	public enum Policy {
+
+		NO_REFERRER("no-referrer"),
+
+		NO_REFERRER_WHEN_DOWNGRADE("no-referrer-when-downgrade"),
+
+		SAME_ORIGIN("same-origin"),
+
+		ORIGIN("origin"),
+
+		STRICT_ORIGIN("strict-origin"),
+
+		ORIGIN_WHEN_CROSS_ORIGIN("origin-when-cross-origin"),
+
+		STRICT_ORIGIN_WHEN_CROSS_ORIGIN("strict-origin-when-cross-origin"),
+
+		UNSAFE_URL("unsafe-url");
+
+		private final String policy;
+
+		Policy(final String policy){
+			this.policy = policy;
+		}
+
+		public String getPolicy(){
+			return this.policy;
+		}
+
+		@Override
+		public String toString(){
+			return getPolicy();
+		}
+
+	}
+
+	@Override
+	public String toString(){
+		final ConfigStringBuilder sb = ConfigStringBuilder.create("ReferrerPolicy");
+
+		sb.set("enable", enable).set("policy", policy);
+
+		return sb.build();
+	}
 }

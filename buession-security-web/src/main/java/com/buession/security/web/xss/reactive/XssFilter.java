@@ -21,10 +21,36 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.web.xss.reactive;/**
- * 
+ */
+package com.buession.security.web.xss.reactive;
+
+import org.owasp.validator.html.Policy;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
+
+/**
+ * XSS 过滤器
  *
  * @author Yong.Teng
  * @since 2.0.0
- */public class XssFilter {
+ */
+public class XssFilter implements WebFilter {
+
+	private Policy policy;
+
+	public Policy getPolicy(){
+		return policy;
+	}
+
+	public void setPolicy(Policy policy){
+		this.policy = policy;
+	}
+
+	@Override
+	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain){
+		return chain.filter(exchange);
+	}
+
 }

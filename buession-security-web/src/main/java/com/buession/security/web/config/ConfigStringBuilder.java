@@ -28,26 +28,40 @@ package com.buession.security.web.config;
  * @author Yong.Teng
  * @since 2.0.0
  */
-class StringBuilder {
+class ConfigStringBuilder {
 
-	private final java.lang.StringBuilder sb = new java.lang.StringBuilder();
+	private final StringBuilder sb = new java.lang.StringBuilder();
 
-	private StringBuilder(final String name){
+	private int index = 0;
+
+	private boolean finished = false;
+
+	private ConfigStringBuilder(final String name){
 		sb.append(name).append(" = {");
 	}
 
-	public static StringBuilder create(final String name){
-		final StringBuilder instance = new StringBuilder(name);
-		return instance;
+	public static ConfigStringBuilder create(final String name){
+		return new ConfigStringBuilder(name);
 	}
 
-	public StringBuilder set(final String name, final Object value){
+	public ConfigStringBuilder set(final String name, final Object value){
+		if(++index > 0){
+			sb.append(", ");
+		}
+
+		sb.append(name).append('=').append(value);
 		return this;
 	}
 
 	public String build(){
+		this.finished = true;
 		sb.append('}');
 		return sb.toString();
+	}
+
+	@Override
+	public String toString(){
+		return this.finished ? sb.toString() : build();
 	}
 
 }
