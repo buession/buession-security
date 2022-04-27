@@ -27,41 +27,116 @@ package com.buession.security.geetest.core;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * V4 版本请求数据
+ *
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public class RequestV3Data {
+public class RequestV4Data implements RequestData {
 
-    @JsonProperty(value = "user_id")
-    private String userId;
+	/**
+	 * 验证流水号
+	 */
+	@JsonProperty(value = "lot_number")
+	private String lotNumber;
 
-    @JsonProperty(value = "client_type")
-    private ClientType clientType;
+	/**
+	 * 验证输出信息
+	 */
+	@JsonProperty(value = "captcha_output")
+	private String captchaOutput;
 
-    @JsonProperty(value = "ip_address")
-    private String ipAddress;
+	/**
+	 * 验证通过标识
+	 */
+	@JsonProperty(value = "pass_token")
+	private String passToken;
 
-    public String getUserId(){
-        return userId;
-    }
+	/**
+	 * 验证通过时间戳
+	 */
+	@JsonProperty(value = "gen_time")
+	private String genTime;
 
-    public void setUserId(String userId){
-        this.userId = userId;
-    }
+	/**
+	 * 返回验证流水号
+	 *
+	 * @return 验证流水号
+	 */
+	public String getLotNumber(){
+		return lotNumber;
+	}
 
-    public ClientType getClientType(){
-        return clientType;
-    }
+	/**
+	 * 设置验证流水号
+	 *
+	 * @param lotNumber
+	 * 		验证流水号
+	 */
+	public void setLotNumber(String lotNumber){
+		this.lotNumber = lotNumber;
+	}
 
-    public void setClientType(ClientType clientType){
-        this.clientType = clientType;
-    }
+	/**
+	 * 返回验证输出信息
+	 *
+	 * @return 验证输出信息
+	 */
+	public String getCaptchaOutput(){
+		return captchaOutput;
+	}
 
-    public String getIpAddress(){
-        return ipAddress;
-    }
+	/**
+	 * 设置验证输出信息
+	 *
+	 * @param captchaOutput
+	 * 		验证输出信息
+	 */
+	public void setCaptchaOutput(String captchaOutput){
+		this.captchaOutput = captchaOutput;
+	}
 
-    public void setIpAddress(String ipAddress){
-        this.ipAddress = ipAddress;
-    }
+	/**
+	 * 返回验证通过标识
+	 *
+	 * @return 验证通过标识
+	 */
+	public String getPassToken(){
+		return passToken;
+	}
+
+	/**
+	 * 设置验证通过标识
+	 *
+	 * @param passToken
+	 * 		验证通过标识
+	 */
+	public void setPassToken(String passToken){
+		this.passToken = passToken;
+	}
+
+	/**
+	 * 返回验证通过时间戳
+	 *
+	 * @return 验证通过时间戳
+	 */
+	public String getGenTime(){
+		return genTime;
+	}
+
+	/**
+	 * 设置验证通过时间戳
+	 *
+	 * @param genTime
+	 * 		验证通过时间戳
+	 */
+	public void setGenTime(String genTime){
+		this.genTime = genTime;
+	}
+
+	@Override
+	public String toString(){
+		return "RequestV4Data{" + "lotNumber='" + lotNumber + '\'' + ", captchaOutput='" + captchaOutput + '\'' + ", passToken='" + passToken + '\'' + ", genTime='" + genTime + '\'' + '}';
+	}
 
 }

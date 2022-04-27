@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class Init3Result implements InitResult {
+public class InitV3Result implements InitResult {
 
 	private boolean success;
 

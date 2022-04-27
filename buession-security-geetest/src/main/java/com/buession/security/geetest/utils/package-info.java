@@ -23,8 +23,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  */
 /**
- * 
- *
  * @author Yong.Teng
  * @since 2.0.0
- */package com.buession.security.geetest.utils;
+ */
+package com.buession.security.geetest.utils;

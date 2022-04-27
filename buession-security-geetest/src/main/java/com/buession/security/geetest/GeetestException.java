@@ -21,10 +21,35 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.geetest;/**
- * 
- *
+ */
+package com.buession.security.geetest;
+
+/**
  * @author Yong.Teng
  * @since 2.0.0
- */public class GeetestException {
+ */
+public class GeetestException extends Exception {
+
+	private final static long serialVersionUID = -7439062849805991359L;
+
+	public GeetestException(){
+		super();
+	}
+
+	public GeetestException(String message){
+		super(message);
+	}
+
+	public GeetestException(String message, Throwable cause){
+		super(message, cause);
+	}
+
+	public GeetestException(Throwable cause){
+		super(cause);
+	}
+
+	public GeetestException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace){
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+	
 }

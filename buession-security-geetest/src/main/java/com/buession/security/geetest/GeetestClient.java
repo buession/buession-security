@@ -22,18 +22,51 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.geetest.api;
+package com.buession.security.geetest;
 
 import com.buession.lang.Status;
+import com.buession.security.geetest.core.DigestMode;
+import com.buession.security.geetest.core.InitResult;
+import com.buession.security.geetest.core.RequestData;
 
 /**
- * 极验 API Client
+ * 极验 Client
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public interface GeetestApiClient {
+public interface GeetestClient {
 
-	Status validate();
+	/**
+	 * 验证初始化
+	 *
+	 * @param digestMode
+	 * 		加密模式
+	 * @param requestData
+	 * 		请求数据
+	 *
+	 * @return 初始化结果
+	 */
+	InitResult initialize(DigestMode digestMode, RequestData requestData) throws GeetestException;
+
+	/**
+	 * 二次验证
+	 *
+	 * @param requestData
+	 * 		请求数据
+	 *
+	 * @return 验证结果
+	 *
+	 * @throws GeetestException
+	 * 		异常
+	 */
+	Status validate(RequestData requestData) throws GeetestException;
+
+	/**
+	 * 获取版本号
+	 *
+	 * @return 版本号
+	 */
+	String getVersion();
 
 }

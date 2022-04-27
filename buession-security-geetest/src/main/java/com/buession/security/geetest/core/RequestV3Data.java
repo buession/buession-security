@@ -27,41 +27,131 @@ package com.buession.security.geetest.core;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * V3 版本请求数据
+ *
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public class RequestData {
+public class RequestV3Data implements RequestData {
 
-    @JsonProperty(value = "user_id")
-    private String userId;
+	/**
+	 * 流水号
+	 */
+	private String challenge;
 
-    @JsonProperty(value = "client_type")
-    private ClientType clientType;
+	/**
+	 * 核心校验数据
+	 */
+	private String seccode;
 
-    @JsonProperty(value = "ip_address")
-    private String ipAddress;
+	/**
+	 * 用户的唯一标识
+	 */
+	@JsonProperty(value = "user_id")
+	private String userId;
 
-    public String getUserId(){
-        return userId;
-    }
+	/**
+	 * 客户端类型
+	 */
+	@JsonProperty(value = "client_type")
+	private ClientType clientType;
 
-    public void setUserId(String userId){
-        this.userId = userId;
-    }
+	@JsonProperty(value = "ip_address")
+	private String ipAddress;
 
-    public ClientType getClientType(){
-        return clientType;
-    }
+	/**
+	 * 返回流水号
+	 *
+	 * @return 流水号
+	 */
+	public String getChallenge(){
+		return challenge;
+	}
 
-    public void setClientType(ClientType clientType){
-        this.clientType = clientType;
-    }
+	/**
+	 * 设置流水号
+	 *
+	 * @param challenge
+	 * 		流水号
+	 */
+	public void setChallenge(String challenge){
+		this.challenge = challenge;
+	}
 
-    public String getIpAddress(){
-        return ipAddress;
-    }
+	/**
+	 * 返回核心校验数据
+	 *
+	 * @return 核心校验数据
+	 */
+	public String getSeccode(){
+		return seccode;
+	}
 
-    public void setIpAddress(String ipAddress){
-        this.ipAddress = ipAddress;
-    }
+	/**
+	 * 设置核心校验数据
+	 *
+	 * @param seccode
+	 * 		核心校验数据
+	 */
+	public void setSeccode(String seccode){
+		this.seccode = seccode;
+	}
+
+	/**
+	 * 返回用户的唯一标识
+	 *
+	 * @return 用户的唯一标识
+	 */
+	public String getUserId(){
+		return userId;
+	}
+
+	/**
+	 * 设置用户的唯一标识
+	 *
+	 * @param userId
+	 * 		用户的唯一标识
+	 */
+	public void setUserId(String userId){
+		this.userId = userId;
+	}
+
+	/**
+	 * 返回客户端类型
+	 *
+	 * @return 客户端类型
+	 */
+	public ClientType getClientType(){
+		return clientType;
+	}
+
+	/**
+	 * 设置客户端类型
+	 *
+	 * @param clientType
+	 * 		客户端类型
+	 */
+	public void setClientType(ClientType clientType){
+		this.clientType = clientType;
+	}
+
+	/**
+	 * 返回客户端请求SDK服务器的ip地址
+	 *
+	 * @return 客户端请求SDK服务器的ip地址
+	 */
+	public String getIpAddress(){
+		return ipAddress;
+	}
+
+	/**
+	 * 设置客户端请求SDK服务器的ip地址
+	 *
+	 * @param ipAddress
+	 * 		客户端请求SDK服务器的ip地址
+	 */
+	public void setIpAddress(String ipAddress){
+		this.ipAddress = ipAddress;
+	}
 
 }

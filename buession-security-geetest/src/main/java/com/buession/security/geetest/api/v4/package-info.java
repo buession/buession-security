@@ -26,4 +26,4 @@
  * @author Yong.Teng
  * @since 2.0.0
  */
-package com.buession.security.geetest.v4;
+package com.buession.security.geetest.api.v4;

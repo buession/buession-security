@@ -24,7 +24,12 @@
  */
 package com.buession.security.geetest.api;
 
+import com.buession.core.utils.VersionUtils;
 import com.buession.httpclient.HttpClient;
+import com.buession.security.geetest.GeetestClient;
+import com.buession.security.geetest.api.v3.GeetestV3Client;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 极验 API Client 抽象类
@@ -32,7 +37,11 @@ import com.buession.httpclient.HttpClient;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public abstract class AbstractGeetestApiClient implements GeetestApiClient {
+public abstract class AbstractGeetestClient implements GeetestClient {
+
+	protected final static String SDK_NAME = "Geetest-Java-SDK-" + GeetestV3Client.class.getPackage().getName() + "/" + VersionUtils.determineClassVersion(GeetestV3Client.class);
+
+	protected final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
 	/**
 	 * 公钥
@@ -46,6 +55,10 @@ public abstract class AbstractGeetestApiClient implements GeetestApiClient {
 
 	protected HttpClient httpClient;
 
+	static{
+		OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	}
+
 	/**
 	 * 构造函数
 	 *
@@ -54,7 +67,7 @@ public abstract class AbstractGeetestApiClient implements GeetestApiClient {
 	 * @param geetestKey
 	 * 		私钥
 	 */
-	public AbstractGeetestApiClient(final String geetestId, final String geetestKey){
+	public AbstractGeetestClient(final String geetestId, final String geetestKey){
 		this.geetestId = geetestId;
 		this.geetestKey = geetestKey;
 	}
