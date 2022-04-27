@@ -19,12 +19,49 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.geetest.core;/**
- * 
- *
+ */
+package com.buession.security.geetest.core;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
  * @author Yong.Teng
- * @since 2.0.0
- */public interface RequestData {
+ */
+public class RequestData {
+
+    @JsonProperty(value = "user_id")
+    private String userId;
+
+    @JsonProperty(value = "client_type")
+    private ClientType clientType;
+
+    @JsonProperty(value = "ip_address")
+    private String ipAddress;
+
+    public String getUserId(){
+        return userId;
+    }
+
+    public void setUserId(String userId){
+        this.userId = userId;
+    }
+
+    public ClientType getClientType(){
+        return clientType;
+    }
+
+    public void setClientType(ClientType clientType){
+        this.clientType = clientType;
+    }
+
+    public String getIpAddress(){
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress){
+        this.ipAddress = ipAddress;
+    }
+
 }

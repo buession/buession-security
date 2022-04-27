@@ -21,10 +21,33 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.geetest.core;/**
- * 
- *
+ */
+package com.buession.security.web.config;
+
+/**
  * @author Yong.Teng
  * @since 2.0.0
- */public interface RequestData {
+ */
+class StringBuilder {
+
+	private final java.lang.StringBuilder sb = new java.lang.StringBuilder();
+
+	private StringBuilder(final String name){
+		sb.append(name).append(" = {");
+	}
+
+	public static StringBuilder create(final String name){
+		final StringBuilder instance = new StringBuilder(name);
+		return instance;
+	}
+
+	public StringBuilder set(final String name, final Object value){
+		return this;
+	}
+
+	public String build(){
+		sb.append('}');
+		return sb.toString();
+	}
+
 }

@@ -26,5 +26,5 @@
  *
  * @author Yong.Teng
  * @since 2.0.0
- */public interface RequestData {
+ */public interface InitRresult {
 }

@@ -21,10 +21,71 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.geetest.core;/**
- * 
- *
+ */
+package com.buession.security.geetest.core;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
  * @author Yong.Teng
  * @since 2.0.0
- */public interface RequestData {
+ */
+public class Init3Result implements InitResult {
+
+	private boolean success;
+
+	private String gt;
+
+	private String challenge;
+
+	@JsonProperty(value = "new_captcha")
+	private Boolean newCaptcha;
+
+	@JsonProperty(value = "session_id")
+	private String sessionId;
+
+	public boolean getSuccess(){
+		return success;
+	}
+
+	public boolean isSuccess(){
+		return getSuccess();
+	}
+
+	public void setSuccess(boolean success){
+		this.success = success;
+	}
+
+	public String getGt(){
+		return gt;
+	}
+
+	public void setGt(String gt){
+		this.gt = gt;
+	}
+
+	public String getChallenge(){
+		return challenge;
+	}
+
+	public void setChallenge(String challenge){
+		this.challenge = challenge;
+	}
+
+	public Boolean getNewCaptcha(){
+		return newCaptcha;
+	}
+
+	public void setNewCaptcha(Boolean newCaptcha){
+		this.newCaptcha = newCaptcha;
+	}
+
+	public String getSessionId(){
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId){
+		this.sessionId = sessionId;
+	}
+
 }

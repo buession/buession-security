@@ -21,10 +21,49 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.geetest.core;/**
- * 
+ */
+package com.buession.security.geetest.api;
+
+import com.buession.httpclient.HttpClient;
+
+/**
+ * 极验 API Client 抽象类
  *
  * @author Yong.Teng
  * @since 2.0.0
- */public interface RequestData {
+ */
+public abstract class AbstractGeetestApiClient implements GeetestApiClient {
+
+	/**
+	 * 公钥
+	 */
+	protected final String geetestId;
+
+	/**
+	 * 私钥
+	 */
+	protected final String geetestKey;
+
+	protected HttpClient httpClient;
+
+	/**
+	 * 构造函数
+	 *
+	 * @param geetestId
+	 * 		公钥
+	 * @param geetestKey
+	 * 		私钥
+	 */
+	public AbstractGeetestApiClient(final String geetestId, final String geetestKey){
+		this.geetestId = geetestId;
+		this.geetestKey = geetestKey;
+	}
+
+	public HttpClient getHttpClient(){
+		return httpClient;
+	}
+
+	public void setHttpClient(HttpClient httpClient){
+		this.httpClient = httpClient;
+	}
 }
