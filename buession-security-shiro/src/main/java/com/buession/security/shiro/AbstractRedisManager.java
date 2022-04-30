@@ -148,12 +148,14 @@ public abstract class AbstractRedisManager implements RedisManager {
 
 	@Override
 	public Status delete(byte[] key){
-		return redisTemplate.del(key);
+		Long result = redisTemplate.del(key);
+		return result == null ? Status.FAILURE : StatusUtils.valueOf(result);
 	}
 
 	@Override
 	public Status delete(byte[]... keys){
-		return StatusUtils.valueOf(redisTemplate.del(keys) > 0);
+		Long result = redisTemplate.del(keys);
+		return result == null ? Status.FAILURE : StatusUtils.valueOf(result);
 	}
 
 	@Override
