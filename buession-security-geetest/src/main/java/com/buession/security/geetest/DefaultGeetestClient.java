@@ -33,11 +33,9 @@ import com.buession.security.geetest.api.v4.GeetestV4Client;
 import com.buession.security.geetest.core.DigestMode;
 import com.buession.security.geetest.core.InitResult;
 import com.buession.security.geetest.core.RequestData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * 默认极验 Client
+ * 默认极验行为验证 Client
  *
  * @author Yong.Teng
  */
@@ -45,9 +43,7 @@ public class DefaultGeetestClient implements GeetestClient {
 
 	private HttpClient httpClient;
 
-	private GeetestClient geetestClient;
-
-	private final static Logger logger = LoggerFactory.getLogger(DefaultGeetestClient.class);
+	private final GeetestClient geetestClient;
 
 	/**
 	 * 构造函数
@@ -56,11 +52,8 @@ public class DefaultGeetestClient implements GeetestClient {
 	 * 		公钥
 	 * @param geetestKey
 	 * 		私钥
-	 *
-	 * @throws GeetestException
-	 * 		初始化异常
 	 */
-	public DefaultGeetestClient(String geetestId, String geetestKey) throws GeetestException{
+	public DefaultGeetestClient(String geetestId, String geetestKey){
 		this.geetestClient = new GeetestV4Client(geetestId, geetestKey);
 	}
 
@@ -79,9 +72,9 @@ public class DefaultGeetestClient implements GeetestClient {
 	 */
 	public DefaultGeetestClient(String geetestId, String geetestKey, String version) throws GeetestException{
 		Assert.isBlank(version, "Version cloud empty or null.");
-		if(StringUtils.endsWithIgnoreCase(version, "v3")){
+		if(StringUtils.equalsIgnoreCase(version, "v3")){
 			this.geetestClient = new GeetestV3Client(geetestId, geetestKey);
-		}else if(StringUtils.endsWithIgnoreCase(version, "v4")){
+		}else if(StringUtils.equalsIgnoreCase(version, "v4")){
 			this.geetestClient = new GeetestV4Client(geetestId, geetestKey);
 		}else{
 			throw new GeetestException("Not support version: " + version);
@@ -95,6 +88,8 @@ public class DefaultGeetestClient implements GeetestClient {
 	 * 		公钥
 	 * @param geetestKey
 	 * 		私钥
+	 * @param httpClient
+	 * 		Http Client
 	 *
 	 * @throws GeetestException
 	 * 		初始化异常
@@ -113,11 +108,14 @@ public class DefaultGeetestClient implements GeetestClient {
 	 * 		私钥
 	 * @param version
 	 * 		版本
+	 * @param httpClient
+	 * 		Http Client
 	 *
 	 * @throws GeetestException
 	 * 		初始化异常
 	 */
-	public DefaultGeetestClient(String geetestId, String geetestKey, String version, HttpClient httpClient) throws GeetestException{
+	public DefaultGeetestClient(String geetestId, String geetestKey, String version, HttpClient httpClient)
+			throws GeetestException{
 		this(geetestId, geetestKey, version);
 		setHttpClient(httpClient);
 	}
@@ -155,6 +153,16 @@ public class DefaultGeetestClient implements GeetestClient {
 	@Override
 	public String getVersion(){
 		return geetestClient.getVersion();
+	}
+
+	@Override
+	public String getJavaScript(){
+		return geetestClient.getJavaScript();
+	}
+
+	@Override
+	public void setJavaScript(String url){
+		geetestClient.setJavaScript(url);
 	}
 
 }

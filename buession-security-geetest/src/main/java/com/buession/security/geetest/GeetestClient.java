@@ -30,7 +30,7 @@ import com.buession.security.geetest.core.InitResult;
 import com.buession.security.geetest.core.RequestData;
 
 /**
- * 极验 Client
+ * 极验行为验证 Client
  *
  * @author Yong.Teng
  * @since 2.0.0
@@ -68,5 +68,20 @@ public interface GeetestClient {
 	 * @return 版本号
 	 */
 	String getVersion();
+
+	/**
+	 * 返回前端 JavaScript 库地址
+	 *
+	 * @return 前端 JavaScript 库地址
+	 */
+	String getJavaScript();
+
+	/**
+	 * 设置前端 JavaScript 库地址
+	 *
+	 * @param url
+	 * 		前端 JavaScript 库地址
+	 */
+	void setJavaScript(String url);
 
 }

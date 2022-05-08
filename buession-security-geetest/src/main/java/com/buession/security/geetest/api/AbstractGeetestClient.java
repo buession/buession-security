@@ -32,14 +32,15 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * 极验 API Client 抽象类
+ * 极验行为验证 API Client 抽象类
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
 public abstract class AbstractGeetestClient implements GeetestClient {
 
-	protected final static String SDK_NAME = "Geetest-Java-SDK-" + GeetestV3Client.class.getPackage().getName() + "/" + VersionUtils.determineClassVersion(GeetestV3Client.class);
+	protected final static String SDK_NAME = "Geetest-Java-SDK-" + GeetestV3Client.class.getPackage().getName() + "/" +
+			VersionUtils.determineClassVersion(GeetestV3Client.class);
 
 	protected final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -52,6 +53,11 @@ public abstract class AbstractGeetestClient implements GeetestClient {
 	 * 私钥
 	 */
 	protected final String geetestKey;
+
+	/**
+	 * 前端 JavaScript 库地址
+	 */
+	protected String javascript;
 
 	protected HttpClient httpClient;
 
@@ -79,4 +85,15 @@ public abstract class AbstractGeetestClient implements GeetestClient {
 	public void setHttpClient(HttpClient httpClient){
 		this.httpClient = httpClient;
 	}
+
+	@Override
+	public String getJavaScript(){
+		return javascript;
+	}
+
+	@Override
+	public void setJavaScript(String url){
+		this.javascript = url;
+	}
+
 }
