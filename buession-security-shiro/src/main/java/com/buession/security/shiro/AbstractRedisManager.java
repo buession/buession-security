@@ -55,7 +55,7 @@ public abstract class AbstractRedisManager implements RedisManager {
 	 */
 	private int returnKeysCount = DEFAULT_RETURN_KEYS_COUNT;
 
-	private RedisTemplate redisTemplate;
+	protected RedisTemplate redisTemplate;
 
 	/**
 	 * 构造函数
@@ -69,28 +69,8 @@ public abstract class AbstractRedisManager implements RedisManager {
 	 * @param redisTemplate
 	 *        {@link RedisTemplate}
 	 */
-	public AbstractRedisManager(RedisTemplate redisTemplate){
+	public AbstractRedisManager(final RedisTemplate redisTemplate){
 		setRedisTemplate(redisTemplate);
-	}
-
-	/**
-	 * 返回 {@link RedisTemplate}
-	 *
-	 * @return {@link RedisTemplate}
-	 */
-	public RedisTemplate getRedisTemplate(){
-		return redisTemplate;
-	}
-
-	/**
-	 * 设置 {@link RedisTemplate}
-	 *
-	 * @param redisTemplate
-	 *        {@link RedisTemplate}
-	 */
-	public void setRedisTemplate(RedisTemplate redisTemplate){
-		Assert.isNull(redisTemplate, "RedisTemplate could not be null.");
-		this.redisTemplate = redisTemplate;
 	}
 
 	/**
@@ -110,6 +90,26 @@ public abstract class AbstractRedisManager implements RedisManager {
 	 */
 	public void setReturnKeysCount(int returnKeysCount){
 		this.returnKeysCount = returnKeysCount;
+	}
+
+	/**
+	 * 返回 {@link RedisTemplate}
+	 *
+	 * @return {@link RedisTemplate}
+	 */
+	public RedisTemplate getRedisTemplate(){
+		return redisTemplate;
+	}
+
+	/**
+	 * 设置 {@link RedisTemplate}
+	 *
+	 * @param redisTemplate
+	 *        {@link RedisTemplate}
+	 */
+	public void setRedisTemplate(RedisTemplate redisTemplate){
+		Assert.isNull(redisTemplate, "RedisTemplate cloud not be null");
+		this.redisTemplate = redisTemplate;
 	}
 
 	@Override
