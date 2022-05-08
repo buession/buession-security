@@ -46,16 +46,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 极验 V3 版本 Client
+ * 极验行为验证 V3 版本 Client
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
 public final class GeetestV3Client extends AbstractGeetestClient {
 
-	private final static String REGISTER_URL = "http://api.geetest.com/register.php";
+	private final static String REGISTER_URL = "https://api.geetest.com/register.php";
 
-	private final static String VALIDATE_URL = "http://api.geetest.com/validate.php";
+	private final static String VALIDATE_URL = "https://api.geetest.com/validate.php";
 
 	private final static String JSON_FORMAT = "1";
 
@@ -120,7 +120,8 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		initResult.setSuccess(true);
 		initResult.setNewCaptcha(true);
 
-		if(initResult.getChallenge() == null || initResult.getChallenge().isEmpty() || "0".equals(initResult.getChallenge())){
+		if(initResult.getChallenge() == null || initResult.getChallenge().isEmpty() ||
+				"0".equals(initResult.getChallenge())){
 			initResult.setSuccess(false);
 			initResult.setChallenge(new SimpleIdGenerator().nextId());
 		}else{

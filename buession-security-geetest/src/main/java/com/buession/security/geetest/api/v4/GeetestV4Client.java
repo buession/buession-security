@@ -43,14 +43,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 极验 V4 版本 Client
+ * 极验行为验证 V4 版本 Client
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
 public final class GeetestV4Client extends AbstractGeetestClient {
 
-	public final static String VALIDATE_URL = "http://gcaptcha4.geetest.com/validate";
+	public final static String VALIDATE_URL = "https://gcaptcha4.geetest.com/validate";
 
 	private final static Logger logger = LoggerFactory.getLogger(GeetestV4Client.class);
 
