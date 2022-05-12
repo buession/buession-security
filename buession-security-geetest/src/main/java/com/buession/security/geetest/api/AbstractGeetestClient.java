@@ -27,7 +27,6 @@ package com.buession.security.geetest.api;
 import com.buession.core.utils.VersionUtils;
 import com.buession.httpclient.HttpClient;
 import com.buession.security.geetest.GeetestClient;
-import com.buession.security.geetest.api.v3.GeetestV3Client;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -38,9 +37,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @since 2.0.0
  */
 public abstract class AbstractGeetestClient implements GeetestClient {
-
-	protected final static String SDK_NAME = "Geetest-Java-SDK-" + GeetestV3Client.class.getPackage().getName() + "/" +
-			VersionUtils.determineClassVersion(GeetestV3Client.class);
 
 	protected final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -61,6 +57,8 @@ public abstract class AbstractGeetestClient implements GeetestClient {
 
 	protected HttpClient httpClient;
 
+	private String sdkName = null;
+
 	static{
 		OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
@@ -76,6 +74,21 @@ public abstract class AbstractGeetestClient implements GeetestClient {
 	public AbstractGeetestClient(final String geetestId, final String geetestKey){
 		this.geetestId = geetestId;
 		this.geetestKey = geetestKey;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param geetestId
+	 * 		公钥
+	 * @param geetestKey
+	 * 		私钥
+	 * @param httpClient
+	 *        {@link HttpClient}
+	 */
+	public AbstractGeetestClient(final String geetestId, final String geetestKey, final HttpClient httpClient){
+		this(geetestId, geetestKey);
+		setHttpClient(httpClient);
 	}
 
 	public HttpClient getHttpClient(){
@@ -94,6 +107,18 @@ public abstract class AbstractGeetestClient implements GeetestClient {
 	@Override
 	public void setJavaScript(String url){
 		this.javascript = url;
+	}
+
+	protected String getSdkName(){
+		if(sdkName == null){
+			final StringBuilder sb = new StringBuilder("Geetest-Java-SDK-");
+
+			sb.append(getClass().getName()).append('/').append(VersionUtils.determineClassVersion(getClass()));
+
+			sdkName = sb.toString();
+		}
+
+		return sdkName;
 	}
 
 }

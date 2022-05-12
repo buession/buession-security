@@ -41,45 +41,7 @@ import com.buession.security.geetest.core.RequestData;
  */
 public class DefaultGeetestClient implements GeetestClient {
 
-	private HttpClient httpClient;
-
 	private final GeetestClient geetestClient;
-
-	/**
-	 * 构造函数
-	 *
-	 * @param geetestId
-	 * 		公钥
-	 * @param geetestKey
-	 * 		私钥
-	 */
-	public DefaultGeetestClient(String geetestId, String geetestKey){
-		this.geetestClient = new GeetestV4Client(geetestId, geetestKey);
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param geetestId
-	 * 		公钥
-	 * @param geetestKey
-	 * 		私钥
-	 * @param version
-	 * 		版本
-	 *
-	 * @throws GeetestException
-	 * 		初始化异常
-	 */
-	public DefaultGeetestClient(String geetestId, String geetestKey, String version) throws GeetestException{
-		Assert.isBlank(version, "Version cloud empty or null.");
-		if(StringUtils.equalsIgnoreCase(version, "v3")){
-			this.geetestClient = new GeetestV3Client(geetestId, geetestKey);
-		}else if(StringUtils.equalsIgnoreCase(version, "v4")){
-			this.geetestClient = new GeetestV4Client(geetestId, geetestKey);
-		}else{
-			throw new GeetestException("Not support version: " + version);
-		}
-	}
 
 	/**
 	 * 构造函数
@@ -95,8 +57,7 @@ public class DefaultGeetestClient implements GeetestClient {
 	 * 		初始化异常
 	 */
 	public DefaultGeetestClient(String geetestId, String geetestKey, HttpClient httpClient) throws GeetestException{
-		this(geetestId, geetestKey);
-		setHttpClient(httpClient);
+		this.geetestClient = new GeetestV4Client(geetestId, geetestKey, httpClient);
 	}
 
 	/**
@@ -116,28 +77,19 @@ public class DefaultGeetestClient implements GeetestClient {
 	 */
 	public DefaultGeetestClient(String geetestId, String geetestKey, String version, HttpClient httpClient)
 			throws GeetestException{
-		this(geetestId, geetestKey, version);
-		setHttpClient(httpClient);
+		Assert.isBlank(version, "Version cloud empty or null.");
+		if(StringUtils.equalsIgnoreCase(version, "v3")){
+			this.geetestClient = new GeetestV3Client(geetestId, geetestKey, httpClient);
+		}else if(StringUtils.equalsIgnoreCase(version, "v4")){
+			this.geetestClient = new GeetestV4Client(geetestId, geetestKey, httpClient);
+		}else{
+			throw new GeetestException("Not support version: " + version);
+		}
 	}
 
-	/**
-	 * 获取 Http Client
-	 *
-	 * @return Http Client
-	 */
-	public HttpClient getHttpClient(){
-		return httpClient;
-	}
-
-	/**
-	 * 设置 Http Client
-	 *
-	 * @param httpClient
-	 * 		Http Client
-	 */
-	public void setHttpClient(HttpClient httpClient){
-		Assert.isNull(httpClient, "HttpClient cloud not be null.");
-		this.httpClient = httpClient;
+	@Override
+	public Status checkStatus(){
+		return geetestClient.checkStatus();
 	}
 
 	@Override

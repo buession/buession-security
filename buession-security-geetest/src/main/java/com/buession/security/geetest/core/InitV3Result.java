@@ -26,6 +26,8 @@ package com.buession.security.geetest.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.StringJoiner;
+
 /**
  * @author Yong.Teng
  * @since 2.0.0
@@ -40,9 +42,6 @@ public class InitV3Result implements InitResult {
 
 	@JsonProperty(value = "new_captcha")
 	private Boolean newCaptcha;
-
-	@JsonProperty(value = "session_id")
-	private String sessionId;
 
 	public boolean getSuccess(){
 		return success;
@@ -80,12 +79,14 @@ public class InitV3Result implements InitResult {
 		this.newCaptcha = newCaptcha;
 	}
 
-	public String getSessionId(){
-		return sessionId;
-	}
-
-	public void setSessionId(String sessionId){
-		this.sessionId = sessionId;
+	@Override
+	public String toString(){
+		return new StringJoiner(", ", InitV3Result.class.getSimpleName() + "[", "]")
+				.add("success=" + success)
+				.add("gt=" + gt)
+				.add("challenge=" + challenge)
+				.add("newCaptcha=" + newCaptcha)
+				.toString();
 	}
 
 }

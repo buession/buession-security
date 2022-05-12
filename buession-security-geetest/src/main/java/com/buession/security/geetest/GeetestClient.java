@@ -38,6 +38,13 @@ import com.buession.security.geetest.core.RequestData;
 public interface GeetestClient {
 
 	/**
+	 * 检测状态
+	 *
+	 * @return 可用时返回 Status.SUCCESS；否则，返回 Status.FAILURE
+	 */
+	Status checkStatus();
+
+	/**
 	 * 验证初始化
 	 *
 	 * @param digestMode
@@ -46,6 +53,9 @@ public interface GeetestClient {
 	 * 		请求数据
 	 *
 	 * @return 初始化结果
+	 *
+	 * @throws GeetestException
+	 * 		异常
 	 */
 	InitResult initialize(DigestMode digestMode, RequestData requestData) throws GeetestException;
 

@@ -24,6 +24,7 @@
  */
 package com.buession.security.geetest.api.v4;
 
+import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
 import com.buession.lang.Status;
 import com.buession.security.geetest.GeetestException;
@@ -64,6 +65,25 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 	 */
 	public GeetestV4Client(final String geetestId, final String geetestKey){
 		super(geetestId, geetestKey);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param geetestId
+	 * 		公钥
+	 * @param geetestKey
+	 * 		私钥
+	 * @param httpClient
+	 *        {@link HttpClient}
+	 */
+	public GeetestV4Client(final String geetestId, final String geetestKey, final HttpClient httpClient){
+		super(geetestId, geetestKey, httpClient);
+	}
+
+	@Override
+	public Status checkStatus(){
+		return Status.SUCCESS;
 	}
 
 	@Override

@@ -24,9 +24,11 @@
  */
 package com.buession.security.geetest.api.v3;
 
+import com.buession.core.builder.MapBuilder;
 import com.buession.core.id.SimpleIdGenerator;
 import com.buession.core.utils.StatusUtils;
 import com.buession.core.validator.Validate;
+import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
 import com.buession.lang.Status;
 import com.buession.security.geetest.GeetestException;
@@ -39,6 +41,7 @@ import com.buession.security.geetest.core.RequestData;
 import com.buession.security.geetest.core.RequestV3Data;
 import com.buession.security.geetest.utils.Digester;
 import com.buession.security.mcrypt.MD5Mcrypt;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +55,8 @@ import java.util.Map;
  * @since 2.0.0
  */
 public final class GeetestV3Client extends AbstractGeetestClient {
+
+	private final static String CHECK_STATUS_URL = "https://api.geetest.com//v1/bypass_status.php";
 
 	private final static String REGISTER_URL = "https://api.geetest.com/register.php";
 
@@ -69,8 +74,42 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	 * @param geetestKey
 	 * 		私钥
 	 */
-	public GeetestV3Client(String geetestId, String geetestKey){
+	public GeetestV3Client(final String geetestId, final String geetestKey){
 		super(geetestId, geetestKey);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param geetestId
+	 * 		公钥
+	 * @param geetestKey
+	 * 		私钥
+	 * @param httpClient
+	 *        {@link HttpClient}
+	 */
+	public GeetestV3Client(final String geetestId, final String geetestKey, final HttpClient httpClient){
+		super(geetestId, geetestKey, httpClient);
+	}
+
+	@Override
+	public Status checkStatus(){
+		try{
+			Response response = httpClient.get(REGISTER_URL, MapBuilder.of("gt", geetestId));
+
+			Map<String, Object> data = OBJECT_MAPPER.readValue(response.getBody(),
+					new TypeReference<Map<String, Object>>() {
+
+					});
+
+			if(data == null){
+				return "success".equals(data.get("status")) ? Status.SUCCESS : Status.FAILURE;
+			}
+		}catch(Exception e){
+			//
+		}
+
+		return Status.FAILURE;
 	}
 
 	@Override
@@ -84,34 +123,33 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		}
 
 		RequestV3Data requestV3Data = (RequestV3Data) requestData;
-		Map<String, Object> parameters = new HashMap<>(7);
-
-		parameters.put("gt", JSON_FORMAT);
-		parameters.put("json_format", JSON_FORMAT);
-		parameters.put("digestmod", digestMode.getName());
-		parameters.put("sdk", SDK_NAME);
-
-		if(requestV3Data.getUserId() != null){
-			parameters.put("user_id", requestV3Data.getUserId());
-		}
+		MapBuilder<String, Object> parametersBuilder = MapBuilder.<String, Object>create()
+				.put("gt", geetestId)
+				.put("json_format", JSON_FORMAT)
+				.put("digestmod", digestMode.getName())
+				.put("sdk", getSdkName());
 
 		if(requestV3Data.getClientType() != null){
-			parameters.put("client_type", requestV3Data.getClientType().getValue());
+			parametersBuilder.put("client_type", requestV3Data.getClientType().getValue());
 		}
 
 		if(requestV3Data.getIpAddress() != null){
-			parameters.put("ip_address", requestV3Data.getIpAddress());
+			parametersBuilder.put("ip_address", requestV3Data.getIpAddress());
 		}
 
 		if(logger.isDebugEnabled()){
-			logger.debug("验证初始化, parameters：{}.", parameters);
+			logger.debug("验证初始化, parameters：{}.", parametersBuilder.build());
 		}
 
 		InitV3Result initResult;
 		try{
-			Response response = httpClient.get(REGISTER_URL, parameters);
+			Response response = httpClient.get(REGISTER_URL, parametersBuilder.build());
 
 			initResult = OBJECT_MAPPER.readValue(response.getBody(), InitV3Result.class);
+
+			if(logger.isInfoEnabled()){
+				logger.info("register api return data: {}", initResult);
+			}
 		}catch(Exception e){
 			logger.error("验证初始化失败: {}", e.getMessage());
 			initResult = new InitV3Result();
@@ -120,8 +158,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		initResult.setSuccess(true);
 		initResult.setNewCaptcha(true);
 
-		if(initResult.getChallenge() == null || initResult.getChallenge().isEmpty() ||
-				"0".equals(initResult.getChallenge())){
+		if(Validate.isBlank(initResult.getChallenge()) || "0".equals(initResult.getChallenge())){
 			initResult.setSuccess(false);
 			initResult.setChallenge(new SimpleIdGenerator().nextId());
 		}else{
@@ -141,35 +178,41 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		}
 
 		RequestV3Data requestV3Data = (RequestV3Data) requestData;
-		if(checkParam(requestV3Data.getChallenge(), "aa", requestV3Data.getSeccode()) == false){
+		if(checkParam(requestV3Data.getChallenge(), requestV3Data.getValidate(), requestV3Data.getSeccode()) == false){
 			return Status.FAILURE;
 		}
 
-		Map<String, Object> formData = new HashMap<>(7);
-
-		formData.put("challenge", requestV3Data.getChallenge());
-		//formData.put("validate", validate);
-		formData.put("seccode", requestV3Data.getSeccode());
-		formData.put("json_format", JSON_FORMAT);
-		formData.put("sdk", SDK_NAME);
+		MapBuilder<String, Object> formDataBuilder = MapBuilder.<String, Object>create()
+				.put("captchaid", geetestId)
+				.put("challenge", requestV3Data.getChallenge())
+				.put("validate", requestV3Data.getValidate())
+				.put("seccode", requestV3Data.getSeccode())
+				.put("json_format", JSON_FORMAT)
+				.put("sdk", getSdkName());
 
 		if(requestV3Data.getUserId() != null){
-			formData.put("user_id", requestV3Data.getUserId());
+			formDataBuilder.put("user_id", requestV3Data.getUserId());
 		}
 
 		if(requestV3Data.getClientType() != null){
-			formData.put("client_type", requestV3Data.getClientType().getValue());
+			formDataBuilder.put("client_type", requestV3Data.getClientType().getValue());
 		}
 
 		if(requestV3Data.getIpAddress() != null){
-			formData.put("ip_address", requestV3Data.getIpAddress());
+			formDataBuilder.put("ip_address", requestV3Data.getIpAddress());
+		}
+
+		if(logger.isDebugEnabled()){
+			logger.debug("二次验证, parameters：{}.", formDataBuilder.build());
 		}
 
 		Response response;
 		try{
-			response = httpClient.post(VALIDATE_URL, formData);
+			response = httpClient.post(VALIDATE_URL, formDataBuilder.build());
 
-			logger.debug("Enhenced Validate response: {}", response);
+			if(logger.isInfoEnabled()){
+				logger.info("Enhenced Validate response: {}", response);
+			}
 
 			EnhencedResult returnMap = OBJECT_MAPPER.readValue(response.getBody(), EnhencedResult.class);
 

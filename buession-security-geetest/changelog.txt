@@ -5,6 +5,7 @@ Buession Security Geetest Changelog
 Changes in version 2.0.0 (2022-02-22)
 -------------------------------------
 *【新增】新增极验 V4 版本支持
+*【新增】设置和返回前端 JavaScript 库地址
 
 Changes in version 1.3.2 (2021-11-10)
 -------------------------------------

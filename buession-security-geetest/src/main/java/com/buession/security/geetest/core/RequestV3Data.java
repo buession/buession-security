@@ -26,6 +26,8 @@ package com.buession.security.geetest.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.StringJoiner;
+
 /**
  * V3 版本请求数据
  *
@@ -43,6 +45,11 @@ public class RequestV3Data implements RequestData {
 	 * 核心校验数据
 	 */
 	private String seccode;
+
+	/**
+	 * 核心校验数据
+	 */
+	private String validate;
 
 	/**
 	 * 用户的唯一标识
@@ -95,6 +102,25 @@ public class RequestV3Data implements RequestData {
 	 */
 	public void setSeccode(String seccode){
 		this.seccode = seccode;
+	}
+
+	/**
+	 * 返回核心校验数据
+	 *
+	 * @return 核心校验数据
+	 */
+	public String getValidate(){
+		return validate;
+	}
+
+	/**
+	 * 设置核心校验数据
+	 *
+	 * @param validate
+	 * 		核心校验数据
+	 */
+	public void setValidate(String validate){
+		this.validate = validate;
 	}
 
 	/**
@@ -154,4 +180,15 @@ public class RequestV3Data implements RequestData {
 		this.ipAddress = ipAddress;
 	}
 
+	@Override
+	public String toString(){
+		return new StringJoiner(", ", "[", "]")
+				.add("challenge=" + challenge)
+				.add("seccode=" + seccode)
+				.add("validate=" + validate)
+				.add("userId=" + userId)
+				.add("clientType=" + clientType)
+				.add("ipAddress=" + ipAddress)
+				.toString();
+	}
 }
