@@ -25,7 +25,7 @@
 package com.buession.security.captcha.geetest;
 
 import com.buession.security.captcha.geetest.core.ClientType;
-import com.buession.security.captcha.geetest.core.RequestV3Data;
+import com.buession.security.captcha.geetest.api.v3.GeetestV3RequestData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class RequestDataTest {
 
 	@Test
 	public void json() throws JsonProcessingException{
-		RequestV3Data requestData = new RequestV3Data();
+		GeetestV3RequestData requestData = new GeetestV3RequestData();
 
 		requestData.setUserId("ueerid");
 		requestData.setClientType(ClientType.H5);
@@ -47,7 +47,7 @@ public class RequestDataTest {
 		String str = objectMapper.writeValueAsString(requestData);
 		System.out.println(str);
 
-		RequestV3Data requestData1 = objectMapper.readValue(str, RequestV3Data.class);
+		GeetestV3RequestData requestData1 = objectMapper.readValue(str, GeetestV3RequestData.class);
 		System.out.println(requestData1.getIpAddress());
 	}
 

@@ -22,19 +22,28 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest.api;
+package com.buession.security.captcha.tencent;
 
-import com.buession.core.utils.VersionUtils;
+import com.buession.core.utils.Assert;
+import com.buession.core.utils.StringUtils;
 import com.buession.httpclient.HttpClient;
-import com.buession.security.captcha.geetest.GeetestClient;
+import com.buession.lang.Status;
+import com.buession.security.captcha.AbstractCaptchaClient;
+import com.buession.security.captcha.core.CaptchaException;
+import com.buession.security.captcha.core.DigestMode;
+import com.buession.security.captcha.core.RequestData;
+
+import java.util.Date;
 
 /**
- * 极验行为验证 API Client 抽象类
+ * 腾讯云行为验证 Client，文档：<a href="https://cloud.tencent.com/document/product/1110/36334" target="_blank">https://cloud.tencent.com/document/product/1110/36334</a>
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public abstract class AbstractGeetestClient implements GeetestClient {
+public class TencentCaptchaClient extends AbstractCaptchaClient {
+
+	public final static String VALIDATE_URL = "https://captcha.tencentcloudapi.com/";
 
 	/**
 	 * 公钥
@@ -46,19 +55,17 @@ public abstract class AbstractGeetestClient implements GeetestClient {
 	 */
 	protected final String secretKey;
 
-	protected String sdkName = null;
-
-	protected HttpClient httpClient;
-
 	/**
 	 * 构造函数
 	 *
 	 * @param appId
 	 * 		应用 ID
 	 * @param secretKey
-	 * 		私钥
+	 * 		密钥
 	 */
-	public AbstractGeetestClient(final String appId, final String secretKey){
+	public TencentCaptchaClient(final String appId, final String secretKey){
+		Assert.isBlank(appId, "App Id cloud not be empty or null");
+		Assert.isBlank(secretKey, "Secret Key cloud not be empty or null");
 		this.appId = appId;
 		this.secretKey = secretKey;
 	}
@@ -69,40 +76,42 @@ public abstract class AbstractGeetestClient implements GeetestClient {
 	 * @param appId
 	 * 		应用 ID
 	 * @param secretKey
-	 * 		私钥
+	 * 		密钥
 	 * @param httpClient
-	 *        {@link HttpClient}
+	 *        {@link HttpClient} 实例
 	 */
-	public AbstractGeetestClient(final String appId, final String secretKey, final HttpClient httpClient){
+	public TencentCaptchaClient(final String appId, final String secretKey, final HttpClient httpClient){
 		this(appId, secretKey);
 		setHttpClient(httpClient);
 	}
 
 	@Override
-	public void setHttpClient(HttpClient httpClient){
-		this.httpClient = httpClient;
-	}
+	public Status validate(RequestData requestData) throws CaptchaException{
+		StringBuilder sb = new StringBuilder(VALIDATE_URL);
 
-	@Override
-	public String getJavaScript(){
+		/*
+		sb.append('?');
+		sb.append("Action=DescribeCaptchaResult");
+		sb.append("&Version=").append(getVersion());
+		sb.append("&CaptchaType=9");
+		sb.append("&Ticket=").append(sdf.format(new Date()));
+		sb.append("&UserIp=").append(requestData.getClientIp());
+		sb.append("&Randstr=").append(randomStr());
+		sb.append("&CaptchaAppId=").append(appId);
+		sb.append("&AppSecretKey=").append(secretKey);
+		sb.append("&BusinessId=").append();
+		sb.append("&SceneId=").append();
+		sb.append("&MacAddress=").append();
+		sb.append("&Imei=").append();
+		sb.append("&NeedGetCaptchaTime=1");
+
+		 */
 		return null;
 	}
 
 	@Override
-	public void setJavaScript(String url){
-
-	}
-
-	protected String getSdkName(){
-		if(sdkName == null){
-			final StringBuilder sb = new StringBuilder("Geetest-Java-SDK-");
-
-			sb.append(getClass().getName()).append('/').append(VersionUtils.determineClassVersion(getClass()));
-
-			sdkName = sb.toString();
-		}
-
-		return sdkName;
+	public String getVersion(){
+		return "2019-07-22";
 	}
 
 }

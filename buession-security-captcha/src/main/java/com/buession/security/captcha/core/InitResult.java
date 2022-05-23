@@ -22,71 +22,14 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha;
-
-import com.buession.lang.Status;
-import com.buession.security.captcha.core.CaptchaException;
-import com.buession.security.captcha.core.DigestMode;
-import com.buession.security.captcha.core.RequestData;
-import com.buession.security.captcha.core.InitResult;
+package com.buession.security.captcha.core;
 
 /**
- * 行为验证 Client
+ * 初始化结果
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public interface CaptchaClient {
-
-	/**
-	 * 验证初始化
-	 *
-	 * @param digestMode
-	 * 		加密模式
-	 * @param requestData
-	 * 		请求数据
-	 *
-	 * @return 初始化结果
-	 */
-	default InitResult initialize(DigestMode digestMode, RequestData requestData){
-		return new InitResult() {
-
-		};
-	}
-
-	/**
-	 * 二次验证
-	 *
-	 * @param requestData
-	 * 		请求数据
-	 *
-	 * @return 验证结果，成功返回 Status.SUCCESS；否则，返回 Status.FAILURE
-	 *
-	 * @throws CaptchaException
-	 * 		验证异常
-	 */
-	Status validate(RequestData requestData) throws CaptchaException;
-
-	/**
-	 * 获取版本号
-	 *
-	 * @return 版本号
-	 */
-	String getVersion();
-
-	/**
-	 * 返回前端 JavaScript 库地址
-	 *
-	 * @return 前端 JavaScript 库地址
-	 */
-	String getJavaScript();
-
-	/**
-	 * 设置前端 JavaScript 库地址
-	 *
-	 * @param url
-	 * 		前端 JavaScript 库地址
-	 */
-	void setJavaScript(String url);
+public interface InitResult {
 
 }

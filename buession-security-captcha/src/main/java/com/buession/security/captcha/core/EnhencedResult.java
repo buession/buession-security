@@ -22,71 +22,16 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest.core;
+package com.buession.security.captcha.core;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.StringJoiner;
+import java.io.Serializable;
 
 /**
+ * 二次校验返回结果
+ *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class InitV3Result implements InitResult {
-
-	private boolean success;
-
-	private String gt;
-
-	private String challenge;
-
-	@JsonProperty(value = "new_captcha")
-	private Boolean newCaptcha;
-
-	public boolean getSuccess(){
-		return success;
-	}
-
-	public boolean isSuccess(){
-		return getSuccess();
-	}
-
-	public void setSuccess(boolean success){
-		this.success = success;
-	}
-
-	public String getGt(){
-		return gt;
-	}
-
-	public void setGt(String gt){
-		this.gt = gt;
-	}
-
-	public String getChallenge(){
-		return challenge;
-	}
-
-	public void setChallenge(String challenge){
-		this.challenge = challenge;
-	}
-
-	public Boolean getNewCaptcha(){
-		return newCaptcha;
-	}
-
-	public void setNewCaptcha(Boolean newCaptcha){
-		this.newCaptcha = newCaptcha;
-	}
-
-	@Override
-	public String toString(){
-		return new StringJoiner(", ", InitV3Result.class.getSimpleName() + "[", "]")
-				.add("success=" + success)
-				.add("gt=" + gt)
-				.add("challenge=" + challenge)
-				.add("newCaptcha=" + newCaptcha)
-				.toString();
-	}
+public interface EnhencedResult extends Serializable {
 
 }

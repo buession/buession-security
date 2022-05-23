@@ -24,6 +24,7 @@
  */
 package com.buession.security.captcha;
 
+import com.buession.core.utils.StringUtils;
 import com.buession.httpclient.HttpClient;
 
 /**
@@ -35,16 +36,6 @@ import com.buession.httpclient.HttpClient;
 public abstract class AbstractCaptchaClient implements CaptchaClient {
 
 	/**
-	 * 应用 ID
-	 */
-	private String appId;
-
-	/**
-	 * 密钥
-	 */
-	private String secretKey;
-
-	/**
 	 * 前端 JavaScript 库地址
 	 */
 	private String javascript;
@@ -53,78 +44,6 @@ public abstract class AbstractCaptchaClient implements CaptchaClient {
 	 * {@link HttpClient} 实例
 	 */
 	private HttpClient httpClient;
-
-	/**
-	 * 构造函数
-	 */
-	public AbstractCaptchaClient(){
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param appId
-	 * 		应用 ID
-	 * @param secretKey
-	 * 		密钥
-	 */
-	public AbstractCaptchaClient(String appId, String secretKey){
-		this.appId = appId;
-		this.secretKey = secretKey;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param appId
-	 * 		应用 ID
-	 * @param secretKey
-	 * 		私钥
-	 * @param httpClient
-	 *        {@link HttpClient} 实例
-	 */
-	public AbstractCaptchaClient(String appId, String secretKey, HttpClient httpClient){
-		this(appId, secretKey);
-		this.httpClient = httpClient;
-	}
-
-	/**
-	 * 返回应用 ID
-	 *
-	 * @return 应用 ID
-	 */
-	public String getAppId(){
-		return appId;
-	}
-
-	/**
-	 * 设置应用 ID
-	 *
-	 * @param appId
-	 * 		应用 ID
-	 */
-	public void setAppId(String appId){
-		this.appId = appId;
-	}
-
-	/**
-	 * 返回私钥
-	 *
-	 * @return 私钥
-	 */
-	public String getSecretKey(){
-		return secretKey;
-	}
-
-	/**
-	 * 设置私钥
-	 *
-	 * @param secretKey
-	 * 		私钥
-	 */
-	public void setSecretKey(String secretKey){
-		this.secretKey = secretKey;
-	}
 
 	@Override
 	public String getJavaScript(){
@@ -142,6 +61,18 @@ public abstract class AbstractCaptchaClient implements CaptchaClient {
 
 	public void setHttpClient(HttpClient httpClient){
 		this.httpClient = httpClient;
+	}
+
+	protected static String randomStr(){
+		return randomStr(System.currentTimeMillis());
+	}
+
+	protected static String randomStr(final long timestamp){
+		final StringBuilder sb = new StringBuilder(14);
+
+		sb.append(StringUtils.random(6)).append('_').append(timestamp);
+
+		return sb.toString();
 	}
 
 }

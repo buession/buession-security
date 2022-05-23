@@ -22,20 +22,21 @@
  * | Copyright @ 2013-2020 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest.core;
+package com.buession.security.captcha.geetest.api.v4;
 
 import com.buession.security.captcha.core.RequestData;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.StringJoiner;
 
 /**
- * V4 版本请求数据
+ * 极验 V4 版本请求数据
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class RequestV4Data implements RequestData {
+public class GeetestV4RequestData implements RequestData {
 
 	/**
 	 * 验证流水号
@@ -135,6 +136,18 @@ public class RequestV4Data implements RequestData {
 	 */
 	public void setGenTime(String genTime){
 		this.genTime = genTime;
+	}
+
+	@JsonIgnore
+	@Override
+	public String getClientIp(){
+		return null;
+	}
+
+	@JsonIgnore
+	@Override
+	public void setClientIp(String clientIp){
+
 	}
 
 	@Override

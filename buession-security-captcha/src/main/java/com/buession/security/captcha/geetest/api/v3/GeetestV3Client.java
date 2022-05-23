@@ -32,15 +32,13 @@ import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
 import com.buession.lang.Status;
 import com.buession.security.captcha.core.CaptchaException;
+import com.buession.security.captcha.core.RequiredParameterCaptchaException;
 import com.buession.security.captcha.geetest.api.AbstractGeetestClient;
 import com.buession.security.captcha.core.DigestMode;
-import com.buession.security.captcha.geetest.core.EnhencedResult;
-import com.buession.security.captcha.geetest.core.InitResult;
-import com.buession.security.captcha.geetest.core.InitV3Result;
+import com.buession.security.captcha.core.InitResult;
 import com.buession.security.captcha.core.RequestData;
-import com.buession.security.captcha.geetest.core.RequestV3Data;
 import com.buession.security.captcha.utils.Digester;
-import com.buession.security.mcrypt.MD5Mcrypt;
+import com.buession.security.captcha.utils.ObjectMapperUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +94,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			digestMode = DigestMode.MD5;
 		}
 
-		RequestV3Data requestV3Data = (RequestV3Data) requestData;
+		GeetestV3RequestData requestV3Data = (GeetestV3RequestData) requestData;
 		MapBuilder<String, Object> parametersBuilder = MapBuilder.<String, Object>create()
 				.put("gt", appId)
 				.put("json_format", JSON_FORMAT)
@@ -115,18 +113,19 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			logger.debug("验证初始化, parameters：{}.", parametersBuilder.build());
 		}
 
-		InitV3Result initResult;
+		GeetestV3InitResult initResult;
 		try{
 			Response response = httpClient.get(REGISTER_URL, parametersBuilder.build());
 
-			initResult = OBJECT_MAPPER.readValue(response.getBody(), InitV3Result.class);
+			initResult = ObjectMapperUtils.createObjectMapper()
+					.readValue(response.getBody(), GeetestV3InitResult.class);
 
 			if(logger.isInfoEnabled()){
 				logger.info("register api return data: {}", initResult);
 			}
 		}catch(Exception e){
 			logger.error("验证初始化失败: {}", e.getMessage());
-			initResult = new InitV3Result();
+			initResult = new GeetestV3InitResult();
 		}
 
 		initResult.setSuccess(true);
@@ -148,11 +147,11 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	@Override
 	public Status validate(RequestData requestData) throws CaptchaException{
 		if(logger.isDebugEnabled()){
-			logger.debug("二次验证 正常模式, 请求参数：{}.", requestData);
+			logger.debug("二次验证, 请求参数：{}.", requestData);
 		}
 
-		RequestV3Data requestV3Data = (RequestV3Data) requestData;
-		if(checkParam(requestV3Data.getChallenge(), requestV3Data.getValidate(), requestV3Data.getSeccode()) == false){
+		GeetestV3RequestData requestV3Data = (GeetestV3RequestData) requestData;
+		if(checkParam(requestV3Data) == false){
 			return Status.FAILURE;
 		}
 
@@ -185,15 +184,14 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			response = httpClient.post(VALIDATE_URL, formDataBuilder.build());
 
 			if(logger.isInfoEnabled()){
-				logger.info("Enhenced Validate response: {}", response);
+				logger.info("二次验证 response: {}", response);
 			}
 
-			EnhencedResult returnMap = OBJECT_MAPPER.readValue(response.getBody(), EnhencedResult.class);
-
-			final MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-			return StatusUtils.valueOf(md5Mcrypt.encode(requestV3Data.getSeccode()).equals(returnMap.getSeccode()));
+			GeetestV3EnhencedResult result = ObjectMapperUtils.createObjectMapper().readValue(response.getBody(),
+					GeetestV3EnhencedResult.class);
+			return StatusUtils.valueOf(result != null && Validate.hasText(result.getSeccode()));
 		}catch(Exception e){
-			logger.error("Enhenced Validate failure: {}", e.getMessage());
+			logger.error("二次验证失败: {}", e.getMessage());
 			throw new CaptchaException(e.getMessage(), e);
 		}
 	}
@@ -204,19 +202,28 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	}
 
 	/**
-	 * 检查客户端的请求是否合法,三个只要有一个为空，则判断不合法
+	 * 检查客户端的请求是否合法，只要有一个为空，则判断不合法
 	 *
-	 * @param challenge
-	 * 		challenge
-	 * @param validate
-	 * 		validate
-	 * @param seccode
-	 * 		seccode
+	 * @param requestData
+	 *        {@link GeetestV3RequestData}
 	 *
 	 * @return 检测结果
 	 */
-	private static boolean checkParam(String challenge, String validate, String seccode){
-		return Validate.hasText(challenge) && Validate.hasText(validate) && Validate.hasText(seccode);
+	private static boolean checkParam(final GeetestV3RequestData requestData)
+			throws RequiredParameterCaptchaException{
+		if(Validate.hasText(requestData.getChallenge()) == false){
+			throw new RequiredParameterCaptchaException("challenge");
+		}
+
+		if(Validate.hasText(requestData.getValidate()) == false){
+			throw new RequiredParameterCaptchaException("validate");
+		}
+
+		if(Validate.hasText(requestData.getSeccode()) == false){
+			throw new RequiredParameterCaptchaException("seccode");
+		}
+
+		return true;
 	}
 
 }

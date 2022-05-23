@@ -24,22 +24,21 @@
  */
 package com.buession.security.captcha.geetest.api.v4;
 
+import com.buession.core.builder.MapBuilder;
+import com.buession.core.validator.Validate;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
 import com.buession.lang.Status;
 import com.buession.security.captcha.core.CaptchaException;
+import com.buession.security.captcha.core.RequiredParameterCaptchaException;
 import com.buession.security.captcha.geetest.api.AbstractGeetestClient;
 import com.buession.security.captcha.core.DigestMode;
-import com.buession.security.captcha.geetest.core.InitResult;
+import com.buession.security.captcha.core.InitResult;
 import com.buession.security.captcha.core.RequestData;
-import com.buession.security.captcha.geetest.core.RequestV4Data;
 import com.buession.security.captcha.utils.Digester;
+import com.buession.security.captcha.utils.ObjectMapperUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 极验行为验证 V4 版本 Client
@@ -91,15 +90,19 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 	@Override
 	public Status validate(RequestData requestData) throws CaptchaException{
 		if(logger.isDebugEnabled()){
-			logger.debug("二次验证 正常模式, 请求参数：{}.", requestData);
+			logger.debug("二次验证, 请求参数：{}.", requestData);
 		}
-		RequestV4Data requestV4Data = (RequestV4Data) requestData;
-		Map<String, Object> formData = new HashMap<>(7);
 
-		formData.put("lot_number", requestV4Data.getLotNumber());
-		formData.put("captcha_output", requestV4Data.getCaptchaOutput());
-		formData.put("pass_token", requestV4Data.getPassToken());
-		formData.put("gen_time", requestV4Data.getGenTime());
+		GeetestV4RequestData requestV4Data = (GeetestV4RequestData) requestData;
+		if(checkParam(requestV4Data) == false){
+			return Status.FAILURE;
+		}
+
+		MapBuilder<String, Object> formDataBuilder = MapBuilder.<String, Object>create()
+				.put("lot_number", requestV4Data.getLotNumber())
+				.put("captcha_output", requestV4Data.getCaptchaOutput())
+				.put("pass_token", requestV4Data.getPassToken())
+				.put("gen_time", requestV4Data.getGenTime());
 
 		// 生成签名
 		// 生成签名使用标准的 hmac 算法，使用用户当前完成验证的流水号 lot_number 作为原始消息 message，使用客户验证私钥作为 key
@@ -107,25 +110,30 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 		Digester digester = new Digester(DigestMode.HMAC_SHA256, appId);
 		String signToken = digester.hex(requestV4Data.getLotNumber());
 
-		formData.put("sign_token", signToken);
+		formDataBuilder.put("sign_token", signToken);
+
+		if(logger.isDebugEnabled()){
+			logger.debug("二次验证, parameters：{}.", formDataBuilder.build());
+		}
 
 		Response response;
 		try{
-			response = httpClient.post(VALIDATE_URL + "?captcha_id=" + appId, formData);
+			response = httpClient.post(VALIDATE_URL + "?captcha_id=" + appId, formDataBuilder.build());
 
-			if(logger.isDebugEnabled()){
-				logger.debug("Validate response: {}", response);
+			if(logger.isInfoEnabled()){
+				logger.info("二次验证 response: {}", response);
 			}
 
-			EnhencedResult enhencedResult = OBJECT_MAPPER.readValue(response.getBody(), EnhencedResult.class);
+			GeetestV4EnhencedResult result = ObjectMapperUtils.createObjectMapper()
+					.readValue(response.getBody(), GeetestV4EnhencedResult.class);
 
-			if("success".equals(enhencedResult.getResult())){
+			if("success".equals(result.getResult())){
 				return Status.SUCCESS;
 			}else{
-				throw new CaptchaException(enhencedResult.getReason());
+				throw new CaptchaException(result.getReason());
 			}
 		}catch(Exception e){
-			logger.error("Validate failure: {}", e.getMessage());
+			logger.error("二次验证失败: {}", e.getMessage());
 			throw new CaptchaException(e.getMessage());
 		}
 	}
@@ -135,29 +143,33 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 		return "v4";
 	}
 
-	private final class EnhencedResult implements Serializable {
-
-		private final static long serialVersionUID = 402465840048648582L;
-
-		private String result;
-
-		private String reason;
-
-		public String getResult(){
-			return result;
+	/**
+	 * 检查客户端的请求是否合法，只要有一个为空，则判断不合法
+	 *
+	 * @param requestData
+	 *        {@link GeetestV4RequestData}
+	 *
+	 * @return 检测结果
+	 */
+	private static boolean checkParam(final GeetestV4RequestData requestData)
+			throws RequiredParameterCaptchaException{
+		if(Validate.hasText(requestData.getLotNumber()) == false){
+			throw new RequiredParameterCaptchaException("lot_number");
 		}
 
-		public void setResult(String result){
-			this.result = result;
+		if(Validate.hasText(requestData.getCaptchaOutput()) == false){
+			throw new RequiredParameterCaptchaException("captcha_output");
 		}
 
-		public String getReason(){
-			return reason;
+		if(Validate.hasText(requestData.getPassToken()) == false){
+			throw new RequiredParameterCaptchaException("pass_token");
 		}
 
-		public void setReason(String reason){
-			this.reason = reason;
+		if(Validate.hasText(requestData.getGenTime()) == false){
+			throw new RequiredParameterCaptchaException("gen_time");
 		}
+
+		return true;
 	}
 
 }

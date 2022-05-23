@@ -22,30 +22,39 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest.core;
-
-import java.io.Serializable;
+package com.buession.security.captcha.core;
 
 /**
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public class EnhencedResult implements Serializable {
+public class RequiredParameterCaptchaException extends CaptchaException {
 
-	private final static long serialVersionUID = 402465840048648582L;
+	private final static long serialVersionUID = -6054427701086591593L;
 
-	private String seccode;
+	private final String parameter;
 
-	public String getSeccode(){
-		return seccode;
+	public RequiredParameterCaptchaException(String parameter){
+		super("Parameter \"" + parameter + "\" cloud not be empty or null.");
+		this.parameter = parameter;
 	}
 
-	public void setSeccode(String seccode){
-		this.seccode = seccode;
+	public RequiredParameterCaptchaException(String parameter, String message){
+		super(message);
+		this.parameter = parameter;
 	}
 
-	@Override
-	public String toString(){
-		return "{" + "seccode='" + seccode + '\'' + '}';
+	public RequiredParameterCaptchaException(String parameter, Throwable cause){
+		super("Parameter \"" + parameter + "\" cloud not be empty or null.", cause);
+		this.parameter = parameter;
 	}
 
+	public RequiredParameterCaptchaException(String parameter, String message, Throwable cause){
+		super(message, cause);
+		this.parameter = parameter;
+	}
+
+	public String getParameter(){
+		return parameter;
+	}
 }

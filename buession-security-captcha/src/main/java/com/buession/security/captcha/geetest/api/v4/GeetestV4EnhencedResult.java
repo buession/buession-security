@@ -22,71 +22,104 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha;
+package com.buession.security.captcha.geetest.api.v4;
 
-import com.buession.lang.Status;
-import com.buession.security.captcha.core.CaptchaException;
-import com.buession.security.captcha.core.DigestMode;
-import com.buession.security.captcha.core.RequestData;
-import com.buession.security.captcha.core.InitResult;
+import com.buession.security.captcha.geetest.core.GeetestEnhencedResult;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Map;
+import java.util.StringJoiner;
 
 /**
- * 行为验证 Client
+ * 极验 V4 版二次校验返回结果
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public interface CaptchaClient {
+public class GeetestV4EnhencedResult implements GeetestEnhencedResult {
+
+	private final static long serialVersionUID = -5177885027352003530L;
 
 	/**
-	 * 验证初始化
-	 *
-	 * @param digestMode
-	 * 		加密模式
-	 * @param requestData
-	 * 		请求数据
-	 *
-	 * @return 初始化结果
+	 * 二次校验结果
 	 */
-	default InitResult initialize(DigestMode digestMode, RequestData requestData){
-		return new InitResult() {
+	private String result;
 
-		};
+	/**
+	 * 校验结果说明
+	 */
+	private String reason;
+
+	/**
+	 * 验证输出参数
+	 */
+	@JsonProperty(value = "captcha_args")
+	private Map<String, Object> captchaArgs;
+
+	/**
+	 * 返回二次校验结果
+	 *
+	 * @return 二次校验结果
+	 */
+	public String getResult(){
+		return result;
 	}
 
 	/**
-	 * 二次验证
+	 * 设置二次校验结果
 	 *
-	 * @param requestData
-	 * 		请求数据
-	 *
-	 * @return 验证结果，成功返回 Status.SUCCESS；否则，返回 Status.FAILURE
-	 *
-	 * @throws CaptchaException
-	 * 		验证异常
+	 * @param result
+	 * 		二次校验结果
 	 */
-	Status validate(RequestData requestData) throws CaptchaException;
+	public void setResult(String result){
+		this.result = result;
+	}
 
 	/**
-	 * 获取版本号
+	 * 返回校验结果说明
 	 *
-	 * @return 版本号
+	 * @return 校验结果说明
 	 */
-	String getVersion();
+	public String getReason(){
+		return reason;
+	}
 
 	/**
-	 * 返回前端 JavaScript 库地址
+	 * 设置校验结果说明
 	 *
-	 * @return 前端 JavaScript 库地址
+	 * @param reason
+	 * 		校验结果说明
 	 */
-	String getJavaScript();
+	public void setReason(String reason){
+		this.reason = reason;
+	}
 
 	/**
-	 * 设置前端 JavaScript 库地址
+	 * 返回验证输出参数
 	 *
-	 * @param url
-	 * 		前端 JavaScript 库地址
+	 * @return 验证输出参数
 	 */
-	void setJavaScript(String url);
+	public Map<String, Object> getCaptchaArgs(){
+		return captchaArgs;
+	}
 
+	/**
+	 * 设置验证输出参数
+	 *
+	 * @param captchaArgs
+	 * 		验证输出参数
+	 */
+	public void setCaptchaArgs(Map<String, Object> captchaArgs){
+		this.captchaArgs = captchaArgs;
+	}
+
+	@Override
+	public String toString(){
+		return new StringJoiner(", ", "[", "]")
+				.add("result=" + result)
+				.add("reason=" + reason)
+				.add("captchaArgs=" + captchaArgs)
+				.toString();
+	}
+	
 }

@@ -34,10 +34,11 @@ import com.buession.security.captcha.core.DigestMode;
 import com.buession.security.captcha.core.RequestData;
 import com.buession.security.captcha.geetest.api.v3.GeetestV3Client;
 import com.buession.security.captcha.geetest.api.v4.GeetestV4Client;
-import com.buession.security.captcha.geetest.core.InitResult;
+import com.buession.security.captcha.core.InitResult;
 
 /**
- * 极验行为验证 Client
+ * 极验行为验证 Client，
+ * 文档：第三代 <a href="https://www.geetest.com/Sensebot" target="_blank">https://www.geetest.com/Sensebot</a>、第四代 <a href="https://www.geetest.com/adaptive-captcha" target="_blank">https://www.geetest.com/adaptive-captcha</a>
  *
  * @author Yong.Teng
  * @since 2.0.0
@@ -54,8 +55,9 @@ public class GeetestCaptchaClient extends AbstractCaptchaClient {
 	 * @param secretKey
 	 * 		密钥
 	 */
-	public GeetestCaptchaClient(String appId, String secretKey){
-		super(appId, secretKey);
+	public GeetestCaptchaClient(final String appId, final String secretKey){
+		Assert.isBlank(appId, "App Id cloud not be empty or null");
+		Assert.isBlank(secretKey, "Secret Key cloud not be empty or null");
 		this.geetestClient = new GeetestV4Client(appId, secretKey);
 	}
 
@@ -69,8 +71,9 @@ public class GeetestCaptchaClient extends AbstractCaptchaClient {
 	 * @param httpClient
 	 *        {@link HttpClient} 实例
 	 */
-	public GeetestCaptchaClient(String appId, String secretKey, HttpClient httpClient){
-		super(appId, secretKey, httpClient);
+	public GeetestCaptchaClient(final String appId, final String secretKey, final HttpClient httpClient){
+		Assert.isBlank(appId, "App Id cloud not be empty or null");
+		Assert.isBlank(secretKey, "Secret Key cloud not be empty or null");
 		this.geetestClient = new GeetestV4Client(appId, secretKey, httpClient);
 	}
 
@@ -84,9 +87,9 @@ public class GeetestCaptchaClient extends AbstractCaptchaClient {
 	 * @param version
 	 * 		版本
 	 */
-	public GeetestCaptchaClient(String appId, String secretKey, String version){
-		super(appId, secretKey);
-
+	public GeetestCaptchaClient(final String appId, final String secretKey, final String version){
+		Assert.isBlank(appId, "App Id cloud not be empty or null");
+		Assert.isBlank(secretKey, "Secret Key cloud not be empty or null");
 		Assert.isBlank(version, "Version cloud empty or null.");
 
 		if(StringUtils.equalsIgnoreCase(version, "v3")){
@@ -110,7 +113,8 @@ public class GeetestCaptchaClient extends AbstractCaptchaClient {
 	 * @param httpClient
 	 * 		Http Client
 	 */
-	public GeetestCaptchaClient(String appId, String secretKey, String version, HttpClient httpClient){
+	public GeetestCaptchaClient(final String appId, final String secretKey, final String version,
+								final HttpClient httpClient){
 		this(appId, secretKey, version);
 		setHttpClient(httpClient);
 	}

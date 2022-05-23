@@ -22,12 +22,51 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest.core;
+package com.buession.security.captcha.geetest.api.v3;
+
+import com.buession.security.captcha.geetest.core.GeetestEnhencedResult;
+
+import java.util.StringJoiner;
 
 /**
+ * 极验 V3 版二次校验返回结果
+ *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public interface InitResult {
+public class GeetestV3EnhencedResult implements GeetestEnhencedResult {
+
+	private final static long serialVersionUID = 402465840048648582L;
+
+	/**
+	 * 验证结果标识，为”false”表示验证不通过
+	 */
+	private String seccode;
+
+	/**
+	 * 返回验证结果标识，为”false”表示验证不通过
+	 *
+	 * @return 验证结果标识，为”false”表示验证不通过
+	 */
+	public String getSeccode(){
+		return seccode;
+	}
+
+	/**
+	 * 设置验证结果标识
+	 *
+	 * @param seccode
+	 * 		验证结果标识
+	 */
+	public void setSeccode(String seccode){
+		this.seccode = seccode;
+	}
+
+	@Override
+	public String toString(){
+		return new StringJoiner(", ", "[", "]")
+				.add("seccode=" + seccode)
+				.toString();
+	}
 
 }

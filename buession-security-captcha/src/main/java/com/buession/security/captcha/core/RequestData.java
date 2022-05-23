@@ -32,4 +32,19 @@ package com.buession.security.captcha.core;
  */
 public interface RequestData {
 
+	/**
+	 * 返回客户端 IP
+	 *
+	 * @return 客户端 IP
+	 */
+	String getClientIp();
+
+	/**
+	 * 设置客户端 IP
+	 *
+	 * @param clientIp
+	 * 		客户端 IP
+	 */
+	void setClientIp(String clientIp);
+
 }
