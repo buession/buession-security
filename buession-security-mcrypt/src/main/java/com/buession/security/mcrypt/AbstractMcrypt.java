@@ -41,7 +41,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 
 /**
- * 对象加密通用方法
+ * 对象加解密抽象类
  *
  * @author Yong.Teng
  */

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -28,90 +28,92 @@ import java.nio.charset.Charset;
 import java.security.Provider;
 
 /**
+ * 加解密
+ *
  * @author Yong.Teng
  */
 public interface Mcrypt {
 
-    /**
-     * 返回请求算法的名称
-     *
-     * @return 返回请求算法的名称
-     */
-    Algo getAlgo();
+	/**
+	 * 返回请求算法的名称
+	 *
+	 * @return 返回请求算法的名称
+	 */
+	Algo getAlgo();
 
-    /**
-     * 设置请求算法的名称
-     *
-     * @param algo
-     *         请求算法的名称
-     */
-    void setAlgo(final Algo algo);
+	/**
+	 * 设置请求算法的名称
+	 *
+	 * @param algo
+	 * 		请求算法的名称
+	 */
+	void setAlgo(final Algo algo);
 
-    /**
-     * 返回加密密钥
-     *
-     * @return 加密密钥
-     */
-    String getSalt();
+	/**
+	 * 返回加密密钥
+	 *
+	 * @return 加密密钥
+	 */
+	String getSalt();
 
-    /**
-     * 设置加密密钥
-     *
-     * @param salt
-     *         加密密钥
-     */
-    void setSalt(final String salt);
+	/**
+	 * 设置加密密钥
+	 *
+	 * @param salt
+	 * 		加密密钥
+	 */
+	void setSalt(final String salt);
 
-    /**
-     * 获取字符串编码
-     *
-     * @return 字符串编码
-     */
-    Charset getCharset();
+	/**
+	 * 获取字符串编码
+	 *
+	 * @return 字符串编码
+	 */
+	Charset getCharset();
 
-    /**
-     * 设置字符串编码
-     *
-     * @param charset
-     *         字符串编码
-     */
-    void setCharset(final Charset charset);
+	/**
+	 * 设置字符串编码
+	 *
+	 * @param charset
+	 * 		字符串编码
+	 */
+	void setCharset(final Charset charset);
 
-    /**
-     * 返回此信息摘要对象的提供者
-     *
-     * @return 信息摘要对象的提供者
-     */
-    Provider getProvider();
+	/**
+	 * 返回此信息摘要对象的提供者
+	 *
+	 * @return 信息摘要对象的提供者
+	 */
+	Provider getProvider();
 
-    /**
-     * 设置信息摘要对象的提供者
-     *
-     * @param provider
-     *         信息摘要对象的提供者
-     */
-    void setProvider(final Provider provider);
+	/**
+	 * 设置信息摘要对象的提供者
+	 *
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	void setProvider(final Provider provider);
 
-    /**
-     * 对象加密
-     *
-     * @param object
-     *         需要加密的字符串
-     *
-     * @return 加密后的字符串
-     */
-    String encode(final Object object);
+	/**
+	 * 对象加密
+	 *
+	 * @param object
+	 * 		需要加密的字符串
+	 *
+	 * @return 加密后的字符串
+	 */
+	String encode(final Object object);
 
-    /**
-     * 字符串解密
-     * 该方法需要提供信息摘要算法支持双向解密才可用
-     *
-     * @param cs
-     *         要被解密的 char 值序列
-     *
-     * @return 解密后的字符串
-     */
-    String decode(final CharSequence cs);
+	/**
+	 * 字符串解密
+	 * 该方法需要提供信息摘要算法支持双向解密才可用
+	 *
+	 * @param cs
+	 * 		要被解密的 char 值序列
+	 *
+	 * @return 解密后的字符串
+	 */
+	String decode(final CharSequence cs);
 
 }
 
