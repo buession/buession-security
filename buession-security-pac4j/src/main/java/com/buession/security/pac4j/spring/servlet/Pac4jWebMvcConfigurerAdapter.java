@@ -19,12 +19,14 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2021 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.spring.servlet;
 
 import com.buession.security.pac4j.annotation.servlet.PrincipalMethodArgumentResolver;
+import com.buession.web.servlet.OnServletCondition;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -35,7 +37,8 @@ import java.util.List;
  * @author Yong.Teng
  * @since 1.12.2
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
+@Conditional(OnServletCondition.class)
 public class Pac4jWebMvcConfigurerAdapter implements WebMvcConfigurer {
 
 	@Override
