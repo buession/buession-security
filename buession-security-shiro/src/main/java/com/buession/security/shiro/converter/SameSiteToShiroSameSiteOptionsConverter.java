@@ -25,7 +25,7 @@
 package com.buession.security.shiro.converter;
 
 import com.buession.core.converter.Converter;
-import com.buession.security.core.SameSite;
+import com.buession.web.http.SameSite;
 import org.apache.shiro.web.servlet.Cookie;
 
 /**

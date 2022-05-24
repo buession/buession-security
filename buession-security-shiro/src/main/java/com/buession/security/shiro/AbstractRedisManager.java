@@ -134,11 +134,7 @@ public abstract class AbstractRedisManager implements RedisManager {
 
 	@Override
 	public byte[] set(byte[] key, byte[] value, int expire){
-		if(redisTemplate.setEx(key, value, expire == 0 ? -1 : expire) == Status.SUCCESS){
-			return value;
-		}else{
-			return null;
-		}
+		return redisTemplate.setEx(key, value, expire == 0 ? -1 : expire) == Status.SUCCESS ? value : null;
 	}
 
 	@Override

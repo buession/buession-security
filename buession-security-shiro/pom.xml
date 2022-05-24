@@ -53,6 +53,14 @@
 			<version>${buession.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.buession</groupId>
+			<artifactId>buession-web</artifactId>
+			<version>${buession.version}</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 			<optional>true</optional>
