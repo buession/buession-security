@@ -27,6 +27,7 @@ package com.buession.security.captcha.geetest.api.v4;
 import com.buession.core.builder.MapBuilder;
 import com.buession.core.validator.Validate;
 import com.buession.httpclient.HttpClient;
+import com.buession.httpclient.core.EncodedFormRequestBody;
 import com.buession.httpclient.core.Response;
 import com.buession.lang.Status;
 import com.buession.security.captcha.core.CaptchaException;
@@ -98,6 +99,11 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 			return Status.FAILURE;
 		}
 
+		EncodedFormRequestBody requestBody = new EncodedFormRequestBody();
+		requestBody.addRequestBodyElement("lot_number", requestV4Data.getLotNumber());
+		requestBody.addRequestBodyElement("captcha_output", requestV4Data.getCaptchaOutput());
+		requestBody.addRequestBodyElement("pass_token", requestV4Data.getPassToken());
+		requestBody.addRequestBodyElement("gen_time", requestV4Data.getGenTime());
 		MapBuilder<String, Object> formDataBuilder = MapBuilder.<String, Object>create()
 				.put("lot_number", requestV4Data.getLotNumber())
 				.put("captcha_output", requestV4Data.getCaptchaOutput())
@@ -107,10 +113,11 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 		// 生成签名
 		// 生成签名使用标准的 hmac 算法，使用用户当前完成验证的流水号 lot_number 作为原始消息 message，使用客户验证私钥作为 key
 		// 采用 sha256 散列算法将 message 和 key 进行单向散列生成最终的签名
-		Digester digester = new Digester(DigestMode.HMAC_SHA256, appId);
+		Digester digester = new Digester(DigestMode.HMAC_SHA256, secretKey);
 		String signToken = digester.hex(requestV4Data.getLotNumber());
 
 		formDataBuilder.put("sign_token", signToken);
+		requestBody.addRequestBodyElement("sign_token", signToken);
 
 		if(logger.isDebugEnabled()){
 			logger.debug("二次验证, parameters：{}.", formDataBuilder.build());
@@ -118,7 +125,7 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 
 		Response response;
 		try{
-			response = httpClient.post(VALIDATE_URL + "?captcha_id=" + appId, formDataBuilder.build());
+			response = httpClient.post(VALIDATE_URL, requestBody, MapBuilder.of("captcha_id", appId));
 
 			if(logger.isInfoEnabled()){
 				logger.info("二次验证 response: {}", response);
