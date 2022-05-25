@@ -29,8 +29,6 @@ package com.buession.security.mcrypt;
 import com.buession.core.utils.Assert;
 import com.buession.core.utils.StringUtils;
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -43,7 +41,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.security.Provider;
 
 /**
  * AES 加密对象
@@ -70,23 +67,11 @@ public final class AESMcrypt extends AbstractMcrypt {
 
 	private Cipher cipher = null;
 
-	private final static Logger logger = LoggerFactory.getLogger(AESMcrypt.class);
-
 	/**
 	 * 构造函数
 	 */
 	public AESMcrypt(){
 		super(Algo.AES);
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 */
-	public AESMcrypt(final Provider provider){
-		super(Algo.AES, provider);
 	}
 
 	/**
@@ -114,35 +99,11 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 *
 	 * @param characterEncoding
 	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 */
-	public AESMcrypt(final String characterEncoding, final Provider provider){
-		this(characterEncoding, null, provider);
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param charset
-	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 */
-	public AESMcrypt(final Charset charset, final Provider provider){
-		this(charset, null, provider);
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param characterEncoding
-	 * 		字符编码
 	 * @param salt
 	 * 		加密密钥
 	 */
 	public AESMcrypt(final String characterEncoding, final String salt){
-		this(characterEncoding, salt, (Provider) null);
+		super(Algo.AES, characterEncoding, salt);
 	}
 
 	/**
@@ -154,35 +115,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * 		加密密钥
 	 */
 	public AESMcrypt(final Charset charset, final String salt){
-		this(charset, salt, (Provider) null);
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 */
-	public AESMcrypt(final String characterEncoding, final String salt, final Provider provider){
-		super(Algo.AES, characterEncoding, salt, provider);
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param charset
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 */
-	public AESMcrypt(final Charset charset, final String salt, final Provider provider){
-		super(Algo.AES, charset, salt, provider);
+		super(Algo.AES, charset, salt);
 	}
 
 	/**
@@ -193,19 +126,6 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 */
 	public AESMcrypt(final Mode mode){
 		this();
-		this.mode = mode;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 */
-	public AESMcrypt(final Provider provider, final Mode mode){
-		this(provider);
 		this.mode = mode;
 	}
 
@@ -232,36 +152,6 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 */
 	public AESMcrypt(final Charset charset, final Mode mode){
 		this(charset);
-		this.mode = mode;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 */
-	public AESMcrypt(final String characterEncoding, final Provider provider, final Mode mode){
-		this(characterEncoding, provider);
-		this.mode = mode;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param charset
-	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 */
-	public AESMcrypt(final Charset charset, final Provider provider, final Mode mode){
-		this(charset, provider);
 		this.mode = mode;
 	}
 
@@ -298,58 +188,11 @@ public final class AESMcrypt extends AbstractMcrypt {
 	/**
 	 * 构造函数
 	 *
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 */
-	public AESMcrypt(final String characterEncoding, final String salt, final Provider provider, final Mode mode){
-		this(characterEncoding, salt, provider);
-		this.mode = mode;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param charset
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 */
-	public AESMcrypt(final Charset charset, final String salt, final Provider provider, final Mode mode){
-		this(charset, salt, provider);
-		this.mode = mode;
-	}
-
-	/**
-	 * 构造函数
-	 *
 	 * @param padding
 	 * 		补码方式
 	 */
 	public AESMcrypt(final Padding padding){
 		this();
-		this.padding = padding;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param padding
-	 * 		补码方式
-	 */
-	public AESMcrypt(final Provider provider, final Padding padding){
-		this(provider);
 		this.padding = padding;
 	}
 
@@ -376,36 +219,6 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 */
 	public AESMcrypt(final Charset charset, final Padding padding){
 		this(charset);
-		this.padding = padding;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param padding
-	 * 		补码方式
-	 */
-	public AESMcrypt(final String characterEncoding, final Provider provider, final Padding padding){
-		this(characterEncoding, provider);
-		this.padding = padding;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param charset
-	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param padding
-	 * 		补码方式
-	 */
-	public AESMcrypt(final Charset charset, final Provider provider, final Padding padding){
-		this(charset, provider);
 		this.padding = padding;
 	}
 
@@ -442,40 +255,6 @@ public final class AESMcrypt extends AbstractMcrypt {
 	/**
 	 * 构造函数
 	 *
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param padding
-	 * 		补码方式
-	 */
-	public AESMcrypt(final String characterEncoding, final String salt, final Provider provider, final Padding padding){
-		this(characterEncoding, salt, provider);
-		this.padding = padding;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param charset
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param padding
-	 * 		补码方式
-	 */
-	public AESMcrypt(final Charset charset, final String salt, final Provider provider, final Padding padding){
-		this(charset, salt, provider);
-		this.padding = padding;
-	}
-
-	/**
-	 * 构造函数
-	 *
 	 * @param mode
 	 * 		加密模式
 	 * @param padding
@@ -483,19 +262,6 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 */
 	public AESMcrypt(final Mode mode, final Padding padding){
 		this(mode);
-		this.padding = padding;
-	}
-
-	/**
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 * @param padding
-	 * 		补码方式
-	 */
-	public AESMcrypt(final Provider provider, final Mode mode, final Padding padding){
-		this(provider, mode);
 		this.padding = padding;
 	}
 
@@ -522,36 +288,6 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 */
 	public AESMcrypt(final Charset charset, final Mode mode, final Padding padding){
 		this(charset, mode);
-		this.padding = padding;
-	}
-
-	/**
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 * @param padding
-	 * 		补码方式
-	 */
-	public AESMcrypt(final String characterEncoding, final Provider provider, final Mode mode, final Padding padding){
-		this(characterEncoding, null, provider, mode);
-		this.padding = padding;
-	}
-
-	/**
-	 * @param charset
-	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 * @param padding
-	 * 		补码方式
-	 */
-	public AESMcrypt(final Charset charset, final Provider provider, final Mode mode, final Padding padding){
-		this(charset, provider, mode);
 		this.padding = padding;
 	}
 
@@ -585,42 +321,6 @@ public final class AESMcrypt extends AbstractMcrypt {
 		this.padding = padding;
 	}
 
-	/**
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 * @param padding
-	 * 		补码方式
-	 */
-	public AESMcrypt(final String characterEncoding, final String salt, final Provider provider, final
-	Mode mode, final Padding padding){
-		this(characterEncoding, salt, provider, mode);
-		this.padding = padding;
-	}
-
-	/**
-	 * @param charset
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 * @param padding
-	 * 		补码方式
-	 */
-	public AESMcrypt(final Charset charset, final String salt, final Provider provider, final
-	Mode mode, final Padding padding){
-		this(charset, salt, provider, mode);
-		this.padding = padding;
-	}
-
 	@Override
 	public String encode(final Object object){
 		Assert.isNull(object, "Mcrypt encode object could not be null");
@@ -637,17 +337,20 @@ public final class AESMcrypt extends AbstractMcrypt {
 			return Base64.encodeBase64String(result);
 		}catch(InvalidKeyException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(IllegalBlockSizeException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(BadPaddingException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(NoSuchAlgorithmException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(NoSuchPaddingException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}
-
-		return null;
 	}
 
 	@Override
@@ -667,17 +370,20 @@ public final class AESMcrypt extends AbstractMcrypt {
 			return new String(result);
 		}catch(InvalidKeyException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(IllegalBlockSizeException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(BadPaddingException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(NoSuchAlgorithmException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(NoSuchPaddingException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}
-
-		return null;
 	}
 
 	private Cipher initCipher() throws NoSuchAlgorithmException, NoSuchPaddingException{

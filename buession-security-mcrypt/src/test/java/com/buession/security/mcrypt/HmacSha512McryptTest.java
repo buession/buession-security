@@ -19,39 +19,26 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2021 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest.core;
+package com.buession.security.mcrypt;
+
+import org.junit.Test;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public enum ClientType {
+public class HmacSha512McryptTest {
 
-	/**
-	 * 电脑上的浏览器
-	 */
-	WEB("web"),
+	@Test
+	public void encode(){
+		HmacSha512Mcrypt hmacSha1Mcrypt = new HmacSha512Mcrypt(StandardCharsets.UTF_8, "A");
 
-	/**
-	 * 手机上的浏览器，包括移动应用内完全内置的 web view
-	 */
-	H5("h5"),
-
-	/**
-	 * 通过原生 SDK 植入 APP 应用的方式
-	 */
-	NATIVE("native");
-
-	private final String value;
-
-	ClientType(final String value){
-		this.value = value;
-	}
-
-	public String getValue(){
-		return value;
+		System.out.println(hmacSha1Mcrypt.encode("A"));
 	}
 
 }

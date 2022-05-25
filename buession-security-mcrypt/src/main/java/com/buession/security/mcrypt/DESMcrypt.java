@@ -28,8 +28,6 @@ package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -68,8 +66,6 @@ public final class DESMcrypt extends AbstractMcrypt {
 	private Padding padding = Padding.PKCS5_PADDING;
 
 	private Cipher cipher = null;
-
-	private final static Logger logger = LoggerFactory.getLogger(DESMcrypt.class);
 
 	/**
 	 * 构造函数
@@ -637,19 +633,23 @@ public final class DESMcrypt extends AbstractMcrypt {
 			return Base64.encodeBase64String(result);
 		}catch(IllegalBlockSizeException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(BadPaddingException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(InvalidKeySpecException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(NoSuchAlgorithmException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(InvalidKeyException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(NoSuchPaddingException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}
-
-		return null;
 	}
 
 	@Override
@@ -668,19 +668,23 @@ public final class DESMcrypt extends AbstractMcrypt {
 			return new String(result);
 		}catch(IllegalBlockSizeException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(BadPaddingException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(InvalidKeySpecException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(NoSuchAlgorithmException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(InvalidKeyException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}catch(NoSuchPaddingException e){
 			logger.error(e.getMessage());
+			throw new SecurityException(e);
 		}
-
-		return null;
 	}
 
 	private Cipher initCipher() throws NoSuchAlgorithmException, NoSuchPaddingException{

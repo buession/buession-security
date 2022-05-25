@@ -27,14 +27,13 @@
 package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
+import com.buession.core.utils.CharacterUtils;
 import com.buession.core.utils.StringUtils;
 import com.buession.core.validator.Validate;
 import com.buession.lang.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -67,7 +66,7 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	 */
 	private Provider provider = null;
 
-	private final static Logger logger = LoggerFactory.getLogger(AbstractMcrypt.class);
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * 构造函数
@@ -315,20 +314,20 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	@Override
 	public String encode(final Object object){
 		Assert.isNull(object, "Mcrypt encode object could not be null");
-		Assert.isNull(algo, "Algo could not be null");
+		Assert.isNull(getAlgo(), "Algo could not be null");
 
 		try{
-			MessageDigest messageDigest = provider == null ? MessageDigest.getInstance(algo.getName()) :
-					MessageDigest.getInstance(algo.getName(), provider);
+			MessageDigest messageDigest = getProvider() == null ? MessageDigest.getInstance(getAlgo().getName()) :
+					MessageDigest.getInstance(getAlgo().getName(), getProvider());
 
 			if(object instanceof char[]){
 				return encode(new String((char[]) object), messageDigest);
 			}else if(object instanceof byte[]){
-				return encode(new String((byte[]) object, charset), messageDigest);
+				return encode(new String((byte[]) object, getCharset()), messageDigest);
 			}else{
 				return encode(object.toString(), messageDigest);
 			}
-		}catch(final NoSuchAlgorithmException e){
+		}catch(NoSuchAlgorithmException e){
 			logger.error(e.getMessage());
 			throw new SecurityException(e);
 		}
@@ -345,8 +344,8 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	 */
 	@Override
 	public String decode(final CharSequence cs){
-		Assert.isNull(algo, "Algo could not be null");
-		throw new UnsupportedOperationException("Algo '" + algo + "' unsupported decode");
+		Assert.isNull(getAlgo(), "Algo could not be null");
+		throw new UnsupportedOperationException("Algo '" + getAlgo() + "' unsupported decode");
 	}
 
 	protected String object2String(final Object object){
@@ -365,16 +364,7 @@ public abstract class AbstractMcrypt implements Mcrypt {
 		Assert.isNull(object, "Mcrypt encode object could not be null");
 
 		if(object instanceof char[]){
-			char[] chars = (char[]) object;
-			Charset cs = getCharset() == null ? Charset.defaultCharset() : getCharset();
-			CharBuffer cb = CharBuffer.allocate(chars.length);
-
-			cb.put(chars);
-			cb.flip();
-
-			ByteBuffer buffer = cs.encode(cb);
-
-			return buffer.array();
+			return CharacterUtils.toBytes((char[]) object);
 		}else if(object instanceof byte[]){
 			return (byte[]) object;
 		}else if(object instanceof String){
@@ -421,7 +411,10 @@ public abstract class AbstractMcrypt implements Mcrypt {
 	}
 
 	/**
+	 * 字节填充
+	 *
 	 * @param bytes
+	 * 		字节
 	 *
 	 * @return formatted string
 	 */

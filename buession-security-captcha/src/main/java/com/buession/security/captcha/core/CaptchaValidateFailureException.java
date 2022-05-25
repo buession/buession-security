@@ -21,56 +21,10 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */
-package com.buession.security.mcrypt;
-
-/**
- * 加密算法
+ */package com.buession.security.captcha.core;/**
+ * 
  *
  * @author Yong.Teng
- */
-public enum Algo {
-
-	AES("AES"),
-
-	DES("DES"),
-
-	MD5("MD5"),
-
-	SHA("SHA"),
-
-	SHA1("SHA-1"),
-
-	SHA224("SHA-224"),
-
-	SHA256("SHA-256"),
-
-	SHA384("SHA-384"),
-
-	SHA512("SHA-512"),
-
-	HMAC_SHA1("HmacSHA1"),
-
-	HMAC_SHA224("HmacSHA224"),
-
-	HMAC_SHA256("HmacSHA256"),
-
-	HMAC_SHA384("HmacSHA384"),
-
-	HMAC_SHA512("HmacSHA512"),
-
-	HMAC_MD5("HmacMD5"),
-
-	BASE64("BASE64");
-
-	private final String name;
-
-	Algo(final String name){
-		this.name = name;
-	}
-
-	public String getName(){
-		return name;
-	}
-
+ * @since 2.0.0
+ */public class CaptchaValidateFailureException {
 }

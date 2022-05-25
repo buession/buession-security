@@ -19,10 +19,70 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
+package com.buession.security.mcrypt;
+
+import java.nio.charset.Charset;
+
 /**
+ * Hmac SHA-256 加密对象
+ *
  * @author Yong.Teng
+ * @since 2.0.0
  */
-package com.buession.security.captcha.geetest.core;
+public final class HmacSha256Mcrypt extends AbstractHmacMcrypt {
+
+	/**
+	 * 构造函数
+	 */
+	public HmacSha256Mcrypt(){
+		super(Algo.HMAC_SHA256);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 */
+	public HmacSha256Mcrypt(final String characterEncoding){
+		super(Algo.HMAC_SHA256, characterEncoding);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 */
+	public HmacSha256Mcrypt(final Charset charset){
+		super(Algo.HMAC_SHA256, charset);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public HmacSha256Mcrypt(final String characterEncoding, final String salt){
+		super(Algo.HMAC_SHA256, characterEncoding, salt);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public HmacSha256Mcrypt(final Charset charset, final String salt){
+		super(Algo.HMAC_SHA256, charset, salt);
+	}
+
+}
