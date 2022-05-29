@@ -24,6 +24,8 @@
  */
 package com.buession.security.mcrypt;
 
+import org.apache.commons.codec.digest.HmacAlgorithms;
+
 import java.nio.charset.Charset;
 
 /**
@@ -85,4 +87,9 @@ public final class HmacMD5Mcrypt extends AbstractHmacMcrypt {
 		super(Algo.HMAC_MD5, charset, salt);
 	}
 
+	@Override
+	protected HmacAlgorithms getHmacAlgorithms(){
+		return HmacAlgorithms.HMAC_MD5;
+	}
+	
 }

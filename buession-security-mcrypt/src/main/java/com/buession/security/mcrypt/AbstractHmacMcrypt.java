@@ -25,13 +25,10 @@
 package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
-import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.HmacAlgorithms;
+import org.apache.commons.codec.digest.HmacUtils;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.Charset;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Hmac 加解密
@@ -39,7 +36,7 @@ import java.security.NoSuchAlgorithmException;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class AbstractHmacMcrypt extends AbstractMcrypt {
+public abstract class AbstractHmacMcrypt extends AbstractMcrypt {
 
 	/**
 	 * 构造函数
@@ -115,21 +112,10 @@ public class AbstractHmacMcrypt extends AbstractMcrypt {
 		Assert.isNull(object, "Mcrypt encode object could not be null");
 		Assert.isNull(getAlgo(), "Algo could not be null");
 
-		try{
-			SecretKeySpec secretKeySpec = new SecretKeySpec(getRealSalt().getBytes(getCharset()),
-					getAlgo().getName());
-
-			Mac mac = Mac.getInstance(getAlgo().getName());
-			mac.init(secretKeySpec);
-
-			return Hex.encodeHexString(mac.doFinal(object2Bytes(object)));
-		}catch(NoSuchAlgorithmException e){
-			logger.error(e.getMessage());
-			throw new SecurityException(e);
-		}catch(InvalidKeyException e){
-			logger.error(e.getMessage());
-			throw new SecurityException(e);
-		}
+		return new HmacUtils(getHmacAlgorithms(), getRealSalt().getBytes(getCharset())).hmacHex(
+				object2Bytes(object));
 	}
+
+	protected abstract HmacAlgorithms getHmacAlgorithms();
 
 }
