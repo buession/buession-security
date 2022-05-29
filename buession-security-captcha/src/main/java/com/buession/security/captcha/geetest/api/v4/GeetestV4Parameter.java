@@ -19,135 +19,148 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api.v4;
 
-import com.buession.security.captcha.geetest.GeetestRequestData;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.buession.core.validator.Validate;
+import com.buession.security.captcha.geetest.GeetestParameter;
 
 import java.util.StringJoiner;
 
 /**
- * 极验 V4 版本请求数据
+ * 极验 V4 版本参数定义接口
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class GeetestV4RequestData implements GeetestRequestData {
+public class GeetestV4Parameter implements GeetestParameter {
+
+	private final static long serialVersionUID = 5519418826643028121L;
 
 	/**
-	 * 验证流水号
+	 * 默认验证流水号参数名称
 	 */
-	@JsonProperty(value = "lot_number")
-	private String lotNumber;
+	public final static String DEFAULT_LOT_NUMBER = "lot_number";
 
 	/**
-	 * 验证输出信息
+	 * 默认验证输出信息参数名称
 	 */
-	@JsonProperty(value = "captcha_output")
-	private String captchaOutput;
+	public final static String DEFAULT_CAPTCHA_OUTPUT = "captcha_output";
 
 	/**
-	 * 验证通过标识
+	 * 默认验证通过标识参数名称
 	 */
-	@JsonProperty(value = "pass_token")
-	private String passToken;
+	public final static String DEFAULT_PASS_TOKEN = "pass_token";
 
 	/**
-	 * 验证通过时间戳
+	 * 默认验证通过时间戳参数名称
 	 */
-	@JsonProperty(value = "gen_time")
-	private String genTime;
+	public final static String DEFAULT_GEN_TIME = "gen_time";
 
 	/**
-	 * 返回验证流水号
+	 * 验证流水号参数名称
+	 */
+	private String lotNumber = DEFAULT_LOT_NUMBER;
+
+	/**
+	 * 验证输出信息参数名称
+	 */
+	private String captchaOutput = DEFAULT_CAPTCHA_OUTPUT;
+
+	/**
+	 * 验证通过标识参数名称
+	 */
+	private String passToken = DEFAULT_PASS_TOKEN;
+
+	/**
+	 * 验证通过时间戳参数名称
+	 */
+	private String genTime = DEFAULT_GEN_TIME;
+
+	/**
+	 * 返回验证流水号参数名称
 	 *
-	 * @return 验证流水号
+	 * @return 验证流水号参数名称
 	 */
 	public String getLotNumber(){
 		return lotNumber;
 	}
 
 	/**
-	 * 设置验证流水号
+	 * 设置验证流水号参数名称
 	 *
 	 * @param lotNumber
-	 * 		验证流水号
+	 * 		验证流水号参数名称
 	 */
 	public void setLotNumber(String lotNumber){
-		this.lotNumber = lotNumber;
+		if(Validate.hasText(lotNumber)){
+			this.lotNumber = lotNumber;
+		}
 	}
 
 	/**
-	 * 返回验证输出信息
+	 * 返回验证输出信息参数名称
 	 *
-	 * @return 验证输出信息
+	 * @return 验证输出信息参数名称
 	 */
 	public String getCaptchaOutput(){
 		return captchaOutput;
 	}
 
 	/**
-	 * 设置验证输出信息
+	 * 设置验证输出信息参数名称
 	 *
 	 * @param captchaOutput
-	 * 		验证输出信息
+	 * 		验证输出信息参数名称
 	 */
 	public void setCaptchaOutput(String captchaOutput){
-		this.captchaOutput = captchaOutput;
+		if(Validate.hasText(captchaOutput)){
+			this.captchaOutput = captchaOutput;
+		}
 	}
 
 	/**
-	 * 返回验证通过标识
+	 * 返回验证通过标识参数名称
 	 *
-	 * @return 验证通过标识
+	 * @return 验证通过标识参数名称
 	 */
 	public String getPassToken(){
 		return passToken;
 	}
 
 	/**
-	 * 设置验证通过标识
+	 * 设置验证通过标识参数名称
 	 *
 	 * @param passToken
-	 * 		验证通过标识
+	 * 		验证通过标识参数名称
 	 */
 	public void setPassToken(String passToken){
-		this.passToken = passToken;
+		if(Validate.hasText(passToken)){
+			this.passToken = passToken;
+		}
 	}
 
 	/**
-	 * 返回验证通过时间戳
+	 * 返回验证通过时间戳参数名称
 	 *
-	 * @return 验证通过时间戳
+	 * @return 验证通过时间戳参数名称
 	 */
 	public String getGenTime(){
 		return genTime;
 	}
 
 	/**
-	 * 设置验证通过时间戳
+	 * 设置验证通过时间戳参数名称
 	 *
 	 * @param genTime
-	 * 		验证通过时间戳
+	 * 		验证通过时间戳参数名称
 	 */
 	public void setGenTime(String genTime){
-		this.genTime = genTime;
-	}
-
-	@JsonIgnore
-	@Override
-	public String getClientIp(){
-		return null;
-	}
-
-	@JsonIgnore
-	@Override
-	public void setClientIp(String clientIp){
-
+		if(Validate.hasText(passToken)){
+			this.genTime = genTime;
+		}
 	}
 
 	@Override
@@ -159,5 +172,5 @@ public class GeetestV4RequestData implements GeetestRequestData {
 				.add("genTime=" + genTime)
 				.toString();
 	}
-
+	
 }

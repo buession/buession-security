@@ -22,7 +22,7 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.aliyun;
+package com.buession.security.captcha.tencent;
 
 import com.buession.security.captcha.core.RequestData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,123 +31,67 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.StringJoiner;
 
 /**
- * 阿里云请求数据
+ * 腾讯云请求数据
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class AliYunRequestData implements RequestData {
+public class TencentRequestData implements RequestData {
 
 	/**
-	 * 请求唯一标识
+	 * 前端回调函数返回的随机字符串
 	 */
-	@JsonProperty(value = "Token")
-	private String token;
+	@JsonProperty(value = "Randstr")
+	private String randstr;
 
 	/**
-	 * 签名串
+	 * 前端回调函数返回的用户验证票据
 	 */
-	@JsonProperty(value = "Sig")
-	private String sig;
-
-	/**
-	 * 会话 ID
-	 */
-	@JsonProperty(value = "SessionId")
-	private String sessionId;
-
-	/**
-	 * 使用场景标识；在统计报表中将根据该字段的内容进行分类展示
-	 */
-	@JsonProperty(value = "Scene")
-	private String scene;
+	@JsonProperty(value = "Ticket")
+	private String ticket;
 
 	/**
 	 * 客户端 IP
 	 */
-	@JsonProperty(value = "RemoteIp")
-	private String remoteIp;
+	@JsonProperty(value = "UserIp")
+	private String userIp;
 
 	/**
-	 * 来源 IP
-	 */
-	@JsonProperty(value = "sourceIp")
-	private String sourceIp;
-
-	/**
-	 * 返回请求唯一标识
+	 * 返回前端回调函数返回的随机字符串
 	 *
-	 * @return 请求唯一标识
+	 * @return 前端回调函数返回的随机字符串
 	 */
-	public String getToken(){
-		return token;
+	public String getRandstr(){
+		return randstr;
 	}
 
 	/**
-	 * 设置请求唯一标识
+	 * 设置前端回调函数返回的随机字符串
 	 *
-	 * @param token
-	 * 		请求唯一标识
+	 * @param randstr
+	 * 		前端回调函数返回的随机字符串
 	 */
-	public void setToken(String token){
-		this.token = token;
+	public void setRandstr(String randstr){
+		this.randstr = randstr;
 	}
 
 	/**
-	 * 返回签名串
+	 * 返回前端回调函数返回的用户验证票据
 	 *
-	 * @return 签名串
+	 * @return 前端回调函数返回的用户验证票据
 	 */
-	public String getSig(){
-		return sig;
+	public String getTicket(){
+		return ticket;
 	}
 
 	/**
-	 * 设置签名串
+	 * 设置前端回调函数返回的用户验证票据
 	 *
-	 * @param sig
-	 * 		签名串
+	 * @param ticket
+	 * 		前端回调函数返回的用户验证票据
 	 */
-	public void setSig(String sig){
-		this.sig = sig;
-	}
-
-	/**
-	 * 返回会话 ID
-	 *
-	 * @return 会话 ID
-	 */
-	public String getSessionId(){
-		return sessionId;
-	}
-
-	/**
-	 * 设置会话 ID
-	 *
-	 * @param sessionId
-	 * 		会话 ID
-	 */
-	public void setSessionId(String sessionId){
-		this.sessionId = sessionId;
-	}
-
-	/**
-	 * 返回使用场景标识；在统计报表中将根据该字段的内容进行分类展示
-	 *
-	 * @return 使用场景标识
-	 */
-	public String getScene(){
-		return scene;
-	}
-
-	/**
-	 * 设置使用场景标识；在统计报表中将根据该字段的内容进行分类展示
-	 *
-	 * @param scene
-	 * 		使用场景标识
-	 */
-	public void setScene(String scene){
-		this.scene = scene;
+	public void setTicket(String ticket){
+		this.ticket = ticket;
 	}
 
 	/**
@@ -155,60 +99,38 @@ public class AliYunRequestData implements RequestData {
 	 *
 	 * @return 客户端 IP
 	 */
-	public String getRemoteIp(){
-		return remoteIp;
+	public String getUserIp(){
+		return userIp;
 	}
 
 	/**
 	 * 设置客户端 IP
 	 *
-	 * @param remoteIp
+	 * @param userIp
 	 * 		客户端 IP
 	 */
-	public void setRemoteIp(String remoteIp){
-		this.remoteIp = remoteIp;
+	public void setUserIp(String userIp){
+		this.userIp = userIp;
 	}
 
 	@JsonIgnore
 	@Override
 	public String getClientIp(){
-		return getRemoteIp();
+		return getUserIp();
 	}
 
 	@JsonIgnore
 	@Override
 	public void setClientIp(String clientIp){
-		setRemoteIp(clientIp);
-	}
-
-	/**
-	 * 返回来源 IP
-	 *
-	 * @return 来源 IP
-	 */
-	public String getSourceIp(){
-		return sourceIp;
-	}
-
-	/**
-	 * 设置来源 IP
-	 *
-	 * @param sourceIp
-	 * 		来源 IP
-	 */
-	public void setSourceIp(String sourceIp){
-		this.sourceIp = sourceIp;
+		setUserIp(clientIp);
 	}
 
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "[", "]")
-				.add("token=" + token)
-				.add("sig=" + sig)
-				.add("sessionId=" + sessionId)
-				.add("scene=" + scene)
-				.add("remoteIp=" + remoteIp)
-				.add("sourceIp=" + sourceIp)
+				.add("randstr=" + randstr)
+				.add("ticket=" + ticket)
+				.add("userIp=" + userIp)
 				.toString();
 	}
 

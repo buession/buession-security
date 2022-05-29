@@ -22,74 +22,55 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha;
+package com.buession.security.captcha.validator.reactive;
 
+import com.buession.core.utils.Assert;
 import com.buession.lang.Status;
 import com.buession.security.captcha.core.CaptchaException;
-import com.buession.security.captcha.core.Manufacturer;
-import com.buession.security.captcha.core.RequestData;
-import com.buession.security.captcha.core.InitResponse;
+import com.buession.security.captcha.tencent.TencentCaptchaClient;
+import com.buession.security.captcha.tencent.TencentParameter;
+import com.buession.security.captcha.tencent.TencentRequestData;
+import com.buession.security.captcha.validator.TencentCaptchaValidator;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.util.MultiValueMap;
 
 /**
- * 行为验证 Client
+ * Reactive 环境腾讯云验证码验证
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public interface CaptchaClient {
+public class ReactiveTencentCaptchaValidator extends TencentCaptchaValidator implements ReactiveCaptchaValidator {
 
 	/**
-	 * 验证初始化
-	 *
-	 * @param requestData
-	 * 		请求数据
-	 *
-	 * @return 初始化结果
+	 * {@link TencentParameter} 实例
 	 */
-	default InitResponse initialize(RequestData requestData){
-		return null;
+	private final TencentParameter parameter;
+
+	/**
+	 * 构造函数
+	 *
+	 * @param tencentCaptchaClient
+	 *        {@link TencentCaptchaClient} 实例
+	 * @param parameter
+	 *        {@link TencentParameter} 实例
+	 */
+	public ReactiveTencentCaptchaValidator(final TencentCaptchaClient tencentCaptchaClient,
+										   final TencentParameter parameter){
+		super(tencentCaptchaClient);
+		Assert.isNull(parameter, "GeetestParameter cloud not be null.");
+		this.parameter = parameter;
 	}
 
-	/**
-	 * 二次验证
-	 *
-	 * @param requestData
-	 * 		请求数据
-	 *
-	 * @return 验证结果，成功返回 Status.SUCCESS；否则，返回 Status.FAILURE
-	 *
-	 * @throws CaptchaException
-	 * 		验证异常
-	 */
-	Status validate(RequestData requestData) throws CaptchaException;
+	@Override
+	public Status validate(final ServerHttpRequest request) throws CaptchaException{
+		final TencentRequestData requestData = new TencentRequestData();
 
-	/**
-	 * 返回厂商
-	 *
-	 * @return 厂商
-	 */
-	Manufacturer getManufacturer();
+		MultiValueMap<String, String> parameters = request.getQueryParams();
+		requestData.setRandstr(parameters.getFirst(parameter.getRandStr()));
+		requestData.setTicket(parameters.getFirst(parameter.getTicket()));
 
-	/**
-	 * 获取版本号
-	 *
-	 * @return 版本号
-	 */
-	String getVersion();
-
-	/**
-	 * 返回前端 JavaScript 库地址
-	 *
-	 * @return 前端 JavaScript 库地址
-	 */
-	String getJavaScript();
-
-	/**
-	 * 设置前端 JavaScript 库地址
-	 *
-	 * @param url
-	 * 		前端 JavaScript 库地址
-	 */
-	void setJavaScript(String url);
+		return validate(requestData);
+	}
 
 }

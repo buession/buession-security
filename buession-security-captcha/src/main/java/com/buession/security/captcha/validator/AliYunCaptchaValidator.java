@@ -22,74 +22,26 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest.api.v3;
+package com.buession.security.captcha.validator;
 
-import com.buession.security.captcha.core.InitResult;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.StringJoiner;
+import com.buession.security.captcha.aliyun.AliYunCaptchaClient;
 
 /**
- * 极验 V3 版本初始化结果
+ * 阿里云验证码验证
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class GeetestV3InitResult implements InitResult {
+public class AliYunCaptchaValidator extends AbstractCaptchaValidator<AliYunCaptchaClient> {
 
-	private boolean success;
-
-	private String gt;
-
-	private String challenge;
-
-	@JsonProperty(value = "new_captcha")
-	private Boolean newCaptcha;
-
-	public boolean getSuccess(){
-		return success;
-	}
-
-	public boolean isSuccess(){
-		return getSuccess();
-	}
-
-	public void setSuccess(boolean success){
-		this.success = success;
-	}
-
-	public String getGt(){
-		return gt;
-	}
-
-	public void setGt(String gt){
-		this.gt = gt;
-	}
-
-	public String getChallenge(){
-		return challenge;
-	}
-
-	public void setChallenge(String challenge){
-		this.challenge = challenge;
-	}
-
-	public Boolean getNewCaptcha(){
-		return newCaptcha;
-	}
-
-	public void setNewCaptcha(Boolean newCaptcha){
-		this.newCaptcha = newCaptcha;
-	}
-
-	@Override
-	public String toString(){
-		return new StringJoiner(", ", GeetestV3InitResult.class.getSimpleName() + "[", "]")
-				.add("success=" + success)
-				.add("gt=" + gt)
-				.add("challenge=" + challenge)
-				.add("newCaptcha=" + newCaptcha)
-				.toString();
+	/**
+	 * 构造函数
+	 *
+	 * @param aliYunCaptchaClient
+	 *        {@link AliYunCaptchaClient} 实例
+	 */
+	public AliYunCaptchaValidator(final AliYunCaptchaClient aliYunCaptchaClient){
+		super("Aliyun", aliYunCaptchaClient);
 	}
 
 }

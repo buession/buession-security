@@ -22,139 +22,154 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.aliyun;
+package com.buession.security.captcha.geetest.api.v4;
 
-import com.buession.security.captcha.core.ValidateResponse;
+import com.buession.security.captcha.geetest.GeetestValidateResponse;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
+import java.util.Map;
 import java.util.StringJoiner;
 
 /**
- * 阿里云二次校验返回结果
+ * 极验 V4 版二次校验返回结果
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class AliyunEnhencedResult implements ValidateResponse {
+public class GeetestV4ValidateResponse implements GeetestValidateResponse {
 
-	private final static long serialVersionUID = 402465840048648582L;
+	private final static long serialVersionUID = -5177885027352003530L;
 
 	/**
-	 * 调用返回编码
+	 * 二次校验结果
+	 */
+	private String result;
+
+	/**
+	 * 错误码
 	 */
 	private String code;
 
 	/**
-	 * 调用返回状态
+	 * 错误消息
 	 */
-	private Boolean success;
-
-	private Data data;
+	private String msg;
 
 	/**
-	 * 返回调用返回编码
+	 * 校验结果说明
+	 */
+	private String reason;
+
+	/**
+	 * 验证输出参数
+	 */
+	@JsonProperty(value = "captcha_args")
+	private Map<String, Object> captchaArgs;
+
+	/**
+	 * 返回二次校验结果
 	 *
-	 * @return 调用返回编码
+	 * @return 二次校验结果
+	 */
+	public String getResult(){
+		return result;
+	}
+
+	/**
+	 * 设置二次校验结果
+	 *
+	 * @param result
+	 * 		二次校验结果
+	 */
+	public void setResult(String result){
+		this.result = result;
+	}
+
+	/**
+	 * 返回错误码
+	 *
+	 * @return 错误码
 	 */
 	public String getCode(){
 		return code;
 	}
 
 	/**
-	 * 设置调用返回编码
+	 * 设置错误码
 	 *
 	 * @param code
-	 * 		调用返回编码
+	 * 		错误码
 	 */
 	public void setCode(String code){
 		this.code = code;
 	}
 
 	/**
-	 * 返回调用返回状态
+	 * 返回错误消息
 	 *
-	 * @return 调用返回状态
+	 * @return 错误消息
 	 */
-	public Boolean getSuccess(){
-		return success;
+	public String getMsg(){
+		return msg;
 	}
 
 	/**
-	 * 设置调用返回状态
+	 * 设置错误消息
 	 *
-	 * @param success
-	 * 		调用返回状态
+	 * @param msg
+	 * 		错误消息
 	 */
-	public void setSuccess(Boolean success){
-		this.success = success;
+	public void setMsg(String msg){
+		this.msg = msg;
 	}
 
 	/**
-	 * 返回调用返回结果
+	 * 返回校验结果说明
 	 *
-	 * @return 调用返回结果
+	 * @return 校验结果说明
 	 */
-	public Data getData(){
-		return data;
+	public String getReason(){
+		return reason;
 	}
 
 	/**
-	 * 设置调用返回结果
+	 * 设置校验结果说明
 	 *
-	 * @param data
-	 * 		调用返回结果
+	 * @param reason
+	 * 		校验结果说明
 	 */
-	public void setData(Data data){
-		this.data = data;
+	public void setReason(String reason){
+		this.reason = reason;
+	}
+
+	/**
+	 * 返回验证输出参数
+	 *
+	 * @return 验证输出参数
+	 */
+	public Map<String, Object> getCaptchaArgs(){
+		return captchaArgs;
+	}
+
+	/**
+	 * 设置验证输出参数
+	 *
+	 * @param captchaArgs
+	 * 		验证输出参数
+	 */
+	public void setCaptchaArgs(Map<String, Object> captchaArgs){
+		this.captchaArgs = captchaArgs;
 	}
 
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "[", "]")
+				.add("result=" + result)
 				.add("code=" + code)
-				.add("success=" + success)
-				.add("data=" + data)
+				.add("msg=" + msg)
+				.add("reason=" + reason)
+				.add("captchaArgs=" + captchaArgs)
 				.toString();
-	}
-
-	public final static class Data implements Serializable {
-
-		private final static long serialVersionUID = -2831087419706976003L;
-
-		/**
-		 * 阿里云验证码结果编码
-		 * <p>**100**：表示验证通过</p>
-		 * <p>**900**：表示验证不通过</p>
-		 */
-		private String code;
-
-		/**
-		 * 返回阿里云验证码结果编码
-		 *
-		 * @return 阿里云验证码结果编码
-		 * <p>**100**：表示验证通过</p>
-		 * <p>**900**：表示验证不通过</p>
-		 */
-		public String getCode(){
-			return code;
-		}
-
-		/**
-		 * 设置阿里云验证码结果编码
-		 *
-		 * @param code
-		 * 		阿里云验证码结果编码
-		 */
-		public void setCode(String code){
-			this.code = code;
-		}
-
-		@Override
-		public String toString(){
-			return new StringJoiner(", ", "[", "]")
-					.add("code=" + code)
-					.toString();
-		}
 	}
 
 }

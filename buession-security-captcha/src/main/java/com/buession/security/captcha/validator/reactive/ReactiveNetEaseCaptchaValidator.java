@@ -22,44 +22,34 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.utils;
+package com.buession.security.captcha.validator.reactive;
 
-import com.buession.security.captcha.core.DigestMode;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.codec.digest.HmacAlgorithms;
-import org.apache.commons.codec.digest.HmacUtils;
+import com.buession.lang.Status;
+import com.buession.security.captcha.core.CaptchaException;
+import com.buession.security.captcha.netease.NetEaseCaptchaClient;
+import com.buession.security.captcha.validator.NetEaseCaptchaValidator;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 
 /**
+ * Reactive 环境网易验证码验证
+ *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class Digester {
+public class ReactiveNetEaseCaptchaValidator extends NetEaseCaptchaValidator implements ReactiveCaptchaValidator {
 
-	private final DigestMode digestMode;
-
-	private final String key;
-
-	public Digester(final DigestMode digestMode, final String key){
-		this.digestMode = digestMode;
-		this.key = key;
+	/**
+	 * 构造函数
+	 *
+	 * @param netEaseCaptchaClient
+	 *        {@link NetEaseCaptchaClient} 实例
+	 */
+	public ReactiveNetEaseCaptchaValidator(final NetEaseCaptchaClient netEaseCaptchaClient){
+		super(netEaseCaptchaClient);
 	}
 
-	public String hex(final String value){
-		if(digestMode != null){
-			switch(digestMode){
-				case MD5:
-					return DigestUtils.md5Hex(value + key);
-				case SHA256:
-					return DigestUtils.sha256Hex(value + key);
-				case HMAC_SHA1:
-					return new HmacUtils(HmacAlgorithms.HMAC_SHA_1, key).hmacHex(value);
-				case HMAC_SHA256:
-					return new HmacUtils(HmacAlgorithms.HMAC_SHA_256, key).hmacHex(value);
-				default:
-					break;
-			}
-		}
-
+	@Override
+	public Status validate(final ServerHttpRequest request) throws CaptchaException{
 		return null;
 	}
 

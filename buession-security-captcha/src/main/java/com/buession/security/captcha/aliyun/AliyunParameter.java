@@ -22,113 +22,91 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.core;
+package com.buession.security.captcha.aliyun;
+
+import com.buession.core.validator.Validate;
+import com.buession.security.captcha.core.Parameter;
 
 import java.util.StringJoiner;
 
 /**
- * 验证码验证异常
+ * 阿里云行为验证参数定义
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class CaptchaValidateFailureException extends CaptchaException {
+public class AliyunParameter implements Parameter {
 
-	private final static long serialVersionUID = -3533294801605015984L;
+	private final static long serialVersionUID = -1575628555899104535L;
 
 	/**
-	 * 错误码
+	 * 默认验证码客户端验证回调的随机串参数名称
 	 */
-	private final String code;
+	public final static String DEFAULT_RAND_STR = "Randstr";
 
 	/**
-	 * 错误信息文本
+	 * 默认验证码客户端验证回调的票据参数名称
 	 */
-	private final String text;
+	public final static String DEFAULT_TICKET = "Ticket";
 
 	/**
-	 * 构造函数
+	 * 验证码客户端验证回调的随机串参数名称
+	 */
+	private String randStr = DEFAULT_RAND_STR;
+
+	/**
+	 * 验证码客户端验证回调的票据参数名称
+	 */
+	private String ticket = DEFAULT_TICKET;
+
+	/**
+	 * 返回验证码客户端验证回调的随机串参数名称
 	 *
-	 * @param code
-	 * 		错误码
-	 * @param message
-	 * 		错误信息
+	 * @return 验证码客户端验证回调的随机串参数名称
 	 */
-	public CaptchaValidateFailureException(String code, String message){
-		this(code, message, message);
+	public String getRandStr(){
+		return randStr;
 	}
 
 	/**
-	 * 构造函数
+	 * 设置验证码客户端验证回调的随机串参数名称
 	 *
-	 * @param code
-	 * 		错误码
-	 * @param message
-	 * 		错误信息
-	 * @param text
-	 * 		错误信息文本
+	 * @param randStr
+	 * 		验证码客户端验证回调的随机串参数名称
 	 */
-	public CaptchaValidateFailureException(String code, String message, String text){
-		super(message);
-		this.code = code;
-		this.text = text;
+	public void setRandStr(String randStr){
+		if(Validate.hasText(randStr)){
+			this.randStr = randStr;
+		}
 	}
 
 	/**
-	 * 构造函数
+	 * 返回验证码客户端验证回调的票据参数名称
 	 *
-	 * @param code
-	 * 		错误码
-	 * @param message
-	 * 		错误信息
-	 * @param cause
-	 * 		上游异常
+	 * @return 验证码客户端验证回调的票据参数名称
 	 */
-	public CaptchaValidateFailureException(String code, String message, Throwable cause){
-		this(code, message, message, cause);
+	public String getTicket(){
+		return ticket;
 	}
 
 	/**
-	 * 构造函数
+	 * 设置验证码客户端验证回调的票据参数名称
 	 *
-	 * @param code
-	 * 		错误码
-	 * @param message
-	 * 		错误信息
-	 * @param text
-	 * 		错误信息文本
-	 * @param cause
-	 * 		上游异常
+	 * @param ticket
+	 * 		验证码客户端验证回调的票据参数名称
 	 */
-	public CaptchaValidateFailureException(String code, String message, String text, Throwable cause){
-		super(message, cause);
-		this.code = code;
-		this.text = text;
-	}
-
-	/**
-	 * 返回错误码
-	 *
-	 * @return 错误码
-	 */
-	public String getCode(){
-		return code;
-	}
-
-	/**
-	 * 返回错误信息文本
-	 *
-	 * @return 错误信息文本
-	 */
-	public String getText(){
-		return text;
+	public void setTicket(String ticket){
+		if(Validate.hasText(ticket)){
+			this.ticket = ticket;
+		}
 	}
 
 	@Override
 	public String toString(){
-		return new StringJoiner(", ", CaptchaValidateFailureException.class.getSimpleName() + "[", "]")
-				.add("code='" + code + "'")
-				.add("text='" + text + "'")
+		return new StringJoiner(", ", "[", "]")
+				.add("randStr=" + randStr)
+				.add("ticket=" + ticket)
 				.toString();
 	}
+
 }

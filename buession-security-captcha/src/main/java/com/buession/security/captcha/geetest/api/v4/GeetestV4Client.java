@@ -31,12 +31,11 @@ import com.buession.httpclient.core.EncodedFormRequestBody;
 import com.buession.httpclient.core.Response;
 import com.buession.lang.Status;
 import com.buession.security.captcha.core.CaptchaException;
+import com.buession.security.captcha.core.CaptchaValidateFailureException;
 import com.buession.security.captcha.core.RequiredParameterCaptchaException;
 import com.buession.security.captcha.geetest.api.AbstractGeetestClient;
-import com.buession.security.captcha.core.DigestMode;
-import com.buession.security.captcha.core.InitResult;
+import com.buession.security.captcha.core.InitResponse;
 import com.buession.security.captcha.core.RequestData;
-import com.buession.security.captcha.utils.Digester;
 import com.buession.security.captcha.utils.ObjectMapperUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +48,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class GeetestV4Client extends AbstractGeetestClient {
 
-	public final static String VALIDATE_URL = "https://gcaptcha4.geetest.com/validate";
+	private final static String VALIDATE_URL = "https://gcaptcha4.geetest.com/validate";
 
 	private final static Logger logger = LoggerFactory.getLogger(GeetestV4Client.class);
 
@@ -80,9 +79,9 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 	}
 
 	@Override
-	public InitResult initialize(DigestMode digestMode, RequestData requestData){
+	public InitResponse initialize(RequestData requestData){
 		if(logger.isDebugEnabled()){
-			logger.debug("验证初始化, DigestMode: {}", digestMode);
+			logger.debug("验证初始化");
 		}
 
 		return null;
@@ -99,28 +98,11 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 			return Status.FAILURE;
 		}
 
-		EncodedFormRequestBody requestBody = new EncodedFormRequestBody();
-		requestBody.addRequestBodyElement("lot_number", requestV4Data.getLotNumber());
-		requestBody.addRequestBodyElement("captcha_output", requestV4Data.getCaptchaOutput());
-		requestBody.addRequestBodyElement("pass_token", requestV4Data.getPassToken());
-		requestBody.addRequestBodyElement("gen_time", requestV4Data.getGenTime());
-		MapBuilder<String, Object> formDataBuilder = MapBuilder.<String, Object>create()
-				.put("lot_number", requestV4Data.getLotNumber())
-				.put("captcha_output", requestV4Data.getCaptchaOutput())
-				.put("pass_token", requestV4Data.getPassToken())
-				.put("gen_time", requestV4Data.getGenTime());
-
-		// 生成签名
-		// 生成签名使用标准的 hmac 算法，使用用户当前完成验证的流水号 lot_number 作为原始消息 message，使用客户验证私钥作为 key
-		// 采用 sha256 散列算法将 message 和 key 进行单向散列生成最终的签名
-		Digester digester = new Digester(DigestMode.HMAC_SHA256, secretKey);
-		String signToken = digester.hex(requestV4Data.getLotNumber());
-
-		formDataBuilder.put("sign_token", signToken);
-		requestBody.addRequestBodyElement("sign_token", signToken);
+		RequestFormRequestBodyConverter converter = new RequestFormRequestBodyConverter(appId, secretKey, getSdkName());
+		EncodedFormRequestBody requestBody = converter.convert(requestV4Data);
 
 		if(logger.isDebugEnabled()){
-			logger.debug("二次验证, parameters：{}.", formDataBuilder.build());
+			logger.debug("二次验证, parameters：{}.", requestBody);
 		}
 
 		Response response;
@@ -131,13 +113,14 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 				logger.info("二次验证 response: {}", response);
 			}
 
-			GeetestV4EnhencedResult result = ObjectMapperUtils.createObjectMapper()
-					.readValue(response.getBody(), GeetestV4EnhencedResult.class);
+			GeetestV4ValidateResponse resp = ObjectMapperUtils.createObjectMapper()
+					.readValue(response.getBody(), GeetestV4ValidateResponse.class);
 
-			if("success".equals(result.getResult())){
+			if("success".equals(resp.getResult())){
 				return Status.SUCCESS;
 			}else{
-				throw new CaptchaException(result.getReason());
+				logger.error("二次验证失败: {}", resp);
+				throw new CaptchaValidateFailureException(resp.getCode(), resp.getMsg(), resp.getReason());
 			}
 		}catch(Exception e){
 			logger.error("二次验证失败: {}", e.getMessage());

@@ -32,6 +32,7 @@ import com.buession.httpclient.core.RequestBodyElement;
 import com.buession.lang.Status;
 import com.buession.security.captcha.AbstractCaptchaClient;
 import com.buession.security.captcha.core.CaptchaException;
+import com.buession.security.captcha.core.Manufacturer;
 import com.buession.security.captcha.core.RequestData;
 import com.buession.security.mcrypt.MD5Mcrypt;
 import org.apache.commons.lang3.ObjectUtils;
@@ -103,6 +104,11 @@ public class NetEaseCaptchaClient extends AbstractCaptchaClient {
 		body.addRequestBodyElement(new RequestBodyElement("signature", getVersion()));
 
 		return null;
+	}
+
+	@Override
+	public Manufacturer getManufacturer(){
+		return Manufacturer.NETEASE;
 	}
 
 	@Override

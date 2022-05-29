@@ -22,32 +22,47 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.core;
+package com.buession.security.captcha.validator.reactive;
+
+import com.buession.core.utils.Assert;
+import com.buession.lang.Status;
+import com.buession.security.captcha.aliyun.AliYunCaptchaClient;
+import com.buession.security.captcha.aliyun.AliyunParameter;
+import com.buession.security.captcha.core.CaptchaException;
+import com.buession.security.captcha.validator.AliYunCaptchaValidator;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 
 /**
- * 签名方式
+ * Reactive 环境阿里云验证码验证
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public enum DigestMode {
+public class ReactiveAliYunCaptchaValidator extends AliYunCaptchaValidator implements ReactiveCaptchaValidator {
 
-	MD5("md5"),
+	/**
+	 * {@link AliyunParameter} 实例
+	 */
+	private AliyunParameter parameter;
 
-	SHA256("sha256"),
-
-	HMAC_SHA1("hmac-sha1"),
-
-	HMAC_SHA256("hmac-sha256");
-
-	private String name;
-
-	DigestMode(String name){
-		this.name = name;
+	/**
+	 * 构造函数
+	 *
+	 * @param aliYunCaptchaClient
+	 *        {@link AliYunCaptchaClient} 实例
+	 * @param parameter
+	 *        {@link AliyunParameter} 实例
+	 */
+	public ReactiveAliYunCaptchaValidator(final AliYunCaptchaClient aliYunCaptchaClient,
+										  final AliyunParameter parameter){
+		super(aliYunCaptchaClient);
+		Assert.isNull(parameter, "AliyunParameter cloud not be null.");
+		this.parameter = parameter;
 	}
 
-	public String getName(){
-		return name;
+	@Override
+	public Status validate(final ServerHttpRequest request) throws CaptchaException{
+		return null;
 	}
 
 }

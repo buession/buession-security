@@ -21,10 +21,17 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.captcha.geetest;/**
- * 
+ */
+package com.buession.security.captcha.geetest;
+
+import com.buession.security.captcha.core.RequestData;
+
+/**
+ * 极验请求数据
  *
  * @author Yong.Teng
  * @since 2.0.0
- */public interface GeetestRequestData {
+ */
+public interface GeetestRequestData extends RequestData {
+
 }

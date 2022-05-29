@@ -22,104 +22,105 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest.api.v4;
+package com.buession.security.captcha.tencent;
 
-import com.buession.security.captcha.geetest.core.GeetestEnhencedResult;
+import com.buession.security.captcha.core.ValidateResponse;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Map;
 import java.util.StringJoiner;
 
 /**
- * 极验 V4 版二次校验返回结果
+ * 腾讯二次校验返回结果
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class GeetestV4EnhencedResult implements GeetestEnhencedResult {
+public class TencentValidateResponse implements ValidateResponse {
 
-	private final static long serialVersionUID = -5177885027352003530L;
+	private final static long serialVersionUID = 402465840048648582L;
 
 	/**
-	 * 二次校验结果
+	 * 错误码，1：验证成功，0：验证失败，100：AppSecretKey 参数校验错误
 	 */
-	private String result;
+	private int response;
 
 	/**
-	 * 校验结果说明
+	 * 恶意等级，取值：0 ~ 100
 	 */
-	private String reason;
+	@JsonProperty(value = "evil_level")
+	private int evilLevel;
 
 	/**
-	 * 验证输出参数
+	 * 验证错误信息
 	 */
-	@JsonProperty(value = "captcha_args")
-	private Map<String, Object> captchaArgs;
+	@JsonProperty(value = "err_msg")
+	private String errMsg;
 
 	/**
-	 * 返回二次校验结果
+	 * 返回错误码
 	 *
-	 * @return 二次校验结果
+	 * @return 错误码，1：验证成功，0：验证失败，100：AppSecretKey 参数校验错误
 	 */
-	public String getResult(){
-		return result;
+	public int getResponse(){
+		return response;
 	}
 
 	/**
-	 * 设置二次校验结果
+	 * 设置错误码
 	 *
-	 * @param result
-	 * 		二次校验结果
+	 * @param response
+	 * 		错误码
 	 */
-	public void setResult(String result){
-		this.result = result;
+	public void setResponse(int response){
+		this.response = response;
 	}
 
 	/**
-	 * 返回校验结果说明
+	 * 返回恶意等级
 	 *
-	 * @return 校验结果说明
+	 * @return 恶意等级，取值：0 ~ 100
 	 */
-	public String getReason(){
-		return reason;
+	public int getEvilLevel(){
+		return evilLevel;
 	}
 
 	/**
-	 * 设置校验结果说明
+	 * 设置恶意等级
 	 *
-	 * @param reason
-	 * 		校验结果说明
+	 * @param evilLevel
+	 * 		恶意等级
 	 */
-	public void setReason(String reason){
-		this.reason = reason;
+	public void setEvilLevel(int evilLevel){
+		this.evilLevel = evilLevel;
 	}
 
 	/**
-	 * 返回验证输出参数
+	 * 返回验证错误信息
 	 *
-	 * @return 验证输出参数
+	 * @return 验证错误信息
 	 */
-	public Map<String, Object> getCaptchaArgs(){
-		return captchaArgs;
+	public String getErrMsg(){
+		return errMsg;
 	}
 
 	/**
-	 * 设置验证输出参数
+	 * 设置验证错误信息
 	 *
-	 * @param captchaArgs
-	 * 		验证输出参数
+	 * @param errMsg
+	 * 		验证错误信息
 	 */
-	public void setCaptchaArgs(Map<String, Object> captchaArgs){
-		this.captchaArgs = captchaArgs;
+	public void setErrMsg(String errMsg){
+		this.errMsg = errMsg;
 	}
 
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "[", "]")
-				.add("result=" + result)
-				.add("reason=" + reason)
-				.add("captchaArgs=" + captchaArgs)
+				.add("response=" + response)
+				.add("evilLevel=" + evilLevel)
+				.add("errMsg=" + errMsg)
 				.toString();
 	}
-	
+
 }

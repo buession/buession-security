@@ -30,11 +30,10 @@ import com.buession.httpclient.HttpClient;
 import com.buession.lang.Status;
 import com.buession.security.captcha.AbstractCaptchaClient;
 import com.buession.security.captcha.core.CaptchaException;
-import com.buession.security.captcha.core.DigestMode;
 import com.buession.security.captcha.core.RequestData;
 import com.buession.security.captcha.geetest.api.v3.GeetestV3Client;
 import com.buession.security.captcha.geetest.api.v4.GeetestV4Client;
-import com.buession.security.captcha.core.InitResult;
+import com.buession.security.captcha.core.InitResponse;
 
 /**
  * 极验行为验证 Client，
@@ -43,7 +42,7 @@ import com.buession.security.captcha.core.InitResult;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class GeetestCaptchaClient extends AbstractCaptchaClient {
+public class GeetestCaptchaClient extends AbstractCaptchaClient implements GeetestClient {
 
 	private final GeetestClient geetestClient;
 
@@ -126,8 +125,8 @@ public class GeetestCaptchaClient extends AbstractCaptchaClient {
 	}
 
 	@Override
-	public InitResult initialize(DigestMode digestMode, RequestData requestData){
-		return geetestClient.initialize(digestMode, requestData);
+	public InitResponse initialize(RequestData requestData){
+		return geetestClient.initialize(requestData);
 	}
 
 	@Override

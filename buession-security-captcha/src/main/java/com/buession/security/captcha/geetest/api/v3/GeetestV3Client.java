@@ -26,21 +26,23 @@ package com.buession.security.captcha.geetest.api.v3;
 
 import com.buession.core.builder.MapBuilder;
 import com.buession.core.id.SimpleIdGenerator;
-import com.buession.core.utils.StatusUtils;
 import com.buession.core.validator.Validate;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
 import com.buession.lang.Status;
 import com.buession.security.captcha.core.CaptchaException;
+import com.buession.security.captcha.core.CaptchaValidateFailureException;
 import com.buession.security.captcha.core.RequiredParameterCaptchaException;
 import com.buession.security.captcha.geetest.api.AbstractGeetestClient;
-import com.buession.security.captcha.core.DigestMode;
-import com.buession.security.captcha.core.InitResult;
+import com.buession.security.captcha.core.InitResponse;
 import com.buession.security.captcha.core.RequestData;
-import com.buession.security.captcha.utils.Digester;
 import com.buession.security.captcha.utils.ObjectMapperUtils;
+import com.buession.security.mcrypt.Algo;
+import com.buession.security.mcrypt.MD5Mcrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * 极验行为验证 V3 版本 Client
@@ -55,6 +57,8 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	private final static String VALIDATE_URL = "https://api.geetest.com/validate.php";
 
 	private final static String JSON_FORMAT = "1";
+
+	private final static Algo DIGEST_MODE = Algo.MD5;
 
 	private final static Logger logger = LoggerFactory.getLogger(GeetestV3Client.class);
 
@@ -85,20 +89,16 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	}
 
 	@Override
-	public InitResult initialize(DigestMode digestMode, RequestData requestData){
+	public InitResponse initialize(RequestData requestData){
 		if(logger.isDebugEnabled()){
-			logger.debug("验证初始化, DigestMode: {}", digestMode);
-		}
-
-		if(digestMode == null){
-			digestMode = DigestMode.MD5;
+			logger.debug("验证初始化");
 		}
 
 		GeetestV3RequestData requestV3Data = (GeetestV3RequestData) requestData;
 		MapBuilder<String, Object> parametersBuilder = MapBuilder.<String, Object>create()
 				.put("gt", appId)
 				.put("json_format", JSON_FORMAT)
-				.put("digestmod", digestMode.getName())
+				.put("digestmod", DIGEST_MODE.getName())
 				.put("sdk", getSdkName());
 
 		if(requestV3Data.getClientType() != null){
@@ -113,19 +113,19 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			logger.debug("验证初始化, parameters：{}.", parametersBuilder.build());
 		}
 
-		GeetestV3InitResult initResult;
+		GeetestV3InitResponse initResult;
 		try{
 			Response response = httpClient.get(REGISTER_URL, parametersBuilder.build());
 
 			initResult = ObjectMapperUtils.createObjectMapper()
-					.readValue(response.getBody(), GeetestV3InitResult.class);
+					.readValue(response.getBody(), GeetestV3InitResponse.class);
 
 			if(logger.isInfoEnabled()){
 				logger.info("register api return data: {}", initResult);
 			}
 		}catch(Exception e){
 			logger.error("验证初始化失败: {}", e.getMessage());
-			initResult = new GeetestV3InitResult();
+			initResult = new GeetestV3InitResponse();
 		}
 
 		initResult.setSuccess(true);
@@ -136,9 +136,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			initResult.setChallenge(new SimpleIdGenerator().nextId());
 		}else{
 			initResult.setGt(appId);
-
-			Digester digester = new Digester(digestMode, secretKey);
-			initResult.setChallenge(digester.hex(initResult.getChallenge()));
+			initResult.setChallenge(sign(initResult));
 		}
 
 		return initResult;
@@ -155,41 +153,29 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			return Status.FAILURE;
 		}
 
-		MapBuilder<String, Object> formDataBuilder = MapBuilder.<String, Object>create()
-				.put("captchaid", appId)
-				.put("challenge", requestV3Data.getChallenge())
-				.put("validate", requestV3Data.getValidate())
-				.put("seccode", requestV3Data.getSeccode())
-				.put("json_format", JSON_FORMAT)
-				.put("sdk", getSdkName());
-
-		if(requestV3Data.getUserId() != null){
-			formDataBuilder.put("user_id", requestV3Data.getUserId());
-		}
-
-		if(requestV3Data.getClientType() != null){
-			formDataBuilder.put("client_type", requestV3Data.getClientType().getValue());
-		}
-
-		if(requestV3Data.getIpAddress() != null){
-			formDataBuilder.put("ip_address", requestV3Data.getIpAddress());
-		}
+		RequestParametersConverter converter = new RequestParametersConverter(appId, secretKey, getSdkName());
+		Map<String, Object> parameters = converter.convert(requestV3Data);
 
 		if(logger.isDebugEnabled()){
-			logger.debug("二次验证, parameters：{}.", formDataBuilder.build());
+			logger.debug("二次验证, parameters：{}.", parameters);
 		}
 
 		Response response;
 		try{
-			response = httpClient.post(VALIDATE_URL, formDataBuilder.build());
+			response = httpClient.post(VALIDATE_URL, parameters);
 
 			if(logger.isInfoEnabled()){
 				logger.info("二次验证 response: {}", response);
 			}
 
-			GeetestV3EnhencedResult result = ObjectMapperUtils.createObjectMapper().readValue(response.getBody(),
-					GeetestV3EnhencedResult.class);
-			return StatusUtils.valueOf(result != null && Validate.hasText(result.getSeccode()));
+			GeetestV3ValidateResponse resp = ObjectMapperUtils.createObjectMapper().readValue(response.getBody(),
+					GeetestV3ValidateResponse.class);
+			if("false".equals(resp.getSeccode())){
+				logger.error("二次验证失败: {}", resp);
+				throw new CaptchaValidateFailureException(null, null);
+			}else{
+				return Status.SUCCESS;
+			}
 		}catch(Exception e){
 			logger.error("二次验证失败: {}", e.getMessage());
 			throw new CaptchaException(e.getMessage(), e);
@@ -224,6 +210,21 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		}
 
 		return true;
+	}
+
+	/**
+	 * 生成签名
+	 * 生成签名使用标准的 hmac 算法，使用用户当前完成验证的流水号 lot_number 作为原始消息 message，使用客户验证私钥作为 key
+	 * 采用 sha256 散列算法将 message 和 key 进行单向散列生成最终的签名
+	 *
+	 * @param initResponse
+	 * 		初始化结果
+	 *
+	 * @return 生成签名结果
+	 */
+	private String sign(final GeetestV3InitResponse initResponse){
+		MD5Mcrypt md5Mcrypt = new MD5Mcrypt(secretKey);
+		return md5Mcrypt.encode(initResponse.getChallenge());
 	}
 
 }

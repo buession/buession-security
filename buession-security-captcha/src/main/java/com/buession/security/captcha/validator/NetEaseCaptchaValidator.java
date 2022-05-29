@@ -19,36 +19,29 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest;
+package com.buession.security.captcha.validator;
 
-import com.buession.security.captcha.core.ClientType;
-import com.buession.security.captcha.geetest.api.v3.GeetestV3RequestData;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import com.buession.security.captcha.netease.NetEaseCaptchaClient;
 
 /**
+ * 网易验证码验证
+ *
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public class RequestDataTest {
+public class NetEaseCaptchaValidator extends AbstractCaptchaValidator<NetEaseCaptchaClient> {
 
-	@Test
-	public void json() throws JsonProcessingException{
-		GeetestV3RequestData requestData = new GeetestV3RequestData();
-
-		requestData.setUserId("ueerid");
-		requestData.setClientType(ClientType.H5);
-		requestData.setIpAddress("127.0.0.1");
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		String str = objectMapper.writeValueAsString(requestData);
-		System.out.println(str);
-
-		GeetestV3RequestData requestData1 = objectMapper.readValue(str, GeetestV3RequestData.class);
-		System.out.println(requestData1.getIpAddress());
+	/**
+	 * 构造函数
+	 *
+	 * @param netEaseCaptchaClient
+	 *        {@link NetEaseCaptchaClient} 实例
+	 */
+	public NetEaseCaptchaValidator(final NetEaseCaptchaClient netEaseCaptchaClient){
+		super("Netease", netEaseCaptchaClient);
 	}
 
 }

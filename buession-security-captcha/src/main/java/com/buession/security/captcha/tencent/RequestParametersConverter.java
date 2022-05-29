@@ -22,16 +22,41 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest.core;
+package com.buession.security.captcha.tencent;
 
-import com.buession.security.captcha.core.EnhencedResult;
+import com.buession.core.builder.MapBuilder;
+import com.buession.core.converter.Converter;
+
+import java.util.Map;
 
 /**
- * 极验二次校验返回结果
- *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public interface GeetestEnhencedResult extends EnhencedResult {
+class RequestParametersConverter implements Converter<TencentRequestData, Map<String, Object>> {
+
+	private final String secretId;
+
+	private final String secretKey;
+
+	RequestParametersConverter(final String secretId, final String secretKey){
+		this.secretId = secretId;
+		this.secretKey = secretKey;
+	}
+
+	@Override
+	public Map<String, Object> convert(final TencentRequestData requestData){
+		MapBuilder<String, Object> builder = MapBuilder.<String, Object>create()
+				.put("aid", secretId)
+				.put("AppSecretKey", secretKey)
+				.put("Ticket", requestData.getTicket())
+				.put("Randstr", requestData.getRandstr());
+
+		if(requestData.getClientIp() != null){
+			builder.put("UserIP", requestData.getClientIp());
+		}
+
+		return builder.build();
+	}
 
 }

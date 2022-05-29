@@ -19,36 +19,51 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest;
+package com.buession.security.captcha.validator.servlet;
 
-import com.buession.security.captcha.core.ClientType;
-import com.buession.security.captcha.geetest.api.v3.GeetestV3RequestData;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import com.buession.core.utils.Assert;
+import com.buession.lang.Status;
+import com.buession.security.captcha.aliyun.AliYunCaptchaClient;
+import com.buession.security.captcha.aliyun.AliyunParameter;
+import com.buession.security.captcha.core.CaptchaException;
+import com.buession.security.captcha.validator.AliYunCaptchaValidator;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
+ * Servlet 环境阿里云验证码验证
+ *
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public class RequestDataTest {
+public class ServletAliYunCaptchaValidator extends AliYunCaptchaValidator implements ServletCaptchaValidator {
 
-	@Test
-	public void json() throws JsonProcessingException{
-		GeetestV3RequestData requestData = new GeetestV3RequestData();
+	/**
+	 * {@link AliyunParameter} 实例
+	 */
+	private AliyunParameter parameter;
 
-		requestData.setUserId("ueerid");
-		requestData.setClientType(ClientType.H5);
-		requestData.setIpAddress("127.0.0.1");
+	/**
+	 * 构造函数
+	 *
+	 * @param aliYunCaptchaClient
+	 *        {@link AliYunCaptchaClient} 实例
+	 * @param parameter
+	 *        {@link AliyunParameter} 实例
+	 */
+	public ServletAliYunCaptchaValidator(final AliYunCaptchaClient aliYunCaptchaClient,
+										 final AliyunParameter parameter){
+		super(aliYunCaptchaClient);
+		Assert.isNull(parameter, "AliyunParameter cloud not be null.");
+		this.parameter = parameter;
+	}
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		String str = objectMapper.writeValueAsString(requestData);
-		System.out.println(str);
-
-		GeetestV3RequestData requestData1 = objectMapper.readValue(str, GeetestV3RequestData.class);
-		System.out.println(requestData1.getIpAddress());
+	@Override
+	public Status validate(final HttpServletRequest request) throws CaptchaException{
+		return null;
 	}
 
 }

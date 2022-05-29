@@ -21,10 +21,35 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.captcha.core;/**
- * 
+ */
+package com.buession.security.captcha.core;
+
+/**
+ * 验证码厂商
  *
  * @author Yong.Teng
  * @since 2.0.0
- */public enum Manufacturer {
+ */
+public enum Manufacturer {
+
+	/**
+	 * 阿里云
+	 */
+	ALIYUN,
+
+	/**
+	 * 极验
+	 */
+	GEETEST,
+
+	/**
+	 * 网易
+	 */
+	NETEASE,
+
+	/**
+	 * 腾讯
+	 */
+	TENCENT
+
 }

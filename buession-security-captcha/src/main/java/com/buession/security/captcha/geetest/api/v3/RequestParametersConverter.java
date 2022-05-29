@@ -19,36 +19,57 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest;
+package com.buession.security.captcha.geetest.api.v3;
 
-import com.buession.security.captcha.core.ClientType;
-import com.buession.security.captcha.geetest.api.v3.GeetestV3RequestData;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import com.buession.core.builder.MapBuilder;
+import com.buession.core.converter.Converter;
+
+import java.util.Map;
 
 /**
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public class RequestDataTest {
+class RequestParametersConverter implements Converter<GeetestV3RequestData, Map<String, Object>> {
 
-	@Test
-	public void json() throws JsonProcessingException{
-		GeetestV3RequestData requestData = new GeetestV3RequestData();
+	private final String appId;
 
-		requestData.setUserId("ueerid");
-		requestData.setClientType(ClientType.H5);
-		requestData.setIpAddress("127.0.0.1");
+	private final String secretKey;
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		String str = objectMapper.writeValueAsString(requestData);
-		System.out.println(str);
+	private final String sdkName;
 
-		GeetestV3RequestData requestData1 = objectMapper.readValue(str, GeetestV3RequestData.class);
-		System.out.println(requestData1.getIpAddress());
+	RequestParametersConverter(final String appId, final String secretKey, final String sdkName){
+		this.appId = appId;
+		this.secretKey = secretKey;
+		this.sdkName = sdkName;
+	}
+
+	@Override
+	public Map<String, Object> convert(final GeetestV3RequestData requestData){
+		MapBuilder<String, Object> builder = MapBuilder.<String, Object>create()
+				.put("captchaid", appId)
+				.put("challenge", requestData.getChallenge())
+				.put("validate", requestData.getValidate())
+				.put("seccode", requestData.getSeccode())
+				.put("json_format", "1")
+				.put("sdk", sdkName);
+
+		if(requestData.getUserId() != null){
+			builder.put("user_id", requestData.getUserId());
+		}
+
+		if(requestData.getClientType() != null){
+			builder.put("client_type", requestData.getClientType().getValue());
+		}
+
+		if(requestData.getIpAddress() != null){
+			builder.put("ip_address", requestData.getIpAddress());
+		}
+
+		return builder.build();
 	}
 
 }

@@ -22,14 +22,16 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.core;
+package com.buession.security.captcha.geetest;
+
+import com.buession.security.captcha.core.Parameter;
 
 /**
- * 初始化结果
+ * 极验参数定义接口
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public interface InitResult {
+public interface GeetestParameter extends Parameter {
 
 }

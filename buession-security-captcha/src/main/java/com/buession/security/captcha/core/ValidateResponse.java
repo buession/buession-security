@@ -32,6 +32,6 @@ import java.io.Serializable;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public interface EnhencedResult extends Serializable {
+public interface ValidateResponse extends Serializable {
 
 }

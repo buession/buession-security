@@ -24,48 +24,73 @@
  */
 package com.buession.security.captcha.geetest.api.v3;
 
-import com.buession.security.captcha.geetest.core.GeetestEnhencedResult;
+import com.buession.security.captcha.geetest.GeetestInitResponse;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.StringJoiner;
 
 /**
- * 极验 V3 版二次校验返回结果
+ * 极验 V3 版本初始化结果
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class GeetestV3EnhencedResult implements GeetestEnhencedResult {
+public class GeetestV3InitResponse implements GeetestInitResponse {
 
-	private final static long serialVersionUID = 402465840048648582L;
+	private final static long serialVersionUID = 2447877854812523971L;
 
-	/**
-	 * 验证结果标识，为”false”表示验证不通过
-	 */
-	private String seccode;
+	private boolean success;
 
-	/**
-	 * 返回验证结果标识，为”false”表示验证不通过
-	 *
-	 * @return 验证结果标识，为”false”表示验证不通过
-	 */
-	public String getSeccode(){
-		return seccode;
+	private String gt;
+
+	private String challenge;
+
+	@JsonProperty(value = "new_captcha")
+	private Boolean newCaptcha;
+
+	public boolean getSuccess(){
+		return success;
 	}
 
-	/**
-	 * 设置验证结果标识
-	 *
-	 * @param seccode
-	 * 		验证结果标识
-	 */
-	public void setSeccode(String seccode){
-		this.seccode = seccode;
+	public boolean isSuccess(){
+		return getSuccess();
+	}
+
+	public void setSuccess(boolean success){
+		this.success = success;
+	}
+
+	public String getGt(){
+		return gt;
+	}
+
+	public void setGt(String gt){
+		this.gt = gt;
+	}
+
+	public String getChallenge(){
+		return challenge;
+	}
+
+	public void setChallenge(String challenge){
+		this.challenge = challenge;
+	}
+
+	public Boolean getNewCaptcha(){
+		return newCaptcha;
+	}
+
+	public void setNewCaptcha(Boolean newCaptcha){
+		this.newCaptcha = newCaptcha;
 	}
 
 	@Override
 	public String toString(){
-		return new StringJoiner(", ", "[", "]")
-				.add("seccode=" + seccode)
+		return new StringJoiner(", ", GeetestV3InitResponse.class.getSimpleName() + "[", "]")
+				.add("success=" + success)
+				.add("gt=" + gt)
+				.add("challenge=" + challenge)
+				.add("newCaptcha=" + newCaptcha)
 				.toString();
 	}
 

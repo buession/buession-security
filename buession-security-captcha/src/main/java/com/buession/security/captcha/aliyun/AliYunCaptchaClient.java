@@ -31,9 +31,10 @@ import com.buession.httpclient.core.Response;
 import com.buession.lang.Status;
 import com.buession.security.captcha.AbstractCaptchaClient;
 import com.buession.security.captcha.core.CaptchaException;
-import com.buession.security.captcha.core.DigestMode;
+import com.buession.security.captcha.core.Manufacturer;
 import com.buession.security.captcha.core.RequestData;
 import com.buession.security.captcha.utils.ObjectMapperUtils;
+import com.buession.security.mcrypt.Algo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +66,9 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 	 */
 	private final String accessKeySecret;
 
+	/**
+	 * 端点
+	 */
 	private String endpoint = "https://afs.aliyuncs.com";
 
 	private final static Logger logger = LoggerFactory.getLogger(AliYunCaptchaClient.class);
@@ -146,7 +150,7 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DDThh:mm:ssZ");
 		MapBuilder<String, Object> parametersBuilder = MapBuilder.<String, Object>create()
 				.put("Action", ACTION).put("Format", FORMAT).put("Version", getVersion())
-				.put("SignatureMethod", DigestMode.HMAC_SHA1.name()).put("SignatureNonce", randomStr())
+				.put("SignatureMethod", Algo.HMAC_SHA1.getName()).put("SignatureNonce", randomStr())
 				.put("SignatureVersion", SIGNATURE_VERSION)
 				.put("AccessKeyId", accessKeyId).put("AppKey", accessKeySecret)
 				.put("Timestamp", sdf.format(new Date()));
@@ -216,8 +220,22 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 	}
 
 	@Override
+	public Manufacturer getManufacturer(){
+		return Manufacturer.ALIYUN;
+	}
+
+	@Override
 	public String getVersion(){
 		return "2018-01-12";
+	}
+
+	/**
+	 * 返回端点
+	 *
+	 * @return 端点
+	 */
+	public String getEndpoint(){
+		return endpoint;
 	}
 
 }

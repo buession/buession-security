@@ -19,36 +19,54 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest;
+package com.buession.security.captcha.geetest.api.v3;
 
-import com.buession.security.captcha.core.ClientType;
-import com.buession.security.captcha.geetest.api.v3.GeetestV3RequestData;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import com.buession.security.captcha.geetest.GeetestValidateResponse;
+
+import java.util.StringJoiner;
 
 /**
+ * 极验 V3 版二次校验返回结果
+ *
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public class RequestDataTest {
+public class GeetestV3ValidateResponse implements GeetestValidateResponse {
 
-	@Test
-	public void json() throws JsonProcessingException{
-		GeetestV3RequestData requestData = new GeetestV3RequestData();
+	private final static long serialVersionUID = 402465840048648582L;
 
-		requestData.setUserId("ueerid");
-		requestData.setClientType(ClientType.H5);
-		requestData.setIpAddress("127.0.0.1");
+	/**
+	 * 验证结果标识，为”false”表示验证不通过
+	 */
+	private String seccode;
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		String str = objectMapper.writeValueAsString(requestData);
-		System.out.println(str);
+	/**
+	 * 返回验证结果标识，为”false”表示验证不通过
+	 *
+	 * @return 验证结果标识，为”false”表示验证不通过
+	 */
+	public String getSeccode(){
+		return seccode;
+	}
 
-		GeetestV3RequestData requestData1 = objectMapper.readValue(str, GeetestV3RequestData.class);
-		System.out.println(requestData1.getIpAddress());
+	/**
+	 * 设置验证结果标识
+	 *
+	 * @param seccode
+	 * 		验证结果标识
+	 */
+	public void setSeccode(String seccode){
+		this.seccode = seccode;
+	}
+
+	@Override
+	public String toString(){
+		return new StringJoiner(", ", "[", "]")
+				.add("seccode=" + seccode)
+				.toString();
 	}
 
 }

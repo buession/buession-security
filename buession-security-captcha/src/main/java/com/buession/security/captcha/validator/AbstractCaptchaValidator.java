@@ -19,36 +19,52 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest;
+package com.buession.security.captcha.validator;
 
-import com.buession.security.captcha.core.ClientType;
-import com.buession.security.captcha.geetest.api.v3.GeetestV3RequestData;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import com.buession.core.utils.Assert;
+import com.buession.lang.Status;
+import com.buession.security.captcha.CaptchaClient;
+import com.buession.security.captcha.core.CaptchaException;
+import com.buession.security.captcha.core.RequestData;
 
 /**
+ * 行为验证码验证抽象类
+ *
+ * @param <C>
+ * 		验证码客户端
+ *
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public class RequestDataTest {
+public abstract class AbstractCaptchaValidator<C extends CaptchaClient> implements CaptchaValidator {
 
-	@Test
-	public void json() throws JsonProcessingException{
-		GeetestV3RequestData requestData = new GeetestV3RequestData();
+	protected String name;
 
-		requestData.setUserId("ueerid");
-		requestData.setClientType(ClientType.H5);
-		requestData.setIpAddress("127.0.0.1");
+	/**
+	 * 验证码客户端
+	 */
+	protected final C captchaClient;
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		String str = objectMapper.writeValueAsString(requestData);
-		System.out.println(str);
+	/**
+	 * 构造函数
+	 *
+	 * @param name
+	 * 		验证码名称
+	 * @param captchaClient
+	 * 		验证码客户端实例
+	 */
+	public AbstractCaptchaValidator(final String name, final C captchaClient){
+		Assert.isNull(captchaClient, name + " captcha client cloud not be null.");
+		this.name = name;
+		this.captchaClient = captchaClient;
+	}
 
-		GeetestV3RequestData requestData1 = objectMapper.readValue(str, GeetestV3RequestData.class);
-		System.out.println(requestData1.getIpAddress());
+	@Override
+	public Status validate(final RequestData requestData) throws CaptchaException{
+		return captchaClient.validate(requestData);
 	}
 
 }

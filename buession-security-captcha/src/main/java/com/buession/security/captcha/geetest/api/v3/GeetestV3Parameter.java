@@ -19,180 +19,179 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api.v3;
 
-import com.buession.security.captcha.core.ClientType;
-import com.buession.security.captcha.geetest.GeetestRequestData;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.buession.core.validator.Validate;
+import com.buession.security.captcha.geetest.GeetestParameter;
 
 import java.util.StringJoiner;
 
 /**
- * 极验 V3 版本请求数据
+ * 极验 V3 版本参数定义接口
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class GeetestV3RequestData implements GeetestRequestData {
+public class GeetestV3Parameter implements GeetestParameter {
+
+	private final static long serialVersionUID = 5519418826643028121L;
 
 	/**
-	 * 流水号
+	 * 默认流水号参数名称
 	 */
-	private String challenge;
+	public final static String DEFAULT_CHALLENGE = "challenge";
 
 	/**
-	 * 核心校验数据
+	 * 默认核心校验数据参数名称
 	 */
-	private String seccode;
+	public final static String DEFAULT_SECCODE = "seccode";
 
 	/**
-	 * 核心校验数据
+	 * 默认核心校验数据参数名称
 	 */
-	private String validate;
+	public final static String DEFAULT_VALIDATE = "validate";
 
 	/**
-	 * 用户的唯一标识
+	 * 默认用户的唯一标识参数名称
 	 */
-	@JsonProperty(value = "user_id")
-	private String userId;
+	public final static String DEFAULT_USER_ID = "user_id";
 
 	/**
-	 * 客户端类型
+	 * 默认客户端类型参数名称
 	 */
-	@JsonProperty(value = "client_type")
-	private ClientType clientType;
-
-	@JsonProperty(value = "ip_address")
-	private String ipAddress;
+	public final static String DEFAULT_CLIENT_TYPE = "client_type";
 
 	/**
-	 * 返回流水号
+	 * 流水号参数名称
+	 */
+	private String challenge = DEFAULT_CHALLENGE;
+
+	/**
+	 * 核心校验数据参数名称
+	 */
+	private String seccode = DEFAULT_SECCODE;
+
+	/**
+	 * 核心校验数据参数名称
+	 */
+	private String validate = DEFAULT_VALIDATE;
+
+	/**
+	 * 用户的唯一标识参数名称
+	 */
+	private String userId = DEFAULT_USER_ID;
+
+	/**
+	 * 客户端类型参数名称
+	 */
+	private String clientType = DEFAULT_CLIENT_TYPE;
+
+	/**
+	 * 返回流水号参数名称
 	 *
-	 * @return 流水号
+	 * @return 流水号参数名称
 	 */
 	public String getChallenge(){
 		return challenge;
 	}
 
 	/**
-	 * 设置流水号
+	 * 设置流水号参数名称
 	 *
 	 * @param challenge
-	 * 		流水号
+	 * 		流水号参数名称
 	 */
 	public void setChallenge(String challenge){
-		this.challenge = challenge;
+		if(Validate.hasText(challenge)){
+			this.challenge = challenge;
+		}
 	}
 
 	/**
-	 * 返回核心校验数据
+	 * 返回核心校验数据参数名称
 	 *
-	 * @return 核心校验数据
+	 * @return 核心校验数据参数名称
 	 */
 	public String getSeccode(){
 		return seccode;
 	}
 
 	/**
-	 * 设置核心校验数据
+	 * 设置核心校验数据参数名称
 	 *
 	 * @param seccode
-	 * 		核心校验数据
+	 * 		核心校验数据参数名称
 	 */
 	public void setSeccode(String seccode){
-		this.seccode = seccode;
+		if(Validate.hasText(seccode)){
+			this.seccode = seccode;
+		}
 	}
 
 	/**
-	 * 返回核心校验数据
+	 * 返回核心校验数据参数名称
 	 *
-	 * @return 核心校验数据
+	 * @return 核心校验数据参数名称
 	 */
 	public String getValidate(){
 		return validate;
 	}
 
 	/**
-	 * 设置核心校验数据
+	 * 设置核心校验数据参数名称
 	 *
 	 * @param validate
-	 * 		核心校验数据
+	 * 		核心校验数据参数名称
 	 */
 	public void setValidate(String validate){
-		this.validate = validate;
+		if(Validate.hasText(validate)){
+			this.validate = validate;
+		}
 	}
 
 	/**
-	 * 返回用户的唯一标识
+	 * 返回用户的唯一标识参数名称
 	 *
-	 * @return 用户的唯一标识
+	 * @return 用户的唯一标识参数名称
 	 */
 	public String getUserId(){
 		return userId;
 	}
 
 	/**
-	 * 设置用户的唯一标识
+	 * 设置用户的唯一标识参数名称
 	 *
 	 * @param userId
-	 * 		用户的唯一标识
+	 * 		用户的唯一标识参数名称
 	 */
 	public void setUserId(String userId){
-		this.userId = userId;
+		if(Validate.hasText(userId)){
+			this.userId = userId;
+		}
 	}
 
 	/**
-	 * 返回客户端类型
+	 * 返回客户端类型参数名称
 	 *
-	 * @return 客户端类型
+	 * @return 客户端类型参数名称
 	 */
-	public ClientType getClientType(){
+	public String getClientType(){
 		return clientType;
 	}
 
 	/**
-	 * 设置客户端类型
+	 * 设置客户端类型参数名称
 	 *
 	 * @param clientType
-	 * 		客户端类型
+	 * 		客户端类型参数名称
 	 */
-	public void setClientType(ClientType clientType){
-		this.clientType = clientType;
-	}
-
-	/**
-	 * 返回客户端请求SDK服务器的ip地址
-	 *
-	 * @return 客户端请求SDK服务器的ip地址
-	 */
-	public String getIpAddress(){
-		return ipAddress;
-	}
-
-	/**
-	 * 设置客户端请求SDK服务器的ip地址
-	 *
-	 * @param ipAddress
-	 * 		客户端请求SDK服务器的ip地址
-	 */
-	public void setIpAddress(String ipAddress){
-		this.ipAddress = ipAddress;
-	}
-
-	@JsonIgnore
-	@Override
-	public String getClientIp(){
-		return getIpAddress();
-	}
-
-	@JsonIgnore
-	@Override
-	public void setClientIp(String clientIp){
-		setIpAddress(clientIp);
+	public void setClientType(String clientType){
+		if(Validate.hasText(clientType)){
+			this.clientType = clientType;
+		}
 	}
 
 	@Override
@@ -203,7 +202,7 @@ public class GeetestV3RequestData implements GeetestRequestData {
 				.add("validate=" + validate)
 				.add("userId=" + userId)
 				.add("clientType=" + clientType)
-				.add("ipAddress=" + ipAddress)
 				.toString();
 	}
+
 }

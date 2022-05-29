@@ -22,38 +22,54 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.core;
+package com.buession.security.captcha.validator.servlet;
+
+import com.buession.core.utils.Assert;
+import com.buession.lang.Status;
+import com.buession.security.captcha.core.CaptchaException;
+import com.buession.security.captcha.tencent.TencentCaptchaClient;
+import com.buession.security.captcha.tencent.TencentParameter;
+import com.buession.security.captcha.tencent.TencentRequestData;
+import com.buession.security.captcha.validator.TencentCaptchaValidator;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * 客户端类型
+ * Servlet 环境腾讯云验证码验证
  *
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public enum ClientType {
+public class ServletTencentCaptchaValidator extends TencentCaptchaValidator implements ServletCaptchaValidator {
 
 	/**
-	 * 电脑上的浏览器
+	 * {@link TencentParameter} 实例
 	 */
-	WEB("web"),
+	private final TencentParameter parameter;
 
 	/**
-	 * 手机上的浏览器，包括移动应用内完全内置的 web view
+	 * 构造函数
+	 *
+	 * @param tencentCaptchaClient
+	 *        {@link TencentCaptchaClient} 实例
+	 * @param parameter
+	 *        {@link TencentParameter} 实例
 	 */
-	H5("h5"),
-
-	/**
-	 * 通过原生 SDK 植入 APP 应用的方式
-	 */
-	NATIVE("native");
-
-	private final String value;
-
-	ClientType(final String value){
-		this.value = value;
+	public ServletTencentCaptchaValidator(final TencentCaptchaClient tencentCaptchaClient,
+										  final TencentParameter parameter){
+		super(tencentCaptchaClient);
+		Assert.isNull(parameter, "GeetestParameter cloud not be null.");
+		this.parameter = parameter;
 	}
 
-	public String getValue(){
-		return value;
+	@Override
+	public Status validate(final HttpServletRequest request) throws CaptchaException{
+		final TencentRequestData requestData = new TencentRequestData();
+
+		requestData.setRandstr(request.getParameter(parameter.getRandStr()));
+		requestData.setTicket(request.getParameter(parameter.getTicket()));
+
+		return validate(requestData);
 	}
 
 }

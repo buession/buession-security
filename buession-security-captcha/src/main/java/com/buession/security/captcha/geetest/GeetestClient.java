@@ -26,6 +26,7 @@ package com.buession.security.captcha.geetest;
 
 import com.buession.httpclient.HttpClient;
 import com.buession.security.captcha.CaptchaClient;
+import com.buession.security.captcha.core.Manufacturer;
 
 /**
  * @author Yong.Teng
@@ -34,5 +35,10 @@ import com.buession.security.captcha.CaptchaClient;
 public interface GeetestClient extends CaptchaClient {
 
 	void setHttpClient(HttpClient httpClient);
+
+	@Override
+	default Manufacturer getManufacturer(){
+		return Manufacturer.GEETEST;
+	}
 
 }
