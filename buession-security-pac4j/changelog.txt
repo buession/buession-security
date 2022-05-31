@@ -5,6 +5,7 @@ Buession Security Pac4j Changelog
 Changes in version 2.0.0 (2022-02-22)
 -------------------------------------
 *【移除】com.buession.security.pac4j.annotation.ProfileUtils，使用 com.buession.security.pac4j.profile.ProfileUtils 替代
+*【变化】Pac4jWebMvcConfigurerAdapter 增加OnServletCondition 条件控制
 
 Changes in version 1.3.2 (2021-11-10)
 -------------------------------------
