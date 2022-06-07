@@ -24,6 +24,10 @@
 			<id>yong.teng</id>
 			<name>yong.teng</name>
 			<email>webmaster@buession.com</email>
+			<roles>
+				<role>Project Manager</role>
+				<role>Developer</role>
+			</roles>
 		</developer>
 	</developers>
 
@@ -31,6 +35,8 @@
 		<license>
 			<name>The Apache License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
 
