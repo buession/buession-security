@@ -7,6 +7,9 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.buession.security/buession-security-core.svg)](https://search.maven.org/search?q=g:com.buession.security)
 [![GitHub release](https://img.shields.io/github/release/buession/buession-security.svg)](https://github.com/buession/buession-security/releases)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![Java support](https://img.shields.io/badge/Java-8+-green?logo=java&logoColor=white)](https://openjdk.java.net/)
+
+<img src="docs/images/logo.png" alt="Buession Security" title="Buession Security" width="280px" />
 
 ## Requirements
 
@@ -30,4 +33,4 @@
 
 ## License
 
-The Buession Framework is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
+The Buession Security is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
