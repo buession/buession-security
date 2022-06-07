@@ -24,6 +24,8 @@
  */
 package com.buession.security.web.config;
 
+import java.util.StringJoiner;
+
 /**
  * Content Security Policy 配置
  * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP"
@@ -107,11 +109,11 @@ public class ContentSecurityPolicy {
 
 	@Override
 	public String toString(){
-		final ConfigStringBuilder sb = ConfigStringBuilder.create("ContentSecurityPolicy");
-
-		sb.set("enable", enable).set("reportOnly", reportOnly).set("policyDirectives", policyDirectives);
-
-		return sb.build();
+		return new StringJoiner(", ", "ContentSecurityPolicy = {", "}")
+				.add("enable=" + enable)
+				.add("reportOnly=" + reportOnly)
+				.add("policyDirectives=" + policyDirectives)
+				.toString();
 	}
 
 }

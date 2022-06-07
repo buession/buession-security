@@ -24,6 +24,8 @@
  */
 package com.buession.security.web.config;
 
+import java.util.StringJoiner;
+
 /**
  * ReferrerPolicy 配置
  *
@@ -75,6 +77,14 @@ public class ReferrerPolicy {
 		this.policy = policy;
 	}
 
+	@Override
+	public String toString(){
+		return new StringJoiner(", ", "ReferrerPolicy = {", "}")
+				.add("enable=" + enable)
+				.add("policy=" + policy)
+				.toString();
+	}
+
 	public enum Policy {
 
 		NO_REFERRER("no-referrer"),
@@ -110,12 +120,4 @@ public class ReferrerPolicy {
 
 	}
 
-	@Override
-	public String toString(){
-		final ConfigStringBuilder sb = ConfigStringBuilder.create("ReferrerPolicy");
-
-		sb.set("enable", enable).set("policy", policy);
-
-		return sb.build();
-	}
 }

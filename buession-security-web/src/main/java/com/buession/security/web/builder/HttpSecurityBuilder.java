@@ -48,11 +48,8 @@ public interface HttpSecurityBuilder {
 	 * 		Http Basic {@link HttpBasic} 配置
 	 *
 	 * @return HttpSecurityBuilder 实例
-	 *
-	 * @throws Exception
-	 * 		异常
 	 */
-	HttpSecurityBuilder httpBasic(final HttpBasic config) throws Exception;
+	HttpSecurityBuilder httpBasic(final HttpBasic config);
 
 	/**
 	 * 设置 Csrf {@link Csrf} 配置
@@ -61,11 +58,8 @@ public interface HttpSecurityBuilder {
 	 * 		Csrf {@link Csrf} 配置
 	 *
 	 * @return HttpSecurityBuilder 实例
-	 *
-	 * @throws Exception
-	 * 		异常
 	 */
-	HttpSecurityBuilder csrf(final Csrf config) throws Exception;
+	HttpSecurityBuilder csrf(final Csrf config);
 
 	/**
 	 * 设置 FrameOptions {@link FrameOptions} 配置
@@ -74,11 +68,8 @@ public interface HttpSecurityBuilder {
 	 * 		FrameOptions {@link FrameOptions} 配置
 	 *
 	 * @return HttpSecurityBuilder 实例
-	 *
-	 * @throws Exception
-	 * 		异常
 	 */
-	HttpSecurityBuilder frameOptions(final FrameOptions config) throws Exception;
+	HttpSecurityBuilder frameOptions(final FrameOptions config);
 
 	/**
 	 * 设置 Hsts {@link Hsts} 配置
@@ -87,11 +78,8 @@ public interface HttpSecurityBuilder {
 	 * 		Hsts {@link Hsts} 配置
 	 *
 	 * @return HttpSecurityBuilder 实例
-	 *
-	 * @throws Exception
-	 * 		异常
 	 */
-	HttpSecurityBuilder hsts(final Hsts config) throws Exception;
+	HttpSecurityBuilder hsts(final Hsts config);
 
 	/**
 	 * 设置 Hpkp {@link Hpkp} 配置
@@ -100,11 +88,8 @@ public interface HttpSecurityBuilder {
 	 * 		Hpkp {@link Hpkp} 配置
 	 *
 	 * @return HttpSecurityBuilder 实例
-	 *
-	 * @throws Exception
-	 * 		异常
 	 */
-	HttpSecurityBuilder hpkp(final Hpkp config) throws Exception;
+	HttpSecurityBuilder hpkp(final Hpkp config);
 
 	/**
 	 * 设置 ContentSecurityPolicy {@link ContentSecurityPolicy} 配置
@@ -113,11 +98,8 @@ public interface HttpSecurityBuilder {
 	 * 		ContentSecurityPolicy {@link ContentSecurityPolicy} 配置
 	 *
 	 * @return HttpSecurityBuilder 实例
-	 *
-	 * @throws Exception
-	 * 		异常
 	 */
-	HttpSecurityBuilder contentSecurityPolicy(final ContentSecurityPolicy config) throws Exception;
+	HttpSecurityBuilder contentSecurityPolicy(final ContentSecurityPolicy config);
 
 	/**
 	 * 设置 ReferrerPolicy {@link ReferrerPolicy} 配置
@@ -126,11 +108,8 @@ public interface HttpSecurityBuilder {
 	 * 		ReferrerPolicy {@link ReferrerPolicy} 配置
 	 *
 	 * @return HttpSecurityBuilder 实例
-	 *
-	 * @throws Exception
-	 * 		异常
 	 */
-	HttpSecurityBuilder referrerPolicy(final ReferrerPolicy config) throws Exception;
+	HttpSecurityBuilder referrerPolicy(final ReferrerPolicy config);
 
 	/**
 	 * 设置 Xss {@link Xss} 配置
@@ -139,10 +118,7 @@ public interface HttpSecurityBuilder {
 	 * 		Xss {@link Xss} 配置
 	 *
 	 * @return HttpSecurityBuilder 实例
-	 *
-	 * @throws Exception
-	 * 		异常
 	 */
-	HttpSecurityBuilder xss(final Xss config) throws Exception;
+	HttpSecurityBuilder xss(final Xss config);
 
 }

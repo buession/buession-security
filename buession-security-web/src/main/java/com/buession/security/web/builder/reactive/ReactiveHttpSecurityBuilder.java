@@ -53,7 +53,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	/**
 	 * ServerHttpSecurity 实例
 	 */
-	private ServerHttpSecurity serverHttpSecurity;
+	private final ServerHttpSecurity serverHttpSecurity;
 
 	/**
 	 * 构造函数
@@ -78,15 +78,16 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder httpBasic(HttpBasic config) throws Exception{
+	public HttpSecurityBuilder httpBasic(HttpBasic config){
 		if(config.isEnable() == false){
 			serverHttpSecurity.httpBasic().disable();
 		}
+
 		return this;
 	}
 
 	@Override
-	public HttpSecurityBuilder csrf(Csrf config) throws Exception{
+	public HttpSecurityBuilder csrf(Csrf config){
 		ServerHttpSecurity.CsrfSpec csrfSpec = serverHttpSecurity.csrf();
 
 		if(config.isEnable()){
@@ -152,13 +153,14 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder frameOptions(FrameOptions config) throws Exception{
+	public HttpSecurityBuilder frameOptions(FrameOptions config){
 		ServerHttpSecurity.HeaderSpec.FrameOptionsSpec frameOptionsSpec = serverHttpSecurity.headers().frameOptions();
 
 		if(config.isEnable()){
 			if(config.getMode() != null){
 				switch(config.getMode()){
 					case ALLOW_FROM:
+						// empty
 						break;
 					case SAMEORIGIN:
 						frameOptionsSpec.mode(XFrameOptionsServerHttpHeadersWriter.Mode.SAMEORIGIN);
@@ -178,11 +180,12 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder hsts(Hsts config) throws Exception{
+	public HttpSecurityBuilder hsts(Hsts config){
 		ServerHttpSecurity.HeaderSpec.HstsSpec hstsSpec = serverHttpSecurity.headers().hsts();
 
 		if(config.isEnable()){
-			hstsSpec.maxAge(Duration.ofMinutes(config.getMaxAge())).includeSubdomains(config.getIncludeSubDomains()).preload(config.isPreload());
+			hstsSpec.maxAge(Duration.ofMinutes(config.getMaxAge())).includeSubdomains(config.getIncludeSubDomains())
+					.preload(config.isPreload());
 		}else{
 			hstsSpec.disable();
 		}
@@ -191,12 +194,12 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder hpkp(Hpkp config) throws Exception{
+	public HttpSecurityBuilder hpkp(Hpkp config){
 		return this;
 	}
 
 	@Override
-	public HttpSecurityBuilder contentSecurityPolicy(ContentSecurityPolicy config) throws Exception{
+	public HttpSecurityBuilder contentSecurityPolicy(ContentSecurityPolicy config){
 		if(config.isEnable() && Validate.hasText(config.getPolicyDirectives())){
 			serverHttpSecurity.headers().contentSecurityPolicy((contentSecurityPolicySpec)->{
 				contentSecurityPolicySpec.policyDirectives(config.getPolicyDirectives());
@@ -208,33 +211,41 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder referrerPolicy(ReferrerPolicy config) throws Exception{
+	public HttpSecurityBuilder referrerPolicy(ReferrerPolicy config){
 		if(config.isEnable()){
 			if(config.getPolicy() != null){
 				switch(config.getPolicy()){
 					case NO_REFERRER:
-						serverHttpSecurity.headers().referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER);
+						serverHttpSecurity.headers()
+								.referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER);
 						break;
 					case NO_REFERRER_WHEN_DOWNGRADE:
-						serverHttpSecurity.headers().referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE);
+						serverHttpSecurity.headers().referrerPolicy(
+								ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE);
 						break;
 					case SAME_ORIGIN:
-						serverHttpSecurity.headers().referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.SAME_ORIGIN);
+						serverHttpSecurity.headers()
+								.referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.SAME_ORIGIN);
 						break;
 					case ORIGIN:
-						serverHttpSecurity.headers().referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN);
+						serverHttpSecurity.headers()
+								.referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN);
 						break;
 					case STRICT_ORIGIN:
-						serverHttpSecurity.headers().referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN);
+						serverHttpSecurity.headers()
+								.referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN);
 						break;
 					case ORIGIN_WHEN_CROSS_ORIGIN:
-						serverHttpSecurity.headers().referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN_WHEN_CROSS_ORIGIN);
+						serverHttpSecurity.headers().referrerPolicy(
+								ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN_WHEN_CROSS_ORIGIN);
 						break;
 					case STRICT_ORIGIN_WHEN_CROSS_ORIGIN:
-						serverHttpSecurity.headers().referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN);
+						serverHttpSecurity.headers().referrerPolicy(
+								ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN);
 						break;
 					case UNSAFE_URL:
-						serverHttpSecurity.headers().referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.UNSAFE_URL);
+						serverHttpSecurity.headers()
+								.referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.UNSAFE_URL);
 						break;
 					default:
 						break;
@@ -246,8 +257,9 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder xss(Xss config) throws Exception{
-		ServerHttpSecurity.HeaderSpec.XssProtectionSpec xssProtectionSpec = serverHttpSecurity.headers().xssProtection();
+	public HttpSecurityBuilder xss(Xss config){
+		ServerHttpSecurity.HeaderSpec.XssProtectionSpec xssProtectionSpec = serverHttpSecurity.headers()
+				.xssProtection();
 
 		if(config.isEnable()){
 		}else{

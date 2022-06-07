@@ -26,6 +26,7 @@ package com.buession.security.web.config;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * Hpkp 配置
@@ -173,13 +174,15 @@ public class Hpkp {
 
 	@Override
 	public String toString(){
-		final ConfigStringBuilder sb = ConfigStringBuilder.create("ContentSecurityPolicy");
-
-		sb.set("enable", enable).set("pins", pins).set("sha256Pins", Arrays.toString(sha256Pins));
-		sb.set("maxAge", maxAge).set("includeSubDomains", includeSubDomains);
-		sb.set("reportOnly", reportOnly).set("reportUri", reportUri);
-
-		return sb.build();
+		return new StringJoiner(", ", "Hpkp = {", "}")
+				.add("enable=" + enable)
+				.add("pins=" + pins)
+				.add("sha256Pins=" + Arrays.toString(sha256Pins))
+				.add("maxAge=" + maxAge)
+				.add("includeSubDomains=" + includeSubDomains)
+				.add("reportOnly=" + reportOnly)
+				.add("reportUri=" + reportUri)
+				.toString();
 	}
 
 }

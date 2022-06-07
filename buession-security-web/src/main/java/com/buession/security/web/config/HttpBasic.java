@@ -24,6 +24,8 @@
  */
 package com.buession.security.web.config;
 
+import java.util.StringJoiner;
+
 /**
  * Http Basic 验证
  * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication"
@@ -69,11 +71,9 @@ public class HttpBasic {
 
 	@Override
 	public String toString(){
-		final ConfigStringBuilder sb = ConfigStringBuilder.create("HttpBasic");
-
-		sb.set("enable", enable);
-
-		return sb.toString();
+		return new StringJoiner(", ", "HttpBasic = {", "}")
+				.add("enable=" + enable)
+				.toString();
 	}
 
 }

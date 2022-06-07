@@ -24,6 +24,8 @@
  */
 package com.buession.security.web.config;
 
+import java.util.StringJoiner;
+
 /**
  * Frame Options 配置
  * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options"
@@ -93,11 +95,10 @@ public class FrameOptions {
 
 	@Override
 	public String toString(){
-		final ConfigStringBuilder sb = ConfigStringBuilder.create("FrameOptions");
-
-		sb.set("enable", enable).set("mode", mode);
-
-		return sb.toString();
+		return new StringJoiner(", ", "FrameOptions = {", "}")
+				.add("enable=" + enable)
+				.add("mode=" + mode)
+				.toString();
 	}
 
 	public enum XFrameOptionsMode {

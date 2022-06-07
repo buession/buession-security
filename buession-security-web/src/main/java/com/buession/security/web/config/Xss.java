@@ -24,6 +24,8 @@
  */
 package com.buession.security.web.config;
 
+import java.util.StringJoiner;
+
 /**
  * XSS 配置
  * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-XSS-Protection"
@@ -121,11 +123,12 @@ public class Xss {
 
 	@Override
 	public String toString(){
-		final ConfigStringBuilder sb = ConfigStringBuilder.create("Xss = ");
-
-		sb.set("enable", enable).set("block", block);
-		sb.set("enabledProtection", enabledProtection).set("policyConfigLocation", policyConfigLocation);
-
-		return sb.build();
+		return new StringJoiner(", ", "Xss = {", "}")
+				.add("enable=" + enable)
+				.add("block=" + block)
+				.add("enabledProtection=" + enabledProtection)
+				.add("policyConfigLocation=" + policyConfigLocation)
+				.toString();
 	}
+
 }

@@ -26,6 +26,8 @@ package com.buession.security.web.config;
 
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import java.util.StringJoiner;
+
 /**
  * Hsts 配置
  * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/HTTP_Strict_Transport_Security"
@@ -187,13 +189,13 @@ public class Hsts {
 
 	@Override
 	public String toString(){
-		final ConfigStringBuilder sb = ConfigStringBuilder.create("Hsts");
-
-		sb.set("enable", enable).set("matcher", matcher);
-		sb.set("maxAge", maxAge).set("includeSubDomains", includeSubDomains);
-		sb.set("policyDirectpreloadives", preload);
-
-		return sb.build();
+		return new StringJoiner(", ", "Hsts = {", "}")
+				.add("enable=" + enable)
+				.add("matcher=" + matcher)
+				.add("maxAge=" + maxAge)
+				.add("includeSubDomains=" + includeSubDomains)
+				.add("preload=" + preload)
+				.toString();
 	}
 
 }

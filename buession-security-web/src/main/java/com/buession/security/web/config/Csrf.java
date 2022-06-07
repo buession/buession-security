@@ -26,6 +26,8 @@ package com.buession.security.web.config;
 
 import com.buession.security.spring.web.csrf.CsrfTokenRepository;
 
+import java.util.StringJoiner;
+
 /**
  * Csrf 配置
  * <p><a href="https://baike.baidu.com/item/%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0/13777878"
@@ -143,12 +145,12 @@ public class Csrf {
 
 	@Override
 	public String toString(){
-		final ConfigStringBuilder sb = ConfigStringBuilder.create("Csrf");
-
-		sb.set("enable", enable).set("mode", mode);
-		sb.set("cookie", cookie).set("session", session);
-
-		return sb.build();
+		return new StringJoiner(", ", "Csrf = {", "}")
+				.add("enable=" + enable)
+				.add("mode=" + mode)
+				.add("cookie=" + cookie)
+				.add("session=" + session)
+				.toString();
 	}
 
 	/**
@@ -322,12 +324,14 @@ public class Csrf {
 
 		@Override
 		public String toString(){
-			final ConfigStringBuilder sb = ConfigStringBuilder.create("Cookie");
-
-			sb.set("parameterName", parameterName).set("headerName", headerName);
-			sb.set("cookieName", cookieName).set("cookieDomain", cookieDomain).set("cookiePath", cookiePath).set("cookieHttpOnly", cookieHttpOnly);
-
-			return sb.build();
+			return new StringJoiner(", ", "Cookie = {", "}")
+					.add("parameterName=" + parameterName)
+					.add("headerName=" + headerName)
+					.add("cookieName=" + cookieName)
+					.add("cookieDomain=" + cookieDomain)
+					.add("cookiePath=" + cookiePath)
+					.add("cookieHttpOnly=" + cookieHttpOnly)
+					.toString();
 		}
 
 	}
@@ -408,14 +412,14 @@ public class Csrf {
 		public void setSessionAttributeName(String sessionAttributeName){
 			this.sessionAttributeName = sessionAttributeName;
 		}
-
+		
 		@Override
 		public String toString(){
-			final ConfigStringBuilder sb = ConfigStringBuilder.create("Session");
-
-			sb.set("parameterName", parameterName).set("headerName", headerName).set("sessionAttributeName", sessionAttributeName);
-
-			return sb.build();
+			return new StringJoiner(", ", "Session = {", "}")
+					.add("parameterName=" + parameterName)
+					.add("headerName=" + headerName)
+					.add("sessionAttributeName=" + sessionAttributeName)
+					.toString();
 		}
 
 	}
