@@ -43,7 +43,7 @@ public class Hsts {
 	/**
 	 * 是否启用 Hsts
 	 */
-	private boolean enable = true;
+	private boolean enabled = true;
 
 	/**
 	 * Request 匹配器类
@@ -70,8 +70,8 @@ public class Hsts {
 	 *
 	 * @return 是否启用 Hsts
 	 */
-	public boolean isEnable(){
-		return getEnable();
+	public boolean isEnabled(){
+		return getEnabled();
 	}
 
 	/**
@@ -79,18 +79,18 @@ public class Hsts {
 	 *
 	 * @return 是否启用 Hsts
 	 */
-	public boolean getEnable(){
-		return enable;
+	public boolean getEnabled(){
+		return enabled;
 	}
 
 	/**
 	 * 配置是否启用 Hsts
 	 *
-	 * @param enable
+	 * @param enabled
 	 * 		是否启用 Hsts
 	 */
-	public void setEnable(boolean enable){
-		this.enable = enable;
+	public void setEnabled(boolean enabled){
+		this.enabled = enabled;
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class Hsts {
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "Hsts = {", "}")
-				.add("enable=" + enable)
+				.add("enabled=" + enabled)
 				.add("matcher=" + matcher)
 				.add("maxAge=" + maxAge)
 				.add("includeSubDomains=" + includeSubDomains)

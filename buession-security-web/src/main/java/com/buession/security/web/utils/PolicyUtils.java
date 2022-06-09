@@ -22,46 +22,43 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.config;
+package com.buession.security.web.utils;
+
+import com.buession.core.utils.Assert;
+import org.owasp.validator.html.Policy;
+import org.owasp.validator.html.PolicyException;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+
+import java.io.IOException;
 
 /**
+ * {@link Policy} 工具类
+ *
  * @author Yong.Teng
  * @since 2.0.0
  */
-class ConfigStringBuilder {
+public class PolicyUtils {
 
-	private final StringBuilder sb = new java.lang.StringBuilder();
+	/**
+	 * 从配置文件创建 {@link Policy} 实例
+	 *
+	 * @param configLocation
+	 * 		配置文件路径
+	 *
+	 * @return {@link Policy} 实例
+	 *
+	 * @throws IOException
+	 * 		配置文件不存在时抛出
+	 * @throws PolicyException
+	 *        {@link Policy} 实例初始化时抛出
+	 */
+	public static Policy createFromConfigFile(final String configLocation) throws IOException, PolicyException{
+		Assert.isBlank(configLocation, "Policy config location cloud not be empty or null.");
+		PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+		Resource[] resources = resourceResolver.getResources(configLocation);
 
-	private int index = 0;
-
-	private boolean finished = false;
-
-	private ConfigStringBuilder(final String name){
-		sb.append(name).append(" = {");
-	}
-
-	public static ConfigStringBuilder create(final String name){
-		return new ConfigStringBuilder(name);
-	}
-
-	public ConfigStringBuilder set(final String name, final Object value){
-		if(++index > 0){
-			sb.append(", ");
-		}
-
-		sb.append(name).append('=').append(value);
-		return this;
-	}
-
-	public String build(){
-		this.finished = true;
-		sb.append('}');
-		return sb.toString();
-	}
-
-	@Override
-	public String toString(){
-		return this.finished ? sb.toString() : build();
+		return Policy.getInstance(resources[0].getInputStream());
 	}
 
 }

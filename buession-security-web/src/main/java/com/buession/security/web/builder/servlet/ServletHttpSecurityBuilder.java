@@ -83,7 +83,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 
 	@Override
 	public ServletHttpSecurityBuilder httpBasic(final HttpBasic config){
-		if(config.isEnable() == false){
+		if(config.isEnabled() == false){
 			try{
 				httpSecurity.httpBasic().disable();
 			}catch(Exception e){
@@ -101,7 +101,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 		try{
 			CsrfConfigurer<HttpSecurity> csrfConfigurer = httpSecurity.csrf();
 
-			if(config.isEnable()){
+			if(config.isEnabled()){
 				if(config.getMode() != null){
 					switch(config.getMode()){
 						case COOKIE:
@@ -174,7 +174,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 			HeadersConfigurer<HttpSecurity>.FrameOptionsConfig frameOptionsConfig = httpSecurity.headers()
 					.frameOptions();
 
-			if(config.isEnable()){
+			if(config.isEnabled()){
 				if(config.getMode() != null){
 					switch(config.getMode()){
 						case ALLOW_FROM:
@@ -208,7 +208,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 			HeadersConfigurer<HttpSecurity>.HstsConfig hstsConfig = httpSecurity.headers()
 					.httpStrictTransportSecurity();
 
-			if(config.isEnable()){
+			if(config.isEnabled()){
 				if(config.getMatcher() == null){
 					hstsConfig.maxAgeInSeconds(config.getMaxAge()).includeSubDomains(config.getIncludeSubDomains())
 							.preload(config.isPreload());
@@ -233,7 +233,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 		try{
 			HeadersConfigurer<HttpSecurity>.HpkpConfig hpkpConfig = httpSecurity.headers().httpPublicKeyPinning();
 
-			if(config.isEnable()){
+			if(config.isEnabled()){
 				hpkpConfig.maxAgeInSeconds(config.getMaxAge()).includeSubDomains(config.getIncludeSubDomains())
 						.reportOnly(config.isReportOnly());
 
@@ -263,7 +263,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	@Override
 	public ServletHttpSecurityBuilder contentSecurityPolicy(final ContentSecurityPolicy config){
 		try{
-			if(config.isEnable() && Validate.hasText(config.getPolicyDirectives())){
+			if(config.isEnabled() && Validate.hasText(config.getPolicyDirectives())){
 				HeadersConfigurer<HttpSecurity>.ContentSecurityPolicyConfig contentSecurityPolicyConfig = httpSecurity.headers()
 						.contentSecurityPolicy(config.getPolicyDirectives());
 
@@ -283,7 +283,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	@Override
 	public ServletHttpSecurityBuilder referrerPolicy(final ReferrerPolicy config){
 		try{
-			if(config.isEnable()){
+			if(config.isEnabled()){
 				if(config.getPolicy() != null){
 					ReferrerPolicyHeaderWriter.ReferrerPolicy referrerPolicy = null;
 
@@ -335,7 +335,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 		try{
 			HeadersConfigurer<HttpSecurity>.XXssConfig xXssConfig = httpSecurity.headers().xssProtection();
 
-			if(config.isEnable()){
+			if(config.isEnabled()){
 				xXssConfig.block(config.getBlock()).xssProtectionEnabled(config.isEnabledProtection());
 			}else{
 				xXssConfig.disable();

@@ -79,7 +79,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 
 	@Override
 	public HttpSecurityBuilder httpBasic(HttpBasic config){
-		if(config.isEnable() == false){
+		if(config.isEnabled() == false){
 			serverHttpSecurity.httpBasic().disable();
 		}
 
@@ -90,7 +90,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	public HttpSecurityBuilder csrf(Csrf config){
 		ServerHttpSecurity.CsrfSpec csrfSpec = serverHttpSecurity.csrf();
 
-		if(config.isEnable()){
+		if(config.isEnabled()){
 			if(config.getMode() != null){
 				switch(config.getMode()){
 					case COOKIE:
@@ -156,7 +156,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	public HttpSecurityBuilder frameOptions(FrameOptions config){
 		ServerHttpSecurity.HeaderSpec.FrameOptionsSpec frameOptionsSpec = serverHttpSecurity.headers().frameOptions();
 
-		if(config.isEnable()){
+		if(config.isEnabled()){
 			if(config.getMode() != null){
 				switch(config.getMode()){
 					case ALLOW_FROM:
@@ -183,7 +183,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	public HttpSecurityBuilder hsts(Hsts config){
 		ServerHttpSecurity.HeaderSpec.HstsSpec hstsSpec = serverHttpSecurity.headers().hsts();
 
-		if(config.isEnable()){
+		if(config.isEnabled()){
 			hstsSpec.maxAge(Duration.ofMinutes(config.getMaxAge())).includeSubdomains(config.getIncludeSubDomains())
 					.preload(config.isPreload());
 		}else{
@@ -200,7 +200,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 
 	@Override
 	public HttpSecurityBuilder contentSecurityPolicy(ContentSecurityPolicy config){
-		if(config.isEnable() && Validate.hasText(config.getPolicyDirectives())){
+		if(config.isEnabled() && Validate.hasText(config.getPolicyDirectives())){
 			serverHttpSecurity.headers().contentSecurityPolicy((contentSecurityPolicySpec)->{
 				contentSecurityPolicySpec.policyDirectives(config.getPolicyDirectives());
 				contentSecurityPolicySpec.reportOnly(config.isReportOnly());
@@ -212,7 +212,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 
 	@Override
 	public HttpSecurityBuilder referrerPolicy(ReferrerPolicy config){
-		if(config.isEnable()){
+		if(config.isEnabled()){
 			if(config.getPolicy() != null){
 				switch(config.getPolicy()){
 					case NO_REFERRER:
@@ -261,7 +261,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 		ServerHttpSecurity.HeaderSpec.XssProtectionSpec xssProtectionSpec = serverHttpSecurity.headers()
 				.xssProtection();
 
-		if(config.isEnable()){
+		if(config.isEnabled()){
 		}else{
 			xssProtectionSpec.disable();
 		}

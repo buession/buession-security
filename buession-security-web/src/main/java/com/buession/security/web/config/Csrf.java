@@ -41,7 +41,7 @@ public class Csrf {
 	/**
 	 * 是否启用 Csrf
 	 */
-	private boolean enable = true;
+	private boolean enabled = true;
 
 	/**
 	 * Csrf 模式
@@ -63,8 +63,8 @@ public class Csrf {
 	 *
 	 * @return 是否启用 Csrf
 	 */
-	public boolean isEnable(){
-		return getEnable();
+	public boolean isEnabled(){
+		return getEnabled();
 	}
 
 	/**
@@ -72,18 +72,18 @@ public class Csrf {
 	 *
 	 * @return 是否启用 Csrf
 	 */
-	public boolean getEnable(){
-		return enable;
+	public boolean getEnabled(){
+		return enabled;
 	}
 
 	/**
 	 * 设置是否启用 Csrf
 	 *
-	 * @param enable
+	 * @param enabled
 	 * 		是否启用 Csrf
 	 */
-	public void setEnable(boolean enable){
-		this.enable = enable;
+	public void setEnabled(boolean enabled){
+		this.enabled = enabled;
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class Csrf {
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "Csrf = {", "}")
-				.add("enable=" + enable)
+				.add("enabled=" + enabled)
 				.add("mode=" + mode)
 				.add("cookie=" + cookie)
 				.add("session=" + session)
@@ -412,7 +412,7 @@ public class Csrf {
 		public void setSessionAttributeName(String sessionAttributeName){
 			this.sessionAttributeName = sessionAttributeName;
 		}
-		
+
 		@Override
 		public String toString(){
 			return new StringJoiner(", ", "Session = {", "}")

@@ -39,7 +39,7 @@ public class Xss {
 	/**
 	 * 是否启用 Xss 配置
 	 */
-	private boolean enable = true;
+	private boolean enabled = true;
 
 	private boolean block;
 
@@ -55,8 +55,8 @@ public class Xss {
 	 *
 	 * @return 是否启用 Xss 配置
 	 */
-	public boolean isEnable(){
-		return getEnable();
+	public boolean isEnabled(){
+		return getEnabled();
 	}
 
 	/**
@@ -64,18 +64,18 @@ public class Xss {
 	 *
 	 * @return 是否启用 Xss 配置
 	 */
-	public boolean getEnable(){
-		return enable;
+	public boolean getEnabled(){
+		return enabled;
 	}
 
 	/**
 	 * 配置是否启用 Xss 配置
 	 *
-	 * @param enable
+	 * @param enabled
 	 * 		是否启用 Xss 配置
 	 */
-	public void setEnable(boolean enable){
-		this.enable = enable;
+	public void setEnabled(boolean enabled){
+		this.enabled = enabled;
 	}
 
 	public boolean isBlock(){
@@ -124,7 +124,7 @@ public class Xss {
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "Xss = {", "}")
-				.add("enable=" + enable)
+				.add("enabled=" + enabled)
 				.add("block=" + block)
 				.add("enabledProtection=" + enabledProtection)
 				.add("policyConfigLocation=" + policyConfigLocation)

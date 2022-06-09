@@ -39,7 +39,7 @@ public class FrameOptions {
 	/**
 	 * 是否启用 Frame Options
 	 */
-	private boolean enable = true;
+	private boolean enabled = true;
 
 	/**
 	 * Frame Options 模式
@@ -51,8 +51,8 @@ public class FrameOptions {
 	 *
 	 * @return 是否启用 Frame Options
 	 */
-	public boolean isEnable(){
-		return getEnable();
+	public boolean isEnabled(){
+		return getEnabled();
 	}
 
 	/**
@@ -60,18 +60,18 @@ public class FrameOptions {
 	 *
 	 * @return 是否启用 Frame Options
 	 */
-	public boolean getEnable(){
-		return enable;
+	public boolean getEnabled(){
+		return enabled;
 	}
 
 	/**
 	 * 配置是否启用 Frame Options
 	 *
-	 * @param enable
+	 * @param enabled
 	 * 		是否启用 Frame Options
 	 */
-	public void setEnable(boolean enable){
-		this.enable = enable;
+	public void setEnabled(boolean enabled){
+		this.enabled = enabled;
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class FrameOptions {
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "FrameOptions = {", "}")
-				.add("enable=" + enable)
+				.add("enabled=" + enabled)
 				.add("mode=" + mode)
 				.toString();
 	}

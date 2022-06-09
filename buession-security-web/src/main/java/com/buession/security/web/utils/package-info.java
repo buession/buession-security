@@ -22,58 +22,8 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.config;
-
-import java.util.StringJoiner;
-
 /**
- * Http Basic 验证
- * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication"
- * target="_blank">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication</a></p>
- *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class HttpBasic {
-
-	/**
-	 * 是否启用 Http Basic 验证
-	 */
-	private boolean enabled = false;
-
-	/**
-	 * 返回是否启用 Http Basic 验证
-	 *
-	 * @return 是否启用 Http Basic 验证
-	 */
-	public boolean isEnabled(){
-		return getEnabled();
-	}
-
-	/**
-	 * 返回是否启用 Http Basic 验证
-	 *
-	 * @return 是否启用 Http Basic 验证
-	 */
-	public boolean getEnabled(){
-		return enabled;
-	}
-
-	/**
-	 * 设置是否启用 Http Basic 验证
-	 *
-	 * @param enabled
-	 * 		是否启用 Http Basic 验证
-	 */
-	public void setEnabled(boolean enabled){
-		this.enabled = enabled;
-	}
-
-	@Override
-	public String toString(){
-		return new StringJoiner(", ", "HttpBasic = {", "}")
-				.add("enabled=" + enabled)
-				.toString();
-	}
-
-}
+package com.buession.security.web.utils;

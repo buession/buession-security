@@ -39,7 +39,7 @@ public class ContentSecurityPolicy {
 	/**
 	 * 是否启用 ContentSecurityPolicy
 	 */
-	private boolean enable = true;
+	private boolean enabled = true;
 
 	private boolean reportOnly;
 
@@ -53,8 +53,8 @@ public class ContentSecurityPolicy {
 	 *
 	 * @return 是否启用 ContentSecurityPolicy
 	 */
-	public boolean isEnable(){
-		return getEnable();
+	public boolean isEnabled(){
+		return getEnabled();
 	}
 
 	/**
@@ -62,18 +62,18 @@ public class ContentSecurityPolicy {
 	 *
 	 * @return 是否启用 ContentSecurityPolicy
 	 */
-	public boolean getEnable(){
-		return enable;
+	public boolean getEnabled(){
+		return enabled;
 	}
 
 	/**
 	 * 配置是否启用 ContentSecurityPolicy
 	 *
-	 * @param enable
+	 * @param enabled
 	 * 		是否启用 ContentSecurityPolicy
 	 */
-	public void setEnable(boolean enable){
-		this.enable = enable;
+	public void setEnabled(boolean enabled){
+		this.enabled = enabled;
 	}
 
 	public boolean isReportOnly(){
@@ -110,7 +110,7 @@ public class ContentSecurityPolicy {
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "ContentSecurityPolicy = {", "}")
-				.add("enable=" + enable)
+				.add("enabled=" + enabled)
 				.add("reportOnly=" + reportOnly)
 				.add("policyDirectives=" + policyDirectives)
 				.toString();

@@ -41,7 +41,7 @@ public class Hpkp {
 	/**
 	 * 是否启用 Hpkp
 	 */
-	private boolean enable = true;
+	private boolean enabled = true;
 
 	private Map<String, String> pins;
 
@@ -66,8 +66,8 @@ public class Hpkp {
 	 *
 	 * @return 是否启用 Hpkp
 	 */
-	public boolean isEnable(){
-		return getEnable();
+	public boolean isEnabled(){
+		return getEnabled();
 	}
 
 	/**
@@ -75,18 +75,18 @@ public class Hpkp {
 	 *
 	 * @return 是否启用 Hpkp
 	 */
-	public boolean getEnable(){
-		return enable;
+	public boolean getEnabled(){
+		return enabled;
 	}
 
 	/**
 	 * 配置是否启用 Hsts
 	 *
-	 * @param enable
+	 * @param enabled
 	 * 		是否启用 Hsts
 	 */
-	public void setEnable(boolean enable){
-		this.enable = enable;
+	public void setEnabled(boolean enabled){
+		this.enabled = enabled;
 	}
 
 	public Map<String, String> getPins(){
@@ -175,7 +175,7 @@ public class Hpkp {
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "Hpkp = {", "}")
-				.add("enable=" + enable)
+				.add("enabled=" + enabled)
 				.add("pins=" + pins)
 				.add("sha256Pins=" + Arrays.toString(sha256Pins))
 				.add("maxAge=" + maxAge)

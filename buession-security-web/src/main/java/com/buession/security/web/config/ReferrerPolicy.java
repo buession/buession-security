@@ -37,7 +37,7 @@ public class ReferrerPolicy {
 	/**
 	 * 是否启用 ReferrerPolicy
 	 */
-	private boolean enable = true;
+	private boolean enabled = true;
 
 	private ReferrerPolicy.Policy policy = ReferrerPolicy.Policy.NO_REFERRER;
 
@@ -46,8 +46,8 @@ public class ReferrerPolicy {
 	 *
 	 * @return 是否启用 ReferrerPolicy
 	 */
-	public boolean isEnable(){
-		return getEnable();
+	public boolean isEnabled(){
+		return getEnabled();
 	}
 
 	/**
@@ -55,18 +55,18 @@ public class ReferrerPolicy {
 	 *
 	 * @return 是否启用 ReferrerPolicy
 	 */
-	public boolean getEnable(){
-		return enable;
+	public boolean getEnabled(){
+		return enabled;
 	}
 
 	/**
 	 * 配置是否启用 ReferrerPolicy
 	 *
-	 * @param enable
+	 * @param enabled
 	 * 		是否启用 ReferrerPolicy
 	 */
-	public void setEnable(boolean enable){
-		this.enable = enable;
+	public void setEnabled(boolean enabled){
+		this.enabled = enabled;
 	}
 
 	public ReferrerPolicy.Policy getPolicy(){
@@ -80,7 +80,7 @@ public class ReferrerPolicy {
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "ReferrerPolicy = {", "}")
-				.add("enable=" + enable)
+				.add("enabled=" + enabled)
 				.add("policy=" + policy)
 				.toString();
 	}
