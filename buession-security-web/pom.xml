@@ -69,6 +69,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.buession</groupId>
+			<artifactId>buession-web</artifactId>
+			<version>${buession.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
 			<scope>provided</scope>
