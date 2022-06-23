@@ -19,110 +19,19 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2021 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.filter;
 
-import com.buession.security.pac4j.profile.ShiroProfileManager;
-import org.pac4j.core.config.Config;
-import org.pac4j.core.context.JEEContext;
-import org.pac4j.core.context.session.SessionStore;
-import org.pac4j.core.engine.DefaultLogoutLogic;
-import org.pac4j.core.engine.LogoutLogic;
-import org.pac4j.core.http.adapter.HttpActionAdapter;
-import org.pac4j.core.http.adapter.JEEHttpActionAdapter;
-import org.pac4j.core.util.CommonHelper;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.util.Optional;
-
 /**
  * @author Yong.Teng
  */
-public class LogoutFilter extends AbstractPac4jFilter {
-
-	private String defaultUrl;
-
-	private String logoutUrlPattern;
-
-	private Boolean localLogout;
-
-	private Boolean centralLogout;
-
-	private LogoutLogic<Object, JEEContext> logoutLogic = new DefaultLogoutLogic<>();
+@Deprecated
+public class LogoutFilter extends io.buji.pac4j.filter.LogoutFilter {
 
 	public LogoutFilter(){
-		((DefaultLogoutLogic<Object, JEEContext>) logoutLogic).setProfileManagerFactory(ShiroProfileManager::new);
-	}
-
-	public LogoutFilter(Config config){
-		super(config);
-		((DefaultLogoutLogic<Object, JEEContext>) logoutLogic).setProfileManagerFactory(ShiroProfileManager::new);
-	}
-
-	public String getDefaultUrl(){
-		return defaultUrl;
-	}
-
-	public void setDefaultUrl(String defaultUrl){
-		this.defaultUrl = defaultUrl;
-	}
-
-	public String getLogoutUrlPattern(){
-		return logoutUrlPattern;
-	}
-
-	public void setLogoutUrlPattern(String logoutUrlPattern){
-		this.logoutUrlPattern = logoutUrlPattern;
-	}
-
-	public Boolean getLocalLogout(){
-		return localLogout;
-	}
-
-	public void setLocalLogout(Boolean localLogout){
-		this.localLogout = localLogout;
-	}
-
-	public Boolean getCentralLogout(){
-		return centralLogout;
-	}
-
-	public void setCentralLogout(Boolean centralLogout){
-		this.centralLogout = centralLogout;
-	}
-
-	public LogoutLogic<Object, JEEContext> getLogoutLogic(){
-		return logoutLogic;
-	}
-
-	public void setLogoutLogic(LogoutLogic<Object, JEEContext> logoutLogic){
-		this.logoutLogic = logoutLogic;
-	}
-
-	@Override
-	public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse,
-						 final FilterChain filterChain) throws IOException, ServletException{
-		CommonHelper.assertNotNull("logoutLogic", logoutLogic);
-		CommonHelper.assertNotNull("config", getConfig());
-
-		final HttpServletRequest request = (HttpServletRequest) servletRequest;
-		final HttpServletResponse response = (HttpServletResponse) servletResponse;
-		final SessionStore<JEEContext> sessionStore = getSessionStore();
-		final JEEContext context = new JEEContext(request, response, sessionStore);
-		final HttpActionAdapter<Object, JEEContext> adapter =
-				Optional.ofNullable(getHttpActionAdapter()).orElse(JEEHttpActionAdapter.INSTANCE);
-
-		logoutLogic.perform(context, getConfig(), adapter, getDefaultUrl(), getLogoutUrlPattern(), getLocalLogout(),
-				true, getCentralLogout());
+		super();
 	}
 
 }

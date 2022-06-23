@@ -19,107 +19,19 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2021 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.filter;
 
-import com.buession.security.pac4j.engine.ShiroCallbackLogic;
-import org.pac4j.core.config.Config;
-import org.pac4j.core.context.JEEContext;
-import org.pac4j.core.context.session.SessionStore;
-import org.pac4j.core.engine.CallbackLogic;
-import org.pac4j.core.http.adapter.HttpActionAdapter;
-import org.pac4j.core.http.adapter.JEEHttpActionAdapter;
-import org.pac4j.core.util.CommonHelper;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.util.Optional;
-
 /**
  * @author Yong.Teng
  */
-public class CallbackFilter extends AbstractPac4jFilter {
-
-	private String defaultUrl;
-
-	private Boolean saveInSession;
-
-	private Boolean multiProfile;
-
-	private String defaultClient;
-
-	private CallbackLogic<Object, JEEContext> callbackLogic = new ShiroCallbackLogic<>();
+@Deprecated
+public class CallbackFilter extends io.buji.pac4j.filter.CallbackFilter {
 
 	public CallbackFilter(){
-	}
-
-	public CallbackFilter(Config config){
-		super(config);
-	}
-
-	public String getDefaultUrl(){
-		return defaultUrl;
-	}
-
-	public void setDefaultUrl(String defaultUrl){
-		this.defaultUrl = defaultUrl;
-	}
-
-	public Boolean getSaveInSession(){
-		return saveInSession;
-	}
-
-	public void setSaveInSession(Boolean saveInSession){
-		this.saveInSession = saveInSession;
-	}
-
-	public Boolean getMultiProfile(){
-		return multiProfile;
-	}
-
-	public void setMultiProfile(Boolean multiProfile){
-		this.multiProfile = multiProfile;
-	}
-
-	public String getDefaultClient(){
-		return defaultClient;
-	}
-
-	public void setDefaultClient(String defaultClient){
-		this.defaultClient = defaultClient;
-	}
-
-	public CallbackLogic<Object, JEEContext> getCallbackLogic(){
-		return callbackLogic;
-	}
-
-	public void setCallbackLogic(CallbackLogic<Object, JEEContext> callbackLogic){
-		this.callbackLogic = callbackLogic;
-	}
-
-	@Override
-	public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse,
-						 final FilterChain filterChain) throws IOException, ServletException{
-		CommonHelper.assertNotNull("callbackLogic", callbackLogic);
-		CommonHelper.assertNotNull("config", getConfig());
-
-		final HttpServletRequest request = (HttpServletRequest) servletRequest;
-		final HttpServletResponse response = (HttpServletResponse) servletResponse;
-		final SessionStore<JEEContext> sessionStore = getSessionStore();
-		final JEEContext context = new JEEContext(request, response, sessionStore);
-		final HttpActionAdapter<Object, JEEContext> adapter =
-				Optional.ofNullable(getHttpActionAdapter()).orElse(JEEHttpActionAdapter.INSTANCE);
-
-		callbackLogic.perform(context, getConfig(), adapter, getDefaultUrl(), getSaveInSession(), getMultiProfile(),
-				false, getDefaultClient());
+		super();
 	}
 
 }

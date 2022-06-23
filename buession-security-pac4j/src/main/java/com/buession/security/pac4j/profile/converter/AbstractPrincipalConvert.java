@@ -27,14 +27,13 @@
 package com.buession.security.pac4j.profile.converter;
 
 import com.buession.security.pac4j.profile.ProfileUtils;
-import com.buession.security.pac4j.subject.Pac4jPrincipal;
+import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.pac4j.core.profile.CommonProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * @author Yong.Teng
@@ -56,15 +55,15 @@ public abstract class AbstractPrincipalConvert<T> implements PrincipalConvert<T>
 
 		Pac4jPrincipal pac4jPrincipal = (Pac4jPrincipal) source;
 
-		Optional<CommonProfile> optional = pac4jPrincipal.getProfile();
+		CommonProfile profile = pac4jPrincipal.getProfile();
 
-		if(optional == null){
-			logger.error("Principal profile optional is null.");
+		if(profile == null){
+			logger.error("Principal profile is null.");
 			return null;
 		}
 
 		try{
-			return ProfileUtils.convert(optional.get(), getType());
+			return ProfileUtils.convert(profile, getType());
 		}catch(IllegalAccessException e){
 			logger.error("CommonProfile convert to {} error: {}.", getType().getName(), e.getMessage());
 		}catch(InstantiationException e){

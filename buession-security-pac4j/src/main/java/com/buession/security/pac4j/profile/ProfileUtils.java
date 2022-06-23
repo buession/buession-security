@@ -27,7 +27,7 @@ package com.buession.security.pac4j.profile;
 import com.buession.beans.BeanUtils;
 import com.buession.core.utils.StringUtils;
 import com.buession.core.validator.Validate;
-import com.buession.security.pac4j.subject.Pac4jPrincipal;
+import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.apache.shiro.SecurityUtils;
 import org.pac4j.core.profile.CommonProfile;
 
@@ -65,7 +65,7 @@ public class ProfileUtils {
 	 * @return 用户 Profile
 	 */
 	public static CommonProfile getProfileFromPac4jPrincipal(Pac4jPrincipal principal){
-		return principal == null ? null : principal.getProfile().orElse(null);
+		return principal == null ? null : principal.getProfile();
 	}
 
 	/**
@@ -86,7 +86,8 @@ public class ProfileUtils {
 	 * 		权限异常
 	 */
 	@SuppressWarnings({"unchecked"})
-	public static <T> T convert(CommonProfile profile, Class<T> type) throws InstantiationException, IllegalAccessException{
+	public static <T> T convert(CommonProfile profile, Class<T> type)
+			throws InstantiationException, IllegalAccessException{
 		return convert(profile, type, "id", "realName");
 	}
 
@@ -112,7 +113,8 @@ public class ProfileUtils {
 	 * 		权限异常
 	 */
 	@SuppressWarnings({"unchecked"})
-	public static <T> T convert(CommonProfile profile, Class<T> type, String idFieldName, String realNameFieldName) throws InstantiationException, IllegalAccessException{
+	public static <T> T convert(CommonProfile profile, Class<T> type, String idFieldName, String realNameFieldName)
+			throws InstantiationException, IllegalAccessException{
 		T instance = type.newInstance();
 		Map<String, Object> attributes = new LinkedHashMap<>(profile.getAttributes());
 

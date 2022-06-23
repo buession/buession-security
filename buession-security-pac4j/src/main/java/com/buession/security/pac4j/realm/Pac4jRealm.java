@@ -19,83 +19,19 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2021 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.realm;
 
-import com.buession.security.pac4j.subject.Pac4jPrincipal;
-import com.buession.security.pac4j.token.Pac4jToken;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.pac4j.core.profile.CommonProfile;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 /**
  * @author Yong.Teng
  */
-public class Pac4jRealm extends AuthorizingRealm {
-
-	private String principalNameAttribute;
+@Deprecated
+public class Pac4jRealm extends io.buji.pac4j.realm.Pac4jRealm {
 
 	public Pac4jRealm(){
-		setAuthenticationTokenClass(Pac4jToken.class);
-	}
-
-	public String getPrincipalNameAttribute(){
-		return principalNameAttribute;
-	}
-
-	public void setPrincipalNameAttribute(String principalNameAttribute){
-		this.principalNameAttribute = principalNameAttribute;
-	}
-
-	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken authenticationToken) throws AuthenticationException{
-		final Pac4jToken token = (Pac4jToken) authenticationToken;
-		final List<CommonProfile> profiles = token.getProfiles();
-		final Pac4jPrincipal principal = new Pac4jPrincipal(profiles, principalNameAttribute);
-		final PrincipalCollection principalCollection = new SimplePrincipalCollection(principal, getName());
-
-		return new SimpleAuthenticationInfo(principalCollection, profiles.hashCode());
-	}
-
-	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals){
-		final Set<String> roles = new HashSet<>();
-		final Set<String> permissions = new HashSet<>();
-		final Pac4jPrincipal principal = principals.oneByType(Pac4jPrincipal.class);
-
-		if(principal != null){
-			final Optional<List<CommonProfile>> profiles = principal.getProfiles();
-
-			if(profiles.isPresent()){
-				for(CommonProfile profile : profiles.get()){
-					if(profile != null){
-						roles.addAll(profile.getRoles());
-						permissions.addAll(profile.getPermissions());
-					}
-				}
-			}
-		}
-
-		final SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-
-		simpleAuthorizationInfo.addRoles(roles);
-		simpleAuthorizationInfo.addStringPermissions(permissions);
-
-		return simpleAuthorizationInfo;
+		super();
 	}
 
 }

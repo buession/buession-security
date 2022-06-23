@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.engine;
@@ -31,11 +31,12 @@ import org.pac4j.core.engine.DefaultSecurityLogic;
 /**
  * @author Yong.Teng
  */
+@Deprecated
 public class ShiroSecurityLogic<R, C extends WebContext> extends DefaultSecurityLogic<R, C> {
 
-    public ShiroSecurityLogic() {
-        super();
-        setProfileManagerFactory(ShiroProfileManager::new);
-    }
+	public ShiroSecurityLogic(){
+		super();
+		setProfileManagerFactory(ShiroProfileManager::new);
+	}
 
 }

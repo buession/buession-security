@@ -19,49 +19,19 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2021 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.subject;
 
-import com.buession.security.pac4j.token.Pac4jToken;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.subject.SubjectContext;
-import org.apache.shiro.web.mgt.DefaultWebSubjectFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author Yong.Teng
  */
-public class Pac4jSubjectFactory extends DefaultWebSubjectFactory {
+@Deprecated
+public class Pac4jSubjectFactory extends io.buji.pac4j.subject.Pac4jSubjectFactory {
 
-	private final static Logger logger = LoggerFactory.getLogger(Pac4jSubjectFactory.class);
-
-	@Override
-	public Subject createSubject(SubjectContext context){
-		if(logger.isInfoEnabled()){
-			logger.info("Create subject by: {}", context);
-		}
-		if(context.isAuthenticated()){
-			logger.info("Subject context is authenticated");
-			AuthenticationToken token = context.getAuthenticationToken();
-
-			if(token instanceof Pac4jToken){
-				if(logger.isInfoEnabled()){
-					logger.info("Authentication token instanceof {}", Pac4jToken.class.getName());
-				}
-
-				final Pac4jToken clientToken = (Pac4jToken) token;
-				if(clientToken.isRememberMe()){
-					logger.info("Token is remember me");
-					context.setAuthenticated(false);
-				}
-			}
-		}
-
-		return super.createSubject(context);
+	public Pac4jSubjectFactory(){
+		super();
 	}
 
 }

@@ -19,85 +19,29 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2021 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.subject;
 
-import com.buession.core.validator.Validate;
-import org.pac4j.core.profile.BasicUserProfile;
 import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.core.profile.ProfileHelper;
-import org.pac4j.core.util.CommonHelper;
 
-import java.io.Serializable;
-import java.security.Principal;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * @author Yong.Teng
  */
-public class Pac4jPrincipal implements Principal, Serializable {
+@Deprecated
+public class Pac4jPrincipal extends io.buji.pac4j.subject.Pac4jPrincipal {
 
 	private final static long serialVersionUID = 96494800982373373L;
 
-	private final String principalNameAttribute;
-
-	private final List<CommonProfile> profiles;
-
 	public Pac4jPrincipal(final List<CommonProfile> profiles){
-		this.principalNameAttribute = null;
-		this.profiles = profiles;
+		super(profiles);
 	}
 
 	public Pac4jPrincipal(final List<CommonProfile> profiles, String principalNameAttribute){
-		this.principalNameAttribute = Validate.hasText(principalNameAttribute) ? principalNameAttribute.trim() : null;
-		this.profiles = profiles;
-	}
-
-	@Override
-	public String getName(){
-		Optional<CommonProfile> profile = getProfile();
-		if(principalNameAttribute == null){
-			return profile.map(BasicUserProfile::getId).orElse(null);
-		}
-
-		Object value = profile.map(commonProfile->commonProfile.getAttribute(principalNameAttribute)).orElse(null);
-		return null == value ? null : String.valueOf(value);
-	}
-
-	public Optional<CommonProfile> getProfile(){
-		return ProfileHelper.flatIntoOneProfile(profiles);
-	}
-
-	public Optional<List<CommonProfile>> getProfiles(){
-		return Optional.of(profiles);
-	}
-
-	@Override
-	public boolean equals(Object obj){
-		if(this == obj){
-			return true;
-		}
-
-		if(obj instanceof Pac4jPrincipal){
-			final Pac4jPrincipal that = (Pac4jPrincipal) obj;
-			return Objects.deepEquals(profiles, that.profiles);
-		}
-
-		return false;
-	}
-
-	@Override
-	public int hashCode(){
-		return Objects.hashCode(profiles);
-	}
-
-	@Override
-	public String toString(){
-		return CommonHelper.toNiceString(getClass(), "profiles", getProfiles());
+		super(profiles, principalNameAttribute);
 	}
 
 }

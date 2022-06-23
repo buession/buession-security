@@ -21,37 +21,10 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */
-package com.buession.security.shiro.converter;
-
-import com.buession.core.converter.Converter;
-import com.buession.web.http.SameSite;
-import org.apache.shiro.web.servlet.Cookie;
-
-/**
- * {@link SameSite} 转换为 {@link Cookie.SameSiteOptions}
+ */package com.buession.security.shiro.support;/**
+ * 
  *
  * @author Yong.Teng
- * @since 1.3.3
- */
-public class SameSiteToShiroSameSiteOptionsConverter implements Converter<SameSite, Cookie.SameSiteOptions> {
-
-	@Override
-	public Cookie.SameSiteOptions convert(SameSite sameSite){
-		if(sameSite == null){
-			return null;
-		}
-
-		switch(sameSite){
-			case STRICT:
-				return Cookie.SameSiteOptions.STRICT;
-			case LAX:
-				return Cookie.SameSiteOptions.LAX;
-			case NONE:
-				return Cookie.SameSiteOptions.NONE;
-			default:
-				return null;
-		}
-	}
-
+ * @since 2.0.0
+ */public interface ViewSupport {
 }

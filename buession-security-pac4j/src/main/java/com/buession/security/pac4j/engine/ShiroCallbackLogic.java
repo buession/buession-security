@@ -19,23 +19,24 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.engine;
 
-import com.buession.security.pac4j.profile.ShiroProfileManager;
+import io.buji.pac4j.profile.ShiroProfileManager;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.engine.DefaultCallbackLogic;
 
 /**
  * @author Yong.Teng
  */
+@Deprecated
 public class ShiroCallbackLogic<R, C extends WebContext> extends DefaultCallbackLogic<R, C> {
 
-    public ShiroCallbackLogic() {
-        super();
-        setProfileManagerFactory(ShiroProfileManager::new);
-    }
+	public ShiroCallbackLogic(){
+		super();
+		setProfileManagerFactory(ShiroProfileManager::new);
+	}
 
 }

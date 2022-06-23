@@ -19,48 +19,25 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.token;
 
-import org.apache.shiro.authc.RememberMeAuthenticationToken;
 import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.core.profile.ProfileHelper;
 
 import java.util.List;
 
 /**
  * @author Yong.Teng
  */
-public class Pac4jToken implements RememberMeAuthenticationToken {
+@Deprecated
+public class Pac4jToken extends io.buji.pac4j.token.Pac4jToken {
 
-    private final List<CommonProfile> profiles;
+	private final static long serialVersionUID = 2333119474518175179L;
 
-    private final boolean isRemembered;
-
-    public Pac4jToken(final List<CommonProfile> profiles, final boolean isRemembered){
-        this.profiles = profiles;
-        this.isRemembered = isRemembered;
-    }
-
-    @Override
-    public Object getPrincipal(){
-        return ProfileHelper.flatIntoOneProfile(profiles);
-    }
-
-    @Override
-    public Object getCredentials(){
-        return profiles.hashCode();
-    }
-
-    public List<CommonProfile> getProfiles(){
-        return profiles;
-    }
-
-    @Override
-    public boolean isRememberMe(){
-        return isRemembered;
-    }
+	public Pac4jToken(final List<CommonProfile> profiles, final boolean isRemembered){
+		super(profiles, isRemembered);
+	}
 
 }

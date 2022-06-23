@@ -19,22 +19,19 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.env;
 
-import org.apache.shiro.config.Ini;
-import org.apache.shiro.web.env.IniWebEnvironment;
-
 /**
  * @author Yong.Teng
  */
-public class Pac4jIniEnvironment extends IniWebEnvironment {
+@Deprecated
+public class Pac4jIniEnvironment extends io.buji.pac4j.env.Pac4jIniEnvironment {
 
-    @Override
-    protected Ini getFrameworkIni() {
-        return Ini.fromResourcePath("classpath:default-pac4j.ini");
-    }
+	public Pac4jIniEnvironment(){
+		super();
+	}
 
 }
