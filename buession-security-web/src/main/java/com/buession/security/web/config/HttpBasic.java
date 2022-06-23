@@ -28,8 +28,8 @@ import java.util.StringJoiner;
 
 /**
  * Http Basic 验证
- * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication"
- * target="_blank">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication</a></p>
+ * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication"target="_blank">
+ * https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication</a></p>
  *
  * @author Yong.Teng
  * @since 2.0.0

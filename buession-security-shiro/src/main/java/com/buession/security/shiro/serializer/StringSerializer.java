@@ -46,12 +46,12 @@ public class StringSerializer implements RedisSerializer<String> {
 
 	@Override
 	public byte[] serialize(String v) throws SerializerException{
-		return v == null ? null : v.getBytes(charset);
+		return v == null ? null : v.getBytes(getCharset());
 	}
 
 	@Override
 	public String deserialize(byte[] bytes) throws SerializerException{
-		return bytes == null ? null : new String(bytes, charset);
+		return bytes == null ? null : new String(bytes, getCharset());
 	}
 
 }

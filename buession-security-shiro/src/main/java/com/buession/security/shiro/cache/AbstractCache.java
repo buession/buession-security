@@ -19,61 +19,139 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.cache;
 
-import com.buession.core.validator.Validate;
+import java.util.StringJoiner;
 
 /**
+ * 缓存抽象类
+ *
+ * @param <K>
+ * 		Key 类型
+ * @param <V>
+ * 		值类型
+ *
  * @author Yong.Teng
+ * @see org.apache.shiro.cache.Cache
  */
-public abstract class AbstractCache<K, V> implements Cache<K, V> {
+public abstract class AbstractCache<K, V> implements Cache<K, V>, org.apache.shiro.cache.Cache<K, V> {
 
-	private String keyPrefix = CacheManager.DEFAULT_KEY_PREFIX;
+	/**
+	 * Key 前缀
+	 */
+	private String keyPrefix = AbstractCacheManager.DEFAULT_KEY_PREFIX;
 
-	private int expire = CacheManager.DEFAULT_EXPIRE;
+	/**
+	 * 有效期（单位：秒）
+	 */
+	private int expire = AbstractCacheManager.DEFAULT_EXPIRE;
 
-	private String principalIdFieldName = CacheManager.DEFAULT_PRINCIPAL_ID_FIELD_NAME;
+	/**
+	 * 身份信息 ID 字段名称
+	 */
+	private String principalIdFieldName = AbstractCacheManager.DEFAULT_PRINCIPAL_ID_FIELD_NAME;
 
+	/**
+	 * 构造函数
+	 */
 	public AbstractCache(){
 	}
 
+	/**
+	 * 构造函数
+	 *
+	 * @param keyPrefix
+	 * 		Key 前缀
+	 * @param expire
+	 * 		有效期（单位：秒）
+	 */
 	public AbstractCache(String keyPrefix, int expire){
 		this.keyPrefix = keyPrefix;
 		this.expire = expire;
 	}
 
+	/**
+	 * 构造函数
+	 *
+	 * @param keyPrefix
+	 * 		Key 前缀
+	 * @param expire
+	 * 		有效期（单位：秒）
+	 * @param principalIdFieldName
+	 * 		身份信息 ID 字段名称
+	 */
 	public AbstractCache(String keyPrefix, int expire, String principalIdFieldName){
 		this(keyPrefix, expire);
 		setPrincipalIdFieldName(principalIdFieldName);
 	}
 
+	/**
+	 * 返回 Key 前缀
+	 *
+	 * @return Key 前缀
+	 */
 	public String getKeyPrefix(){
 		return keyPrefix;
 	}
 
+	/**
+	 * 设置 Key 前缀
+	 *
+	 * @param keyPrefix
+	 * 		Key 前缀
+	 */
 	public void setKeyPrefix(String keyPrefix){
 		this.keyPrefix = keyPrefix;
 	}
 
+	/**
+	 * 返回有效期（单位：秒）
+	 *
+	 * @return 有效期
+	 */
 	public int getExpire(){
 		return expire;
 	}
 
+	/**
+	 * 设置有效期
+	 *
+	 * @param expire
+	 * 		有效期（单位：秒）
+	 */
 	public void setExpire(int expire){
 		this.expire = expire;
 	}
 
+	/**
+	 * 返回身份信息 ID 字段名称
+	 *
+	 * @return 身份信息 ID 字段名称
+	 */
 	public String getPrincipalIdFieldName(){
 		return principalIdFieldName;
 	}
 
+	/**
+	 * 设置身份信息 ID 字段名称
+	 *
+	 * @param principalIdFieldName
+	 * 		身份信息 ID 字段名称
+	 */
 	public void setPrincipalIdFieldName(String principalIdFieldName){
-		if(Validate.hasText(principalIdFieldName)){
-			this.principalIdFieldName = principalIdFieldName;
-		}
+		this.principalIdFieldName = principalIdFieldName;
+	}
+
+	@Override
+	public String toString(){
+		return new StringJoiner(", ", getClass().getName() + "[", "]")
+				.add("keyPrefix=" + keyPrefix)
+				.add("expire=" + expire)
+				.add("principalIdFieldName=" + principalIdFieldName)
+				.toString();
 	}
 
 }

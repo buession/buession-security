@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.exception;
@@ -29,16 +29,17 @@ package com.buession.security.shiro.exception;
  */
 public class PrincipalIdNullException extends RuntimeException {
 
+	private final static long serialVersionUID = 1035491619557739433L;
+
 	public PrincipalIdNullException(Class clazz, String idMethodName){
 		super(formatMessage(clazz, idMethodName));
 	}
 
 	protected static String formatMessage(Class clazz, String idMethodName){
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 
 		sb.append(clazz).append(" id field: ").append(idMethodName).append(", ");
-		sb.append("value is null; ");
-		sb.append("Principal Id shouldn't be null.");
+		sb.append("value is null; ").append("Principal Id shouldn't be null.");
 
 		return sb.toString();
 	}

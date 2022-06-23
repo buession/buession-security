@@ -27,12 +27,7 @@ package com.buession.security.shiro.cache;
 /**
  * @author Yong.Teng
  */
+@Deprecated
 public interface CacheManager extends org.apache.shiro.cache.CacheManager {
-
-	String DEFAULT_KEY_PREFIX = "shiro:cache:";
-
-	int DEFAULT_EXPIRE = 1800;
-
-	String DEFAULT_PRINCIPAL_ID_FIELD_NAME = "id";
 
 }

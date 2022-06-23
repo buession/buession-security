@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2021 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.cache;
@@ -39,12 +39,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * Redis 缓存 {@link Cache} 管理器
+ *
  * @author Yong.Teng
+ * @see Cache
  */
 public class RedisCacheManager extends AbstractCacheManager {
 
 	private final ConcurrentMap<String, Cache> caches = new ConcurrentHashMap<>();
 
+	/**
+	 * Redis 管理器 {@link RedisManager} 实例
+	 */
 	private RedisManager redisManager;
 
 	/**
@@ -72,7 +78,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 */
 	public RedisCacheManager(String keyPrefix, int expire){
 		super(keyPrefix, expire);
@@ -84,9 +90,9 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param principalIdFieldName
-	 * 		Principal Id 字段名称
+	 * 		身份信息 ID 字段名称
 	 */
 	public RedisCacheManager(String keyPrefix, int expire, String principalIdFieldName){
 		super(keyPrefix, expire, principalIdFieldName);
@@ -96,11 +102,11 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * 构造函数
 	 *
 	 * @param redisManager
-	 * 		Redis 管理器
+	 * 		Redis 管理器 {@link RedisManager} 实例
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 */
 	public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire){
 		this(keyPrefix, expire);
@@ -111,17 +117,17 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * 构造函数
 	 *
 	 * @param redisManager
-	 * 		Redis 管理器
+	 * 		Redis 管理器 {@link RedisManager} 实例
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param principalIdFieldName
-	 * 		Principal Id 字段名称
+	 * 		身份信息 ID 字段名称
 	 */
 	public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName){
 		this(keyPrefix, expire, principalIdFieldName);
-		this.redisManager = redisManager;
+		setRedisManager(redisManager);
 	}
 
 	/**
@@ -145,7 +151,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param keySerializer
 	 * 		Key 序列化对象
 	 * @param valueSerializer
@@ -166,9 +172,9 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param principalIdFieldName
-	 * 		Principal Id 字段名称
+	 * 		身份信息 ID 字段名称
 	 * @param keySerializer
 	 * 		Key 序列化对象
 	 * @param valueSerializer
@@ -187,11 +193,11 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * 构造函数
 	 *
 	 * @param redisManager
-	 * 		Redis 管理器
+	 * 		Redis 管理器 {@link RedisManager} 实例
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param keySerializer
 	 * 		Key 序列化对象
 	 * @param valueSerializer
@@ -211,13 +217,13 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * 构造函数
 	 *
 	 * @param redisManager
-	 * 		Redis 管理器
+	 * 		Redis 管理器 {@link RedisManager} 实例
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param principalIdFieldName
-	 * 		Principal Id 字段名称
+	 * 		身份信息 ID 字段名称
 	 * @param keySerializer
 	 * 		Key 序列化对象
 	 * @param valueSerializer
@@ -233,10 +239,21 @@ public class RedisCacheManager extends AbstractCacheManager {
 		setValueSerializer(valueSerializer);
 	}
 
+	/**
+	 * 返回 Redis 管理器 {@link RedisManager} 实例
+	 *
+	 * @return Redis 管理器 {@link RedisManager} 实例
+	 */
 	public RedisManager getRedisManager(){
 		return redisManager;
 	}
 
+	/**
+	 * 设置 Redis 管理器 {@link RedisManager} 实例
+	 *
+	 * @param redisManager
+	 * 		Redis 管理器 {@link RedisManager} 实例
+	 */
 	public void setRedisManager(RedisManager redisManager){
 		Assert.isNull(redisManager, "RedisManager could not be null.");
 		this.redisManager = redisManager;
@@ -293,12 +310,16 @@ public class RedisCacheManager extends AbstractCacheManager {
 	@Override
 	@SuppressWarnings({"unchecked"})
 	public <K, V> Cache<K, V> getCache(String name) throws CacheException{
-		logger.debug("Get cache, name: {}", name);
+		if(logger.isDebugEnabled()){
+			logger.debug("Get cache name: {}", name);
+		}
 
 		Cache<K, V> cache = caches.get(name);
 
 		if(cache == null){
-			cache = new RedisCache<>(redisManager, makeKey(name), getExpire(), getPrincipalIdFieldName(),
+			String principalIdFieldName = Validate.isEmpty(
+					getPrincipalIdFieldName()) ? DEFAULT_PRINCIPAL_ID_FIELD_NAME : getPrincipalIdFieldName();
+			cache = new RedisCache<>(redisManager, makeKey(name), getExpire(), principalIdFieldName,
 					getKeySerializer(), getValueSerializer());
 			caches.put(name, cache);
 		}
@@ -307,15 +328,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	}
 
 	protected String makeKey(final String key){
-		if(Validate.isEmpty(getKeyPrefix())){
-			return key;
-		}else{
-			StringBuilder sb = new StringBuilder(getKeyPrefix().length() + key.length() + 1);
-
-			sb.append(getKeyPrefix()).append(key).append(':');
-
-			return sb.toString();
-		}
+		return Validate.isEmpty(getKeyPrefix()) ? key + ":" : getKeyPrefix() + key + ":";
 	}
 
 }

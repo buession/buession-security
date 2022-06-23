@@ -85,7 +85,7 @@ public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 		}
 
 		ReactiveHttpSecurityBuilder builder = ReactiveHttpSecurityBuilder.getInstance(httpSecurity);
-
+		
 		if(configurer.getHttpBasic() != null){
 			builder.httpBasic(configurer.getHttpBasic());
 		}

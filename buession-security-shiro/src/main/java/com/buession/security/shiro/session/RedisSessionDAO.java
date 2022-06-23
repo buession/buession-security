@@ -42,6 +42,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Redis Data Access Object design pattern specification to enable {@link Session} access to an EIS (Enterprise Information System).
+ *
  * @author Yong.Teng
  */
 public class RedisSessionDAO extends AbstractSessionDAO {
@@ -63,32 +65,91 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 
 	private final static Logger logger = LoggerFactory.getLogger(RedisSessionDAO.class);
 
+	/**
+	 * 构造函数
+	 */
 	public RedisSessionDAO(){
 		super();
 	}
 
+	/**
+	 * 构造函数
+	 *
+	 * @param keyPrefix
+	 * 		SESSION Key 前缀
+	 * @param expire
+	 * 		过期时间（单位：秒）{@link #expire}
+	 */
 	public RedisSessionDAO(String keyPrefix, int expire){
 		super(keyPrefix, expire);
 	}
 
+	/**
+	 * 构造函数
+	 *
+	 * @param keyPrefix
+	 * 		SESSION Key 前缀
+	 * @param expire
+	 * 		过期时间（单位：秒）{@link #expire}
+	 * @param sessionInMemoryEnabled
+	 * 		SESSION 是否存储在内存中
+	 * @param sessionInMemoryTimeout
+	 * 		SESSION 存储在内存中的过期时间
+	 */
 	public RedisSessionDAO(String keyPrefix, int expire, boolean sessionInMemoryEnabled, long sessionInMemoryTimeout){
 		super(keyPrefix, expire, sessionInMemoryEnabled, sessionInMemoryTimeout);
 	}
 
+	/**
+	 * 构造函数
+	 *
+	 * @param redisManager
+	 *        {@link RedisManager} 实例
+	 * @param keyPrefix
+	 * 		SESSION Key 前缀
+	 * @param expire
+	 * 		过期时间（单位：秒）{@link #expire}
+	 */
 	public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire){
 		this(keyPrefix, expire);
 		setRedisManager(redisManager);
 	}
 
-	public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire, boolean sessionInMemoryEnabled, long sessionInMemoryTimeout){
+	/**
+	 * 构造函数
+	 *
+	 * @param redisManager
+	 *        {@link RedisManager} 实例
+	 * @param keyPrefix
+	 * 		SESSION Key 前缀
+	 * @param expire
+	 * 		过期时间（单位：秒）{@link #expire}
+	 * @param sessionInMemoryEnabled
+	 * 		SESSION 是否存储在内存中
+	 * @param sessionInMemoryTimeout
+	 * 		SESSION 存储在内存中的过期时间
+	 */
+	public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire, boolean sessionInMemoryEnabled,
+						   long sessionInMemoryTimeout){
 		this(keyPrefix, expire, sessionInMemoryEnabled, sessionInMemoryTimeout);
 		this.redisManager = redisManager;
 	}
 
+	/**
+	 * 返回 {@link RedisManager} 实例
+	 *
+	 * @return {@link RedisManager} 实例
+	 */
 	public RedisManager getRedisManager(){
 		return redisManager;
 	}
 
+	/**
+	 * 设置 {@link RedisManager} 实例
+	 *
+	 * @param redisManager
+	 *        {@link RedisManager} 实例
+	 */
 	public void setRedisManager(RedisManager redisManager){
 		Assert.isNull(redisManager, "RedisManager could not be null.");
 		this.redisManager = redisManager;
@@ -166,7 +227,9 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		long millisecondsExpire = expire * millisecondsInASecond;
 		if(expire != NO_EXPIRE && millisecondsExpire < session.getTimeout()){
 			if(logger.isWarnEnabled()){
-				logger.warn("Redis session expire time: {} is less than Session timeout: {}. It may cause some " + "problems.", millisecondsExpire, session.getTimeout());
+				logger.warn(
+						"Redis session expire time: {} is less than Session timeout: {}. It may cause some problems.",
+						millisecondsExpire, session.getTimeout());
 			}
 		}
 
@@ -197,7 +260,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		byte[] pattern;
 
 		try{
-			pattern = keySerializer.serialize(makeKey(getKeyPrefix() != null ? getKeyPrefix() : "*"));
+			pattern = keySerializer.serialize(makeKey("*"));
 			Set<byte[]> keys = redisManager.keys(pattern);
 
 			if(Validate.isNotEmpty(keys)){
@@ -208,13 +271,14 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 				}
 			}
 		}catch(SerializerException e){
-			logger.error("get active sessions error.");
+			logger.error("get active sessions error: {}.", e.getMessage());
 		}
+
 		return sessions;
 	}
 
 	@Override
-	public void doDeleteSession(Session session){
+	protected void doDeleteSession(Session session){
 		try{
 			redisManager.delete(getSessionKey(session.getId()));
 		}catch(SerializerException e){
@@ -227,7 +291,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	}
 
 	protected String makeKey(final String key){
-		return Validate.isEmpty(getKeyPrefix()) ? key : getKeyPrefix() + key;
+		return getKeyPrefix() == null ? key : getKeyPrefix() + key;
 	}
 
 }

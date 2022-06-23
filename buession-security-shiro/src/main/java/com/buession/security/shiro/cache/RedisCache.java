@@ -19,11 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.cache;
 
+import com.buession.beans.PropertyDescriptorUtils;
 import com.buession.core.serializer.SerializerException;
 import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
@@ -39,6 +40,10 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -49,6 +54,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Redis 缓存
+ *
  * @author Yong.Teng
  */
 public class RedisCache<K, V> extends AbstractCache<K, V> {
@@ -82,7 +89,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 */
 	public RedisCache(String keyPrefix, int expire){
 		super(keyPrefix, expire);
@@ -94,9 +101,9 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param principalIdFieldName
-	 * 		Principal Id 字段名称
+	 * 		身份信息 ID 字段名称
 	 */
 	public RedisCache(String keyPrefix, int expire, String principalIdFieldName){
 		super(keyPrefix, expire, principalIdFieldName);
@@ -110,7 +117,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 */
 	public RedisCache(RedisManager redisManager, String keyPrefix, int expire){
 		this(keyPrefix, expire);
@@ -125,9 +132,9 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param principalIdFieldName
-	 * 		Principal Id 字段名称
+	 * 		身份信息 ID 字段名称
 	 */
 	public RedisCache(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName){
 		this(keyPrefix, expire, principalIdFieldName);
@@ -155,7 +162,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param keySerializer
 	 * 		Key 序列化对象
 	 * @param valueSerializer
@@ -176,7 +183,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param principalIdFieldName
 	 * 		Principal Id 字段名称
 	 * @param keySerializer
@@ -201,7 +208,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param keySerializer
 	 * 		Key 序列化对象
 	 * @param valueSerializer
@@ -225,9 +232,9 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 * @param expire
-	 * 		有效期
+	 * 		有效期（单位：秒）
 	 * @param principalIdFieldName
-	 * 		Principal Id 字段名称
+	 * 		身份信息 ID 字段名称
 	 * @param keySerializer
 	 * 		Key 序列化对象
 	 * @param valueSerializer
@@ -486,55 +493,45 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 	protected String getRedisKeyFromPrincipalCollection(PrincipalCollection principalCollection){
 		Object principalObject = principalCollection.getPrimaryPrincipal();
+
 		if(principalObject instanceof String){
 			return principalObject.toString();
 		}
 
-		Method principalIdGetter = getPrincipalIdGetter(principalObject);
-		String redisKey;
-
 		try{
+			Method principalIdGetter = getPrincipalIdGetter(principalObject);
+
+			if(principalIdGetter == null){
+				throw new CacheManagerPrincipalIdNotAssignedException();
+			}
+
 			Object idObj = principalIdGetter.invoke(principalObject);
 
 			if(idObj == null){
 				throw new PrincipalIdNullException(principalObject.getClass(), getPrincipalIdFieldName());
 			}
 
-			redisKey = idObj.toString();
-		}catch(IllegalAccessException e){
+			return idObj.toString();
+		}catch(IntrospectionException e){
 			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName(), e);
 		}catch(InvocationTargetException e){
 			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName(), e);
+		}catch(IllegalAccessException e){
+			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName(), e);
 		}
-		return redisKey;
 	}
 
-	private Method getPrincipalIdGetter(Object principalObject){
-		Method principalIdGetter;
-		String principalIdMethodName = getPrincipalIdMethodName();
+	private Method getPrincipalIdGetter(Object principalObject) throws IntrospectionException{
+		BeanInfo bi = Introspector.getBeanInfo(principalObject.getClass());
+		PropertyDescriptor[] propertyDescriptors = bi.getPropertyDescriptors();
 
-		try{
-			principalIdGetter = principalObject.getClass().getMethod(principalIdMethodName);
-		}catch(NoSuchMethodException e){
-			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName());
+		for(PropertyDescriptor pd : propertyDescriptors){
+			if(getPrincipalIdFieldName().equals(pd.getName())){
+				return PropertyDescriptorUtils.getReadMethod(pd);
+			}
 		}
 
-		return principalIdGetter;
-	}
-
-	private String getPrincipalIdMethodName(){
-		String principalIdFieldName = getPrincipalIdFieldName();
-
-		if(Validate.isBlank(principalIdFieldName)){
-			throw new CacheManagerPrincipalIdNotAssignedException();
-		}
-
-		StringBuilder sb = new StringBuilder(principalIdFieldName.length() + 3);
-
-		sb.append("get");
-		sb.append(principalIdFieldName.substring(0, 1).toUpperCase()).append(principalIdFieldName.substring(1));
-
-		return sb.toString();
+		return null;
 	}
 
 }

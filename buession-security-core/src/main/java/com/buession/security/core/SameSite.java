@@ -19,20 +19,48 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.core;
 
 /**
+ * Cookie SameSite
+ * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Set-Cookie/SameSite"target="_blank">
+ * https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Set-Cookie/SameSite</a></p>
+ *
  * @author Yong.Teng
  */
 public enum SameSite {
 
-	NONE,
+	/**
+	 * Cookie 将在所有上下文中发送，即允许跨站发送
+	 */
+	NONE("None"),
 
-	LAX,
+	/**
+	 * Cookies 允许与顶级导航一起发送，并将与第三方网站发起的 GET 请求一起发送
+	 */
+	LAX("Lay"),
 
-	STRICT
+	/**
+	 * Cookies 只会在第一方上下文中发送，不会与第三方网站发起的请求一起发送
+	 */
+	STRICT("Strict");
+
+	private final String value;
+
+	SameSite(final String value){
+		this.value = value;
+	}
+
+	public String getValue(){
+		return value;
+	}
+
+	@Override
+	public String toString(){
+		return getValue();
+	}
 
 }

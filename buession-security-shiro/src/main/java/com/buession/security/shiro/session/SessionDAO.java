@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.session;
@@ -27,16 +27,7 @@ package com.buession.security.shiro.session;
 /**
  * @author Yong.Teng
  */
+@Deprecated
 public interface SessionDAO extends org.apache.shiro.session.mgt.eis.SessionDAO {
-
-	String DEFAULT_SESSION_KEY_PREFIX = "shiro:session:";
-
-	int DEFAULT_EXPIRE = -2;
-
-	boolean DEFAULT_SESSION_IN_MEMORY_ENABLED = true;
-
-	long DEFAULT_SESSION_IN_MEMORY_TIMEOUT = 1000L;
-
-	int NO_EXPIRE = -1;
 
 }

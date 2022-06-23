@@ -120,7 +120,7 @@ public abstract class AbstractRedisManager implements RedisManager {
 		ScanResult<List<byte[]>> scanResult;
 
 		do{
-			scanResult = redisTemplate.scan(cursor, returnKeysCount);
+			scanResult = redisTemplate.scan(cursor, pattern, returnKeysCount);
 
 			if(Validate.isNotEmpty(scanResult.getResults())){
 				keys.addAll(scanResult.getResults());
