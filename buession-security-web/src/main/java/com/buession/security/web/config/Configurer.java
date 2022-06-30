@@ -35,45 +35,6 @@ import java.util.StringJoiner;
 public class Configurer {
 
 	/**
-	 * 构造函数
-	 */
-	public Configurer(){
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param httpBasic
-	 * 		Http Basic 配置
-	 * @param csrf
-	 * 		Csrf 配置
-	 * @param frameOptions
-	 * 		Frame Options 配置
-	 * @param hsts
-	 * 		Hsts 配置
-	 * @param hpkp
-	 * 		Hpkp 配置
-	 * @param contentSecurityPolicy
-	 * 		Content Security Policy 配置
-	 * @param referrerPolicy
-	 * 		Referrer Policy 配置
-	 * @param xss
-	 * 		XSS 配置
-	 */
-	public Configurer(HttpBasic httpBasic, Csrf csrf, FrameOptions frameOptions, Hsts hsts,
-					  Hpkp hpkp, ContentSecurityPolicy contentSecurityPolicy,
-					  ReferrerPolicy referrerPolicy, Xss xss){
-		this.httpBasic = httpBasic;
-		this.csrf = csrf;
-		this.frameOptions = frameOptions;
-		this.hsts = hsts;
-		this.hpkp = hpkp;
-		this.contentSecurityPolicy = contentSecurityPolicy;
-		this.referrerPolicy = referrerPolicy;
-		this.xss = xss;
-	}
-
-	/**
 	 * Http Basic 配置
 	 */
 	private HttpBasic httpBasic;
@@ -82,6 +43,11 @@ public class Configurer {
 	 * Csrf 配置
 	 */
 	private Csrf csrf;
+
+	/**
+	 * Cors 配置
+	 */
+	private Cors cors;
 
 	/**
 	 * Frame Options 配置
@@ -112,6 +78,48 @@ public class Configurer {
 	 * XSS 配置
 	 */
 	private Xss xss;
+
+	/**
+	 * 构造函数
+	 */
+	public Configurer(){
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param httpBasic
+	 * 		Http Basic 配置
+	 * @param csrf
+	 * 		Csrf 配置
+	 * @param cors
+	 * 		Cors 配置
+	 * @param frameOptions
+	 * 		Frame Options 配置
+	 * @param hsts
+	 * 		Hsts 配置
+	 * @param hpkp
+	 * 		Hpkp 配置
+	 * @param contentSecurityPolicy
+	 * 		Content Security Policy 配置
+	 * @param referrerPolicy
+	 * 		Referrer Policy 配置
+	 * @param xss
+	 * 		XSS 配置
+	 */
+	public Configurer(HttpBasic httpBasic, Csrf csrf, Cors cors, FrameOptions frameOptions, Hsts hsts,
+					  Hpkp hpkp, ContentSecurityPolicy contentSecurityPolicy,
+					  ReferrerPolicy referrerPolicy, Xss xss){
+		this.httpBasic = httpBasic;
+		this.csrf = csrf;
+		this.cors = cors;
+		this.frameOptions = frameOptions;
+		this.hsts = hsts;
+		this.hpkp = hpkp;
+		this.contentSecurityPolicy = contentSecurityPolicy;
+		this.referrerPolicy = referrerPolicy;
+		this.xss = xss;
+	}
 
 	/**
 	 * 返回 Http Basic 配置
@@ -149,6 +157,25 @@ public class Configurer {
 	 */
 	public void setCsrf(Csrf csrf){
 		this.csrf = csrf;
+	}
+
+	/**
+	 * 返回 Cors 配置
+	 *
+	 * @return Cors 配置
+	 */
+	public Cors getCors(){
+		return cors;
+	}
+
+	/**
+	 * 设置 Cors 配置
+	 *
+	 * @param cors
+	 * 		Cors 配置
+	 */
+	public void setCors(Cors cors){
+		this.cors = cors;
 	}
 
 	/**

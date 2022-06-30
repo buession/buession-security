@@ -25,6 +25,7 @@
 package com.buession.security.web.builder;
 
 import com.buession.security.web.config.ContentSecurityPolicy;
+import com.buession.security.web.config.Cors;
 import com.buession.security.web.config.Csrf;
 import com.buession.security.web.config.FrameOptions;
 import com.buession.security.web.config.Hpkp;
@@ -60,6 +61,16 @@ public interface HttpSecurityBuilder {
 	 * @return HttpSecurityBuilder 实例
 	 */
 	HttpSecurityBuilder csrf(final Csrf config);
+
+	/**
+	 * 设置 Cors {@link Cors} 配置
+	 *
+	 * @param config
+	 * 		Cors {@link Cors} 配置
+	 *
+	 * @return HttpSecurityBuilder 实例
+	 */
+	HttpSecurityBuilder cors(final Cors config);
 
 	/**
 	 * 设置 FrameOptions {@link FrameOptions} 配置

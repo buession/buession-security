@@ -57,17 +57,17 @@ public class Cookie implements Serializable {
 	/**
 	 * Cookie 最大有效期
 	 */
-	private int maxAge;
+	private Integer maxAge;
 
 	/**
 	 * 是否启用安全 Cookie
 	 */
-	private boolean secure;
+	private Boolean secure;
 
 	/**
 	 * 是否开启 HttpOnly
 	 */
-	private boolean httpOnly;
+	private Boolean httpOnly;
 
 	/**
 	 * 限制第三方 Cookie 方式
@@ -421,7 +421,7 @@ public class Cookie implements Serializable {
 	 *
 	 * @return Cookie 最大有效期
 	 */
-	public int getMaxAge(){
+	public Integer getMaxAge(){
 		return maxAge;
 	}
 
@@ -431,7 +431,7 @@ public class Cookie implements Serializable {
 	 * @param maxAge
 	 * 		Cookie 最大有效期
 	 */
-	public void setMaxAge(int maxAge){
+	public void setMaxAge(Integer maxAge){
 		this.maxAge = maxAge;
 	}
 
@@ -440,16 +440,7 @@ public class Cookie implements Serializable {
 	 *
 	 * @return 是否启用安全 Cookie
 	 */
-	public boolean isSecure(){
-		return getSecure();
-	}
-
-	/**
-	 * 返回是否启用安全 Cookie
-	 *
-	 * @return 是否启用安全 Cookie
-	 */
-	public boolean getSecure(){
+	public Boolean getSecure(){
 		return secure;
 	}
 
@@ -459,7 +450,7 @@ public class Cookie implements Serializable {
 	 * @param secure
 	 * 		是否启用安全 Cookie
 	 */
-	public void setSecure(boolean secure){
+	public void setSecure(Boolean secure){
 		this.secure = secure;
 	}
 
@@ -468,16 +459,7 @@ public class Cookie implements Serializable {
 	 *
 	 * @return 是否开启 HttpOnly
 	 */
-	public boolean isHttpOnly(){
-		return getHttpOnly();
-	}
-
-	/**
-	 * 返回是否开启 HttpOnly
-	 *
-	 * @return 是否开启 HttpOnly
-	 */
-	public boolean getHttpOnly(){
+	public Boolean getHttpOnly(){
 		return httpOnly;
 	}
 
@@ -487,7 +469,7 @@ public class Cookie implements Serializable {
 	 * @param httpOnly
 	 * 		是否开启 HttpOnly
 	 */
-	public void setHttpOnly(boolean httpOnly){
+	public void setHttpOnly(Boolean httpOnly){
 		this.httpOnly = httpOnly;
 	}
 
@@ -522,5 +504,5 @@ public class Cookie implements Serializable {
 				.add("sameSite=" + sameSite)
 				.toString();
 	}
-	
+
 }

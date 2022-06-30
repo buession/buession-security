@@ -27,6 +27,7 @@ package com.buession.security.web.builder.reactive;
 import com.buession.core.validator.Validate;
 import com.buession.security.web.builder.HttpSecurityBuilder;
 import com.buession.security.web.config.ContentSecurityPolicy;
+import com.buession.security.web.config.Cors;
 import com.buession.security.web.config.Csrf;
 import com.buession.security.web.config.FrameOptions;
 import com.buession.security.web.config.Hpkp;
@@ -39,6 +40,7 @@ import org.springframework.security.web.server.csrf.CookieServerCsrfTokenReposit
 import org.springframework.security.web.server.csrf.WebSessionServerCsrfTokenRepository;
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import java.time.Duration;
 
@@ -78,7 +80,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder httpBasic(HttpBasic config){
+	public ReactiveHttpSecurityBuilder httpBasic(HttpBasic config){
 		if(config.isEnabled() == false){
 			serverHttpSecurity.httpBasic().disable();
 		}
@@ -87,7 +89,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder csrf(Csrf config){
+	public ReactiveHttpSecurityBuilder csrf(Csrf config){
 		ServerHttpSecurity.CsrfSpec csrfSpec = serverHttpSecurity.csrf();
 
 		if(config.isEnabled()){
@@ -153,7 +155,23 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder frameOptions(FrameOptions config){
+	public ReactiveHttpSecurityBuilder cors(Cors config){
+		ServerHttpSecurity.CorsSpec corsSpec = serverHttpSecurity.cors();
+
+		if(config.isEnabled()){
+			UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+			urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", config.toCorsConfiguration());
+
+			corsSpec.configurationSource(urlBasedCorsConfigurationSource);
+		}else{
+			corsSpec.disable();
+		}
+
+		return this;
+	}
+
+	@Override
+	public ReactiveHttpSecurityBuilder frameOptions(FrameOptions config){
 		ServerHttpSecurity.HeaderSpec.FrameOptionsSpec frameOptionsSpec = serverHttpSecurity.headers().frameOptions();
 
 		if(config.isEnabled()){
@@ -180,7 +198,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder hsts(Hsts config){
+	public ReactiveHttpSecurityBuilder hsts(Hsts config){
 		ServerHttpSecurity.HeaderSpec.HstsSpec hstsSpec = serverHttpSecurity.headers().hsts();
 
 		if(config.isEnabled()){
@@ -194,24 +212,26 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder hpkp(Hpkp config){
+	public ReactiveHttpSecurityBuilder hpkp(Hpkp config){
 		return this;
 	}
 
 	@Override
-	public HttpSecurityBuilder contentSecurityPolicy(ContentSecurityPolicy config){
+	public ReactiveHttpSecurityBuilder contentSecurityPolicy(ContentSecurityPolicy config){
 		if(config.isEnabled() && Validate.hasText(config.getPolicyDirectives())){
-			serverHttpSecurity.headers().contentSecurityPolicy((contentSecurityPolicySpec)->{
-				contentSecurityPolicySpec.policyDirectives(config.getPolicyDirectives());
+			ServerHttpSecurity.HeaderSpec.ContentSecurityPolicySpec contentSecurityPolicySpec = serverHttpSecurity.headers()
+					.contentSecurityPolicy(config.getPolicyDirectives());
+
+			if(config.isReportOnly()){
 				contentSecurityPolicySpec.reportOnly(config.isReportOnly());
-			});
+			}
 		}
 
 		return this;
 	}
 
 	@Override
-	public HttpSecurityBuilder referrerPolicy(ReferrerPolicy config){
+	public ReactiveHttpSecurityBuilder referrerPolicy(ReferrerPolicy config){
 		if(config.isEnabled()){
 			if(config.getPolicy() != null){
 				switch(config.getPolicy()){
@@ -257,7 +277,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public HttpSecurityBuilder xss(Xss config){
+	public ReactiveHttpSecurityBuilder xss(Xss config){
 		ServerHttpSecurity.HeaderSpec.XssProtectionSpec xssProtectionSpec = serverHttpSecurity.headers()
 				.xssProtection();
 

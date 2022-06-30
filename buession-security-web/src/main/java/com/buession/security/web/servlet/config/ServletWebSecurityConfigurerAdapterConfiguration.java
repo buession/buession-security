@@ -29,7 +29,6 @@ import com.buession.security.web.config.Configurer;
 import com.buession.web.servlet.OnServletCondition;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -41,7 +40,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration(proxyBeanMethods = false)
 @Conditional(OnServletCondition.class)
-@Order(100)
 public class ServletWebSecurityConfigurerAdapterConfiguration extends WebSecurityConfigurerAdapter {
 
 	/**
@@ -90,6 +88,10 @@ public class ServletWebSecurityConfigurerAdapterConfiguration extends WebSecurit
 
 		if(configurer.getCsrf() != null){
 			builder.csrf(configurer.getCsrf());
+		}
+
+		if(configurer.getCors() != null){
+			builder.cors(configurer.getCors());
 		}
 
 		if(configurer.getFrameOptions() != null){

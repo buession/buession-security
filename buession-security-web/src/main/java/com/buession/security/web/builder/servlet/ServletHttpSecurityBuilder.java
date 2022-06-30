@@ -27,6 +27,7 @@ package com.buession.security.web.builder.servlet;
 import com.buession.core.validator.Validate;
 import com.buession.security.web.builder.HttpSecurityBuilder;
 import com.buession.security.web.config.ContentSecurityPolicy;
+import com.buession.security.web.config.Cors;
 import com.buession.security.web.config.Csrf;
 import com.buession.security.web.config.FrameOptions;
 import com.buession.security.web.config.Hpkp;
@@ -37,12 +38,18 @@ import com.buession.security.web.config.Xss;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Servlet 浏览器安全性构建器
@@ -162,6 +169,28 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 		}catch(Exception e){
 			if(logger.isErrorEnabled()){
 				logger.error("csrf config error: {}<{}>", e.getMessage(), config);
+			}
+		}
+
+		return this;
+	}
+
+	@Override
+	public ServletHttpSecurityBuilder cors(final Cors config){
+		try{
+			CorsConfigurer<HttpSecurity> corsConfigurer = httpSecurity.cors();
+
+			if(config.isEnabled()){
+				UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+				urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", config.toCorsConfiguration());
+
+				corsConfigurer.configurationSource(urlBasedCorsConfigurationSource);
+			}else{
+				corsConfigurer.disable();
+			}
+		}catch(Exception e){
+			if(logger.isErrorEnabled()){
+				logger.error("cors config error: {}<{}>", e.getMessage(), config);
 			}
 		}
 

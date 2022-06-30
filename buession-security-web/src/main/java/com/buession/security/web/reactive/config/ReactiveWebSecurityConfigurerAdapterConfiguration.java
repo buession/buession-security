@@ -26,10 +26,9 @@ package com.buession.security.web.reactive.config;
 
 import com.buession.security.web.builder.reactive.ReactiveHttpSecurityBuilder;
 import com.buession.security.web.config.Configurer;
-import com.buession.web.servlet.OnServletCondition;
+import com.buession.web.reactive.OnWebFluxCondition;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 
 /**
@@ -39,8 +38,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
  * @since 2.0.0
  */
 @Configuration(proxyBeanMethods = false)
-@Conditional(OnServletCondition.class)
-@Order(100)
+@Conditional(OnWebFluxCondition.class)
 public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 
 	/**
@@ -85,13 +83,17 @@ public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 		}
 
 		ReactiveHttpSecurityBuilder builder = ReactiveHttpSecurityBuilder.getInstance(httpSecurity);
-		
+
 		if(configurer.getHttpBasic() != null){
 			builder.httpBasic(configurer.getHttpBasic());
 		}
 
 		if(configurer.getCsrf() != null){
 			builder.csrf(configurer.getCsrf());
+		}
+
+		if(configurer.getCors() != null){
+			builder.cors(configurer.getCors());
 		}
 
 		if(configurer.getFrameOptions() != null){
