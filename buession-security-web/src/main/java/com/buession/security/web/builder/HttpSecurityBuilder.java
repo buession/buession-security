@@ -27,6 +27,7 @@ package com.buession.security.web.builder;
 import com.buession.security.web.config.ContentSecurityPolicy;
 import com.buession.security.web.config.Cors;
 import com.buession.security.web.config.Csrf;
+import com.buession.security.web.config.FormLogin;
 import com.buession.security.web.config.FrameOptions;
 import com.buession.security.web.config.Hpkp;
 import com.buession.security.web.config.Hsts;
@@ -131,5 +132,15 @@ public interface HttpSecurityBuilder {
 	 * @return HttpSecurityBuilder 实例
 	 */
 	HttpSecurityBuilder xss(final Xss config);
+
+	/**
+	 * 设置登录表单 {@link FormLogin} 配置
+	 *
+	 * @param config
+	 * 		登录表单 {@link FormLogin} 配置
+	 *
+	 * @return HttpSecurityBuilder 实例
+	 */
+	HttpSecurityBuilder formLogin(final FormLogin config);
 
 }

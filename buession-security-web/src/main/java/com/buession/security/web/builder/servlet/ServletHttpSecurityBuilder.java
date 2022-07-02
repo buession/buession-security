@@ -29,6 +29,7 @@ import com.buession.security.web.builder.HttpSecurityBuilder;
 import com.buession.security.web.config.ContentSecurityPolicy;
 import com.buession.security.web.config.Cors;
 import com.buession.security.web.config.Csrf;
+import com.buession.security.web.config.FormLogin;
 import com.buession.security.web.config.FrameOptions;
 import com.buession.security.web.config.Hpkp;
 import com.buession.security.web.config.Hsts;
@@ -40,16 +41,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 /**
  * Servlet 浏览器安全性构建器
@@ -372,6 +370,27 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 		}catch(Exception e){
 			if(logger.isErrorEnabled()){
 				logger.error("xss config error: {}<{}>", e.getMessage(), config);
+			}
+		}
+
+		return this;
+	}
+
+	@Override
+	public ServletHttpSecurityBuilder formLogin(FormLogin config){
+		try{
+			FormLoginConfigurer<HttpSecurity> formLoginConfigurer = httpSecurity.formLogin();
+
+			if(config.isEnabled()){
+				if(Validate.hasText(config.getLoginPage())){
+					formLoginConfigurer.loginPage(config.getLoginPage());
+				}
+			}else{
+				formLoginConfigurer.disable();
+			}
+		}catch(Exception e){
+			if(logger.isErrorEnabled()){
+				logger.error("form login config error: {}<{}>", e.getMessage(), config);
 			}
 		}
 

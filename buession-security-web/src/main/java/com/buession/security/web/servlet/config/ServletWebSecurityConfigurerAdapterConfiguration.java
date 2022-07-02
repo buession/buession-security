@@ -117,6 +117,10 @@ public class ServletWebSecurityConfigurerAdapterConfiguration extends WebSecurit
 		if(configurer.getXss() != null){
 			builder.xss(configurer.getXss());
 		}
+
+		if(configurer.getFormLogin() != null){
+			builder.formLogin(configurer.getFormLogin());
+		}
 	}
 
 }

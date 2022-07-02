@@ -80,6 +80,11 @@ public class Configurer {
 	private Xss xss;
 
 	/**
+	 * 登录表单配置
+	 */
+	private FormLogin formLogin;
+
+	/**
 	 * 构造函数
 	 */
 	public Configurer(){
@@ -106,10 +111,12 @@ public class Configurer {
 	 * 		Referrer Policy 配置
 	 * @param xss
 	 * 		XSS 配置
+	 * @param formLogin
+	 * 		登录表单配置
 	 */
 	public Configurer(HttpBasic httpBasic, Csrf csrf, Cors cors, FrameOptions frameOptions, Hsts hsts,
 					  Hpkp hpkp, ContentSecurityPolicy contentSecurityPolicy,
-					  ReferrerPolicy referrerPolicy, Xss xss){
+					  ReferrerPolicy referrerPolicy, Xss xss, FormLogin formLogin){
 		this.httpBasic = httpBasic;
 		this.csrf = csrf;
 		this.cors = cors;
@@ -119,6 +126,7 @@ public class Configurer {
 		this.contentSecurityPolicy = contentSecurityPolicy;
 		this.referrerPolicy = referrerPolicy;
 		this.xss = xss;
+		this.formLogin = formLogin;
 	}
 
 	/**
@@ -292,6 +300,25 @@ public class Configurer {
 		this.xss = xss;
 	}
 
+	/**
+	 * 返回登录表单配置
+	 *
+	 * @return 登录表单配置
+	 */
+	public FormLogin getFormLogin(){
+		return formLogin;
+	}
+
+	/**
+	 * 设置登录表单配置
+	 *
+	 * @param formLogin
+	 * 		登录表单配置
+	 */
+	public void setFormLogin(FormLogin formLogin){
+		this.formLogin = formLogin;
+	}
+
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "{", "}")
@@ -303,6 +330,7 @@ public class Configurer {
 				.add("contentSecurityPolicy=" + contentSecurityPolicy)
 				.add("referrerPolicy=" + referrerPolicy)
 				.add("xss=" + xss)
+				.add("formLogin=" + formLogin)
 				.toString();
 	}
 

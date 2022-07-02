@@ -22,34 +22,62 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.spring.web.csrf;
+package com.buession.security.web.config;
 
 /**
- * Csrf Token Repository
+ * 登录表单
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public interface CsrfTokenRepository {
+public class FormLogin {
 
 	/**
-	 * 默认 Csrf Cookie 名称
+	 * 是否启动登录表单
 	 */
-	String DEFAULT_CSRF_COOKIE_NAME = "XSRF-TOKEN";
+	private boolean enabled = false;
 
 	/**
-	 * 默认 Csrf Session 名称
+	 * 登录页地址
 	 */
-	String DEFAULT_CSRF_SESSION_ATTRIBUTE_NAME = CsrfTokenRepository.class.getName() + ".CSRF_TOKEN";
+	private String loginPage;
 
 	/**
-	 * 默认 Csrf 参数名称
+	 * 返回是否启动登录表单
+	 *
+	 * @return 是否启动登录表单
 	 */
-	String DEFAULT_CSRF_PARAMETER_NAME = "_csrf";
+	public boolean isEnabled(){
+		return enabled;
+	}
 
 	/**
-	 * 默认 Csrf 响应头名称
+	 * 设置是否启动登录表单
+	 *
+	 * @param enabled
+	 * 		是否启动登录表单
 	 */
-	String DEFAULT_CSRF_HEADER_NAME = "X-Xsrf-Token";
+	public void setEnabled(boolean enabled){
+		this.enabled = enabled;
+	}
 
+	/**
+	 * 返回登录页地址
+	 *
+	 * @return 登录页地址
+	 */
+	public String getLoginPage(){
+		return loginPage;
+	}
+
+	/**
+	 * 设置登录页地址
+	 *
+	 * @param loginPage
+	 * 		登录页地址
+	 */
+	public void setLoginPage(String loginPage){
+		this.loginPage = loginPage;
+	}
+	
 }

@@ -24,7 +24,7 @@
  */
 package com.buession.security.web.config;
 
-import com.buession.security.spring.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 import java.util.StringJoiner;
 
@@ -172,17 +172,17 @@ public class Csrf {
 		/**
 		 * Csrf 请求参数名
 		 */
-		private String parameterName = CsrfTokenRepository.DEFAULT_CSRF_PARAMETER_NAME;
+		private String parameterName = "_csrf";
 
 		/**
 		 * Csrf 请求头名称
 		 */
-		private String headerName = CsrfTokenRepository.DEFAULT_CSRF_HEADER_NAME;
+		private String headerName = "X-Xsrf-Token";
 
 		/**
 		 * Csrf Cookie 名称
 		 */
-		private String cookieName = CsrfTokenRepository.DEFAULT_CSRF_COOKIE_NAME;
+		private String cookieName = "XSRF-TOKEN";
 
 		/**
 		 * Csrf Cookie 作用域
@@ -344,17 +344,17 @@ public class Csrf {
 		/**
 		 * Csrf 请求参数名
 		 */
-		private String parameterName = CsrfTokenRepository.DEFAULT_CSRF_PARAMETER_NAME;
+		private String parameterName = "_csrf";
 
 		/**
 		 * Csrf 请求头名称
 		 */
-		private String headerName = CsrfTokenRepository.DEFAULT_CSRF_HEADER_NAME;
+		private String headerName = "X-Xsrf-Token";
 
 		/**
 		 * Csrf Session 属性名称
 		 */
-		private String sessionAttributeName = CsrfTokenRepository.DEFAULT_CSRF_SESSION_ATTRIBUTE_NAME;
+		private String sessionAttributeName = HttpSessionCsrfTokenRepository.class.getName().concat(".CSRF_TOKEN");
 
 		/**
 		 * 返回 Csrf 请求参数名

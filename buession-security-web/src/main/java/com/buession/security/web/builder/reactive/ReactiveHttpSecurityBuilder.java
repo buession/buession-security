@@ -29,6 +29,7 @@ import com.buession.security.web.builder.HttpSecurityBuilder;
 import com.buession.security.web.config.ContentSecurityPolicy;
 import com.buession.security.web.config.Cors;
 import com.buession.security.web.config.Csrf;
+import com.buession.security.web.config.FormLogin;
 import com.buession.security.web.config.FrameOptions;
 import com.buession.security.web.config.Hpkp;
 import com.buession.security.web.config.Hsts;
@@ -288,4 +289,20 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 
 		return this;
 	}
+
+	@Override
+	public ReactiveHttpSecurityBuilder formLogin(FormLogin config){
+		ServerHttpSecurity.FormLoginSpec formLoginSpec = serverHttpSecurity.formLogin();
+
+		if(config.isEnabled()){
+			if(Validate.hasText(config.getLoginPage())){
+				formLoginSpec.loginPage(config.getLoginPage());
+			}
+		}else{
+			formLoginSpec.disable();
+		}
+
+		return this;
+	}
+
 }
