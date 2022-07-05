@@ -11,7 +11,7 @@
 
 ### ⭐ 新特性
 
-- **bbuession-security-captcha：** 新增极验 V4 版本支持，网易、阿里云、腾讯云行为验证码
+- **bbuession-security-captcha：** 新增极验 V4 版本支持，阿里云、腾讯云行为验证码
 - **buession-security-mcrypt：** 新增 HMAC、AES、DES 算法加密
 - **buession-security-shiro：** 新增 SameSite 转换为 Shiro Cookie.SameSiteOptions 的转换器 SameSiteToShiroSameSiteOptionsConverter
 - **buession-security-web：** 新增浏览器安全配置以及浏览器安全 Http Security 构建器和自动配置类

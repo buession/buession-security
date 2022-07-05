@@ -69,12 +69,6 @@ public class AliYunRequestData implements RequestData {
 	private String remoteIp;
 
 	/**
-	 * 来源 IP
-	 */
-	@JsonProperty(value = "sourceIp")
-	private String sourceIp;
-
-	/**
 	 * 返回请求唯一标识
 	 *
 	 * @return 请求唯一标识
@@ -181,25 +175,6 @@ public class AliYunRequestData implements RequestData {
 		setRemoteIp(clientIp);
 	}
 
-	/**
-	 * 返回来源 IP
-	 *
-	 * @return 来源 IP
-	 */
-	public String getSourceIp(){
-		return sourceIp;
-	}
-
-	/**
-	 * 设置来源 IP
-	 *
-	 * @param sourceIp
-	 * 		来源 IP
-	 */
-	public void setSourceIp(String sourceIp){
-		this.sourceIp = sourceIp;
-	}
-
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "[", "]")
@@ -208,7 +183,6 @@ public class AliYunRequestData implements RequestData {
 				.add("sessionId=" + sessionId)
 				.add("scene=" + scene)
 				.add("remoteIp=" + remoteIp)
-				.add("sourceIp=" + sourceIp)
 				.toString();
 	}
 

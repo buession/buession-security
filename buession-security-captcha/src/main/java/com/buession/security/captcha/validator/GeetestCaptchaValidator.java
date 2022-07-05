@@ -24,7 +24,9 @@
  */
 package com.buession.security.captcha.validator;
 
+import com.buession.core.utils.Assert;
 import com.buession.security.captcha.geetest.GeetestCaptchaClient;
+import com.buession.security.captcha.geetest.GeetestParameter;
 
 /**
  * 极验验证码验证
@@ -35,13 +37,22 @@ import com.buession.security.captcha.geetest.GeetestCaptchaClient;
 public class GeetestCaptchaValidator extends AbstractCaptchaValidator<GeetestCaptchaClient> {
 
 	/**
+	 * {@link GeetestParameter} 实例
+	 */
+	protected final GeetestParameter parameter;
+
+	/**
 	 * 构造函数
 	 *
 	 * @param geetestCaptchaClient
 	 *        {@link GeetestCaptchaClient} 实例
+	 * @param parameter
+	 *        {@link GeetestParameter} 实例
 	 */
-	public GeetestCaptchaValidator(final GeetestCaptchaClient geetestCaptchaClient){
+	public GeetestCaptchaValidator(final GeetestCaptchaClient geetestCaptchaClient, final GeetestParameter parameter){
 		super("Geetest", geetestCaptchaClient);
+		Assert.isNull(parameter, "GeetestParameter cloud not be null.");
+		this.parameter = parameter;
 	}
 
 }

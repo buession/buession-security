@@ -42,6 +42,7 @@ import com.buession.security.mcrypt.MD5Mcrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -115,7 +116,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 
 		GeetestV3InitResponse initResult;
 		try{
-			Response response = httpClient.get(REGISTER_URL, parametersBuilder.build());
+			Response response = getHttpClient().get(REGISTER_URL, parametersBuilder.build());
 
 			initResult = ObjectMapperUtils.createObjectMapper()
 					.readValue(response.getBody(), GeetestV3InitResponse.class);
@@ -153,8 +154,8 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			return Status.FAILURE;
 		}
 
-		RequestParametersConverter converter = new RequestParametersConverter(appId, secretKey, getSdkName());
-		Map<String, Object> parameters = converter.convert(requestV3Data);
+		GeetestV3ParametersBuilder parametersBuilder = new GeetestV3ParametersBuilder(appId, secretKey, getSdkName());
+		Map<String, Object> parameters = new HashMap<>(parametersBuilder.build(requestV3Data));
 
 		if(logger.isDebugEnabled()){
 			logger.debug("二次验证, parameters：{}.", parameters);
@@ -162,7 +163,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 
 		Response response;
 		try{
-			response = httpClient.post(VALIDATE_URL, parameters);
+			response = getHttpClient().post(VALIDATE_URL, parameters, getHeaders());
 
 			if(logger.isInfoEnabled()){
 				logger.info("二次验证 response: {}", response);

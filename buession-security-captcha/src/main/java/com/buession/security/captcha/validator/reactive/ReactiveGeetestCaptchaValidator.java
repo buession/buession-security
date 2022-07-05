@@ -24,7 +24,6 @@
  */
 package com.buession.security.captcha.validator.reactive;
 
-import com.buession.core.utils.Assert;
 import com.buession.core.utils.EnumUtils;
 import com.buession.core.validator.Validate;
 import com.buession.lang.Status;
@@ -50,11 +49,6 @@ import org.springframework.util.MultiValueMap;
 public class ReactiveGeetestCaptchaValidator extends GeetestCaptchaValidator implements ReactiveCaptchaValidator {
 
 	/**
-	 * {@link GeetestParameter} 实例
-	 */
-	private final GeetestParameter parameter;
-
-	/**
 	 * 构造函数
 	 *
 	 * @param geetestCaptchaClient
@@ -64,9 +58,7 @@ public class ReactiveGeetestCaptchaValidator extends GeetestCaptchaValidator imp
 	 */
 	public ReactiveGeetestCaptchaValidator(final GeetestCaptchaClient geetestCaptchaClient,
 										   final GeetestParameter parameter){
-		super(geetestCaptchaClient);
-		Assert.isNull(parameter, "GeetestParameter cloud not be null.");
-		this.parameter = parameter;
+		super(geetestCaptchaClient, parameter);
 	}
 
 	@Override

@@ -43,11 +43,6 @@ public enum Manufacturer {
 	GEETEST,
 
 	/**
-	 * 网易
-	 */
-	NETEASE,
-
-	/**
 	 * 腾讯
 	 */
 	TENCENT

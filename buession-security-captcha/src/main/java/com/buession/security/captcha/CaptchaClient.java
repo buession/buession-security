@@ -82,7 +82,7 @@ public interface CaptchaClient {
 	 *
 	 * @return 前端 JavaScript 库地址
 	 */
-	String getJavaScript();
+	String[] getJavaScript();
 
 	/**
 	 * 设置前端 JavaScript 库地址
@@ -90,6 +90,6 @@ public interface CaptchaClient {
 	 * @param url
 	 * 		前端 JavaScript 库地址
 	 */
-	void setJavaScript(String url);
+	void setJavaScript(String[] url);
 
 }

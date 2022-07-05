@@ -24,7 +24,9 @@
  */
 package com.buession.security.captcha.validator;
 
+import com.buession.core.utils.Assert;
 import com.buession.security.captcha.tencent.TencentCaptchaClient;
+import com.buession.security.captcha.tencent.TencentParameter;
 
 /**
  * 腾讯云验证码验证
@@ -35,13 +37,22 @@ import com.buession.security.captcha.tencent.TencentCaptchaClient;
 public class TencentCaptchaValidator extends AbstractCaptchaValidator<TencentCaptchaClient> {
 
 	/**
+	 * {@link TencentParameter} 实例
+	 */
+	protected final TencentParameter parameter;
+
+	/**
 	 * 构造函数
 	 *
 	 * @param tencentCaptchaClient
 	 *        {@link TencentCaptchaClient} 实例
+	 * @param parameter
+	 *        {@link TencentParameter} 实例
 	 */
-	public TencentCaptchaValidator(final TencentCaptchaClient tencentCaptchaClient){
+	public TencentCaptchaValidator(final TencentCaptchaClient tencentCaptchaClient, final TencentParameter parameter){
 		super("Tencent", tencentCaptchaClient);
+		Assert.isNull(parameter, "TencentParameter cloud not be null.");
+		this.parameter = parameter;
 	}
 
 }

@@ -24,8 +24,12 @@
  */
 package com.buession.security.captcha;
 
-import com.buession.core.utils.StringUtils;
+import com.buession.core.utils.VersionUtils;
 import com.buession.httpclient.HttpClient;
+import com.buession.httpclient.core.Header;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 行为验证 Client 抽象类
@@ -35,10 +39,14 @@ import com.buession.httpclient.HttpClient;
  */
 public abstract class AbstractCaptchaClient implements CaptchaClient {
 
+	protected final static String CLIENT_VERSION = VersionUtils.determineClassVersion(CaptchaClient.class);
+
+	protected final static String USER_AGENT = "Buession Captcha Client For Java/" + CLIENT_VERSION;
+
 	/**
 	 * 前端 JavaScript 库地址
 	 */
-	private String javascript;
+	private String[] javascript;
 
 	/**
 	 * {@link HttpClient} 实例
@@ -46,12 +54,12 @@ public abstract class AbstractCaptchaClient implements CaptchaClient {
 	private HttpClient httpClient;
 
 	@Override
-	public String getJavaScript(){
+	public String[] getJavaScript(){
 		return javascript;
 	}
 
 	@Override
-	public void setJavaScript(String url){
+	public void setJavaScript(String[] url){
 		this.javascript = url;
 	}
 
@@ -63,16 +71,14 @@ public abstract class AbstractCaptchaClient implements CaptchaClient {
 		this.httpClient = httpClient;
 	}
 
-	protected static String randomStr(){
-		return randomStr(System.currentTimeMillis());
-	}
+	protected List<Header> getHeaders(){
+		final List<Header> headers = new ArrayList<>();
 
-	protected static String randomStr(final long timestamp){
-		final StringBuilder sb = new StringBuilder(14);
+		headers.add(new Header("User-Agent", USER_AGENT));
+		headers.add(new Header("X-Sdk-Client", "java/" + CLIENT_VERSION));
+		headers.add(new Header("X-Sdk-Invoke-Type", "normal"));
 
-		sb.append(StringUtils.random(6)).append('_').append(timestamp);
-
-		return sb.toString();
+		return headers;
 	}
 
 }

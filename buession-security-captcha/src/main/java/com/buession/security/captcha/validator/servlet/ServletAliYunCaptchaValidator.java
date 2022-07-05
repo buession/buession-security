@@ -24,12 +24,13 @@
  */
 package com.buession.security.captcha.validator.servlet;
 
-import com.buession.core.utils.Assert;
 import com.buession.lang.Status;
 import com.buession.security.captcha.aliyun.AliYunCaptchaClient;
+import com.buession.security.captcha.aliyun.AliYunRequestData;
 import com.buession.security.captcha.aliyun.AliyunParameter;
 import com.buession.security.captcha.core.CaptchaException;
 import com.buession.security.captcha.validator.AliYunCaptchaValidator;
+import com.buession.web.servlet.http.request.RequestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -42,11 +43,6 @@ import javax.servlet.http.HttpServletRequest;
 public class ServletAliYunCaptchaValidator extends AliYunCaptchaValidator implements ServletCaptchaValidator {
 
 	/**
-	 * {@link AliyunParameter} 实例
-	 */
-	private AliyunParameter parameter;
-
-	/**
 	 * 构造函数
 	 *
 	 * @param aliYunCaptchaClient
@@ -56,14 +52,20 @@ public class ServletAliYunCaptchaValidator extends AliYunCaptchaValidator implem
 	 */
 	public ServletAliYunCaptchaValidator(final AliYunCaptchaClient aliYunCaptchaClient,
 										 final AliyunParameter parameter){
-		super(aliYunCaptchaClient);
-		Assert.isNull(parameter, "AliyunParameter cloud not be null.");
-		this.parameter = parameter;
+		super(aliYunCaptchaClient, parameter);
 	}
 
 	@Override
 	public Status validate(final HttpServletRequest request) throws CaptchaException{
-		return null;
+		final AliYunRequestData requestData = new AliYunRequestData();
+
+		requestData.setSessionId(request.getParameter(parameter.getSessionId()));
+		requestData.setSig(request.getParameter(parameter.getSig()));
+		requestData.setToken(request.getParameter(parameter.getToken()));
+		requestData.setScene(request.getParameter(parameter.getScene()));
+		requestData.setRemoteIp(RequestUtils.getClientIp(request));
+
+		return validate(requestData);
 	}
 
 }

@@ -22,35 +22,57 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.validator.reactive;
+package com.buession.security.captcha.geetest.api.v4;
 
-import com.buession.lang.Status;
-import com.buession.security.captcha.core.CaptchaException;
-import com.buession.security.captcha.netease.NetEaseCaptchaClient;
-import com.buession.security.captcha.validator.NetEaseCaptchaValidator;
-import org.springframework.http.server.reactive.ServerHttpRequest;
+import com.buession.core.builder.MapBuilder;
+import com.buession.security.captcha.core.ParametersBuilder;
+import com.buession.security.mcrypt.HmacSha256Mcrypt;
+
+import java.util.Map;
 
 /**
- * Reactive 环境网易验证码验证
- *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class ReactiveNetEaseCaptchaValidator extends NetEaseCaptchaValidator implements ReactiveCaptchaValidator {
+class GeetestV4ParametersBuilder implements ParametersBuilder<GeetestV4RequestData> {
 
-	/**
-	 * 构造函数
-	 *
-	 * @param netEaseCaptchaClient
-	 *        {@link NetEaseCaptchaClient} 实例
-	 */
-	public ReactiveNetEaseCaptchaValidator(final NetEaseCaptchaClient netEaseCaptchaClient){
-		super(netEaseCaptchaClient);
+	private final String appId;
+
+	private final String secretKey;
+
+	private final String sdkName;
+
+	GeetestV4ParametersBuilder(final String appId, final String secretKey, final String sdkName){
+		this.appId = appId;
+		this.secretKey = secretKey;
+		this.sdkName = sdkName;
 	}
 
 	@Override
-	public Status validate(final ServerHttpRequest request) throws CaptchaException{
-		return null;
+	public Map<String, String> build(final GeetestV4RequestData requestData){
+		MapBuilder<String, String> builder = MapBuilder.<String, String>create()
+				.put("lot_number", requestData.getLotNumber())
+				.put("captcha_output", requestData.getCaptchaOutput())
+				.put("pass_token", requestData.getPassToken())
+				.put("gen_time", requestData.getGenTime())
+				.put("sign_token", sign(requestData));
+
+		return builder.build();
+	}
+
+	/**
+	 * 生成签名
+	 * 生成签名使用标准的 hmac 算法，使用用户当前完成验证的流水号 lot_number 作为原始消息 message，使用客户验证私钥作为 key
+	 * 采用 sha256 散列算法将 message 和 key 进行单向散列生成最终的签名
+	 *
+	 * @param requestData
+	 * 		请求数据
+	 *
+	 * @return 生成签名结果
+	 */
+	private String sign(final GeetestV4RequestData requestData){
+		HmacSha256Mcrypt hmacSha256Mcrypt = new HmacSha256Mcrypt(secretKey);
+		return hmacSha256Mcrypt.encode(requestData.getLotNumber());
 	}
 
 }

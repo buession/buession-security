@@ -24,7 +24,9 @@
  */
 package com.buession.security.captcha.validator;
 
+import com.buession.core.utils.Assert;
 import com.buession.security.captcha.aliyun.AliYunCaptchaClient;
+import com.buession.security.captcha.aliyun.AliyunParameter;
 
 /**
  * 阿里云验证码验证
@@ -35,13 +37,22 @@ import com.buession.security.captcha.aliyun.AliYunCaptchaClient;
 public class AliYunCaptchaValidator extends AbstractCaptchaValidator<AliYunCaptchaClient> {
 
 	/**
+	 * {@link AliyunParameter} 实例
+	 */
+	protected final AliyunParameter parameter;
+
+	/**
 	 * 构造函数
 	 *
 	 * @param aliYunCaptchaClient
 	 *        {@link AliYunCaptchaClient} 实例
+	 * @param parameter
+	 *        {@link AliyunParameter} 实例
 	 */
-	public AliYunCaptchaValidator(final AliYunCaptchaClient aliYunCaptchaClient){
+	public AliYunCaptchaValidator(final AliYunCaptchaClient aliYunCaptchaClient, final AliyunParameter parameter){
 		super("Aliyun", aliYunCaptchaClient);
+		Assert.isNull(parameter, "AliyunParameter cloud not be null.");
+		this.parameter = parameter;
 	}
 
 }

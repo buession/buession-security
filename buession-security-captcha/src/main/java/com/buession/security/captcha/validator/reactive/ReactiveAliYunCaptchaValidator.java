@@ -24,13 +24,15 @@
  */
 package com.buession.security.captcha.validator.reactive;
 
-import com.buession.core.utils.Assert;
 import com.buession.lang.Status;
 import com.buession.security.captcha.aliyun.AliYunCaptchaClient;
+import com.buession.security.captcha.aliyun.AliYunRequestData;
 import com.buession.security.captcha.aliyun.AliyunParameter;
 import com.buession.security.captcha.core.CaptchaException;
 import com.buession.security.captcha.validator.AliYunCaptchaValidator;
+import com.buession.web.reactive.http.request.RequestUtils;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.util.MultiValueMap;
 
 /**
  * Reactive 环境阿里云验证码验证
@@ -39,11 +41,6 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
  * @since 2.0.0
  */
 public class ReactiveAliYunCaptchaValidator extends AliYunCaptchaValidator implements ReactiveCaptchaValidator {
-
-	/**
-	 * {@link AliyunParameter} 实例
-	 */
-	private AliyunParameter parameter;
 
 	/**
 	 * 构造函数
@@ -55,14 +52,21 @@ public class ReactiveAliYunCaptchaValidator extends AliYunCaptchaValidator imple
 	 */
 	public ReactiveAliYunCaptchaValidator(final AliYunCaptchaClient aliYunCaptchaClient,
 										  final AliyunParameter parameter){
-		super(aliYunCaptchaClient);
-		Assert.isNull(parameter, "AliyunParameter cloud not be null.");
-		this.parameter = parameter;
+		super(aliYunCaptchaClient, parameter);
 	}
 
 	@Override
 	public Status validate(final ServerHttpRequest request) throws CaptchaException{
-		return null;
+		MultiValueMap<String, String> parameters = request.getQueryParams();
+		final AliYunRequestData requestData = new AliYunRequestData();
+
+		requestData.setSessionId(parameters.getFirst(parameter.getSessionId()));
+		requestData.setSig(parameters.getFirst(parameter.getSig()));
+		requestData.setToken(parameters.getFirst(parameter.getToken()));
+		requestData.setScene(parameters.getFirst(parameter.getScene()));
+		requestData.setRemoteIp(RequestUtils.getClientIp(request));
+
+		return validate(requestData);
 	}
 
 }

@@ -39,6 +39,7 @@ import com.buession.security.captcha.utils.ObjectMapperUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -104,8 +105,8 @@ public class TencentCaptchaClient extends AbstractCaptchaClient {
 			return Status.FAILURE;
 		}
 
-		RequestParametersConverter parametersConverter = new RequestParametersConverter(secretId, secretKey);
-		Map<String, Object> parameters = parametersConverter.convert(tencentRequestData);
+		TencentParametersBuilder parametersBuilder = new TencentParametersBuilder(secretId, secretKey);
+		Map<String, Object> parameters = new HashMap<>(parametersBuilder.build(tencentRequestData));
 
 		if(logger.isDebugEnabled()){
 			logger.debug("二次验证, parameters：{}.", parameters);
@@ -113,7 +114,7 @@ public class TencentCaptchaClient extends AbstractCaptchaClient {
 
 		Response response;
 		try{
-			response = getHttpClient().get(VALIDATE_URL, parameters);
+			response = getHttpClient().get(VALIDATE_URL, parameters, getHeaders());
 
 			if(logger.isInfoEnabled()){
 				logger.info("二次验证 response: {}", response);

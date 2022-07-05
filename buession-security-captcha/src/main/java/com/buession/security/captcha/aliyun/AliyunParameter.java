@@ -40,72 +40,134 @@ public class AliyunParameter implements Parameter {
 	private final static long serialVersionUID = -1575628555899104535L;
 
 	/**
-	 * 默认验证码客户端验证回调的随机串参数名称
+	 * 默认会话 ID 参数名称
 	 */
-	public final static String DEFAULT_RAND_STR = "Randstr";
+	public final static String DEFAULT_SESSION_ID = "sessionId";
 
 	/**
-	 * 默认验证码客户端验证回调的票据参数名称
+	 * 默认签名串参数名称
 	 */
-	public final static String DEFAULT_TICKET = "Ticket";
+	public final static String DEFAULT_SIG = "sig";
 
 	/**
-	 * 验证码客户端验证回调的随机串参数名称
+	 * 默认请求唯一标识参数名称
 	 */
-	private String randStr = DEFAULT_RAND_STR;
+	public final static String DEFAULT_TOKEN = "token";
 
 	/**
-	 * 验证码客户端验证回调的票据参数名称
+	 * 默认场景标识参数名称
 	 */
-	private String ticket = DEFAULT_TICKET;
+	public final static String DEFAULT_SCENE = "scene";
 
 	/**
-	 * 返回验证码客户端验证回调的随机串参数名称
+	 * 会话 ID 参数名称
+	 */
+	private String sessionId = DEFAULT_SESSION_ID;
+
+	/**
+	 * 签名串参数名称
+	 */
+	private String sig = DEFAULT_SIG;
+
+	/**
+	 * 请求唯一标识参数名称
+	 */
+	private String token = DEFAULT_TOKEN;
+
+	/**
+	 * 场景标识参数名称
+	 */
+	private String scene = DEFAULT_SCENE;
+
+	/**
+	 * 返回会话 ID 参数名称
 	 *
-	 * @return 验证码客户端验证回调的随机串参数名称
+	 * @return 会话 ID 参数名称
 	 */
-	public String getRandStr(){
-		return randStr;
+	public String getSessionId(){
+		return sessionId;
 	}
 
 	/**
-	 * 设置验证码客户端验证回调的随机串参数名称
+	 * 设置会话 ID 参数名称
 	 *
-	 * @param randStr
-	 * 		验证码客户端验证回调的随机串参数名称
+	 * @param sessionId
+	 * 		会话 ID 参数名称
 	 */
-	public void setRandStr(String randStr){
-		if(Validate.hasText(randStr)){
-			this.randStr = randStr;
+	public void setSessionId(String sessionId){
+		if(Validate.hasText(sessionId)){
+			this.sessionId = sessionId;
 		}
 	}
 
 	/**
-	 * 返回验证码客户端验证回调的票据参数名称
+	 * 返回签名串参数名称
 	 *
-	 * @return 验证码客户端验证回调的票据参数名称
+	 * @return 签名串参数名称
 	 */
-	public String getTicket(){
-		return ticket;
+	public String getSig(){
+		return sig;
 	}
 
 	/**
-	 * 设置验证码客户端验证回调的票据参数名称
+	 * 设置签名串参数名称
 	 *
-	 * @param ticket
-	 * 		验证码客户端验证回调的票据参数名称
+	 * @param sig
+	 * 		签名串参数名称
 	 */
-	public void setTicket(String ticket){
-		if(Validate.hasText(ticket)){
-			this.ticket = ticket;
+	public void setSig(String sig){
+		if(Validate.hasText(sig)){
+			this.sig = sig;
+		}
+	}
+
+	/**
+	 * 返回请求唯一标识参数名称
+	 *
+	 * @return 请求唯一标识参数名称
+	 */
+	public String getToken(){
+		return token;
+	}
+
+	/**
+	 * 设置请求唯一标识参数名称
+	 *
+	 * @param token
+	 * 		请求唯一标识参数名称
+	 */
+	public void setToken(String token){
+		this.token = token;
+	}
+
+	/**
+	 * 返回场景标识参数名称
+	 *
+	 * @return 场景标识参数名称
+	 */
+	public String getScene(){
+		return scene;
+	}
+
+	/**
+	 * 设置场景标识参数名称
+	 *
+	 * @param scene
+	 * 		场景标识参数名称
+	 */
+	public void setScene(String scene){
+		if(Validate.hasText(scene)){
+			this.scene = scene;
 		}
 	}
 
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "[", "]")
-				.add("randStr=" + randStr)
-				.add("ticket=" + ticket)
+				.add("sessionId=" + sessionId)
+				.add("sig=" + sig)
+				.add("token=" + token)
+				.add("scene=" + scene)
 				.toString();
 	}
 

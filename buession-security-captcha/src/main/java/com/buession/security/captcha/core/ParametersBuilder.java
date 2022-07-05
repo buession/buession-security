@@ -22,41 +22,30 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.tencent;
-
-import com.buession.core.builder.MapBuilder;
-import com.buession.core.converter.Converter;
+package com.buession.security.captcha.core;
 
 import java.util.Map;
 
 /**
+ * 验证码平台请求参数构建器
+ *
+ * @param <RD>
+ * 		请求数据
+ *
  * @author Yong.Teng
  * @since 2.0.0
  */
-class RequestParametersConverter implements Converter<TencentRequestData, Map<String, Object>> {
+@FunctionalInterface
+public interface ParametersBuilder<RD extends RequestData> {
 
-	private final String secretId;
-
-	private final String secretKey;
-
-	RequestParametersConverter(final String secretId, final String secretKey){
-		this.secretId = secretId;
-		this.secretKey = secretKey;
-	}
-
-	@Override
-	public Map<String, Object> convert(final TencentRequestData requestData){
-		MapBuilder<String, Object> builder = MapBuilder.<String, Object>create()
-				.put("aid", secretId)
-				.put("AppSecretKey", secretKey)
-				.put("Ticket", requestData.getTicket())
-				.put("Randstr", requestData.getRandstr());
-
-		if(requestData.getClientIp() != null){
-			builder.put("UserIP", requestData.getClientIp());
-		}
-
-		return builder.build();
-	}
+	/**
+	 * 请求参数构建
+	 *
+	 * @param requestData
+	 * 		请求数据
+	 *
+	 * @return 请求参数
+	 */
+	Map<String, String> build(final RD requestData);
 
 }

@@ -26,6 +26,7 @@ package com.buession.security.captcha.geetest.api;
 
 import com.buession.core.utils.VersionUtils;
 import com.buession.httpclient.HttpClient;
+import com.buession.security.captcha.AbstractCaptchaClient;
 import com.buession.security.captcha.geetest.GeetestClient;
 
 /**
@@ -34,7 +35,7 @@ import com.buession.security.captcha.geetest.GeetestClient;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public abstract class AbstractGeetestClient implements GeetestClient {
+public abstract class AbstractGeetestClient extends AbstractCaptchaClient implements GeetestClient {
 
 	/**
 	 * 公钥
@@ -47,8 +48,6 @@ public abstract class AbstractGeetestClient implements GeetestClient {
 	protected final String secretKey;
 
 	protected String sdkName = null;
-
-	protected HttpClient httpClient;
 
 	/**
 	 * 构造函数
@@ -76,21 +75,6 @@ public abstract class AbstractGeetestClient implements GeetestClient {
 	public AbstractGeetestClient(final String appId, final String secretKey, final HttpClient httpClient){
 		this(appId, secretKey);
 		setHttpClient(httpClient);
-	}
-
-	@Override
-	public void setHttpClient(HttpClient httpClient){
-		this.httpClient = httpClient;
-	}
-
-	@Override
-	public String getJavaScript(){
-		return null;
-	}
-
-	@Override
-	public void setJavaScript(String url){
-
 	}
 
 	protected String getSdkName(){

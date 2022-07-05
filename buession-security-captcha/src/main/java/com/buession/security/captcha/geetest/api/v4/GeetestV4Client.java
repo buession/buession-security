@@ -40,6 +40,9 @@ import com.buession.security.captcha.utils.ObjectMapperUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 极验行为验证 V4 版本 Client
  *
@@ -98,8 +101,13 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 			return Status.FAILURE;
 		}
 
-		RequestFormRequestBodyConverter converter = new RequestFormRequestBodyConverter(appId, secretKey, getSdkName());
-		EncodedFormRequestBody requestBody = converter.convert(requestV4Data);
+		GeetestV4ParametersBuilder parametersBuilder = new GeetestV4ParametersBuilder(appId, secretKey, getSdkName());
+		Map<String, Object> parameters = new HashMap<>(parametersBuilder.build(requestV4Data));
+		EncodedFormRequestBody requestBody = new EncodedFormRequestBody();
+
+		parameters.forEach((key, value)->{
+			requestBody.addRequestBodyElement(key, value.toString());
+		});
 
 		if(logger.isDebugEnabled()){
 			logger.debug("二次验证, parameters：{}.", requestBody);
@@ -107,7 +115,8 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 
 		Response response;
 		try{
-			response = httpClient.post(VALIDATE_URL, requestBody, MapBuilder.of("captcha_id", appId));
+			response = getHttpClient().post(VALIDATE_URL, requestBody, MapBuilder.of("captcha_id", appId),
+					getHeaders());
 
 			if(logger.isInfoEnabled()){
 				logger.info("二次验证 response: {}", response);

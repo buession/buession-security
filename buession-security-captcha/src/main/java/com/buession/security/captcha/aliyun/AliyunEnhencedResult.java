@@ -25,8 +25,8 @@
 package com.buession.security.captcha.aliyun;
 
 import com.buession.security.captcha.core.ValidateResponse;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
 import java.util.StringJoiner;
 
 /**
@@ -42,21 +42,30 @@ public class AliyunEnhencedResult implements ValidateResponse {
 	/**
 	 * 调用返回编码
 	 */
-	private String code;
+	@JsonProperty(value = "Code")
+	private int code;
 
 	/**
-	 * 调用返回状态
+	 * 请求 ID
 	 */
-	private Boolean success;
+	@JsonProperty(value = "RequestId")
+	private String requestId;
 
-	private Data data;
+	@JsonProperty(value = "RiskLevel")
+	private String riskLevel;
+
+	/**
+	 * 消息
+	 */
+	@JsonProperty(value = "Msg")
+	private String msg;
 
 	/**
 	 * 返回调用返回编码
 	 *
 	 * @return 调用返回编码
 	 */
-	public String getCode(){
+	public int getCode(){
 		return code;
 	}
 
@@ -66,95 +75,64 @@ public class AliyunEnhencedResult implements ValidateResponse {
 	 * @param code
 	 * 		调用返回编码
 	 */
-	public void setCode(String code){
+	public void setCode(int code){
 		this.code = code;
 	}
 
 	/**
-	 * 返回调用返回状态
+	 * 返回请求 ID
 	 *
-	 * @return 调用返回状态
+	 * @return 请求 ID
 	 */
-	public Boolean getSuccess(){
-		return success;
+	public String getRequestId(){
+		return requestId;
 	}
 
 	/**
-	 * 设置调用返回状态
+	 * 设置请求 ID
 	 *
-	 * @param success
-	 * 		调用返回状态
+	 * @param requestId
+	 * 		请求 ID
 	 */
-	public void setSuccess(Boolean success){
-		this.success = success;
+	public void setRequestId(String requestId){
+		this.requestId = requestId;
+	}
+
+	public String getRiskLevel(){
+		return riskLevel;
+	}
+
+	public void setRiskLevel(String riskLevel){
+		this.riskLevel = riskLevel;
 	}
 
 	/**
-	 * 返回调用返回结果
+	 * 返回消息
 	 *
-	 * @return 调用返回结果
+	 * @return 消息
 	 */
-	public Data getData(){
-		return data;
+	public String getMsg(){
+		return msg;
 	}
 
 	/**
-	 * 设置调用返回结果
+	 * 设置消息
 	 *
-	 * @param data
-	 * 		调用返回结果
+	 * @param msg
+	 * 		消息
 	 */
-	public void setData(Data data){
-		this.data = data;
+	public void setMsg(String msg){
+		this.msg = msg;
 	}
 
 	@Override
 	public String toString(){
 		return new StringJoiner(", ", "[", "]")
 				.add("code=" + code)
-				.add("success=" + success)
-				.add("data=" + data)
+				.add("requestId='" + requestId + "'")
+				.add("riskLevel='" + riskLevel + "'")
+				.add("msg='" + msg + "'")
 				.toString();
-	}
-
-	public final static class Data implements Serializable {
-
-		private final static long serialVersionUID = -2831087419706976003L;
-
-		/**
-		 * 阿里云验证码结果编码
-		 * <p>**100**：表示验证通过</p>
-		 * <p>**900**：表示验证不通过</p>
-		 */
-		private String code;
-
-		/**
-		 * 返回阿里云验证码结果编码
-		 *
-		 * @return 阿里云验证码结果编码
-		 * <p>**100**：表示验证通过</p>
-		 * <p>**900**：表示验证不通过</p>
-		 */
-		public String getCode(){
-			return code;
-		}
-
-		/**
-		 * 设置阿里云验证码结果编码
-		 *
-		 * @param code
-		 * 		阿里云验证码结果编码
-		 */
-		public void setCode(String code){
-			this.code = code;
-		}
-
-		@Override
-		public String toString(){
-			return new StringJoiner(", ", "[", "]")
-					.add("code=" + code)
-					.toString();
-		}
 	}
 
 }

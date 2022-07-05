@@ -24,7 +24,6 @@
  */
 package com.buession.security.captcha.validator.reactive;
 
-import com.buession.core.utils.Assert;
 import com.buession.lang.Status;
 import com.buession.security.captcha.core.CaptchaException;
 import com.buession.security.captcha.tencent.TencentCaptchaClient;
@@ -43,11 +42,6 @@ import org.springframework.util.MultiValueMap;
 public class ReactiveTencentCaptchaValidator extends TencentCaptchaValidator implements ReactiveCaptchaValidator {
 
 	/**
-	 * {@link TencentParameter} 实例
-	 */
-	private final TencentParameter parameter;
-
-	/**
 	 * 构造函数
 	 *
 	 * @param tencentCaptchaClient
@@ -57,9 +51,7 @@ public class ReactiveTencentCaptchaValidator extends TencentCaptchaValidator imp
 	 */
 	public ReactiveTencentCaptchaValidator(final TencentCaptchaClient tencentCaptchaClient,
 										   final TencentParameter parameter){
-		super(tencentCaptchaClient);
-		Assert.isNull(parameter, "GeetestParameter cloud not be null.");
-		this.parameter = parameter;
+		super(tencentCaptchaClient, parameter);
 	}
 
 	@Override

@@ -22,26 +22,54 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.validator;
+package com.buession.security.captcha.geetest.api.v3;
 
-import com.buession.security.captcha.netease.NetEaseCaptchaClient;
+import com.buession.core.builder.MapBuilder;
+import com.buession.security.captcha.core.ParametersBuilder;
+
+import java.util.Map;
 
 /**
- * 网易验证码验证
- *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class NetEaseCaptchaValidator extends AbstractCaptchaValidator<NetEaseCaptchaClient> {
+class GeetestV3ParametersBuilder implements ParametersBuilder<GeetestV3RequestData> {
 
-	/**
-	 * 构造函数
-	 *
-	 * @param netEaseCaptchaClient
-	 *        {@link NetEaseCaptchaClient} 实例
-	 */
-	public NetEaseCaptchaValidator(final NetEaseCaptchaClient netEaseCaptchaClient){
-		super("Netease", netEaseCaptchaClient);
+	private final String appId;
+
+	private final String secretKey;
+
+	private final String sdkName;
+
+	GeetestV3ParametersBuilder(final String appId, final String secretKey, final String sdkName){
+		this.appId = appId;
+		this.secretKey = secretKey;
+		this.sdkName = sdkName;
+	}
+
+	@Override
+	public Map<String, String> build(final GeetestV3RequestData requestData){
+		MapBuilder<String, String> builder = MapBuilder.<String, String>create()
+				.put("captchaid", appId)
+				.put("challenge", requestData.getChallenge())
+				.put("validate", requestData.getValidate())
+				.put("seccode", requestData.getSeccode())
+				.put("json_format", "1")
+				.put("sdk", sdkName);
+
+		if(requestData.getUserId() != null){
+			builder.put("user_id", requestData.getUserId());
+		}
+
+		if(requestData.getClientType() != null){
+			builder.put("client_type", requestData.getClientType().getValue());
+		}
+
+		if(requestData.getIpAddress() != null){
+			builder.put("ip_address", requestData.getIpAddress());
+		}
+
+		return builder.build();
 	}
 
 }

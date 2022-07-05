@@ -19,36 +19,44 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest;
+package com.buession.security.captcha.tencent;
 
-import com.buession.security.captcha.core.ClientType;
-import com.buession.security.captcha.geetest.api.v3.GeetestV3RequestData;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import com.buession.core.builder.MapBuilder;
+import com.buession.security.captcha.core.ParametersBuilder;
+
+import java.util.Map;
 
 /**
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public class RequestDataTest {
+class TencentParametersBuilder implements ParametersBuilder<TencentRequestData> {
 
-	@Test
-	public void json() throws JsonProcessingException{
-		GeetestV3RequestData requestData = new GeetestV3RequestData();
+	private final String secretId;
 
-		requestData.setUserId("ueerid");
-		requestData.setClientType(ClientType.H5);
-		requestData.setIpAddress("127.0.0.1");
+	private final String secretKey;
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		String str = objectMapper.writeValueAsString(requestData);
-		System.out.println(str);
+	TencentParametersBuilder(final String secretId, final String secretKey){
+		this.secretId = secretId;
+		this.secretKey = secretKey;
+	}
 
-		GeetestV3RequestData requestData1 = objectMapper.readValue(str, GeetestV3RequestData.class);
-		System.out.println(requestData1.getIpAddress());
+	@Override
+	public Map<String, String> build(final TencentRequestData requestData){
+		MapBuilder<String, String> builder = MapBuilder.<String, String>create()
+				.put("aid", secretId)
+				.put("AppSecretKey", secretKey)
+				.put("Ticket", requestData.getTicket())
+				.put("Randstr", requestData.getRandstr());
+
+		if(requestData.getClientIp() != null){
+			builder.put("UserIP", requestData.getClientIp());
+		}
+
+		return builder.build();
 	}
 
 }
