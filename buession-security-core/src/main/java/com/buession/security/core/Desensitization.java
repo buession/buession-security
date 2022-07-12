@@ -34,7 +34,7 @@ import com.buession.core.validator.Validate;
 public class Desensitization {
 
 	/**
-	 * 多字符串进行脱敏处理
+	 * 对字符串进行脱敏处理
 	 *
 	 * @param str
 	 * 		字符串

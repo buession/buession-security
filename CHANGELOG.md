@@ -9,6 +9,11 @@
 - [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.0.0)
 
 
+### 🐞 Bug 修复
+
+- **buession-security-web：** 修复 ReactiveWebSecurityConfigurerAdapterConfiguration 无参数构造函数，为初始化 Configurer 的 BUG
+
+
 ### ⭐ 新特性
 
 - **bbuession-security-captcha：** 新增极验 V4 版本支持，阿里云、腾讯云行为验证码
