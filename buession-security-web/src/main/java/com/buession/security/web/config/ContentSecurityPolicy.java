@@ -41,7 +41,7 @@ public class ContentSecurityPolicy {
 	 */
 	private boolean enabled = true;
 
-	private boolean reportOnly;
+	private Boolean reportOnly;
 
 	/**
 	 * 策略
@@ -76,15 +76,16 @@ public class ContentSecurityPolicy {
 		this.enabled = enabled;
 	}
 
-	public boolean isReportOnly(){
+	@Deprecated
+	public Boolean isReportOnly(){
 		return getReportOnly();
 	}
 
-	public boolean getReportOnly(){
+	public Boolean getReportOnly(){
 		return reportOnly;
 	}
 
-	public void setReportOnly(boolean reportOnly){
+	public void setReportOnly(Boolean reportOnly){
 		this.reportOnly = reportOnly;
 	}
 

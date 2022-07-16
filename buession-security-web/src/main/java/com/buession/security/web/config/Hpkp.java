@@ -50,14 +50,14 @@ public class Hpkp {
 	/**
 	 * 浏览器应记住仅使用其中一个已定义的密钥访问此站点的时间
 	 */
-	private long maxAge;
+	private Long maxAge;
 
 	/**
 	 * 配置此规则也适用于该网站的所有子域名
 	 */
-	private boolean includeSubDomains;
+	private Boolean includeSubDomains;
 
-	private boolean reportOnly;
+	private Boolean reportOnly;
 
 	private String reportUri;
 
@@ -110,7 +110,7 @@ public class Hpkp {
 	 *
 	 * @return 浏览器应记住仅使用其中一个已定义的密钥访问此站点的时间
 	 */
-	public long getMaxAge(){
+	public Long getMaxAge(){
 		return maxAge;
 	}
 
@@ -120,7 +120,7 @@ public class Hpkp {
 	 * @param maxAge
 	 * 		浏览器应记住仅使用其中一个已定义的密钥访问此站点的时间
 	 */
-	public void setMaxAge(long maxAge){
+	public void setMaxAge(Long maxAge){
 		this.maxAge = maxAge;
 	}
 
@@ -129,7 +129,8 @@ public class Hpkp {
 	 *
 	 * @return 配置是否也规则也适用于该网站的所有子域名
 	 */
-	public boolean isIncludeSubDomains(){
+	@Deprecated
+	public Boolean isIncludeSubDomains(){
 		return getIncludeSubDomains();
 	}
 
@@ -138,7 +139,7 @@ public class Hpkp {
 	 *
 	 * @return 配置是否也规则也适用于该网站的所有子域名
 	 */
-	public boolean getIncludeSubDomains(){
+	public Boolean getIncludeSubDomains(){
 		return includeSubDomains;
 	}
 
@@ -148,19 +149,20 @@ public class Hpkp {
 	 * @param includeSubDomains
 	 * 		此规则是否也也适用于该网站的所有子域名
 	 */
-	public void setIncludeSubDomains(boolean includeSubDomains){
+	public void setIncludeSubDomains(Boolean includeSubDomains){
 		this.includeSubDomains = includeSubDomains;
 	}
 
-	public boolean isReportOnly(){
+	@Deprecated
+	public Boolean isReportOnly(){
 		return getReportOnly();
 	}
 
-	public boolean getReportOnly(){
+	public Boolean getReportOnly(){
 		return reportOnly;
 	}
 
-	public void setReportOnly(boolean reportOnly){
+	public void setReportOnly(Boolean reportOnly){
 		this.reportOnly = reportOnly;
 	}
 

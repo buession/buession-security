@@ -41,9 +41,9 @@ public class Xss {
 	 */
 	private boolean enabled = true;
 
-	private boolean block;
+	private Boolean block;
 
-	private boolean enabledProtection;
+	private Boolean enabledProtection;
 
 	/**
 	 * XSS 策略配置文件路径
@@ -55,7 +55,8 @@ public class Xss {
 	 *
 	 * @return 是否启用 Xss 配置
 	 */
-	public boolean isEnabled(){
+	@Deprecated
+	public Boolean isEnabled(){
 		return getEnabled();
 	}
 
@@ -64,7 +65,7 @@ public class Xss {
 	 *
 	 * @return 是否启用 Xss 配置
 	 */
-	public boolean getEnabled(){
+	public Boolean getEnabled(){
 		return enabled;
 	}
 
@@ -74,31 +75,33 @@ public class Xss {
 	 * @param enabled
 	 * 		是否启用 Xss 配置
 	 */
-	public void setEnabled(boolean enabled){
+	public void setEnabled(Boolean enabled){
 		this.enabled = enabled;
 	}
 
-	public boolean isBlock(){
+	@Deprecated
+	public Boolean isBlock(){
 		return getBlock();
 	}
 
-	public boolean getBlock(){
+	public Boolean getBlock(){
 		return block;
 	}
 
-	public void setBlock(boolean block){
+	public void setBlock(Boolean block){
 		this.block = block;
 	}
 
-	public boolean isEnabledProtection(){
+	@Deprecated
+	public Boolean isEnabledProtection(){
 		return getEnabledProtection();
 	}
 
-	public boolean getEnabledProtection(){
+	public Boolean getEnabledProtection(){
 		return enabledProtection;
 	}
 
-	public void setEnabledProtection(boolean enabledProtection){
+	public void setEnabledProtection(Boolean enabledProtection){
 		this.enabledProtection = enabledProtection;
 	}
 
