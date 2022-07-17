@@ -2,14 +2,12 @@
 ===========================
 
 
-## [2.0.1](https://github.com/buession/buession-security/releases/tag/v2.0.1) ()
-
-
-## [2.0.0](https://github.com/buession/buession-security/releases/tag/v2.0.0) (2022-07-07)
+## [2.0.1](https://github.com/buession/buession-security/releases/tag/v2.0.1) (2022-07-17)
 
 ### 🔨依赖升级
 
-- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.0.0)
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.0.1)
+- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.6.8
 
 
 ### 🔔 变化
@@ -20,6 +18,18 @@
 ### 🐞 Bug 修复
 
 - **buession-security-web：** 修复 ReactiveWebSecurityConfigurerAdapterConfiguration 无参数构造函数，为初始化 Configurer 的 BUG
+
+
+### 漏洞修复
+
+- [owasp antisamy](https://github.com/nahsra/antisamy) 修复 [CVE-2022-29577](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-29577)、[CVE-2022-28367](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-28367)、[CVE-2021-35043](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-35043)、[CVE-2022-23437](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-23437)、[CVE-2021-29425](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-29425)、[CVE-2022-29546](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-29546) 漏洞
+
+
+## [2.0.0](https://github.com/buession/buession-security/releases/tag/v2.0.0) (2022-07-07)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.0.0)
 
 
 ### ⭐ 新特性
