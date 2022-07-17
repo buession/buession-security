@@ -53,17 +53,17 @@ public class Hsts {
 	/**
 	 * 缓存时间，在浏览器收到这个请求后的 maxAge 秒的时间内凡是访问这个域名下的请求都使用HTTPS请求，默认缓存一年
 	 */
-	private long maxAge = DEFAULT_MAX_AGE;
+	private Long maxAge = DEFAULT_MAX_AGE;
 
 	/**
 	 * 配置此规则也适用于该网站的所有子域名
 	 */
-	private boolean includeSubDomains;
+	private Boolean includeSubDomains;
 
 	/**
 	 * 配置是否预加载 HSTS
 	 */
-	private boolean preload;
+	private Boolean preload;
 
 	/**
 	 * 返回是否启用 Hsts
@@ -117,7 +117,7 @@ public class Hsts {
 	 *
 	 * @return 缓存时间
 	 */
-	public long getMaxAge(){
+	public Long getMaxAge(){
 		return maxAge;
 	}
 
@@ -127,7 +127,7 @@ public class Hsts {
 	 * @param maxAge
 	 * 		缓存时间（单位：秒）
 	 */
-	public void setMaxAge(long maxAge){
+	public void setMaxAge(Long maxAge){
 		this.maxAge = maxAge;
 	}
 
@@ -136,6 +136,7 @@ public class Hsts {
 	 *
 	 * @return 此规则是否适用于该网站的所有子域名
 	 */
+	@Deprecated
 	public boolean isIncludeSubDomains(){
 		return getIncludeSubDomains();
 	}
@@ -145,7 +146,7 @@ public class Hsts {
 	 *
 	 * @return 此规则是否也适用于该网站的所有子域名
 	 */
-	public boolean getIncludeSubDomains(){
+	public Boolean getIncludeSubDomains(){
 		return includeSubDomains;
 	}
 
@@ -155,7 +156,7 @@ public class Hsts {
 	 * @param includeSubDomains
 	 * 		此规则是否也适用于该网站的所有子域名
 	 */
-	public void setIncludeSubDomains(boolean includeSubDomains){
+	public void setIncludeSubDomains(Boolean includeSubDomains){
 		this.includeSubDomains = includeSubDomains;
 	}
 
@@ -164,7 +165,8 @@ public class Hsts {
 	 *
 	 * @return 是否预加载 HSTS
 	 */
-	public boolean isPreload(){
+	@Deprecated
+	public Boolean isPreload(){
 		return getPreload();
 	}
 
@@ -173,7 +175,7 @@ public class Hsts {
 	 *
 	 * @return 是否预加载 HSTS
 	 */
-	public boolean getPreload(){
+	public Boolean getPreload(){
 		return preload;
 	}
 
@@ -183,7 +185,7 @@ public class Hsts {
 	 * @param preload
 	 * 		是否预加载 HSTS
 	 */
-	public void setPreload(boolean preload){
+	public void setPreload(Boolean preload){
 		this.preload = preload;
 	}
 

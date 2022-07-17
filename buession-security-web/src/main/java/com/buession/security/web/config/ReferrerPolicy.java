@@ -39,7 +39,7 @@ public class ReferrerPolicy {
 	 */
 	private boolean enabled = true;
 
-	private ReferrerPolicy.Policy policy = ReferrerPolicy.Policy.NO_REFERRER;
+	private Policy policy = Policy.NO_REFERRER;
 
 	/**
 	 * 返回是否启用 ReferrerPolicy
@@ -69,11 +69,11 @@ public class ReferrerPolicy {
 		this.enabled = enabled;
 	}
 
-	public ReferrerPolicy.Policy getPolicy(){
+	public Policy getPolicy(){
 		return policy;
 	}
 
-	public void setPolicy(ReferrerPolicy.Policy policy){
+	public void setPolicy(Policy policy){
 		this.policy = policy;
 	}
 

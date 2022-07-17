@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 
 /**
- * Servlet Web 安全适配配置类
+ * Reactive Web 安全适配配置类
  *
  * @author Yong.Teng
  * @since 2.0.0
@@ -50,7 +50,7 @@ public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 	 * 构造函数
 	 */
 	public ReactiveWebSecurityConfigurerAdapterConfiguration(){
-		this.configurer = null;
+		this.configurer = new Configurer();
 	}
 
 	/**

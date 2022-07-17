@@ -29,7 +29,7 @@
 
 - 参考文档 [https://security.buession.com/](https://security.buession.com/)
 - Wiki [https://github.com/buession/buession-security/wiki](https://github.com/buession/buession-security/wiki)
-- API Reference [https://security.buession.com/doc/](https://security.buession.com/doc/)
+- API Reference [https://security.buession.com/manual/](https://security.buession.com/manual/)
 
 ## License
 
