@@ -28,6 +28,7 @@ import com.buession.core.builder.MapBuilder;
 import com.buession.security.captcha.core.ParametersBuilder;
 import com.buession.security.mcrypt.HmacSha256Mcrypt;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -71,7 +72,7 @@ class GeetestV4ParametersBuilder implements ParametersBuilder<GeetestV4RequestDa
 	 * @return 生成签名结果
 	 */
 	private String sign(final GeetestV4RequestData requestData){
-		HmacSha256Mcrypt hmacSha256Mcrypt = new HmacSha256Mcrypt(secretKey);
+		HmacSha256Mcrypt hmacSha256Mcrypt = new HmacSha256Mcrypt(StandardCharsets.UTF_8, secretKey);
 		return hmacSha256Mcrypt.encode(requestData.getLotNumber());
 	}
 
