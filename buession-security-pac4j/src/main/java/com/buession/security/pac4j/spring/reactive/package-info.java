@@ -26,4 +26,4 @@
  * @author Yong.Teng
  * @since 2.0.3
  */
-package com.buession.security.pac4j.annotation.reactive;
+package com.buession.security.pac4j.spring.reactive;

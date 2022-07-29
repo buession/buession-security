@@ -31,6 +31,7 @@ import com.buession.security.pac4j.annotation.Principal;
 import com.buession.security.pac4j.profile.ProfileUtils;
 import com.buession.web.method.MethodParameterUtils;
 import com.buession.web.servlet.method.AbstractHandlerMethodArgumentResolver;
+import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.pac4j.core.profile.CommonProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,26 +62,34 @@ public class PrincipalMethodArgumentResolver extends AbstractHandlerMethodArgume
 	}
 
 	@Override
-	public Object resolveArgument(MethodParameter methodParameter, @Nullable ModelAndViewContainer mavContainer, NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception{
+	public Object resolveArgument(MethodParameter methodParameter, @Nullable ModelAndViewContainer mavContainer,
+								  NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory)
+			throws Exception{
 		HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
 		Assert.isNull(servletRequest, "No HttpServletRequest");
 
 		methodParameter = methodParameter.nestedIfOptional();
 
 		Principal principal = methodParameter.getParameterAnnotation(Principal.class);
-		Object result = read(methodParameter, principal, methodParameter.getNestedParameterType());
+		Object result = read(servletRequest, methodParameter, principal, methodParameter.getNestedParameterType());
 		return MethodParameterUtils.adaptArgumentIfNecessary(methodParameter, result);
 	}
 
-	protected <T> Object read(MethodParameter methodParameter, Principal principal, Class<T> paramType) throws MethodArgumentTypeMismatchException{
-		CommonProfile profile = ProfileUtils.getCurrent();
+	protected <T> Object read(HttpServletRequest request, MethodParameter methodParameter, Principal principal,
+							  Class<T> paramType) throws MethodArgumentTypeMismatchException{
+		CommonProfile profile = ProfileUtils.getProfileFromPac4jPrincipal((Pac4jPrincipal) request.getUserPrincipal());
 
-		if(profile == null && checkRequired(methodParameter, principal)){
-			throw new MethodArgumentTypeMismatchException("Principal is missing: " + methodParameter.getExecutable().toGenericString(), methodParameter.getNestedParameterType(), methodParameter.getParameterName(), methodParameter, null);
+		if(profile == null || checkRequired(methodParameter, principal)){
+			throw new MethodArgumentTypeMismatchException(
+					"Principal is missing: " + methodParameter.getExecutable().toGenericString(),
+					methodParameter.getNestedParameterType(), methodParameter.getParameterName(), methodParameter,
+					null);
 		}
 
 		try{
-			return ProfileUtils.convert(ProfileUtils.getCurrent(), paramType, ValueConstants.DEFAULT_NONE.equals(principal.id()) ? null : principal.id(), ValueConstants.DEFAULT_NONE.equals(principal.realName()) ? null : principal.realName());
+			return ProfileUtils.convert(profile, paramType,
+					ValueConstants.DEFAULT_NONE.equals(principal.id()) ? null : principal.id(),
+					ValueConstants.DEFAULT_NONE.equals(principal.realName()) ? null : principal.realName());
 		}catch(InstantiationException e){
 			logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
 		}catch(IllegalAccessException e){

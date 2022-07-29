@@ -24,31 +24,30 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.annotation.servlet;
+package com.buession.security.pac4j.annotation.reactive;
 
 import com.buession.core.utils.Assert;
 import com.buession.security.pac4j.annotation.Principal;
 import com.buession.security.pac4j.profile.ProfileUtils;
-import com.buession.web.method.MethodParameterUtils;
-import com.buession.web.servlet.method.AbstractHandlerMethodArgumentResolver;
+import com.buession.web.reactive.method.AbstractHandlerMethodArgumentResolver;
 import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.pac4j.core.profile.CommonProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ValueConstants;
-import org.springframework.web.bind.support.WebDataBinderFactory;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.method.support.ModelAndViewContainer;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.reactive.BindingContext;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 /**
  * Resolves method arguments annotated with an {@link Principal}
  *
  * @author Yong.Teng
+ * @since 2.0.3
  */
 public class PrincipalMethodArgumentResolver extends AbstractHandlerMethodArgumentResolver<Principal> {
 
@@ -62,41 +61,44 @@ public class PrincipalMethodArgumentResolver extends AbstractHandlerMethodArgume
 	}
 
 	@Override
-	public Object resolveArgument(MethodParameter methodParameter, @Nullable ModelAndViewContainer mavContainer,
-								  NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory)
-			throws Exception{
-		HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
-		Assert.isNull(servletRequest, "No HttpServletRequest");
+	public Mono<Object> resolveArgument(MethodParameter methodParameter, @Nullable BindingContext bindingContext,
+										@Nullable ServerWebExchange exchange){
+		ServerHttpRequest serverHttpRequest = exchange.getRequest();
+		Assert.isNull(serverHttpRequest, "No ServerHttpRequest");
 
 		methodParameter = methodParameter.nestedIfOptional();
 
 		Principal principal = methodParameter.getParameterAnnotation(Principal.class);
-		Object result = read(servletRequest, methodParameter, principal, methodParameter.getNestedParameterType());
-		return MethodParameterUtils.adaptArgumentIfNecessary(methodParameter, result);
+		return read(exchange, methodParameter, principal, methodParameter.getNestedParameterType());
 	}
 
-	protected <T> Object read(HttpServletRequest request, MethodParameter methodParameter, Principal principal,
-							  Class<T> paramType) throws MethodArgumentTypeMismatchException{
-		CommonProfile profile = ProfileUtils.getProfileFromPac4jPrincipal((Pac4jPrincipal) request.getUserPrincipal());
+	protected <T> Mono<Object> read(ServerWebExchange exchange, MethodParameter methodParameter, Principal principal,
+									Class<T> paramType) throws MethodArgumentTypeMismatchException{
+		Mono<Pac4jPrincipal> mono = exchange.getPrincipal();
 
-		if(profile == null && checkRequired(methodParameter, principal)){
-			throw new MethodArgumentTypeMismatchException(
-					"Principal is missing: " + methodParameter.getExecutable().toGenericString(),
-					methodParameter.getNestedParameterType(), methodParameter.getParameterName(), methodParameter,
-					null);
-		}
+		return mono.map((p)->{
+			CommonProfile profile = ProfileUtils.getProfileFromPac4jPrincipal(p);
 
-		try{
-			return ProfileUtils.convert(profile, paramType,
-					ValueConstants.DEFAULT_NONE.equals(principal.id()) ? null : principal.id(),
-					ValueConstants.DEFAULT_NONE.equals(principal.realName()) ? null : principal.realName());
-		}catch(InstantiationException e){
-			logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
-		}catch(IllegalAccessException e){
-			logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
-		}
+			if(profile == null || checkRequired(methodParameter, principal)){
+				throw new MethodArgumentTypeMismatchException(
+						"Principal is missing: " + methodParameter.getExecutable().toGenericString(),
+						methodParameter.getNestedParameterType(), methodParameter.getParameterName(), methodParameter,
+						null);
+			}
 
-		return null;
+			try{
+				Object result = ProfileUtils.convert(profile, paramType,
+						ValueConstants.DEFAULT_NONE.equals(principal.id()) ? null : principal.id(),
+						ValueConstants.DEFAULT_NONE.equals(principal.realName()) ? null : principal.realName());
+				return result;
+			}catch(InstantiationException e){
+				logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
+			}catch(IllegalAccessException e){
+				logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
+			}
+
+			return null;
+		});
 	}
 
 	protected static boolean checkRequired(MethodParameter parameter, Principal principal){

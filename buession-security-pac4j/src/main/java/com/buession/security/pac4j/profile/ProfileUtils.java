@@ -28,7 +28,6 @@ import com.buession.beans.BeanUtils;
 import com.buession.core.utils.StringUtils;
 import com.buession.core.validator.Validate;
 import io.buji.pac4j.subject.Pac4jPrincipal;
-import org.apache.shiro.SecurityUtils;
 import org.pac4j.core.profile.CommonProfile;
 
 import java.util.LinkedHashMap;
@@ -45,16 +44,6 @@ public class ProfileUtils {
 	private final static String ROLES_FIELD = "roles";
 
 	private final static String PERMISSIONS_FIELD = "permissions";
-
-	/**
-	 * 获取当前登录用户 Profile
-	 *
-	 * @return 当前登录用户 Profile
-	 */
-	public static CommonProfile getCurrent(){
-		Pac4jPrincipal principal = (Pac4jPrincipal) SecurityUtils.getSubject().getPrincipal();
-		return getProfileFromPac4jPrincipal(principal);
-	}
 
 	/**
 	 * 从 {@link Pac4jPrincipal} 获取用户 Profile
