@@ -24,21 +24,19 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.MD5Mcrypt;
+import com.buession.security.mcrypt.HmacMD5Mcrypt;
 
 /**
- * MD5 密码生成器
+ * HmacMD5 密码生成器
  *
  * @author Yong.Teng
+ * @since 2.0.3
  */
-public class Md5PasswordGenerator extends AbstractPasswordGenerator {
+public class HmacMd5PasswordGenerator extends AbstractPasswordGenerator {
 
 	@Override
 	public String digestEncoded(final String password, final String salt){
-		MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-
-		md5Mcrypt.setSalt(salt);
-		return md5Mcrypt.encode(password);
+		return digestEncoded(new HmacMD5Mcrypt(), password, salt);
 	}
 
 }

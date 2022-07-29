@@ -24,18 +24,19 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.Sha1Mcrypt;
+import com.buession.security.mcrypt.HmacSha1Mcrypt;
 
 /**
- * SHA-1 密码生成器
+ * HmacSHA1 密码生成器
  *
  * @author Yong.Teng
+ * @since 2.0.3
  */
-public class Sha1PasswordGenerator extends AbstractPasswordGenerator {
+public class HmacSha1PasswordGenerator extends AbstractPasswordGenerator {
 
 	@Override
 	public String digestEncoded(final String password, final String salt){
-		return digestEncoded(new Sha1Mcrypt(), password, salt);
+		return digestEncoded(new HmacSha1Mcrypt(), password, salt);
 	}
 
 }

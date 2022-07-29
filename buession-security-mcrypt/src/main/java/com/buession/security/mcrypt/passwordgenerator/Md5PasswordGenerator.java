@@ -35,10 +35,7 @@ public class Md5PasswordGenerator extends AbstractPasswordGenerator {
 
 	@Override
 	public String digestEncoded(final String password, final String salt){
-		MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-
-		md5Mcrypt.setSalt(salt);
-		return md5Mcrypt.encode(password);
+		return digestEncoded(new MD5Mcrypt(), password, salt);
 	}
 
 }

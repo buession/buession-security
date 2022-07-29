@@ -35,10 +35,7 @@ public class Sha512PasswordGenerator extends AbstractPasswordGenerator {
 
 	@Override
 	public String digestEncoded(final String password, final String salt){
-		Sha512Mcrypt sha512Mcrypt = new Sha512Mcrypt();
-
-		sha512Mcrypt.setSalt(salt);
-		return sha512Mcrypt.encode(password);
+		return digestEncoded(new Sha512Mcrypt(), password, salt);
 	}
 
 }
