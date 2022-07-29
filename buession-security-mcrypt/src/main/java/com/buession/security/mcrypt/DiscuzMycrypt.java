@@ -59,6 +59,7 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
+	@Deprecated
 	public DiscuzMycrypt(final String characterEncoding){
 		super(null, characterEncoding);
 	}

@@ -49,6 +49,7 @@ public final class HmacMD5Mcrypt extends AbstractHmacMcrypt {
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
+	@Deprecated
 	public HmacMD5Mcrypt(final String characterEncoding){
 		super(Algo.HMAC_MD5, characterEncoding);
 	}
@@ -91,5 +92,5 @@ public final class HmacMD5Mcrypt extends AbstractHmacMcrypt {
 	protected HmacAlgorithms getHmacAlgorithms(){
 		return HmacAlgorithms.HMAC_MD5;
 	}
-	
+
 }

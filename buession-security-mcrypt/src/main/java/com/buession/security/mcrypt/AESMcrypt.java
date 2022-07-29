@@ -80,6 +80,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
+	@Deprecated
 	public AESMcrypt(final String characterEncoding){
 		super(Algo.AES, characterEncoding);
 	}

@@ -49,6 +49,7 @@ public final class HmacSha384Mcrypt extends AbstractHmacMcrypt {
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
+	@Deprecated
 	public HmacSha384Mcrypt(final String characterEncoding){
 		super(Algo.HMAC_SHA384, characterEncoding);
 	}

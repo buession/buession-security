@@ -57,6 +57,7 @@ public final class ShaMcrypt extends AbstractMcrypt {
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
+	@Deprecated
 	public ShaMcrypt(final String characterEncoding){
 		super(Algo.SHA, characterEncoding);
 	}

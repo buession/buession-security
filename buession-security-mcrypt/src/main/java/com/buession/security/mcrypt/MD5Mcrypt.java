@@ -57,6 +57,7 @@ public final class MD5Mcrypt extends AbstractMcrypt {
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
+	@Deprecated
 	public MD5Mcrypt(final String characterEncoding){
 		super(Algo.MD5, characterEncoding);
 	}
