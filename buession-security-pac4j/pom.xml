@@ -7,7 +7,7 @@
 		<groupId>com.buession.security</groupId>
 		<artifactId>buession-security-parent</artifactId>
 		<relativePath>../buession-security-parent</relativePath>
-		<version>2.0.2</version>
+		<version>2.0.3</version>
 	</parent>
 	<artifactId>buession-security-pac4j</artifactId>
 	<url>https://github.com/buession/buession-security</url>
@@ -45,6 +45,11 @@
 		<developerConnection>scm:git:https://github.com/buession/buession-security.git</developerConnection>
 		<url>https://github.com/buession/buession-security</url>
 	</scm>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/buession/buession-security/issues</url>
+	</issueManagement>
 
 	<dependencies>
 		<dependency>
@@ -94,6 +99,12 @@
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
 
 		<!-- pac4j start -->
 		<dependency>
@@ -129,33 +140,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-aspectj</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-spring</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-web</artifactId>
 			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jasig.cas.client</groupId>
-			<artifactId>cas-client-core</artifactId>
-			<version>${cas.client.version}</version>
-			<scope>provided</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.jasig.cas.client</groupId>
-			<artifactId>cas-client-support-saml</artifactId>
-			<version>${cas.client.version}</version>
-			<scope>provided</scope>
-			<optional>true</optional>
 		</dependency>
 
 		<dependency>

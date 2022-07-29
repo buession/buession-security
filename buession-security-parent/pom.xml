@@ -7,13 +7,13 @@
 		<groupId>com.buession</groupId>
 		<artifactId>parent</artifactId>
 		<relativePath/>
-		<version>2.0.2</version>
+		<version>2.0.3</version>
 	</parent>
 	<groupId>com.buession.security</groupId>
 	<artifactId>buession-security-parent</artifactId>
 	<url>https://github.com/buession/buession-security</url>
 	<description>Buession Security Framework Parent</description>
-	<version>2.0.2</version>
+	<version>2.0.3</version>
 	<packaging>pom</packaging>
 
 	<organization>
@@ -47,6 +47,11 @@
 		<developerConnection>scm:git:https://github.com/buession/buession-security.git</developerConnection>
 		<url>https://github.com/buession/buession-security</url>
 	</scm>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/buession/buession-security/issues</url>
+	</issueManagement>
 
 	<modules>
 		<module>../buession-security-core</module>

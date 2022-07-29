@@ -1,6 +1,31 @@
  Buession Security Changelog
 ===========================
 
+## [2.0.3](https://github.com/buession/buession-security/releases/tag/v2.0.3) (2022-07-xx)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.0.3)
+
+
+### ⭐ 新特性
+
+- **buession-security-pac4j：** 注解 @Principal 支持 webflux 环境
+
+
+### 🔔 变化
+
+- **buession-security-mcrypt：** 废弃加密类中仅传递字符串形式的编码的构造函数
+- **buession-security-web：** 新增 ReferrerPolicy 策略转换器 ReferrerPolicyConverter
+
+
+### 🐞 Bug 修复
+
+- **buession-security-web：** 修复 HttpSecurity 构建器 ReactiveHttpSecurityBuilder、ServletHttpSecurityBuilder 中 Boolean 类型未判断 null 的 BUG
+
+
+---
+
 
 ## [2.0.2](https://github.com/buession/buession-security/releases/tag/v2.0.2) (2022-07-28)
 
@@ -9,9 +34,17 @@
 - [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.0.2)
 
 
+### ⭐ 新特性
+
+- **buession-security-mcrypt：** 新增 HMAC 密码生成器
+
+
 ### 🐞 Bug 修复
 
 - **buession-security-captcha：** 修复极验 v4 版本签名加密错误的 BUG
+
+
+---
 
 
 ## [2.0.1](https://github.com/buession/buession-security/releases/tag/v2.0.1) (2022-07-17)
@@ -37,6 +70,9 @@
 - [owasp antisamy](https://github.com/nahsra/antisamy) 修复 [CVE-2022-29577](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-29577)、[CVE-2022-28367](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-28367)、[CVE-2021-35043](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-35043)、[CVE-2022-23437](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-23437)、[CVE-2021-29425](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-29425)、[CVE-2022-29546](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-29546) 漏洞
 
 
+---
+
+
 ## [2.0.0](https://github.com/buession/buession-security/releases/tag/v2.0.0) (2022-07-07)
 
 ### 🔨依赖升级
@@ -46,7 +82,7 @@
 
 ### ⭐ 新特性
 
-- **bbuession-security-captcha：** 新增极验 V4 版本支持，阿里云、腾讯云行为验证码
+- **buession-security-captcha：** 新增极验 V4 版本支持，阿里云、腾讯云行为验证码
 - **buession-security-mcrypt：** 新增 HMAC、AES、DES 算法加密
 - **buession-security-shiro：** 新增 SameSite 转换为 Shiro Cookie.SameSiteOptions 的转换器 SameSiteToShiroSameSiteOptionsConverter
 - **buession-security-web：** 新增浏览器安全配置以及浏览器安全 Http Security 构建器和自动配置类
