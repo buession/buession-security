@@ -55,8 +55,7 @@ public class Xss {
 	 *
 	 * @return 是否启用 Xss 配置
 	 */
-	@Deprecated
-	public Boolean isEnabled(){
+	public boolean isEnabled(){
 		return getEnabled();
 	}
 
@@ -65,7 +64,7 @@ public class Xss {
 	 *
 	 * @return 是否启用 Xss 配置
 	 */
-	public Boolean getEnabled(){
+	public boolean getEnabled(){
 		return enabled;
 	}
 
@@ -75,7 +74,7 @@ public class Xss {
 	 * @param enabled
 	 * 		是否启用 Xss 配置
 	 */
-	public void setEnabled(Boolean enabled){
+	public void setEnabled(boolean enabled){
 		this.enabled = enabled;
 	}
 

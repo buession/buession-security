@@ -22,16 +22,57 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.config.converter.servlet;
+package com.buession.security.web.config.converter;
 
 import com.buession.core.converter.Converter;
+import com.buession.security.web.config.ReferrerPolicy;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 
 /**
+ * ReferrerPolicy 策略转换
+ *
+ * @param <S>
+ * 		原始对象
+ * @param <T>
+ * 		目标对象
+ *
  * @author Yong.Teng
- * @since 2.0.0
+ * @see ReferrerPolicy.Policy
+ * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
+ * @see ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy
+ * @since 2.0.3
  */
 public interface ReferrerPolicyConverter<S, T> extends Converter<S, T> {
 
+	/**
+	 * 原生 ReferrerPolicy 策略类型转换为 {@link ReferrerPolicy.Policy}
+	 *
+	 * @param <S>
+	 * 		原生 ReferrerPolicy 策略类型
+	 *
+	 * @author Yong.Teng
+	 * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
+	 * @see ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy
+	 * @since 2.0.3
+	 */
+	interface NativeReferrerPolicyConverter<S> extends ReferrerPolicyConverter<S, ReferrerPolicy.Policy> {
 
+	}
+
+	/**
+	 * {@link ReferrerPolicy.Policy} 策略类型转换为原生 ReferrerPolicy 类型
+	 *
+	 * @param <T>
+	 * 		原生 ReferrerPolicy 策略类型
+	 *
+	 * @author Yong.Teng
+	 * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
+	 * @see ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy
+	 * @since 2.0.3
+	 */
+	interface ToNativeReferrerPolicyConverter<T> extends ReferrerPolicyConverter<ReferrerPolicy.Policy, T> {
+
+	}
 
 }

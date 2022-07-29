@@ -22,13 +22,13 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.config.converter.servlet;
+package com.buession.security.web.config.converter.reactive;
 
 import com.buession.security.web.config.ReferrerPolicy;
-import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 
 /**
- * ReferrerPolicy 策略转换
+ * WebFlux ReferrerPolicy 策略转换
  *
  * @param <S>
  * 		原始对象
@@ -36,19 +36,25 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
  * 		目标对象
  *
  * @author Yong.Teng
+ * @see ReferrerPolicy.Policy
+ * @see ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy
  * @since 2.0.0
  */
 public interface ReferrerPolicyConverter<S, T>
 		extends com.buession.security.web.config.converter.ReferrerPolicyConverter<S, T> {
 
 	/**
-	 * 原生 ReferrerPolicy 策略类型转换为 {@link ReferrerPolicy.Policy}
+	 * WebFlux 原生 ReferrerPolicy 策略类型 {@link ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy} 转换为 {@link ReferrerPolicy.Policy}
+	 *
+	 * @author Yong.Teng
+	 * @see ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy
+	 * @since 2.0.3
 	 */
 	class NativeReferrerPolicyConverter implements
-			com.buession.security.web.config.converter.ReferrerPolicyConverter.NativeReferrerPolicyConverter<ReferrerPolicyHeaderWriter.ReferrerPolicy> {
+			com.buession.security.web.config.converter.ReferrerPolicyConverter.NativeReferrerPolicyConverter<ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy> {
 
 		@Override
-		public ReferrerPolicy.Policy convert(final ReferrerPolicyHeaderWriter.ReferrerPolicy source){
+		public ReferrerPolicy.Policy convert(final ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy source){
 			if(source == null){
 				return null;
 			}
@@ -78,35 +84,38 @@ public interface ReferrerPolicyConverter<S, T>
 	}
 
 	/**
-	 * {@link ReferrerPolicy.Policy} 策略类型转换为原生 ReferrerPolicy
-	 * 原生 ReferrerPolicy 策略类型
+	 * WebFlux {@link ReferrerPolicy.Policy} 策略类型转换为原生 ReferrerPolicy 类型 {@link ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy}
+	 *
+	 * @author Yong.Teng
+	 * @see ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy
+	 * @since 2.0.3
 	 */
 	class ToNativeReferrerPolicyConverter implements
-			com.buession.security.web.config.converter.ReferrerPolicyConverter.ToNativeReferrerPolicyConverter<ReferrerPolicyHeaderWriter.ReferrerPolicy> {
+			com.buession.security.web.config.converter.ReferrerPolicyConverter.ToNativeReferrerPolicyConverter<ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy> {
 
 		@Override
-		public ReferrerPolicyHeaderWriter.ReferrerPolicy convert(final ReferrerPolicy.Policy source){
+		public ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy convert(final ReferrerPolicy.Policy source){
 			if(source == null){
 				return null;
 			}
 
 			switch(source){
 				case NO_REFERRER:
-					return ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER;
+					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER;
 				case NO_REFERRER_WHEN_DOWNGRADE:
-					return ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE;
+					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE;
 				case SAME_ORIGIN:
-					return ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN;
+					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.SAME_ORIGIN;
 				case ORIGIN:
-					return ReferrerPolicyHeaderWriter.ReferrerPolicy.ORIGIN;
+					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN;
 				case STRICT_ORIGIN:
-					return ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN;
+					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN;
 				case ORIGIN_WHEN_CROSS_ORIGIN:
-					return ReferrerPolicyHeaderWriter.ReferrerPolicy.ORIGIN_WHEN_CROSS_ORIGIN;
+					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN_WHEN_CROSS_ORIGIN;
 				case STRICT_ORIGIN_WHEN_CROSS_ORIGIN:
-					return ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN;
+					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN;
 				case UNSAFE_URL:
-					return ReferrerPolicyHeaderWriter.ReferrerPolicy.UNSAFE_URL;
+					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.UNSAFE_URL;
 				default:
 					return null;
 			}

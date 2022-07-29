@@ -21,10 +21,106 @@
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
- */package com.buession.security.web.config.converter.servlet;/**
- * 
+ */
+package com.buession.security.web.config.converter.servlet;
+
+import com.buession.security.web.config.ReferrerPolicy;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+
+/**
+ * Servlet ReferrerPolicy 策略转换
+ *
+ * @param <S>
+ * 		原始对象
+ * @param <T>
+ * 		目标对象
  *
  * @author Yong.Teng
- * @since 2.0.0
- */public class ReferrerPolicyConverter {
+ * @see ReferrerPolicy.Policy
+ * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
+ * @since 2.0.3
+ */
+public interface ReferrerPolicyConverter<S, T>
+		extends com.buession.security.web.config.converter.ReferrerPolicyConverter<S, T> {
+
+	/**
+	 * Servlet 原生 ReferrerPolicy 策略类型 {@link ReferrerPolicyHeaderWriter.ReferrerPolicy} 转换为 {@link ReferrerPolicy.Policy}
+	 *
+	 * @author Yong.Teng
+	 * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
+	 * @since 2.0.3
+	 */
+	class NativeReferrerPolicyConverter implements
+			com.buession.security.web.config.converter.ReferrerPolicyConverter.NativeReferrerPolicyConverter<ReferrerPolicyHeaderWriter.ReferrerPolicy> {
+
+		@Override
+		public ReferrerPolicy.Policy convert(final ReferrerPolicyHeaderWriter.ReferrerPolicy source){
+			if(source == null){
+				return null;
+			}
+
+			switch(source){
+				case NO_REFERRER:
+					return ReferrerPolicy.Policy.NO_REFERRER;
+				case NO_REFERRER_WHEN_DOWNGRADE:
+					return ReferrerPolicy.Policy.NO_REFERRER_WHEN_DOWNGRADE;
+				case SAME_ORIGIN:
+					return ReferrerPolicy.Policy.SAME_ORIGIN;
+				case ORIGIN:
+					return ReferrerPolicy.Policy.ORIGIN;
+				case STRICT_ORIGIN:
+					return ReferrerPolicy.Policy.STRICT_ORIGIN;
+				case ORIGIN_WHEN_CROSS_ORIGIN:
+					return ReferrerPolicy.Policy.ORIGIN_WHEN_CROSS_ORIGIN;
+				case STRICT_ORIGIN_WHEN_CROSS_ORIGIN:
+					return ReferrerPolicy.Policy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN;
+				case UNSAFE_URL:
+					return ReferrerPolicy.Policy.UNSAFE_URL;
+				default:
+					return null;
+			}
+		}
+
+	}
+
+	/**
+	 * Servlet {@link ReferrerPolicy.Policy} 策略类型转换为原生 ReferrerPolicy 类型 {@link ReferrerPolicyHeaderWriter.ReferrerPolicy}
+	 *
+	 * @author Yong.Teng
+	 * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
+	 * @since 2.0.3
+	 */
+	class ToNativeReferrerPolicyConverter implements
+			com.buession.security.web.config.converter.ReferrerPolicyConverter.ToNativeReferrerPolicyConverter<ReferrerPolicyHeaderWriter.ReferrerPolicy> {
+
+		@Override
+		public ReferrerPolicyHeaderWriter.ReferrerPolicy convert(final ReferrerPolicy.Policy source){
+			if(source == null){
+				return null;
+			}
+
+			switch(source){
+				case NO_REFERRER:
+					return ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER;
+				case NO_REFERRER_WHEN_DOWNGRADE:
+					return ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE;
+				case SAME_ORIGIN:
+					return ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN;
+				case ORIGIN:
+					return ReferrerPolicyHeaderWriter.ReferrerPolicy.ORIGIN;
+				case STRICT_ORIGIN:
+					return ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN;
+				case ORIGIN_WHEN_CROSS_ORIGIN:
+					return ReferrerPolicyHeaderWriter.ReferrerPolicy.ORIGIN_WHEN_CROSS_ORIGIN;
+				case STRICT_ORIGIN_WHEN_CROSS_ORIGIN:
+					return ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN;
+				case UNSAFE_URL:
+					return ReferrerPolicyHeaderWriter.ReferrerPolicy.UNSAFE_URL;
+				default:
+					return null;
+			}
+		}
+
+	}
+
 }

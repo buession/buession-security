@@ -36,6 +36,7 @@ import com.buession.security.web.config.Hsts;
 import com.buession.security.web.config.HttpBasic;
 import com.buession.security.web.config.ReferrerPolicy;
 import com.buession.security.web.config.Xss;
+import com.buession.security.web.config.converter.reactive.ReferrerPolicyConverter;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.security.web.server.csrf.WebSessionServerCsrfTokenRepository;
@@ -203,8 +204,15 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 		ServerHttpSecurity.HeaderSpec.HstsSpec hstsSpec = serverHttpSecurity.headers().hsts();
 
 		if(config.isEnabled()){
-			hstsSpec.maxAge(Duration.ofMinutes(config.getMaxAge())).includeSubdomains(config.getIncludeSubDomains())
-					.preload(config.isPreload());
+			hstsSpec.maxAge(Duration.ofMinutes(config.getMaxAge())).includeSubdomains(config.getIncludeSubDomains());
+
+			if(config.getMatcher() != null){
+				// empty
+			}
+
+			if(config.getPreload() != null){
+				hstsSpec.preload(config.getPreload());
+			}
 		}else{
 			hstsSpec.disable();
 		}
@@ -223,8 +231,8 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 			ServerHttpSecurity.HeaderSpec.ContentSecurityPolicySpec contentSecurityPolicySpec = serverHttpSecurity.headers()
 					.contentSecurityPolicy(config.getPolicyDirectives());
 
-			if(config.isReportOnly()){
-				contentSecurityPolicySpec.reportOnly(config.isReportOnly());
+			if(config.getReportOnly() != null){
+				contentSecurityPolicySpec.reportOnly(config.getReportOnly());
 			}
 		}
 
@@ -233,44 +241,13 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 
 	@Override
 	public ReactiveHttpSecurityBuilder referrerPolicy(ReferrerPolicy config){
-		if(config.isEnabled()){
-			if(config.getPolicy() != null){
-				switch(config.getPolicy()){
-					case NO_REFERRER:
-						serverHttpSecurity.headers()
-								.referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER);
-						break;
-					case NO_REFERRER_WHEN_DOWNGRADE:
-						serverHttpSecurity.headers().referrerPolicy(
-								ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE);
-						break;
-					case SAME_ORIGIN:
-						serverHttpSecurity.headers()
-								.referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.SAME_ORIGIN);
-						break;
-					case ORIGIN:
-						serverHttpSecurity.headers()
-								.referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN);
-						break;
-					case STRICT_ORIGIN:
-						serverHttpSecurity.headers()
-								.referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN);
-						break;
-					case ORIGIN_WHEN_CROSS_ORIGIN:
-						serverHttpSecurity.headers().referrerPolicy(
-								ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN_WHEN_CROSS_ORIGIN);
-						break;
-					case STRICT_ORIGIN_WHEN_CROSS_ORIGIN:
-						serverHttpSecurity.headers().referrerPolicy(
-								ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN);
-						break;
-					case UNSAFE_URL:
-						serverHttpSecurity.headers()
-								.referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.UNSAFE_URL);
-						break;
-					default:
-						break;
-				}
+		if(config.isEnabled() && config.getPolicy() != null){
+			ReferrerPolicyConverter.ToNativeReferrerPolicyConverter toNativeReferrerPolicyConverter = new ReferrerPolicyConverter.ToNativeReferrerPolicyConverter();
+			ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy referrerPolicy = toNativeReferrerPolicyConverter.convert(
+					config.getPolicy());
+
+			if(referrerPolicy != null){
+				serverHttpSecurity.headers().referrerPolicy(referrerPolicy);
 			}
 		}
 
