@@ -28,79 +28,57 @@ package com.buession.security.pac4j.annotation.servlet;
 
 import com.buession.core.utils.Assert;
 import com.buession.security.pac4j.annotation.Principal;
-import com.buession.security.pac4j.profile.ProfileUtils;
-import com.buession.web.method.MethodParameterUtils;
-import com.buession.web.servlet.method.AbstractHandlerMethodArgumentResolver;
+import com.buession.security.pac4j.annotation.PrincipalAnnotationUtils;
 import io.buji.pac4j.subject.Pac4jPrincipal;
-import org.pac4j.core.profile.CommonProfile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.ValueConstants;
-import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.method.support.ModelAndViewContainer;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver;
 
 /**
- * Resolves method arguments annotated with an {@link Principal}
+ * 方法参数注解 {@link Principal} 解析器
  *
  * @author Yong.Teng
  */
-public class PrincipalMethodArgumentResolver extends AbstractHandlerMethodArgumentResolver<Principal> {
+public class PrincipalMethodArgumentResolver extends AbstractNamedValueMethodArgumentResolver {
 
-	private final static Logger logger = LoggerFactory.getLogger(PrincipalMethodArgumentResolver.class);
-
-	/**
-	 * 构造函数
-	 */
 	public PrincipalMethodArgumentResolver(){
-		super(Principal.class);
+		super();
+	}
+
+	public PrincipalMethodArgumentResolver(@Nullable ConfigurableBeanFactory beanFactory){
+		super(beanFactory);
 	}
 
 	@Override
-	public Object resolveArgument(MethodParameter methodParameter, @Nullable ModelAndViewContainer mavContainer,
-								  NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory)
-			throws Exception{
-		HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
-		Assert.isNull(servletRequest, "No HttpServletRequest");
-
-		methodParameter = methodParameter.nestedIfOptional();
-
-		Principal principal = methodParameter.getParameterAnnotation(Principal.class);
-		Object result = read(servletRequest, methodParameter, principal, methodParameter.getNestedParameterType());
-		return MethodParameterUtils.adaptArgumentIfNecessary(methodParameter, result);
+	public boolean supportsParameter(MethodParameter parameter){
+		return parameter.hasParameterAnnotation(Principal.class);
 	}
 
-	protected <T> Object read(HttpServletRequest request, MethodParameter methodParameter, Principal principal,
-							  Class<T> paramType) throws MethodArgumentTypeMismatchException{
-		CommonProfile profile = ProfileUtils.getProfileFromPac4jPrincipal((Pac4jPrincipal) request.getUserPrincipal());
-
-		if(profile == null || checkRequired(methodParameter, principal)){
-			throw new MethodArgumentTypeMismatchException(
-					"Principal is missing: " + methodParameter.getExecutable().toGenericString(),
-					methodParameter.getNestedParameterType(), methodParameter.getParameterName(), methodParameter,
-					null);
-		}
-
-		try{
-			return ProfileUtils.convert(profile, paramType,
-					ValueConstants.DEFAULT_NONE.equals(principal.id()) ? null : principal.id(),
-					ValueConstants.DEFAULT_NONE.equals(principal.realName()) ? null : principal.realName());
-		}catch(InstantiationException e){
-			logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
-		}catch(IllegalAccessException e){
-			logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
-		}
-
-		return null;
+	@Override
+	protected NamedValueInfo createNamedValueInfo(MethodParameter parameter){
+		Principal principal = parameter.getParameterAnnotation(Principal.class);
+		Assert.isNull(principal, "No Principal annotation");
+		return new PrincipalNamedValueInfo(principal, parameter.getNestedParameterType());
 	}
 
-	protected static boolean checkRequired(MethodParameter parameter, Principal principal){
-		return (principal != null && principal.required() && parameter.isOptional() == false);
+	@Override
+	@Nullable
+	protected Object resolveName(String name, MethodParameter parameter, NativeWebRequest request){
+		Principal annotation = parameter.getParameterAnnotation(Principal.class);
+		Class<?> paramType = parameter.getParameterType();
+
+		return PrincipalAnnotationUtils.toObject((Pac4jPrincipal) request.getUserPrincipal(), annotation,
+				paramType);
+	}
+
+	private final static class PrincipalNamedValueInfo extends NamedValueInfo {
+
+		private PrincipalNamedValueInfo(Principal annotation, Class<?> paramType){
+			super(Principal.class.getName() + "_" + paramType.getName(), annotation.required(), null);
+		}
+
 	}
 
 }

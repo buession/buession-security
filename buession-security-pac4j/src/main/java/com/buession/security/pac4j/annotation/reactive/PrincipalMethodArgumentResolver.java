@@ -28,81 +28,57 @@ package com.buession.security.pac4j.annotation.reactive;
 
 import com.buession.core.utils.Assert;
 import com.buession.security.pac4j.annotation.Principal;
-import com.buession.security.pac4j.profile.ProfileUtils;
-import com.buession.web.reactive.method.AbstractHandlerMethodArgumentResolver;
+import com.buession.security.pac4j.annotation.PrincipalAnnotationUtils;
 import io.buji.pac4j.subject.Pac4jPrincipal;
-import org.pac4j.core.profile.CommonProfile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.ValueConstants;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.reactive.BindingContext;
+import org.springframework.core.ReactiveAdapterRegistry;
+import org.springframework.web.reactive.result.method.annotation.AbstractNamedValueArgumentResolver;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * Resolves method arguments annotated with an {@link Principal}
+ * 方法参数注解 {@link Principal} 解析器
  *
  * @author Yong.Teng
  * @since 2.0.3
  */
-public class PrincipalMethodArgumentResolver extends AbstractHandlerMethodArgumentResolver<Principal> {
+public class PrincipalMethodArgumentResolver extends AbstractNamedValueArgumentResolver {
 
-	private final static Logger logger = LoggerFactory.getLogger(PrincipalMethodArgumentResolver.class);
-
-	/**
-	 * 构造函数
-	 */
-	public PrincipalMethodArgumentResolver(){
-		super(Principal.class);
+	public PrincipalMethodArgumentResolver(ConfigurableBeanFactory factory,
+										   ReactiveAdapterRegistry registry){
+		super(factory, registry);
 	}
 
 	@Override
-	public Mono<Object> resolveArgument(MethodParameter methodParameter, @Nullable BindingContext bindingContext,
-										@Nullable ServerWebExchange exchange){
-		ServerHttpRequest serverHttpRequest = exchange.getRequest();
-		Assert.isNull(serverHttpRequest, "No ServerHttpRequest");
-
-		methodParameter = methodParameter.nestedIfOptional();
-
-		Principal principal = methodParameter.getParameterAnnotation(Principal.class);
-		return read(exchange, methodParameter, principal, methodParameter.getNestedParameterType());
+	public boolean supportsParameter(MethodParameter parameter){
+		return parameter.hasParameterAnnotation(Principal.class);
 	}
 
-	protected <T> Mono<Object> read(ServerWebExchange exchange, MethodParameter methodParameter, Principal principal,
-									Class<T> paramType) throws MethodArgumentTypeMismatchException{
-		Mono<Pac4jPrincipal> mono = exchange.getPrincipal();
+	@Override
+	protected NamedValueInfo createNamedValueInfo(MethodParameter parameter){
+		Principal principal = parameter.getParameterAnnotation(Principal.class);
+		Assert.isNull(principal, "No Principal annotation");
+		return new PrincipalNamedValueInfo(principal, parameter.getNestedParameterType());
+	}
 
-		return mono.map((p)->{
-			CommonProfile profile = ProfileUtils.getProfileFromPac4jPrincipal(p);
+	@Override
+	protected Mono<Object> resolveName(String name, MethodParameter parameter, ServerWebExchange exchange){
+		return exchange.getPrincipal().map((principal)->{
+			Principal annotation = parameter.getParameterAnnotation(Principal.class);
+			Class<?> paramType = parameter.getParameterType();
 
-			if(profile == null || checkRequired(methodParameter, principal)){
-				throw new MethodArgumentTypeMismatchException(
-						"Principal is missing: " + methodParameter.getExecutable().toGenericString(),
-						methodParameter.getNestedParameterType(), methodParameter.getParameterName(), methodParameter,
-						null);
-			}
-
-			try{
-				Object result = ProfileUtils.convert(profile, paramType,
-						ValueConstants.DEFAULT_NONE.equals(principal.id()) ? null : principal.id(),
-						ValueConstants.DEFAULT_NONE.equals(principal.realName()) ? null : principal.realName());
-				return result;
-			}catch(InstantiationException e){
-				logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
-			}catch(IllegalAccessException e){
-				logger.error("CommonProfile convert to {} error: {}.", paramType.getName(), e.getMessage());
-			}
-
-			return null;
+			return PrincipalAnnotationUtils.toObject((Pac4jPrincipal) principal, annotation,
+					paramType);
 		});
 	}
 
-	protected static boolean checkRequired(MethodParameter parameter, Principal principal){
-		return (principal != null && principal.required() && parameter.isOptional() == false);
+	private final static class PrincipalNamedValueInfo extends NamedValueInfo {
+
+		private PrincipalNamedValueInfo(Principal annotation, Class<?> paramType){
+			super(Principal.class.getName() + "_" + paramType.getName(), annotation.required(), null);
+		}
+
 	}
 
 }

@@ -26,8 +26,11 @@ package com.buession.security.pac4j.spring.reactive;
 
 import com.buession.security.pac4j.annotation.reactive.PrincipalMethodArgumentResolver;
 import com.buession.web.reactive.OnWebFluxCondition;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.ReactiveAdapterRegistry;
+import org.springframework.lang.Nullable;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
 
@@ -39,9 +42,19 @@ import org.springframework.web.reactive.result.method.annotation.ArgumentResolve
 @Conditional(OnWebFluxCondition.class)
 public class Pac4jWebFluxConfigurerAdapter implements WebFluxConfigurer {
 
+	private final ConfigurableBeanFactory factory;
+
+	private final ReactiveAdapterRegistry registry;
+
+	public Pac4jWebFluxConfigurerAdapter(@Nullable ConfigurableBeanFactory factory,
+										 ReactiveAdapterRegistry registry){
+		this.factory = factory;
+		this.registry = registry;
+	}
+
 	@Override
 	public void configureArgumentResolvers(ArgumentResolverConfigurer configurer){
-		configurer.addCustomResolver(new PrincipalMethodArgumentResolver());
+		configurer.addCustomResolver(new PrincipalMethodArgumentResolver(factory, registry));
 	}
 
 }
