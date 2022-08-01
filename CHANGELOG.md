@@ -16,6 +16,7 @@
 ### 🔔 变化
 
 - **buession-security-mcrypt：** 废弃加密类中仅传递字符串形式的编码的构造函数
+- **buession-security-pac4j：** 优化注解 @Principal HandlerMethodArgumentResolver，继承 spring 原生 HandlerMethodArgumentResolver 实现抽象类
 - **buession-security-web：** 新增 ReferrerPolicy 策略转换器 ReferrerPolicyConverter
 
 
