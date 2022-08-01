@@ -24,6 +24,7 @@
  */
 package com.buession.security.web.builder.servlet;
 
+import com.buession.core.converter.mapper.PropertyMapper;
 import com.buession.core.validator.Validate;
 import com.buession.security.web.builder.HttpSecurityBuilder;
 import com.buession.security.web.config.ContentSecurityPolicy;
@@ -50,6 +51,7 @@ import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.time.Duration;
 import java.util.Objects;
 
 /**
@@ -239,14 +241,14 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 					.httpStrictTransportSecurity();
 
 			if(config.isEnabled()){
-				hstsConfig.maxAgeInSeconds(config.getMaxAge()).includeSubDomains(config.getIncludeSubDomains());
+				final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
+
+				propertyMapper.from(config::getMaxAge).to(hstsConfig::maxAgeInSeconds);
+				propertyMapper.from(config::getIncludeSubDomains).to(hstsConfig::includeSubDomains);
+				propertyMapper.from(config::getPreload).to(hstsConfig::preload);
 
 				if(config.getMatcher() != null){
 					hstsConfig.requestMatcher(config.getMatcher().newInstance());
-				}
-
-				if(config.getPreload() != null){
-					hstsConfig.preload(config.getPreload());
 				}
 			}else{
 				hstsConfig.disable();
@@ -266,23 +268,14 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 			HeadersConfigurer<HttpSecurity>.HpkpConfig hpkpConfig = httpSecurity.headers().httpPublicKeyPinning();
 
 			if(config.isEnabled()){
-				hpkpConfig.maxAgeInSeconds(config.getMaxAge()).includeSubDomains(config.getIncludeSubDomains());
+				final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
-				if(config.getReportOnly() != null){
-					hpkpConfig.reportOnly(config.getReportOnly());
-				}
-
-				if(config.getPins() != null){
-					hpkpConfig.withPins(config.getPins());
-				}
-
-				if(config.getSha256Pins() != null){
-					hpkpConfig.addSha256Pins(config.getSha256Pins());
-				}
-
-				if(Validate.hasText(config.getReportUri())){
-					hpkpConfig.reportUri(config.getReportUri());
-				}
+				propertyMapper.from(config::getMaxAge).to(hpkpConfig::maxAgeInSeconds);
+				propertyMapper.from(config::getIncludeSubDomains).to(hpkpConfig::includeSubDomains);
+				propertyMapper.from(config::getReportOnly).to(hpkpConfig::reportOnly);
+				propertyMapper.from(config::getPins).to(hpkpConfig::withPins);
+				propertyMapper.from(config::getSha256Pins).to(hpkpConfig::addSha256Pins);
+				propertyMapper.from(config::getReportUri).to(hpkpConfig::reportUri);
 			}else{
 				hpkpConfig.disable();
 			}
@@ -342,11 +335,10 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 			HeadersConfigurer<HttpSecurity>.XXssConfig xssConfig = httpSecurity.headers().xssProtection();
 
 			if(config.isEnabled()){
-				xssConfig.block(config.getBlock());
+				final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
-				if(config.getEnabledProtection() != null){
-					xssConfig.xssProtectionEnabled(config.getEnabledProtection());
-				}
+				propertyMapper.from(config::getBlock).to(xssConfig::block);
+				propertyMapper.from(config::getEnabledProtection).to(xssConfig::xssProtectionEnabled);
 			}else{
 				xssConfig.disable();
 			}

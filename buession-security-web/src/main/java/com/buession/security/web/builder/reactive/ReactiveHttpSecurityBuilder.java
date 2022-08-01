@@ -24,6 +24,7 @@
  */
 package com.buession.security.web.builder.reactive;
 
+import com.buession.core.converter.mapper.PropertyMapper;
 import com.buession.core.validator.Validate;
 import com.buession.security.web.builder.HttpSecurityBuilder;
 import com.buession.security.web.config.ContentSecurityPolicy;
@@ -204,14 +205,14 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 		ServerHttpSecurity.HeaderSpec.HstsSpec hstsSpec = serverHttpSecurity.headers().hsts();
 
 		if(config.isEnabled()){
-			hstsSpec.maxAge(Duration.ofMinutes(config.getMaxAge())).includeSubdomains(config.getIncludeSubDomains());
+			PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
+
+			propertyMapper.from(config::getMaxAge).as(Duration::ofMillis).to(hstsSpec::maxAge);
+			propertyMapper.from(config::getIncludeSubDomains).to(hstsSpec::includeSubdomains);
+			propertyMapper.from(config::getPreload).to(hstsSpec::preload);
 
 			if(config.getMatcher() != null){
 				// empty
-			}
-
-			if(config.getPreload() != null){
-				hstsSpec.preload(config.getPreload());
 			}
 		}else{
 			hstsSpec.disable();
@@ -260,6 +261,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 				.xssProtection();
 
 		if(config.isEnabled()){
+			
 		}else{
 			xssProtectionSpec.disable();
 		}
