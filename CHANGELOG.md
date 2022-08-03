@@ -1,11 +1,12 @@
  Buession Security Changelog
 ===========================
 
-## [2.0.3](https://github.com/buession/buession-security/releases/tag/v2.0.3) (2022-07-xx)
+## [2.1.0](https://github.com/buession/buession-security/releases/tag/v2.1.0) (2022-07-xx)
 
 ### 🔨依赖升级
 
-- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.0.3)
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.1.0)
+- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.0
 
 
 ### ⭐ 新特性
