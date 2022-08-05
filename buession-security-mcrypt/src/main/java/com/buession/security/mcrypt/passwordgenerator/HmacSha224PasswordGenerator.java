@@ -30,7 +30,7 @@ import com.buession.security.mcrypt.HmacSha224Mcrypt;
  * HmacSHA224 密码生成器
  *
  * @author Yong.Teng
- * @since 2.0.3
+ * @since 2.1.0
  */
 public class HmacSha224PasswordGenerator extends AbstractPasswordGenerator {
 

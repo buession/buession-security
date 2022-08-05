@@ -41,7 +41,7 @@ import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHe
  * @see ReferrerPolicy.Policy
  * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
  * @see ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy
- * @since 2.0.3
+ * @since 2.1.0
  */
 public interface ReferrerPolicyConverter<S, T> extends Converter<S, T> {
 
@@ -54,7 +54,7 @@ public interface ReferrerPolicyConverter<S, T> extends Converter<S, T> {
 	 * @author Yong.Teng
 	 * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
 	 * @see ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy
-	 * @since 2.0.3
+	 * @since 2.1.0
 	 */
 	interface NativeReferrerPolicyConverter<S> extends ReferrerPolicyConverter<S, ReferrerPolicy.Policy> {
 
@@ -69,7 +69,7 @@ public interface ReferrerPolicyConverter<S, T> extends Converter<S, T> {
 	 * @author Yong.Teng
 	 * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
 	 * @see ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy
-	 * @since 2.0.3
+	 * @since 2.1.0
 	 */
 	interface ToNativeReferrerPolicyConverter<T> extends ReferrerPolicyConverter<ReferrerPolicy.Policy, T> {
 

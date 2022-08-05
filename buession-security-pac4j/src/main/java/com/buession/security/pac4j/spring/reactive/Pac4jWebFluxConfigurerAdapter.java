@@ -36,7 +36,7 @@ import org.springframework.web.reactive.result.method.annotation.ArgumentResolve
 
 /**
  * @author Yong.Teng
- * @since 2.0.3
+ * @since 2.1.0
  */
 @Configuration(proxyBeanMethods = false)
 @Conditional(OnWebFluxCondition.class)

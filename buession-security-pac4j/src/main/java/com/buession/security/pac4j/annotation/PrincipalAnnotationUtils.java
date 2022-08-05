@@ -34,7 +34,7 @@ import java.util.Map;
 
 /**
  * @author Yong.Teng
- * @since 2.0.3
+ * @since 2.1.0
  */
 public class PrincipalAnnotationUtils {
 
@@ -62,7 +62,7 @@ public class PrincipalAnnotationUtils {
 				logger.error("Pac4jPrincipal CommonProfile convert to {} error: {}", paramType.getName(),
 						e.getMessage());
 			}
-			
+
 			return null;
 		}
 	}

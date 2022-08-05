@@ -38,7 +38,7 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
  * @author Yong.Teng
  * @see ReferrerPolicy.Policy
  * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
- * @since 2.0.3
+ * @since 2.1.0
  */
 public interface ReferrerPolicyConverter<S, T>
 		extends com.buession.security.web.config.converter.ReferrerPolicyConverter<S, T> {
@@ -48,7 +48,7 @@ public interface ReferrerPolicyConverter<S, T>
 	 *
 	 * @author Yong.Teng
 	 * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
-	 * @since 2.0.3
+	 * @since 2.1.0
 	 */
 	class NativeReferrerPolicyConverter implements
 			com.buession.security.web.config.converter.ReferrerPolicyConverter.NativeReferrerPolicyConverter<ReferrerPolicyHeaderWriter.ReferrerPolicy> {
@@ -88,7 +88,7 @@ public interface ReferrerPolicyConverter<S, T>
 	 *
 	 * @author Yong.Teng
 	 * @see ReferrerPolicyHeaderWriter.ReferrerPolicy
-	 * @since 2.0.3
+	 * @since 2.1.0
 	 */
 	class ToNativeReferrerPolicyConverter implements
 			com.buession.security.web.config.converter.ReferrerPolicyConverter.ToNativeReferrerPolicyConverter<ReferrerPolicyHeaderWriter.ReferrerPolicy> {
