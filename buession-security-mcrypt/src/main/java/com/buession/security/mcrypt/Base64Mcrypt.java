@@ -51,6 +51,7 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
+	@Deprecated
 	public Base64Mcrypt(final String characterEncoding){
 		super(Algo.BASE64, characterEncoding);
 	}

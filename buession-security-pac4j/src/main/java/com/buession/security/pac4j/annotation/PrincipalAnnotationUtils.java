@@ -22,23 +22,49 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt;
+package com.buession.security.pac4j.annotation;
 
-import org.junit.Test;
+import com.buession.security.pac4j.profile.ProfileUtils;
+import io.buji.pac4j.subject.Pac4jPrincipal;
+import org.pac4j.core.profile.CommonProfile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 /**
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 2.1.0
  */
-public class HmacSha1McryptTest {
+public class PrincipalAnnotationUtils {
 
-	@Test
-	public void encode(){
-		HmacSha1Mcrypt hmacSha1Mcrypt = new HmacSha1Mcrypt(StandardCharsets.UTF_8, "A");
+	private final static Logger logger = LoggerFactory.getLogger(PrincipalAnnotationUtils.class);
 
-		System.out.println(hmacSha1Mcrypt.encode("A"));
+	public static <T> T toObject(final Pac4jPrincipal principal, final Principal annotation, final Class<T> paramType){
+		if(principal == null){
+			return null;
+		}
+
+		CommonProfile profile = ProfileUtils.getProfileFromPac4jPrincipal(principal);
+		if(profile == null){
+			return null;
+		}
+
+		try{
+			T instance = org.springframework.beans.BeanUtils.instantiateClass(paramType);
+			Map<String, Object> attributes = ProfileUtils.toMap(profile);
+
+			com.buession.beans.BeanUtils.populate(instance, attributes);
+
+			return instance;
+		}catch(Exception e){
+			if(logger.isErrorEnabled()){
+				logger.error("Pac4jPrincipal CommonProfile convert to {} error: {}", paramType.getName(),
+						e.getMessage());
+			}
+
+			return null;
+		}
 	}
 
 }

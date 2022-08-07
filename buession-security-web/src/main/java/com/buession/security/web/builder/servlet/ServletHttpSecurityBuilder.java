@@ -24,6 +24,7 @@
  */
 package com.buession.security.web.builder.servlet;
 
+import com.buession.core.converter.mapper.PropertyMapper;
 import com.buession.core.validator.Validate;
 import com.buession.security.web.builder.HttpSecurityBuilder;
 import com.buession.security.web.config.ContentSecurityPolicy;
@@ -36,6 +37,7 @@ import com.buession.security.web.config.Hsts;
 import com.buession.security.web.config.HttpBasic;
 import com.buession.security.web.config.ReferrerPolicy;
 import com.buession.security.web.config.Xss;
+import com.buession.security.web.config.converter.servlet.ReferrerPolicyConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -48,6 +50,9 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.time.Duration;
+import java.util.Objects;
 
 /**
  * Servlet 浏览器安全性构建器
@@ -236,12 +241,14 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 					.httpStrictTransportSecurity();
 
 			if(config.isEnabled()){
-				if(config.getMatcher() == null){
-					hstsConfig.maxAgeInSeconds(config.getMaxAge()).includeSubDomains(config.getIncludeSubDomains())
-							.preload(config.isPreload());
-				}else{
-					hstsConfig.requestMatcher(config.getMatcher().newInstance()).maxAgeInSeconds(config.getMaxAge())
-							.includeSubDomains(config.getIncludeSubDomains()).preload(config.isPreload());
+				final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
+
+				propertyMapper.from(config::getMaxAge).to(hstsConfig::maxAgeInSeconds);
+				propertyMapper.from(config::getIncludeSubDomains).to(hstsConfig::includeSubDomains);
+				propertyMapper.from(config::getPreload).to(hstsConfig::preload);
+
+				if(config.getMatcher() != null){
+					hstsConfig.requestMatcher(config.getMatcher().newInstance());
 				}
 			}else{
 				hstsConfig.disable();
@@ -261,20 +268,14 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 			HeadersConfigurer<HttpSecurity>.HpkpConfig hpkpConfig = httpSecurity.headers().httpPublicKeyPinning();
 
 			if(config.isEnabled()){
-				hpkpConfig.maxAgeInSeconds(config.getMaxAge()).includeSubDomains(config.getIncludeSubDomains())
-						.reportOnly(config.isReportOnly());
+				final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
-				if(config.getPins() != null){
-					hpkpConfig.withPins(config.getPins());
-				}
-
-				if(config.getSha256Pins() != null){
-					hpkpConfig.addSha256Pins(config.getSha256Pins());
-				}
-
-				if(Validate.hasText(config.getReportUri())){
-					hpkpConfig.reportUri(config.getReportUri());
-				}
+				propertyMapper.from(config::getMaxAge).to(hpkpConfig::maxAgeInSeconds);
+				propertyMapper.from(config::getIncludeSubDomains).to(hpkpConfig::includeSubDomains);
+				propertyMapper.from(config::getReportOnly).to(hpkpConfig::reportOnly);
+				propertyMapper.from(config::getPins).to(hpkpConfig::withPins);
+				propertyMapper.from(config::getSha256Pins).to(hpkpConfig::addSha256Pins);
+				propertyMapper.from(config::getReportUri).to(hpkpConfig::reportUri);
 			}else{
 				hpkpConfig.disable();
 			}
@@ -294,7 +295,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 				HeadersConfigurer<HttpSecurity>.ContentSecurityPolicyConfig contentSecurityPolicyConfig = httpSecurity.headers()
 						.contentSecurityPolicy(config.getPolicyDirectives());
 
-				if(config.isReportOnly()){
+				if(Objects.equals(config.getReportOnly(), true)){
 					contentSecurityPolicyConfig.reportOnly();
 				}
 			}
@@ -309,48 +310,19 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 
 	@Override
 	public ServletHttpSecurityBuilder referrerPolicy(final ReferrerPolicy config){
-		try{
-			if(config.isEnabled()){
-				if(config.getPolicy() != null){
-					ReferrerPolicyHeaderWriter.ReferrerPolicy referrerPolicy = null;
+		if(config.isEnabled() && config.getPolicy() != null){
+			try{
+				ReferrerPolicyConverter.ToNativeReferrerPolicyConverter toNativeReferrerPolicyConverter = new ReferrerPolicyConverter.ToNativeReferrerPolicyConverter();
+				ReferrerPolicyHeaderWriter.ReferrerPolicy referrerPolicy = toNativeReferrerPolicyConverter.convert(
+						config.getPolicy());
 
-					switch(config.getPolicy()){
-						case NO_REFERRER:
-							referrerPolicy = ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER;
-							break;
-						case NO_REFERRER_WHEN_DOWNGRADE:
-							referrerPolicy = ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE;
-							break;
-						case SAME_ORIGIN:
-							referrerPolicy = ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN;
-							break;
-						case ORIGIN:
-							referrerPolicy = ReferrerPolicyHeaderWriter.ReferrerPolicy.ORIGIN;
-							break;
-						case STRICT_ORIGIN:
-							referrerPolicy = ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN;
-							break;
-						case ORIGIN_WHEN_CROSS_ORIGIN:
-							referrerPolicy = ReferrerPolicyHeaderWriter.ReferrerPolicy.ORIGIN_WHEN_CROSS_ORIGIN;
-							break;
-						case STRICT_ORIGIN_WHEN_CROSS_ORIGIN:
-							referrerPolicy = ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN;
-							break;
-						case UNSAFE_URL:
-							referrerPolicy = ReferrerPolicyHeaderWriter.ReferrerPolicy.UNSAFE_URL;
-							break;
-						default:
-							break;
-					}
-
-					if(referrerPolicy != null){
-						httpSecurity.headers().referrerPolicy(referrerPolicy);
-					}
+				if(referrerPolicy != null){
+					httpSecurity.headers().referrerPolicy(referrerPolicy);
 				}
-			}
-		}catch(Exception e){
-			if(logger.isErrorEnabled()){
-				logger.error("referrerPolicy config error: {}<{}>", e.getMessage(), config);
+			}catch(Exception e){
+				if(logger.isErrorEnabled()){
+					logger.error("referrerPolicy config error: {}<{}>", e.getMessage(), config);
+				}
 			}
 		}
 
@@ -360,12 +332,15 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	@Override
 	public ServletHttpSecurityBuilder xss(final Xss config){
 		try{
-			HeadersConfigurer<HttpSecurity>.XXssConfig xXssConfig = httpSecurity.headers().xssProtection();
+			HeadersConfigurer<HttpSecurity>.XXssConfig xssConfig = httpSecurity.headers().xssProtection();
 
 			if(config.isEnabled()){
-				xXssConfig.block(config.getBlock()).xssProtectionEnabled(config.isEnabledProtection());
+				final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
+
+				propertyMapper.from(config::getBlock).to(xssConfig::block);
+				propertyMapper.from(config::getEnabledProtection).to(xssConfig::xssProtectionEnabled);
 			}else{
-				xXssConfig.disable();
+				xssConfig.disable();
 			}
 		}catch(Exception e){
 			if(logger.isErrorEnabled()){

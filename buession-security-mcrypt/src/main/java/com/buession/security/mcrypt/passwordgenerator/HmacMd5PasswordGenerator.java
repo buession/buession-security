@@ -22,23 +22,21 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt;
+package com.buession.security.mcrypt.passwordgenerator;
 
-import org.junit.Test;
-
-import java.nio.charset.StandardCharsets;
+import com.buession.security.mcrypt.HmacMD5Mcrypt;
 
 /**
+ * HmacMD5 密码生成器
+ *
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 2.1.0
  */
-public class HmacSha512McryptTest {
+public class HmacMd5PasswordGenerator extends AbstractPasswordGenerator {
 
-	@Test
-	public void encode(){
-		HmacSha512Mcrypt hmacSha1Mcrypt = new HmacSha512Mcrypt(StandardCharsets.UTF_8, "A");
-
-		System.out.println(hmacSha1Mcrypt.encode("A"));
+	@Override
+	public String digestEncoded(final String password, final String salt){
+		return digestEncoded(new HmacMD5Mcrypt(), password, salt);
 	}
 
 }

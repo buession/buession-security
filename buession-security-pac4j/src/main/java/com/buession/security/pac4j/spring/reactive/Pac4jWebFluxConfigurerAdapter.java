@@ -22,23 +22,39 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt;
+package com.buession.security.pac4j.spring.reactive;
 
-import org.junit.Test;
-
-import java.nio.charset.StandardCharsets;
+import com.buession.security.pac4j.annotation.reactive.PrincipalMethodArgumentResolver;
+import com.buession.web.reactive.OnWebFluxCondition;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.ReactiveAdapterRegistry;
+import org.springframework.lang.Nullable;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
 
 /**
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 2.1.0
  */
-public class HmacMD5McryptTest {
+@Configuration(proxyBeanMethods = false)
+@Conditional(OnWebFluxCondition.class)
+public class Pac4jWebFluxConfigurerAdapter implements WebFluxConfigurer {
 
-	@Test
-	public void encode(){
-		HmacMD5Mcrypt hmacSha1Mcrypt = new HmacMD5Mcrypt(StandardCharsets.UTF_8, "A");
+	private final ConfigurableBeanFactory factory;
 
-		System.out.println(hmacSha1Mcrypt.encode("A"));
+	private final ReactiveAdapterRegistry registry;
+
+	public Pac4jWebFluxConfigurerAdapter(@Nullable ConfigurableBeanFactory factory,
+										 ReactiveAdapterRegistry registry){
+		this.factory = factory;
+		this.registry = registry;
+	}
+
+	@Override
+	public void configureArgumentResolvers(ArgumentResolverConfigurer configurer){
+		configurer.addCustomResolver(new PrincipalMethodArgumentResolver(factory, registry));
 	}
 
 }

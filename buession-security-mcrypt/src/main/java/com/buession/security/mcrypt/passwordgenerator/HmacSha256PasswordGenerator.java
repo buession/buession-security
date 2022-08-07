@@ -19,36 +19,24 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt;
+package com.buession.security.mcrypt.passwordgenerator;
 
-import org.junit.Test;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.buession.security.mcrypt.HmacSha256Mcrypt;
 
 /**
+ * HmacSHA256 密码生成器
+ *
  * @author Yong.Teng
+ * @since 2.1.0
  */
-public class AESMcryptTest {
+public class HmacSha256PasswordGenerator extends AbstractPasswordGenerator {
 
-	@Test
-	public void encode(){
-		AESMcrypt aesMcrypt = new AESMcrypt(StandardCharsets.UTF_8, "wwwwwwwwwwwwwwwww");
-
-		System.out.println(aesMcrypt.encode("Abc"));
-	}
-
-	@Test
-	public void decode(){
-		AESMcrypt aesMcrypt = new AESMcrypt(StandardCharsets.UTF_8, "wwwwwwwwwwwwwwww");
-
-		System.out.println(aesMcrypt.decode("LbfbEcHC91rZM6cxLTparg=="));
+	@Override
+	public String digestEncoded(final String password, final String salt){
+		return digestEncoded(new HmacSha256Mcrypt(), password, salt);
 	}
 
 }

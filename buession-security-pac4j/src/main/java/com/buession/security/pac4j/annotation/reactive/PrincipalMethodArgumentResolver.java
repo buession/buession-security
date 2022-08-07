@@ -24,7 +24,7 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.annotation.servlet;
+package com.buession.security.pac4j.annotation.reactive;
 
 import com.buession.core.utils.Assert;
 import com.buession.security.pac4j.annotation.Principal;
@@ -32,23 +32,22 @@ import com.buession.security.pac4j.annotation.PrincipalAnnotationUtils;
 import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.core.MethodParameter;
-import org.springframework.lang.Nullable;
-import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver;
+import org.springframework.core.ReactiveAdapterRegistry;
+import org.springframework.web.reactive.result.method.annotation.AbstractNamedValueArgumentResolver;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 /**
  * 方法参数注解 {@link Principal} 解析器
  *
  * @author Yong.Teng
+ * @since 2.1.0
  */
-public class PrincipalMethodArgumentResolver extends AbstractNamedValueMethodArgumentResolver {
+public class PrincipalMethodArgumentResolver extends AbstractNamedValueArgumentResolver {
 
-	public PrincipalMethodArgumentResolver(){
-		super();
-	}
-
-	public PrincipalMethodArgumentResolver(@Nullable ConfigurableBeanFactory beanFactory){
-		super(beanFactory);
+	public PrincipalMethodArgumentResolver(ConfigurableBeanFactory factory,
+										   ReactiveAdapterRegistry registry){
+		super(factory, registry);
 	}
 
 	@Override
@@ -64,13 +63,14 @@ public class PrincipalMethodArgumentResolver extends AbstractNamedValueMethodArg
 	}
 
 	@Override
-	@Nullable
-	protected Object resolveName(String name, MethodParameter parameter, NativeWebRequest request){
-		Principal annotation = parameter.getParameterAnnotation(Principal.class);
-		Class<?> paramType = parameter.getParameterType();
+	protected Mono<Object> resolveName(String name, MethodParameter parameter, ServerWebExchange exchange){
+		return exchange.getPrincipal().map((principal)->{
+			Principal annotation = parameter.getParameterAnnotation(Principal.class);
+			Class<?> paramType = parameter.getParameterType();
 
-		return PrincipalAnnotationUtils.toObject((Pac4jPrincipal) request.getUserPrincipal(), annotation,
-				paramType);
+			return PrincipalAnnotationUtils.toObject((Pac4jPrincipal) principal, annotation,
+					paramType);
+		});
 	}
 
 	private final static class PrincipalNamedValueInfo extends NamedValueInfo {

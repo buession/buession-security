@@ -57,6 +57,7 @@ public final class Sha256Mcrypt extends AbstractMcrypt {
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
+	@Deprecated
 	public Sha256Mcrypt(final String characterEncoding){
 		super(Algo.SHA256, characterEncoding);
 	}

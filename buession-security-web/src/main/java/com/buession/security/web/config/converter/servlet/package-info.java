@@ -21,19 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2020 Buession.com Inc.														|
+ * | Copyright @ 2013-2022 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.profile.converter;
-
-import com.buession.core.converter.Converter;
-
-import java.security.Principal;
-
-/**
- * @author Yong.Teng
- */
-@FunctionalInterface
-public interface PrincipalConvert<T> extends Converter<Principal, T> {
-
-}
+package com.buession.security.web.config.converter.servlet;

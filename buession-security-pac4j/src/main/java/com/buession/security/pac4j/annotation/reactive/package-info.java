@@ -19,32 +19,11 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt;
-
-import com.buession.core.utils.StringUtils;
-import org.junit.Test;
-
-import java.nio.charset.StandardCharsets;
-
 /**
  * @author Yong.Teng
+ * @since 2.1.0
  */
-public class TempTest {
-
-	@Test
-	public void test(){
-		String key = "tfdTy9plMWKE0ubX2amN";
-		String secret = "Vc5pEAzjlL1rhWEuVfY5V8lnwQgzhG4ErmU5r76X5Gxx9xZTZZ";
-		String signature = "5ih0LxX12ubG3Cff82W1NqaXwlDkt79b";
-
-		DiscuzMycrypt discuzMycrypt = new DiscuzMycrypt();
-		System.out.println("Key: " + discuzMycrypt.encode(key));
-
-		Sha512Mcrypt sha512Mcrypt = new Sha512Mcrypt(StandardCharsets.UTF_8, key);
-		System.out.println("Token： " + sha512Mcrypt.encode(key + secret + StringUtils.reverse(signature)));
-	}
-
-}
+package com.buession.security.pac4j.annotation.reactive;

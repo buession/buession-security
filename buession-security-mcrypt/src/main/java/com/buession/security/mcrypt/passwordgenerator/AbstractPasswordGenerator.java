@@ -19,12 +19,13 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
 import com.buession.core.utils.Assert;
+import com.buession.security.mcrypt.Mcrypt;
 
 import java.util.Random;
 
@@ -78,6 +79,11 @@ public abstract class AbstractPasswordGenerator implements PasswordGenerator {
 	@Override
 	public byte[] digestEncoded(final byte[] password, final byte[] salt){
 		return digestEncoded(new String(password), new String(salt)).getBytes();
+	}
+
+	protected static String digestEncoded(final Mcrypt mcrypt, final String password, final String salt){
+		mcrypt.setSalt(salt);
+		return mcrypt.encode(password);
 	}
 
 }

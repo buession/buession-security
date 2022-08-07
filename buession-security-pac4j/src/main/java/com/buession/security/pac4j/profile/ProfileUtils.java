@@ -24,13 +24,10 @@
  */
 package com.buession.security.pac4j.profile;
 
-import com.buession.beans.BeanUtils;
-import com.buession.core.utils.StringUtils;
-import com.buession.core.validator.Validate;
 import io.buji.pac4j.subject.Pac4jPrincipal;
-import org.apache.shiro.SecurityUtils;
 import org.pac4j.core.profile.CommonProfile;
 
+import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -42,25 +39,11 @@ import java.util.Map;
  */
 public class ProfileUtils {
 
-	private final static String ROLES_FIELD = "roles";
-
-	private final static String PERMISSIONS_FIELD = "permissions";
-
 	/**
-	 * 获取当前登录用户 Profile
-	 *
-	 * @return 当前登录用户 Profile
-	 */
-	public static CommonProfile getCurrent(){
-		Pac4jPrincipal principal = (Pac4jPrincipal) SecurityUtils.getSubject().getPrincipal();
-		return getProfileFromPac4jPrincipal(principal);
-	}
-
-	/**
-	 * 从 {@link Pac4jPrincipal} 获取用户 Profile
+	 * 从 {@link Principal} 获取用户 Profile
 	 *
 	 * @param principal
-	 *        {@link Pac4jPrincipal}
+	 *        {@link Principal}
 	 *
 	 * @return 用户 Profile
 	 */
@@ -69,93 +52,33 @@ public class ProfileUtils {
 	}
 
 	/**
-	 * 从 {@link CommonProfile} 转换为指定对象
+	 * 将 pac4j {@link CommonProfile} 转换为 Map
 	 *
 	 * @param profile
-	 *        {@link CommonProfile}
-	 * @param type
-	 * 		目标对象类型
-	 * @param <T>
-	 * 		目标对象类型
+	 *        {@link CommonProfile} 实例
 	 *
-	 * @return 目标对象
-	 *
-	 * @throws InstantiationException
-	 * 		实例化异常
-	 * @throws IllegalAccessException
-	 * 		权限异常
+	 * @return Map
 	 */
-	@SuppressWarnings({"unchecked"})
-	public static <T> T convert(CommonProfile profile, Class<T> type)
-			throws InstantiationException, IllegalAccessException{
-		return convert(profile, type, "id", "realName");
-	}
+	public static Map<String, Object> toMap(final CommonProfile profile){
+		final Map<String, Object> attributes = new LinkedHashMap<>(profile.getAttributes());
 
-	/**
-	 * 从 {@link CommonProfile} 转换为指定对象
-	 *
-	 * @param profile
-	 *        {@link CommonProfile}
-	 * @param type
-	 * 		目标对象类型
-	 * @param idFieldName
-	 * 		ID 字段
-	 * @param realNameFieldName
-	 * 		真实姓名字段
-	 * @param <T>
-	 * 		目标对象类型
-	 *
-	 * @return 目标对象
-	 *
-	 * @throws InstantiationException
-	 * 		实例化异常
-	 * @throws IllegalAccessException
-	 * 		权限异常
-	 */
-	@SuppressWarnings({"unchecked"})
-	public static <T> T convert(CommonProfile profile, Class<T> type, String idFieldName, String realNameFieldName)
-			throws InstantiationException, IllegalAccessException{
-		T instance = type.newInstance();
-		Map<String, Object> attributes = new LinkedHashMap<>(profile.getAttributes());
+		attributes.put("id", profile.getId());
+		attributes.put("email", profile.getEmail());
+		attributes.put("firstName", profile.getFirstName());
+		attributes.put("familyName", profile.getFamilyName());
+		attributes.put("displayName", profile.getDisplayName());
+		attributes.put("username", profile.getUsername());
+		attributes.put("gender", profile.getGender());
+		attributes.put("avatar", profile.getGender());
+		attributes.put("profileUrl", profile.getProfileUrl());
+		attributes.put("location", profile.getLocation());
+		attributes.put("linkedId", profile.getLinkedId());
+		attributes.put("expired", profile.isExpired());
+		attributes.put("remembered", profile.isRemembered());
+		attributes.put("roles", profile.getRoles());
+		attributes.put("permissions", profile.getPermissions());
 
-		if(Validate.hasText(idFieldName)){
-			attributes.put(idFieldName, getId(profile, idFieldName));
-		}
-
-		if(Validate.hasText(realNameFieldName)){
-			attributes.put(realNameFieldName, getRealName(profile, realNameFieldName));
-		}
-
-		attributes.put(ROLES_FIELD, profile.getRoles());
-		attributes.put(PERMISSIONS_FIELD, profile.getPermissions());
-
-		BeanUtils.populate(instance, attributes);
-
-		return instance;
-	}
-
-	private static String getId(final CommonProfile profile, final String idField){
-		if(Validate.hasText(idField)){
-			return getProfileStringAttribute(profile, idField);
-		}else{
-			return profile.getId();
-		}
-	}
-
-	private static String getRealName(final CommonProfile profile, final String realNameField){
-		if(Validate.hasText(realNameField)){
-			return getProfileStringAttribute(profile, realNameField);
-		}else{
-			return StringUtils.join(profile.getFirstName(), profile.getFamilyName());
-		}
-	}
-
-	private static String getProfileStringAttribute(final CommonProfile profile, final String field){
-		return asString(profile.getAttribute(field));
-	}
-
-	private static String asString(final Object obj){
-		return obj == null ? null : obj.toString();
+		return attributes;
 	}
 
 }

@@ -22,33 +22,8 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.annotation;
-
-import org.springframework.web.bind.annotation.ValueConstants;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
  * @author Yong.Teng
+ * @since 2.1.0
  */
-@Target({ElementType.PARAMETER})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface Principal {
-
-	String id() default ValueConstants.DEFAULT_NONE;
-
-	String realName() default ValueConstants.DEFAULT_NONE;
-
-	/**
-	 * @return 是否必须
-	 *
-	 * @since 1.2.2
-	 */
-	boolean required() default true;
-
-}
+package com.buession.security.pac4j.spring.reactive;

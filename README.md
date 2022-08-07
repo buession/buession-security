@@ -7,6 +7,7 @@
 [![GitHub release](https://img.shields.io/github/release/buession/buession-security.svg)](https://github.com/buession/buession-security/releases)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Java support](https://img.shields.io/badge/Java-8+-green?logo=java&logoColor=white)](https://openjdk.java.net/)
+[![Javadocs](http://www.javadoc.io/badge/com.buession.security/buession-security-core.svg)](http://www.javadoc.io/doc/com.buession.security/buession-security-core)
 
 
 基于 Pac4j、Shiro 二次封装，集成 Spring Security，提供极验、阿里云、腾讯云行为验证码 SDK，封装了数据脱敏和多种密码加密方式工具类库的一款安全框架

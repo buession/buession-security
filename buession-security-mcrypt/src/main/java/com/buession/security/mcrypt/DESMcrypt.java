@@ -90,6 +90,7 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
+	@Deprecated
 	public DESMcrypt(final String characterEncoding){
 		super(Algo.DES, characterEncoding);
 	}
