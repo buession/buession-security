@@ -1,7 +1,7 @@
  Buession Security Changelog
 ===========================
 
-## [2.1.0](https://github.com/buession/buession-security/releases/tag/v2.1.0) (2022-07-xx)
+## [2.1.0](https://github.com/buession/buession-security/releases/tag/v2.1.0) (2022-08-07)
 
 ### 🔨依赖升级
 
@@ -12,13 +12,13 @@
 ### ⭐ 新特性
 
 - **buession-security-pac4j：** 注解 @Principal 支持 webflux 环境
+- **buession-security-web：** 新增 ReferrerPolicy 策略转换器 ReferrerPolicyConverter
 
 
 ### 🔔 变化
 
 - **buession-security-mcrypt：** 废弃加密类中仅传递字符串形式的编码的构造函数
 - **buession-security-pac4j：** 优化注解 @Principal HandlerMethodArgumentResolver，继承 spring 原生 HandlerMethodArgumentResolver 实现抽象类
-- **buession-security-web：** 新增 ReferrerPolicy 策略转换器 ReferrerPolicyConverter
 
 
 ### 🐞 Bug 修复
