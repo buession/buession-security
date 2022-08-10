@@ -1,6 +1,28 @@
  Buession Security Changelog
 ===========================
 
+
+## [2.1.1](https://github.com/buession/buession-parent/releases/tag/v2.1.1) (2022-08-xx)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.1.1)
+
+
+### 🔔 变化
+
+- **buession-security-pac4j：** ProfileUtils.toMap(CommonProfile profile) 从 CommonProfile 转换为 Map 由首先写入 CommonProfile.getAttributes() 的数据，再也入固有字段的数据转换为先写入固有字段的数据，再写入 CommonProfile.getAttributes() 的数据，该变化影响注解 @Principal 的转换结果
+- **buession-security-pac4j：** 废弃注解 @Principal 的 id、realName 属性
+
+
+### 🐞 Bug 修复
+
+- **buession-security-pac4j：** 修复 JsonAjaxRequestResolver 返回值不是合法 JSON 字符的 BUG
+
+
+---
+
+
 ## [2.1.0](https://github.com/buession/buession-security/releases/tag/v2.1.0) (2022-08-07)
 
 ### 🔨依赖升级
