@@ -24,6 +24,7 @@
  */
 package com.buession.security.pac4j.http;
 
+import com.buession.lang.Constants;
 import org.pac4j.core.context.HttpConstants;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.exception.http.HttpAction;
@@ -64,7 +65,8 @@ public class TextAjaxRequestResolver extends DefaultAjaxRequestResolver {
 			throw UnauthorizedAction.INSTANCE;
 		}
 
-		return RedirectionActionHelper.buildFormPostContentAction(context, Optional.ofNullable(url).orElse(""));
+		return RedirectionActionHelper.buildFormPostContentAction(context,
+				Optional.ofNullable(url).orElse(Constants.EMPTY_STRING));
 	}
 
 }

@@ -40,8 +40,10 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Principal {
 
+	@Deprecated
 	String id() default ValueConstants.DEFAULT_NONE;
 
+	@Deprecated
 	String realName() default ValueConstants.DEFAULT_NONE;
 
 	/**
