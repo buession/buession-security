@@ -64,13 +64,8 @@ public class PrincipalMethodArgumentResolver extends AbstractNamedValueArgumentR
 
 	@Override
 	protected Mono<Object> resolveName(String name, MethodParameter parameter, ServerWebExchange exchange){
-		return exchange.getPrincipal().map((principal)->{
-			Principal annotation = parameter.getParameterAnnotation(Principal.class);
-			Class<?> paramType = parameter.getParameterType();
-
-			return PrincipalAnnotationUtils.toObject((Pac4jPrincipal) principal, annotation,
-					paramType);
-		});
+		return exchange.getPrincipal()
+				.map((principal)->PrincipalAnnotationUtils.resolve(parameter, (Pac4jPrincipal) principal));
 	}
 
 	private final static class PrincipalNamedValueInfo extends NamedValueInfo {

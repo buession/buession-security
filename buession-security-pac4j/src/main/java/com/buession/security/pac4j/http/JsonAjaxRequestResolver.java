@@ -62,16 +62,12 @@ public class JsonAjaxRequestResolver extends DefaultAjaxRequestResolver {
 			throw UnauthorizedAction.INSTANCE;
 		}
 
-		final StringBuilder buffer = new StringBuilder();
-		buffer.append("{\"redirect\":");
+		final StringBuilder buffer = new StringBuilder("{\"redirect\":{");
 
 		if(CommonHelper.isNotBlank(url)){
-			buffer.append('{');
 			buffer.append("\"url\":\"").append(url).append("\"");
-			buffer.append('}');
-		}else{
-			buffer.append("{}");
 		}
+		buffer.append("}}");
 
 		return RedirectionActionHelper.buildFormPostContentAction(context, buffer.toString());
 	}

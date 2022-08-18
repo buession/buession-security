@@ -29,6 +29,8 @@ import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.pac4j.core.profile.CommonProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.core.MethodParameter;
 
 import java.util.Map;
 
@@ -51,7 +53,7 @@ public class PrincipalAnnotationUtils {
 		}
 
 		try{
-			T instance = org.springframework.beans.BeanUtils.instantiateClass(paramType);
+			T instance = BeanUtils.instantiateClass(paramType);
 			Map<String, Object> attributes = ProfileUtils.toMap(profile);
 
 			com.buession.beans.BeanUtils.populate(instance, attributes);
@@ -65,6 +67,13 @@ public class PrincipalAnnotationUtils {
 
 			return null;
 		}
+	}
+
+	public static Object resolve(final MethodParameter parameter, final Pac4jPrincipal principal){
+		Principal annotation = parameter.getParameterAnnotation(Principal.class);
+		Class<?> paramType = parameter.getParameterType();
+
+		return toObject(principal, annotation, paramType);
 	}
 
 }

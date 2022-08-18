@@ -60,7 +60,7 @@ public class ProfileUtils {
 	 * @return Map
 	 */
 	public static Map<String, Object> toMap(final CommonProfile profile){
-		final Map<String, Object> attributes = new LinkedHashMap<>(profile.getAttributes());
+		final Map<String, Object> attributes = new LinkedHashMap<>(profile.getAttributes().size() + 15);
 
 		attributes.put("id", profile.getId());
 		attributes.put("email", profile.getEmail());
@@ -77,6 +77,8 @@ public class ProfileUtils {
 		attributes.put("remembered", profile.isRemembered());
 		attributes.put("roles", profile.getRoles());
 		attributes.put("permissions", profile.getPermissions());
+
+		attributes.putAll(profile.getAttributes());
 
 		return attributes;
 	}

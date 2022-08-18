@@ -66,11 +66,7 @@ public class PrincipalMethodArgumentResolver extends AbstractNamedValueMethodArg
 	@Override
 	@Nullable
 	protected Object resolveName(String name, MethodParameter parameter, NativeWebRequest request){
-		Principal annotation = parameter.getParameterAnnotation(Principal.class);
-		Class<?> paramType = parameter.getParameterType();
-
-		return PrincipalAnnotationUtils.toObject((Pac4jPrincipal) request.getUserPrincipal(), annotation,
-				paramType);
+		return PrincipalAnnotationUtils.resolve(parameter, (Pac4jPrincipal) request.getUserPrincipal());
 	}
 
 	private final static class PrincipalNamedValueInfo extends NamedValueInfo {

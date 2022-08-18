@@ -14,7 +14,7 @@
 
 
 <p align="center">
-	<img src="docs/images/logo.png" alt="Buession Security" title="Buession Security" width="280px" />
+	<img src="logo.png" alt="Buession Security" title="Buession Security" width="280px" />
 </p>
 
 ## Requirements
