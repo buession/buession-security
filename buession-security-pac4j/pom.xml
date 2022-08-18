@@ -72,6 +72,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.buession.cas</groupId>
+			<artifactId>buession-cas-client</artifactId>
+			<version>${buession.cas.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 		</dependency>
