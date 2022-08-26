@@ -42,6 +42,7 @@ import com.buession.security.mcrypt.MD5Mcrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,10 +57,6 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	private final static String REGISTER_URL = "https://api.geetest.com/register.php";
 
 	private final static String VALIDATE_URL = "https://api.geetest.com/validate.php";
-
-	private final static String JSON_FORMAT = "1";
-
-	private final static Algo DIGEST_MODE = Algo.MD5;
 
 	private final static Logger logger = LoggerFactory.getLogger(GeetestV3Client.class);
 
@@ -96,10 +93,10 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		}
 
 		GeetestV3RequestData requestV3Data = (GeetestV3RequestData) requestData;
-		MapBuilder<String, Object> parametersBuilder = MapBuilder.<String, Object>create()
+		MapBuilder<String, Object> parametersBuilder = MapBuilder.<String, Object>create(4)
 				.put("gt", appId)
-				.put("json_format", JSON_FORMAT)
-				.put("digestmod", DIGEST_MODE.getName())
+				.put("json_format", "1")
+				.put("digestmod", Algo.MD5.getName())
 				.put("sdk", getSdkName());
 
 		if(requestV3Data.getClientType() != null){
@@ -224,7 +221,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	 * @return 生成签名结果
 	 */
 	private String sign(final GeetestV3InitResponse initResponse){
-		MD5Mcrypt md5Mcrypt = new MD5Mcrypt(secretKey);
+		MD5Mcrypt md5Mcrypt = new MD5Mcrypt(StandardCharsets.UTF_8, secretKey);
 		return md5Mcrypt.encode(initResponse.getChallenge());
 	}
 

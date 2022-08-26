@@ -46,7 +46,7 @@ class TencentParametersBuilder implements ParametersBuilder<TencentRequestData> 
 
 	@Override
 	public Map<String, String> build(final TencentRequestData requestData){
-		MapBuilder<String, String> builder = MapBuilder.<String, String>create()
+		MapBuilder<String, String> builder = MapBuilder.<String, String>create(5)
 				.put("aid", secretId)
 				.put("AppSecretKey", secretKey)
 				.put("Ticket", requestData.getTicket())

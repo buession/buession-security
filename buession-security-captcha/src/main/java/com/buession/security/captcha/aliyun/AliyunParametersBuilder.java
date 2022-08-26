@@ -66,7 +66,7 @@ class AliyunParametersBuilder implements ParametersBuilder<AliYunRequestData> {
 
 	private final String appKey;
 
-	private AliYunCaptchaClient client;
+	private final AliYunCaptchaClient client;
 
 	AliyunParametersBuilder(final String accessKeyId, final String accessKeySecret, final String appKey,
 							final AliYunCaptchaClient client){
@@ -83,7 +83,7 @@ class AliyunParametersBuilder implements ParametersBuilder<AliYunRequestData> {
 
 		sdf.setTimeZone(TIMESTAMP_TIMEZONE);
 
-		MapBuilder<String, String> builder = MapBuilder.<String, String>create()
+		MapBuilder<String, String> builder = MapBuilder.<String, String>create(15)
 				.put("Action", ACTION).put("Format", FORMAT).put("Version", client.getVersion())
 				.put("SignatureMethod", SIGNATURE_METHOD.getName().toUpperCase()).put("SignatureNonce", randomStr(date))
 				.put("SignatureVersion", SIGNATURE_VERSION).put("AccessKeyId", accessKeyId)
@@ -143,9 +143,7 @@ class AliyunParametersBuilder implements ParametersBuilder<AliYunRequestData> {
 			mac.init(new SecretKeySpec((signKey + "&").getBytes(StandardCharsets.UTF_8), "HmacSHA1"));
 			byte[] signData = mac.doFinal(signature.toString().getBytes(StandardCharsets.UTF_8));
 			return DatatypeConverter.printBase64Binary(signData);
-		}catch(NoSuchAlgorithmException e){
-			throw new IllegalArgumentException(e.getMessage());
-		}catch(InvalidKeyException e){
+		}catch(Exception e){
 			throw new IllegalArgumentException(e.getMessage());
 		}
 	}
