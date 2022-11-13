@@ -24,7 +24,6 @@
  */
 package com.buession.security.shiro.cache;
 
-import com.buession.beans.PropertyDescriptorUtils;
 import com.buession.core.serializer.SerializerException;
 import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
@@ -40,11 +39,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -491,47 +485,56 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 				key.toString();
 	}
 
-	protected String getRedisKeyFromPrincipalCollection(PrincipalCollection principalCollection){
+	protected String getRedisKeyFromPrincipalCollection(final PrincipalCollection principalCollection){
 		Object principalObject = principalCollection.getPrimaryPrincipal();
 
 		if(principalObject instanceof String){
 			return principalObject.toString();
 		}
 
+		Method principalIdGetter = getPrincipalIdGetter(principalObject);
+		return getIdObj(principalObject, principalIdGetter);
+	}
+
+	private Method getPrincipalIdGetter(Object principalObject){
+		Method principalIdGetter = null;
+		String principalIdMethodName = getPrincipalIdMethodName();
+
 		try{
-			Method principalIdGetter = getPrincipalIdGetter(principalObject);
+			principalIdGetter = principalObject.getClass().getMethod(principalIdMethodName);
+		}catch(NoSuchMethodException e){
+			throw new PrincipalInstanceException(principalObject.getClass(),
+					getPrincipalIdFieldName(), e);
+		}
 
-			if(principalIdGetter == null){
-				throw new CacheManagerPrincipalIdNotAssignedException();
-			}
+		return principalIdGetter;
+	}
 
+	private String getPrincipalIdMethodName(){
+		if(Validate.isEmpty(getPrincipalIdFieldName())){
+			throw new CacheManagerPrincipalIdNotAssignedException();
+		}
+
+		return "get" + getPrincipalIdFieldName().substring(0, 1).toUpperCase() + getPrincipalIdFieldName().substring(1);
+	}
+
+	private String getIdObj(Object principalObject, Method principalIdGetter){
+		String str;
+		try{
 			Object idObj = principalIdGetter.invoke(principalObject);
 
 			if(idObj == null){
-				throw new PrincipalIdNullException(principalObject.getClass(), getPrincipalIdFieldName());
+				throw new PrincipalIdNullException(principalObject.getClass(),
+						getPrincipalIdFieldName());
 			}
 
-			return idObj.toString();
-		}catch(IntrospectionException e){
-			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName(), e);
-		}catch(InvocationTargetException e){
-			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName(), e);
-		}catch(IllegalAccessException e){
-			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName(), e);
-		}
-	}
-
-	private Method getPrincipalIdGetter(Object principalObject) throws IntrospectionException{
-		BeanInfo bi = Introspector.getBeanInfo(principalObject.getClass());
-		PropertyDescriptor[] propertyDescriptors = bi.getPropertyDescriptors();
-
-		for(PropertyDescriptor pd : propertyDescriptors){
-			if(getPrincipalIdFieldName().equals(pd.getName())){
-				return PropertyDescriptorUtils.getReadMethod(pd);
-			}
+			str = idObj.toString();
+		}catch(Exception e){
+			throw new PrincipalInstanceException(principalObject.getClass(),
+					getPrincipalIdFieldName(), e);
 		}
 
-		return null;
+		return str;
 	}
 
 }

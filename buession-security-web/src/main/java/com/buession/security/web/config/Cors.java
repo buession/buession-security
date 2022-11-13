@@ -47,7 +47,7 @@ public class Cors {
 	private boolean enabled = true;
 
 	/**
-	 * 允许请求的域，如果值为 '$http_origin' 则设置为请求头 {@link com.buession.web.http.HttpHeader#ORIGIN} 的值
+	 * 允许请求的域
 	 */
 	private Set<String> origins;
 
@@ -105,19 +105,19 @@ public class Cors {
 	}
 
 	/**
-	 * 返回允许请求的域，如果值为 '$http_origin' 则设置为请求头 {@link com.buession.web.http.HttpHeader#ORIGIN} 的值
+	 * 返回允许请求的域
 	 *
-	 * @return 允许请求的域，如果值为 '$http_origin' 则设置为请求头 {@link com.buession.web.http.HttpHeader#ORIGIN} 的值
+	 * @return 允许请求的域
 	 */
 	public Set<String> getOrigins(){
 		return origins;
 	}
 
 	/**
-	 * 设置允许请求的域，如果值为 '$http_origin' 则设置为请求头 {@link com.buession.web.http.HttpHeader#ORIGIN} 的值
+	 * 设置允许请求的域
 	 *
 	 * @param origins
-	 * 		允许请求的域，如果值为 '$http_origin' 则设置为请求头 {@link com.buession.web.http.HttpHeader#ORIGIN} 的值
+	 * 		允许请求的域
 	 */
 	public void setOrigins(Set<String> origins){
 		this.origins = origins;
@@ -226,30 +226,30 @@ public class Cors {
 	public CorsConfiguration toCorsConfiguration(){
 		final CorsConfiguration configuration = new CorsConfiguration();
 
-		if(Validate.isNotEmpty(this.getOrigins())){
-			configuration.setAllowedOrigins(new ArrayList<>(this.getOrigins()));
+		if(Validate.isNotEmpty(getOrigins())){
+			configuration.setAllowedOrigins(new ArrayList<>(getOrigins()));
 		}
 
-		if(Validate.isNotEmpty(this.getAllowedMethods())){
+		if(Validate.isNotEmpty(getAllowedMethods())){
 			configuration.setAllowedMethods(
-					this.getAllowedMethods().stream().map(Enum::toString).collect(
+					getAllowedMethods().stream().map(Enum::toString).collect(
 							Collectors.toList()));
 		}
 
-		if(Validate.isNotEmpty(this.getAllowedHeaders())){
-			configuration.setAllowedHeaders(new ArrayList<>(this.getAllowedHeaders()));
+		if(Validate.isNotEmpty(getAllowedHeaders())){
+			configuration.setAllowedHeaders(new ArrayList<>(getAllowedHeaders()));
 		}
 
-		if(Validate.isNotEmpty(this.getExposedHeaders())){
-			configuration.setExposedHeaders(new ArrayList<>(this.getExposedHeaders()));
+		if(Validate.isNotEmpty(getExposedHeaders())){
+			configuration.setExposedHeaders(new ArrayList<>(getExposedHeaders()));
 		}
 
-		if(this.getAllowCredentials() != null){
-			configuration.setAllowCredentials(this.getAllowCredentials());
+		if(getAllowCredentials() != null){
+			configuration.setAllowCredentials(getAllowCredentials());
 		}
 
-		if(this.getMaxAge() != null){
-			configuration.setMaxAge(this.getMaxAge());
+		if(getMaxAge() != null){
+			configuration.setMaxAge(getMaxAge());
 		}
 
 		return configuration;
