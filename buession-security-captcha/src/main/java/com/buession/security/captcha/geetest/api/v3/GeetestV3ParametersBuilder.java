@@ -49,7 +49,7 @@ class GeetestV3ParametersBuilder implements ParametersBuilder<GeetestV3RequestDa
 
 	@Override
 	public Map<String, String> build(final GeetestV3RequestData requestData){
-		MapBuilder<String, String> builder = MapBuilder.<String, String>create()
+		MapBuilder<String, String> builder = MapBuilder.<String, String>create(9)
 				.put("captchaid", appId)
 				.put("challenge", requestData.getChallenge())
 				.put("validate", requestData.getValidate())

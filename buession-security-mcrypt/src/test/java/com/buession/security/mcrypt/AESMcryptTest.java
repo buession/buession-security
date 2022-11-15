@@ -22,41 +22,22 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.tencent;
+package com.buession.security.mcrypt;
 
-import com.buession.core.builder.MapBuilder;
-import com.buession.security.captcha.core.ParametersBuilder;
+import org.junit.Test;
 
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 2.0.1
  */
-class TencentParametersBuilder implements ParametersBuilder<TencentRequestData> {
+public class AESMcryptTest {
 
-	private final String secretId;
-
-	private final String secretKey;
-
-	TencentParametersBuilder(final String secretId, final String secretKey){
-		this.secretId = secretId;
-		this.secretKey = secretKey;
-	}
-
-	@Override
-	public Map<String, String> build(final TencentRequestData requestData){
-		MapBuilder<String, String> builder = MapBuilder.<String, String>create(5)
-				.put("aid", secretId)
-				.put("AppSecretKey", secretKey)
-				.put("Ticket", requestData.getTicket())
-				.put("Randstr", requestData.getRandstr());
-
-		if(requestData.getClientIp() != null){
-			builder.put("UserIP", requestData.getClientIp());
-		}
-
-		return builder.build();
+	@Test
+	public void test(){
+		AESMcrypt mcrypt = new AESMcrypt("ASCII", "mima", AESMcrypt.Mode.ECB, AESMcrypt.Padding.PKCS5_PADDING);
+		System.out.println(mcrypt.encode("字符串"));
 	}
 
 }

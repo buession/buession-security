@@ -2,7 +2,22 @@
 ===========================
 
 
-## [2.1.1](https://github.com/buession/buession-parent/releases/tag/v2.1.1) (2022-08-18)
+## [2.1.2](https://github.com/buession/buession-security/releases/tag/v2.1.2) (2022-11-13)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.1.2)
+
+
+### 🐞 Bug 修复
+
+- **buession-captcha：** 修复极验 v3 版本生成签名错误的问题
+
+
+---
+
+
+## [2.1.1](https://github.com/buession/buession-security/releases/tag/v2.1.1) (2022-08-18)
 
 ### 🔨依赖升级
 

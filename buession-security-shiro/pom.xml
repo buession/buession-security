@@ -7,7 +7,7 @@
 		<groupId>com.buession.security</groupId>
 		<artifactId>buession-security-parent</artifactId>
 		<relativePath>../buession-security-parent</relativePath>
-		<version>2.1.1</version>
+		<version>2.1.2</version>
 	</parent>
 	<artifactId>buession-security-shiro</artifactId>
 	<url>https://github.com/buession/buession-security</url>
@@ -58,11 +58,6 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.buession</groupId>
-			<artifactId>buession-beans</artifactId>
-			<version>${buession.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>com.buession</groupId>
 			<artifactId>buession-redis</artifactId>

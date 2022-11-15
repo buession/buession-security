@@ -24,6 +24,7 @@
  */
 package com.buession.security.web.reactive.config;
 
+import com.buession.core.converter.mapper.PropertyMapper;
 import com.buession.security.web.builder.reactive.ReactiveHttpSecurityBuilder;
 import com.buession.security.web.config.Configurer;
 import com.buession.web.reactive.OnWebFluxCondition;
@@ -82,47 +83,19 @@ public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 			return;
 		}
 
+		PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 		ReactiveHttpSecurityBuilder builder = ReactiveHttpSecurityBuilder.getInstance(httpSecurity);
 
-		if(configurer.getHttpBasic() != null){
-			builder.httpBasic(configurer.getHttpBasic());
-		}
-
-		if(configurer.getCsrf() != null){
-			builder.csrf(configurer.getCsrf());
-		}
-
-		if(configurer.getCors() != null){
-			builder.cors(configurer.getCors());
-		}
-
-		if(configurer.getFrameOptions() != null){
-			builder.frameOptions(configurer.getFrameOptions());
-		}
-
-		if(configurer.getHsts() != null){
-			builder.hsts(configurer.getHsts());
-		}
-
-		if(configurer.getHpkp() != null){
-			builder.hpkp(configurer.getHpkp());
-		}
-
-		if(configurer.getContentSecurityPolicy() != null){
-			builder.contentSecurityPolicy(configurer.getContentSecurityPolicy());
-		}
-
-		if(configurer.getReferrerPolicy() != null){
-			builder.referrerPolicy(configurer.getReferrerPolicy());
-		}
-
-		if(configurer.getXss() != null){
-			builder.xss(configurer.getXss());
-		}
-
-		if(configurer.getFormLogin() != null){
-			builder.formLogin(configurer.getFormLogin());
-		}
+		propertyMapper.from(configurer::getHttpBasic).to(builder::httpBasic);
+		propertyMapper.from(configurer::getCsrf).to(builder::csrf);
+		propertyMapper.from(configurer::getCors).to(builder::cors);
+		propertyMapper.from(configurer::getFrameOptions).to(builder::frameOptions);
+		propertyMapper.from(configurer::getHsts).to(builder::hsts);
+		propertyMapper.from(configurer::getHpkp).to(builder::hpkp);
+		propertyMapper.from(configurer::getContentSecurityPolicy).to(builder::contentSecurityPolicy);
+		propertyMapper.from(configurer::getReferrerPolicy).to(builder::referrerPolicy);
+		propertyMapper.from(configurer::getXss).to(builder::xss);
+		propertyMapper.from(configurer::getFormLogin).to(builder::formLogin);
 	}
 
 }
