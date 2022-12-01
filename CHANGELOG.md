@@ -10,6 +10,11 @@
 - [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.1
 
 
+### 🔔 变化
+
+- **buession-security-captcha：** AliYunCaptchaClient 构造函数参数 regionId 为 null 或空字符串时，不再抛出异常；而使用默认值
+
+
 ---
 
 
