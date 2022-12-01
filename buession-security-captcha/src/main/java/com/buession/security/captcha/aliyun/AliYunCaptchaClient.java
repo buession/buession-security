@@ -123,10 +123,9 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 	public AliYunCaptchaClient(final String accessKeyId, final String accessKeySecret, final String appKey,
 							   final String regionId){
 		this(accessKeyId, accessKeySecret, appKey);
-
-		Assert.isBlank(regionId, "RegionId cloud not be empty or null");
-
-		endpoint = String.format("https://afs.%s.aliyuncs.com", regionId);
+		if(Validate.hasText(regionId)){
+			endpoint = String.format("https://afs.%s.aliyuncs.com", regionId);
+		}
 	}
 
 	/**
