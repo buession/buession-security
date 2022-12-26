@@ -105,9 +105,7 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 		Map<String, Object> parameters = new HashMap<>(parametersBuilder.build(requestV4Data));
 		EncodedFormRequestBody requestBody = new EncodedFormRequestBody();
 
-		parameters.forEach((key, value)->{
-			requestBody.addRequestBodyElement(key, value.toString());
-		});
+		parameters.forEach((key, value)->requestBody.addRequestBodyElement(key, value.toString()));
 
 		if(logger.isDebugEnabled()){
 			logger.debug("二次验证, parameters：{}.", requestBody);

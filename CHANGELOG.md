@@ -2,7 +2,38 @@
 ===========================
 
 
-## [2.1.1](https://github.com/buession/buession-parent/releases/tag/v2.1.1) (2022-08-18)
+## [2.2.0](https://github.com/buession/buession-security/releases/tag/v2.2.0) (2022-11-xx)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.2.0)
+- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.1
+
+
+### 🔔 变化
+
+- **buession-security-captcha：** AliYunCaptchaClient 构造函数参数 regionId 为 null 或空字符串时，不再抛出异常；而使用默认值
+
+
+---
+
+
+## [2.1.2](https://github.com/buession/buession-security/releases/tag/v2.1.2) (2022-11-13)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.1.2)
+
+
+### 🐞 Bug 修复
+
+- **buession-captcha：** 修复极验 v3 版本生成签名错误的问题
+
+
+---
+
+
+## [2.1.1](https://github.com/buession/buession-security/releases/tag/v2.1.1) (2022-08-18)
 
 ### 🔨依赖升级
 

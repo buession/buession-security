@@ -51,7 +51,7 @@ class GeetestV4ParametersBuilder implements ParametersBuilder<GeetestV4RequestDa
 
 	@Override
 	public Map<String, String> build(final GeetestV4RequestData requestData){
-		MapBuilder<String, String> builder = MapBuilder.<String, String>create()
+		MapBuilder<String, String> builder = MapBuilder.<String, String>create(5)
 				.put("lot_number", requestData.getLotNumber())
 				.put("captcha_output", requestData.getCaptchaOutput())
 				.put("pass_token", requestData.getPassToken())

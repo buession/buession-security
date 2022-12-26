@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2021 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.session;
@@ -32,6 +32,8 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
+ * Memory Data Access Object design pattern specification to enable {@link Session} access to an EIS (Enterprise Information System).
+ *
  * @author Yong.Teng
  * @since 1.2.2
  */
