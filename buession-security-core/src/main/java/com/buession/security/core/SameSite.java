@@ -41,7 +41,7 @@ public enum SameSite {
 	/**
 	 * Cookies 允许与顶级导航一起发送，并将与第三方网站发起的 GET 请求一起发送
 	 */
-	LAX("Lay"),
+	LAX("Lax"),
 
 	/**
 	 * Cookies 只会在第一方上下文中发送，不会与第三方网站发起的请求一起发送

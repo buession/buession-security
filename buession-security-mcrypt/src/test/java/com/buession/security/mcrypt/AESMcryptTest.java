@@ -40,4 +40,11 @@ public class AESMcryptTest {
 		System.out.println(mcrypt.encode("字符串"));
 	}
 
+	@Test
+	public void decode(){
+		AESMcrypt mcrypt = new AESMcrypt("ASCII", "xkxsnx27s6k7mRqVwJ&X%Z&OtTM3K!UT", AESMcrypt.Mode.CBC,
+				AESMcrypt.Padding.PKCS5_PADDING);
+		System.out.println(mcrypt.decode("qLdlRxNkvnYpFuvlfduEXg=="));
+	}
+
 }
