@@ -21,20 +21,15 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2020 Buession.com Inc.														|
+ * | Copyright @ 2013-2023 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.xss.servlet;
 
-import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
-import org.owasp.validator.html.AntiSamy;
-import org.owasp.validator.html.CleanResults;
+import com.buession.security.web.xss.AntiSamyFactory;
 import org.owasp.validator.html.Policy;
 import org.owasp.validator.html.PolicyException;
-import org.owasp.validator.html.ScanException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -47,37 +42,22 @@ import java.util.Map;
  */
 public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 
-	private AntiSamy antiSamy;
+	private AntiSamyFactory antiSamyFactory;
 
-	private Policy policy;
-
-	private final static Logger logger = LoggerFactory.getLogger(XssServletRequestWrapper.class);
-
-	public XssServletRequestWrapper(HttpServletRequest request){
+	public XssServletRequestWrapper(HttpServletRequest request, Policy policy) throws FileNotFoundException{
 		super(request);
-	}
 
-	public Policy getPolicy() throws FileNotFoundException{
-		if(policy == null){
-			try{
-				policy = Policy.getInstance();
-			}catch(PolicyException e){
-				throw new FileNotFoundException("Policy file 'resources/antisamy.xml' not be found.");
-			}
+		try{
+			antiSamyFactory = AntiSamyFactory.getInstance(policy == null ? Policy.getInstance() : policy);
+		}catch(PolicyException e){
+			throw new FileNotFoundException("Policy file 'resources/antisamy.xml' not be found.");
 		}
-
-		return policy;
-	}
-
-	public void setPolicy(Policy policy){
-		Assert.isNull(policy, "Xss policy cloud not be null.");
-		this.policy = policy;
 	}
 
 	@Override
 	public String getParameter(String name){
 		String value = super.getParameter(name);
-		return value == null ? null : xssClean(value);
+		return value == null ? null : antiSamyFactory.clean(value);
 	}
 
 	@Override
@@ -89,7 +69,7 @@ public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 		}
 
 		for(int i = 0; i < values.length; i++){
-			values[i] = xssClean(values[i]);
+			values[i] = antiSamyFactory.clean(values[i]);
 		}
 
 		return values;
@@ -106,48 +86,10 @@ public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 		Map<String, String[]> result = new LinkedHashMap<>(parameterMap.size());
 
 		parameterMap.forEach((name, value)->{
-			result.put(name, xssClean(value));
+			result.put(name, antiSamyFactory.clean(value));
 		});
 
 		return result;
-	}
-
-	protected String[] xssClean(String[] values){
-		if(Validate.isNotEmpty(values)){
-			for(int i = 0; i < values.length; i++){
-				values[i] = xssClean(values[i]);
-			}
-		}
-
-		return values;
-	}
-
-	protected String xssClean(String value){
-		final CleanResults cleanResults;
-
-		try{
-			cleanResults = getAntiSamy().scan(value);
-			return cleanResults.getCleanHTML();
-		}catch(ScanException e){
-			logger.warn("AntiSamy scan error: {}.", e.getMessage(), e);
-		}catch(PolicyException e){
-			logger.warn("AntiSamy scan policy error{}.", e.getMessage(), e);
-		}
-
-		return value;
-	}
-
-	protected AntiSamy getAntiSamy(){
-		if(antiSamy == null){
-			try{
-				antiSamy = new AntiSamy(getPolicy());
-			}catch(FileNotFoundException e){
-				antiSamy = new AntiSamy();
-				logger.error(e.getMessage());
-			}
-		}
-
-		return antiSamy;
 	}
 
 }
