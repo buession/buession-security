@@ -42,7 +42,7 @@ import java.util.Map;
  */
 public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 
-	private AntiSamyFactory antiSamyFactory;
+	private final AntiSamyFactory antiSamyFactory;
 
 	public XssServletRequestWrapper(HttpServletRequest request, Policy policy) throws FileNotFoundException{
 		super(request);
