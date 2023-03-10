@@ -19,32 +19,35 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt;
+package com.buession.security.web.xss.encoder;
 
-import org.junit.Test;
+import com.buession.security.web.xss.AntiSamyFactory;
+import org.owasp.validator.html.Policy;
+import org.owasp.validator.html.PolicyException;
 
-import java.nio.charset.StandardCharsets;
+import java.io.FileNotFoundException;
 
 /**
  * @author Yong.Teng
- * @since 2.0.1
+ * @since 2.2.0
  */
-public class AESMcryptTest {
+public abstract class AbstractEncoder<T> implements Encoder<T> {
 
-	@Test
-	public void test(){
-		AESMcrypt mcrypt = new AESMcrypt("ASCII", "mima", AESMcrypt.Mode.ECB, AESMcrypt.Padding.PKCS5_PADDING);
-		System.out.println(mcrypt.encode("字符串"));
+	protected AntiSamyFactory antiSamyFactory;
+
+	public AbstractEncoder() throws FileNotFoundException{
+		this(null);
 	}
 
-	@Test
-	public void decode(){
-		AESMcrypt mcrypt = new AESMcrypt("ASCII", "xkxsnx27s6k7mRqVwJ&X%Z&OtTM3K!UT", AESMcrypt.Mode.CBC,
-				AESMcrypt.Padding.PKCS5_PADDING);
-		System.out.println(mcrypt.decode("qLdlRxNkvnYpFuvlfduEXg=="));
+	public AbstractEncoder(final Policy policy) throws FileNotFoundException{
+		try{
+			antiSamyFactory = AntiSamyFactory.getInstance(policy == null ? Policy.getInstance() : policy);
+		}catch(PolicyException e){
+			throw new FileNotFoundException("Policy file 'resources/antisamy.xml' not be found.");
+		}
 	}
 
 }

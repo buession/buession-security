@@ -19,32 +19,55 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt;
+package com.buession.security.web.xss.encoder;
 
-import org.junit.Test;
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import org.owasp.validator.html.Policy;
 
-import java.nio.charset.StandardCharsets;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * @author Yong.Teng
- * @since 2.0.1
+ * @since 2.2.0
  */
-public class AESMcryptTest {
+public class Jackson2Encoder extends AbstractEncoder<JsonDeserializer<String>> {
 
-	@Test
-	public void test(){
-		AESMcrypt mcrypt = new AESMcrypt("ASCII", "mima", AESMcrypt.Mode.ECB, AESMcrypt.Padding.PKCS5_PADDING);
-		System.out.println(mcrypt.encode("字符串"));
+	public Jackson2Encoder() throws FileNotFoundException{
+		super();
 	}
 
-	@Test
-	public void decode(){
-		AESMcrypt mcrypt = new AESMcrypt("ASCII", "xkxsnx27s6k7mRqVwJ&X%Z&OtTM3K!UT", AESMcrypt.Mode.CBC,
-				AESMcrypt.Padding.PKCS5_PADDING);
-		System.out.println(mcrypt.decode("qLdlRxNkvnYpFuvlfduEXg=="));
+	public Jackson2Encoder(final Policy policy) throws FileNotFoundException{
+		super(policy);
+	}
+
+	@Override
+	public JsonDeserializer<String> runtime(){
+		return new JsonDeserializer<String>() {
+
+			@Override
+			public Class<String> handledType(){
+				return String.class;
+			}
+
+			@Override
+			public String deserialize(JsonParser parser, DeserializationContext cxt)
+					throws IOException, JacksonException{
+				String value = parser.getValueAsString();
+
+				if(value != null){
+					return antiSamyFactory.clean(value);
+				}
+
+				return value;
+			}
+		};
 	}
 
 }

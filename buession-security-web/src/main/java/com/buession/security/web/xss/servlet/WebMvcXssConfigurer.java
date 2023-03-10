@@ -19,32 +19,50 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt;
+package com.buession.security.web.xss.servlet;
 
-import org.junit.Test;
+import com.buession.security.web.xss.encoder.Jackson2Encoder;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * @author Yong.Teng
- * @since 2.0.1
+ * @since 2.2.0
  */
-public class AESMcryptTest {
+@Configuration(proxyBeanMethods = false)
+public class WebMvcXssConfigurer implements WebMvcConfigurer {
 
-	@Test
-	public void test(){
-		AESMcrypt mcrypt = new AESMcrypt("ASCII", "mima", AESMcrypt.Mode.ECB, AESMcrypt.Padding.PKCS5_PADDING);
-		System.out.println(mcrypt.encode("字符串"));
+	private final static Logger logger = LoggerFactory.getLogger(WebMvcXssConfigurer.class);
+
+	@Override
+	public void extendMessageConverters(List<HttpMessageConverter<?>> converters){
+		for(HttpMessageConverter<?> converter : converters){
+			if(converter instanceof MappingJackson2HttpMessageConverter){
+				mappingJackson2HttpMessageConverter((MappingJackson2HttpMessageConverter) converter);
+			}
+		}
 	}
 
-	@Test
-	public void decode(){
-		AESMcrypt mcrypt = new AESMcrypt("ASCII", "xkxsnx27s6k7mRqVwJ&X%Z&OtTM3K!UT", AESMcrypt.Mode.CBC,
-				AESMcrypt.Padding.PKCS5_PADDING);
-		System.out.println(mcrypt.decode("qLdlRxNkvnYpFuvlfduEXg=="));
+	private void mappingJackson2HttpMessageConverter(
+			final MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter){
+		try{
+			SimpleModule module = new SimpleModule();
+			module.addDeserializer(String.class, new Jackson2Encoder().runtime());
+
+			mappingJackson2HttpMessageConverter.getObjectMapper().registerModule(module);
+		}catch(Exception e){
+			logger.error(e.getMessage());
+		}
 	}
 
 }

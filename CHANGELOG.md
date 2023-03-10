@@ -2,7 +2,7 @@
 ===========================
 
 
-## [2.2.0](https://github.com/buession/buession-security/releases/tag/v2.2.0) (2022-11-xx)
+## [2.2.0](https://github.com/buession/buession-security/releases/tag/v2.2.0) (2022-03-10)
 
 ### 🔨依赖升级
 
@@ -10,9 +10,19 @@
 - [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.1
 
 
+### ⭐ 新特性
+
+- **buession-security-web：** 新增实验性 jackson HttpMessageConverter 支持 XSS 过滤
+
+
 ### 🔔 变化
 
 - **buession-security-captcha：** AliYunCaptchaClient 构造函数参数 regionId 为 null 或空字符串时，不再抛出异常；而使用默认值
+
+
+### 🐞 Bug 修复
+
+- **buession-security-core：** 修复 SameSite LAX 值
 
 
 ---
@@ -27,7 +37,7 @@
 
 ### 🐞 Bug 修复
 
-- **buession-captcha：** 修复极验 v3 版本生成签名错误的问题
+- **buession-security-captcha：** 修复极验 v3 版本生成签名错误的问题
 
 
 ---

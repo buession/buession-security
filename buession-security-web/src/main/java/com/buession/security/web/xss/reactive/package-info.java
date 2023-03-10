@@ -24,40 +24,4 @@
  * | Copyright @ 2013-2023 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.xss.servlet;
-
-import org.owasp.validator.html.Policy;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-/**
- * XSS Filter
- *
- * @author Yong.Teng
- * @since 1.2.0
- */
-public class XssFilter extends OncePerRequestFilter {
-
-	private Policy policy;
-
-	public Policy getPolicy(){
-		return policy;
-	}
-
-	public void setPolicy(Policy policy){
-		this.policy = policy;
-	}
-
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException{
-		XssServletRequestWrapper xssServletRequestWrapper = new XssServletRequestWrapper(request, getPolicy());
-		filterChain.doFilter(xssServletRequestWrapper, response);
-	}
-
-}
+package com.buession.security.web.xss.reactive;
