@@ -64,8 +64,8 @@
 	</modules>
 
 	<properties>
-		<buession.version>2.2.0</buession.version>
-		<buession.cas.version>2.2.0</buession.cas.version>
+		<buession.version>2.2.1</buession.version>
+		<buession.cas.version>2.2.1</buession.cas.version>
 	</properties>
 
 	<dependencyManagement>
