@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.buession.security</groupId>
 	<artifactId>buession-security-parent</artifactId>
-	<url>https://github.com/buession/buession-security</url>
+	<url>https://security.buession.com/</url>
 	<description>Buession Security Framework Parent</description>
 	<version>2.2.1</version>
 	<packaging>pom</packaging>

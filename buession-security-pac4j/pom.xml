@@ -10,7 +10,7 @@
 		<version>2.2.1</version>
 	</parent>
 	<artifactId>buession-security-pac4j</artifactId>
-	<url>https://github.com/buession/buession-security</url>
+	<url>https://security.buession.com/</url>
 	<description>Buession Security Framework For Pac4j</description>
 	<packaging>jar</packaging>
 

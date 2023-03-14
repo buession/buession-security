@@ -10,7 +10,7 @@
 		<version>2.2.1</version>
 	</parent>
 	<artifactId>buession-security-mcrypt</artifactId>
-	<url>https://github.com/buession/buession-security</url>
+	<url>https://security.buession.com/</url>
 	<description>Buession Security Framework For Mcrypt</description>
 	<packaging>jar</packaging>
 
