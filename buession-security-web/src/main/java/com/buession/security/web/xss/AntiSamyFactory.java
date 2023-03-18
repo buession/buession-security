@@ -33,7 +33,10 @@ import org.owasp.validator.html.ScanException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -66,6 +69,14 @@ public class AntiSamyFactory {
 	public Set<String> clean(Set<String> values){
 		if(Validate.isNotEmpty(values)){
 			return values.stream().map(this::clean).collect(Collectors.toSet());
+		}
+
+		return values;
+	}
+
+	public Queue<String> clean(Queue<String> values){
+		if(Validate.isNotEmpty(values)){
+			return values.stream().map(this::clean).collect(Collectors.toCollection(ArrayDeque::new));
 		}
 
 		return values;
