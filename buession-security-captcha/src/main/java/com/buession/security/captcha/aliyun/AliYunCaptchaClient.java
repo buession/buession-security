@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.aliyun;
@@ -34,7 +34,6 @@ import com.buession.security.captcha.core.CaptchaException;
 import com.buession.security.captcha.core.Manufacturer;
 import com.buession.security.captcha.core.RequestData;
 import com.buession.security.captcha.core.RequiredParameterCaptchaException;
-import com.buession.security.captcha.utils.ObjectMapperUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -176,8 +175,7 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 			}
 
 			if(response.isSuccessful()){
-				AliyunEnhencedResult result = ObjectMapperUtils.createObjectMapper().readValue(response.getBody(),
-						AliyunEnhencedResult.class);
+				AliyunEnhencedResult result = parseObject(response.getBody(), AliyunEnhencedResult.class);
 
 				if(result.getCode() == 100){
 					return Status.SUCCESS;

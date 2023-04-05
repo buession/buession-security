@@ -7,6 +7,7 @@
 ### 🔨依赖升级
 
 - [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.3.0)
+- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.2
 
 
 ---

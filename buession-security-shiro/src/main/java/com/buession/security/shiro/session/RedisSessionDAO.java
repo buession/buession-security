@@ -19,11 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.session;
 
+import com.buession.core.deserializer.DeserializerException;
 import com.buession.core.serializer.SerializerException;
 import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
@@ -227,9 +228,8 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		long millisecondsExpire = expire * millisecondsInASecond;
 		if(expire != NO_EXPIRE && millisecondsExpire < session.getTimeout()){
 			if(logger.isWarnEnabled()){
-				logger.warn(
-						"Redis session expire time: {} is less than Session timeout: {}. It may cause some problems.",
-						millisecondsExpire, session.getTimeout());
+				logger.warn("Redis session expire time: {} is less than Session timeout: {}. It may cause some " +
+						"problems.", millisecondsExpire, session.getTimeout());
 			}
 		}
 
@@ -248,6 +248,8 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 				session = valueSerializer.deserialize(value);
 			}
 		}catch(SerializerException e){
+			logger.error("read session: {} error: {}.", sessionId, e.getMessage());
+		}catch(DeserializerException e){
 			logger.error("read session: {} error: {}.", sessionId, e.getMessage());
 		}
 
@@ -271,6 +273,8 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 				}
 			}
 		}catch(SerializerException e){
+			logger.error("get active sessions error: {}.", e.getMessage());
+		}catch(DeserializerException e){
 			logger.error("get active sessions error: {}.", e.getMessage());
 		}
 

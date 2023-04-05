@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2021 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.annotation.exception;
@@ -32,7 +32,7 @@ import org.springframework.core.NestedRuntimeException;
  */
 public class PrincipalMismatchException extends NestedRuntimeException {
 
-	private static final long serialVersionUID = 7865621848349672408L;
+	private final static long serialVersionUID = 7865621848349672408L;
 
 	public PrincipalMismatchException(String message){
 		super(message);

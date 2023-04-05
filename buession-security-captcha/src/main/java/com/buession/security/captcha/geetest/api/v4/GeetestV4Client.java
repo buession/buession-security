@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api.v4;
@@ -36,7 +36,6 @@ import com.buession.security.captcha.core.RequiredParameterCaptchaException;
 import com.buession.security.captcha.geetest.api.AbstractGeetestClient;
 import com.buession.security.captcha.core.InitResponse;
 import com.buession.security.captcha.core.RequestData;
-import com.buession.security.captcha.utils.ObjectMapperUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,8 +119,7 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 				logger.info("二次验证 response: {}", response);
 			}
 
-			GeetestV4ValidateResponse resp = ObjectMapperUtils.createObjectMapper()
-					.readValue(response.getBody(), GeetestV4ValidateResponse.class);
+			GeetestV4ValidateResponse resp = parseObject(response.getBody(), GeetestV4ValidateResponse.class);
 
 			if("success".equals(resp.getResult())){
 				return Status.SUCCESS;
