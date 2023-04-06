@@ -72,13 +72,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.buession.cas</groupId>
-			<artifactId>buession-cas-client</artifactId>
-			<version>${buession.cas.version}</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 		</dependency>
@@ -103,6 +96,17 @@
 			<artifactId>spring-webflux</artifactId>
 			<scope>provided</scope>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.jasig.cas.client</groupId>
+			<artifactId>cas-client-core</artifactId>
+			<version>3.6.4</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.xml.bind</groupId>
+					<artifactId>jaxb-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- pac4j start -->
