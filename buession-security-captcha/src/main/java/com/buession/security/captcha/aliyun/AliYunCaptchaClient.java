@@ -80,7 +80,7 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 	 * @param appKey
 	 * 		服务使用的 App Key
 	 */
-	public AliYunCaptchaClient(final String accessKeyId, final String accessKeySecret, final String appKey){
+	public AliYunCaptchaClient(final String accessKeyId, final String accessKeySecret, final String appKey) {
 		Assert.isBlank(accessKeyId, "AccessKeyId cloud not be empty or null");
 		Assert.isBlank(accessKeySecret, "AccessKeySecret cloud not be empty or null");
 		Assert.isBlank(appKey, "AppKey cloud not be empty or null");
@@ -102,7 +102,7 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 	 *        {@link HttpClient} 实例
 	 */
 	public AliYunCaptchaClient(final String accessKeyId, final String accessKeySecret, final String appKey,
-							   final HttpClient httpClient){
+							   final HttpClient httpClient) {
 		this(accessKeyId, accessKeySecret, appKey);
 		setHttpClient(httpClient);
 	}
@@ -120,7 +120,7 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 	 * 		区域 ID
 	 */
 	public AliYunCaptchaClient(final String accessKeyId, final String accessKeySecret, final String appKey,
-							   final String regionId){
+							   final String regionId) {
 		this(accessKeyId, accessKeySecret, appKey);
 		if(Validate.hasText(regionId)){
 			endpoint = String.format("https://afs.%s.aliyuncs.com", regionId);
@@ -142,13 +142,13 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 	 * 		Http Client
 	 */
 	public AliYunCaptchaClient(final String accessKeyId, final String accessKeySecret, final String appKey,
-							   final String regionId, final HttpClient httpClient){
+							   final String regionId, final HttpClient httpClient) {
 		this(accessKeyId, accessKeySecret, appKey, regionId);
 		setHttpClient(httpClient);
 	}
 
 	@Override
-	public Status validate(RequestData requestData) throws CaptchaException{
+	public Status validate(RequestData requestData) throws CaptchaException {
 		if(logger.isDebugEnabled()){
 			logger.debug("二次验证, 请求参数：{}.", requestData);
 		}
@@ -197,12 +197,12 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 	}
 
 	@Override
-	public Manufacturer getManufacturer(){
+	public Manufacturer getManufacturer() {
 		return Manufacturer.ALIYUN;
 	}
 
 	@Override
-	public String getVersion(){
+	public String getVersion() {
 		return "2018-01-12";
 	}
 
@@ -211,7 +211,7 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 	 *
 	 * @return 端点
 	 */
-	public String getEndpoint(){
+	public String getEndpoint() {
 		return endpoint;
 	}
 
@@ -223,8 +223,7 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 	 *
 	 * @return 检测结果
 	 */
-	private static boolean checkParam(final AliYunRequestData requestData)
-			throws RequiredParameterCaptchaException{
+	private static boolean checkParam(final AliYunRequestData requestData) throws RequiredParameterCaptchaException {
 		if(Validate.hasText(requestData.getToken()) == false){
 			throw new RequiredParameterCaptchaException("Token");
 		}
