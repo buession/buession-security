@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt.passwordgenerator;
@@ -33,9 +33,8 @@ import com.buession.security.mcrypt.Sha1Mcrypt;
  */
 public class Sha1PasswordGenerator extends AbstractPasswordGenerator {
 
-	@Override
-	public String digestEncoded(final String password, final String salt){
-		return digestEncoded(new Sha1Mcrypt(), password, salt);
+	public Sha1PasswordGenerator() {
+		super(new Sha1Mcrypt());
 	}
 
 }

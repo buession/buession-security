@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt.passwordgenerator;
@@ -29,40 +29,7 @@ package com.buession.security.mcrypt.passwordgenerator;
  *
  * @author Yong.Teng
  */
-public interface PasswordGenerator {
-
-    /**
-     * 生成随机密码
-     *
-     * @param length
-     *         长度
-     *
-     * @return 随机密码
-     */
-    String generatorRandomPassword(final int length);
-
-    /**
-     * 密码加密
-     *
-     * @param password
-     *         原始密码
-     * @param salt
-     *         salt
-     *
-     * @return 加密后的密码
-     */
-    String digestEncoded(final String password, final String salt);
-
-    /**
-     * 密码加密
-     *
-     * @param password
-     *         原始密码
-     * @param salt
-     *         salt
-     *
-     * @return 加密后的密码
-     */
-    byte[] digestEncoded(final byte[] password, final byte[] salt);
+@Deprecated
+public interface PasswordGenerator extends com.buession.security.crypto.passwordgenerator.PasswordGenerator {
 
 }

@@ -19,11 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
 
+import com.buession.security.crypto.HmacCrypto;
 import org.apache.commons.codec.digest.HmacAlgorithms;
 
 import java.nio.charset.Charset;
@@ -34,12 +35,12 @@ import java.nio.charset.Charset;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public final class HmacSha384Mcrypt extends AbstractHmacMcrypt {
+public final class HmacSha384Mcrypt extends AbstractHmacMcrypt implements HmacCrypto {
 
 	/**
 	 * 构造函数
 	 */
-	public HmacSha384Mcrypt(){
+	public HmacSha384Mcrypt() {
 		super(Algo.HMAC_SHA384);
 	}
 
@@ -50,7 +51,7 @@ public final class HmacSha384Mcrypt extends AbstractHmacMcrypt {
 	 * 		字符编码
 	 */
 	@Deprecated
-	public HmacSha384Mcrypt(final String characterEncoding){
+	public HmacSha384Mcrypt(final String characterEncoding) {
 		super(Algo.HMAC_SHA384, characterEncoding);
 	}
 
@@ -60,7 +61,7 @@ public final class HmacSha384Mcrypt extends AbstractHmacMcrypt {
 	 * @param charset
 	 * 		字符编码
 	 */
-	public HmacSha384Mcrypt(final Charset charset){
+	public HmacSha384Mcrypt(final Charset charset) {
 		super(Algo.HMAC_SHA384, charset);
 	}
 
@@ -72,7 +73,7 @@ public final class HmacSha384Mcrypt extends AbstractHmacMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public HmacSha384Mcrypt(final String characterEncoding, final String salt){
+	public HmacSha384Mcrypt(final String characterEncoding, final String salt) {
 		super(Algo.HMAC_SHA384, characterEncoding, salt);
 	}
 
@@ -84,12 +85,12 @@ public final class HmacSha384Mcrypt extends AbstractHmacMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public HmacSha384Mcrypt(final Charset charset, final String salt){
+	public HmacSha384Mcrypt(final Charset charset, final String salt) {
 		super(Algo.HMAC_SHA384, charset, salt);
 	}
 
 	@Override
-	protected HmacAlgorithms getHmacAlgorithms(){
+	protected HmacAlgorithms getHmacAlgorithms() {
 		return HmacAlgorithms.HMAC_SHA_384;
 	}
 

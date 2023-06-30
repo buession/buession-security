@@ -35,16 +35,16 @@ import java.nio.charset.StandardCharsets;
 public class AESMcryptTest {
 
 	@Test
-	public void test(){
+	public void encrypt() {
 		AESMcrypt mcrypt = new AESMcrypt("ASCII", "mima", AESMcrypt.Mode.ECB, AESMcrypt.Padding.PKCS5_PADDING);
-		System.out.println(mcrypt.encode("字符串"));
+		System.out.println(mcrypt.encrypt("字符串"));
 	}
 
 	@Test
-	public void decode(){
+	public void decrypt() {
 		AESMcrypt mcrypt = new AESMcrypt("ASCII", "xkxsnx27s6k7mRqVwJ&X%Z&OtTM3K!UT", AESMcrypt.Mode.CBC,
 				AESMcrypt.Padding.PKCS5_PADDING);
-		System.out.println(mcrypt.decode("qLdlRxNkvnYpFuvlfduEXg=="));
+		System.out.println(mcrypt.decrypt("qLdlRxNkvnYpFuvlfduEXg=="));
 	}
 
 }

@@ -19,10 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
+
+import com.buession.security.crypto.HashCrypto;
 
 import java.nio.charset.Charset;
 import java.security.Provider;
@@ -32,12 +34,12 @@ import java.security.Provider;
  *
  * @author Yong.Teng
  */
-public final class Sha512Mcrypt extends AbstractMcrypt {
+public final class Sha512Mcrypt extends AbstractMcrypt implements HashCrypto {
 
 	/**
 	 * 构造函数
 	 */
-	public Sha512Mcrypt(){
+	public Sha512Mcrypt() {
 		super(Algo.SHA512);
 	}
 
@@ -47,7 +49,7 @@ public final class Sha512Mcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public Sha512Mcrypt(final Provider provider){
+	public Sha512Mcrypt(final Provider provider) {
 		super(Algo.SHA512, provider);
 	}
 
@@ -58,7 +60,7 @@ public final class Sha512Mcrypt extends AbstractMcrypt {
 	 * 		字符编码
 	 */
 	@Deprecated
-	public Sha512Mcrypt(final String characterEncoding){
+	public Sha512Mcrypt(final String characterEncoding) {
 		super(Algo.SHA512, characterEncoding);
 	}
 
@@ -68,7 +70,7 @@ public final class Sha512Mcrypt extends AbstractMcrypt {
 	 * @param charset
 	 * 		字符编码
 	 */
-	public Sha512Mcrypt(final Charset charset){
+	public Sha512Mcrypt(final Charset charset) {
 		super(Algo.SHA512, charset);
 	}
 
@@ -80,7 +82,7 @@ public final class Sha512Mcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public Sha512Mcrypt(final String characterEncoding, final Provider provider){
+	public Sha512Mcrypt(final String characterEncoding, final Provider provider) {
 		this(characterEncoding, null, provider);
 	}
 
@@ -92,7 +94,7 @@ public final class Sha512Mcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public Sha512Mcrypt(final Charset charset, final Provider provider){
+	public Sha512Mcrypt(final Charset charset, final Provider provider) {
 		this(charset, null, provider);
 	}
 
@@ -104,7 +106,7 @@ public final class Sha512Mcrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public Sha512Mcrypt(final String characterEncoding, final String salt){
+	public Sha512Mcrypt(final String characterEncoding, final String salt) {
 		this(characterEncoding, salt, null);
 	}
 
@@ -116,7 +118,7 @@ public final class Sha512Mcrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public Sha512Mcrypt(final Charset charset, final String salt){
+	public Sha512Mcrypt(final Charset charset, final String salt) {
 		this(charset, salt, null);
 	}
 
@@ -130,7 +132,7 @@ public final class Sha512Mcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public Sha512Mcrypt(final String characterEncoding, final String salt, final Provider provider){
+	public Sha512Mcrypt(final String characterEncoding, final String salt, final Provider provider) {
 		super(Algo.SHA512, characterEncoding, salt, provider);
 	}
 
@@ -144,7 +146,7 @@ public final class Sha512Mcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public Sha512Mcrypt(final Charset charset, final String salt, final Provider provider){
+	public Sha512Mcrypt(final Charset charset, final String salt, final Provider provider) {
 		super(Algo.SHA512, charset, salt, provider);
 	}
 

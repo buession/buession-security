@@ -28,6 +28,7 @@ package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
 import com.buession.core.utils.StringUtils;
+import com.buession.security.crypto.utils.ObjectUtils;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
@@ -39,6 +40,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 /**
  * AES 加密对象
@@ -54,21 +56,21 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 *
 	 * @since 2.0.0
 	 */
-	private Mode mode = Mode.ECB;
+	private com.buession.security.crypto.Mode mode = com.buession.security.crypto.Mode.ECB;
 
 	/**
 	 * 补码方式
 	 *
 	 * @since 2.0.0
 	 */
-	private Padding padding = Padding.PKCS5_PADDING;
+	private com.buession.security.crypto.Padding padding = com.buession.security.crypto.Padding.PKCS5;
 
 	private Cipher cipher = null;
 
 	/**
 	 * 构造函数
 	 */
-	public AESMcrypt(){
+	public AESMcrypt() {
 		super(Algo.AES);
 	}
 
@@ -79,7 +81,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * 		字符编码
 	 */
 	@Deprecated
-	public AESMcrypt(final String characterEncoding){
+	public AESMcrypt(final String characterEncoding) {
 		super(Algo.AES, characterEncoding);
 	}
 
@@ -89,7 +91,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param charset
 	 * 		字符编码
 	 */
-	public AESMcrypt(final Charset charset){
+	public AESMcrypt(final Charset charset) {
 		super(Algo.AES, charset);
 	}
 
@@ -101,7 +103,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public AESMcrypt(final String characterEncoding, final String salt){
+	public AESMcrypt(final String characterEncoding, final String salt) {
 		super(Algo.AES, characterEncoding, salt);
 	}
 
@@ -113,7 +115,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public AESMcrypt(final Charset charset, final String salt){
+	public AESMcrypt(final Charset charset, final String salt) {
 		super(Algo.AES, charset, salt);
 	}
 
@@ -123,7 +125,20 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param mode
 	 * 		加密模式
 	 */
-	public AESMcrypt(final Mode mode){
+	@Deprecated
+	public AESMcrypt(final Mode mode) {
+		this(mode.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param mode
+	 * 		加密模式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final com.buession.security.crypto.Mode mode) {
 		this();
 		this.mode = mode;
 	}
@@ -136,7 +151,22 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param mode
 	 * 		加密模式
 	 */
-	public AESMcrypt(final String characterEncoding, final Mode mode){
+	@Deprecated
+	public AESMcrypt(final String characterEncoding, final Mode mode) {
+		this(characterEncoding, mode.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param mode
+	 * 		加密模式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final String characterEncoding, final com.buession.security.crypto.Mode mode) {
 		this(characterEncoding);
 		this.mode = mode;
 	}
@@ -149,7 +179,22 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param mode
 	 * 		加密模式
 	 */
-	public AESMcrypt(final Charset charset, final Mode mode){
+	@Deprecated
+	public AESMcrypt(final Charset charset, final Mode mode) {
+		this(charset, mode.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param mode
+	 * 		加密模式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final Charset charset, final com.buession.security.crypto.Mode mode) {
 		this(charset);
 		this.mode = mode;
 	}
@@ -164,7 +209,24 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param mode
 	 * 		加密模式
 	 */
-	public AESMcrypt(final String characterEncoding, final String salt, final Mode mode){
+	@Deprecated
+	public AESMcrypt(final String characterEncoding, final String salt, final Mode mode) {
+		this(characterEncoding, salt, mode.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param mode
+	 * 		加密模式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final String characterEncoding, final String salt, final com.buession.security.crypto.Mode mode) {
 		this(characterEncoding, salt);
 		this.mode = mode;
 	}
@@ -179,7 +241,24 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param mode
 	 * 		加密模式
 	 */
-	public AESMcrypt(final Charset charset, final String salt, final Mode mode){
+	@Deprecated
+	public AESMcrypt(final Charset charset, final String salt, final Mode mode) {
+		this(charset, salt, mode.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param mode
+	 * 		加密模式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final Charset charset, final String salt, final com.buession.security.crypto.Mode mode) {
 		this(charset, salt);
 		this.mode = mode;
 	}
@@ -190,7 +269,20 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public AESMcrypt(final Padding padding){
+	@Deprecated
+	public AESMcrypt(final Padding padding) {
+		this(padding.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final com.buession.security.crypto.Padding padding) {
 		this();
 		this.padding = padding;
 	}
@@ -203,7 +295,22 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public AESMcrypt(final String characterEncoding, final Padding padding){
+	@Deprecated
+	public AESMcrypt(final String characterEncoding, final Padding padding) {
+		this(characterEncoding, padding.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final String characterEncoding, final com.buession.security.crypto.Padding padding) {
 		this(characterEncoding);
 		this.padding = padding;
 	}
@@ -216,7 +323,22 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public AESMcrypt(final Charset charset, final Padding padding){
+	@Deprecated
+	public AESMcrypt(final Charset charset, final Padding padding) {
+		this(charset, padding.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final Charset charset, final com.buession.security.crypto.Padding padding) {
 		this(charset);
 		this.padding = padding;
 	}
@@ -231,7 +353,25 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public AESMcrypt(final String characterEncoding, final String salt, final Padding padding){
+	@Deprecated
+	public AESMcrypt(final String characterEncoding, final String salt, final Padding padding) {
+		this(characterEncoding, salt, padding.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final String characterEncoding, final String salt,
+					 final com.buession.security.crypto.Padding padding) {
 		this(characterEncoding, salt);
 		this.padding = padding;
 	}
@@ -246,7 +386,24 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public AESMcrypt(final Charset charset, final String salt, final Padding padding){
+	@Deprecated
+	public AESMcrypt(final Charset charset, final String salt, final Padding padding) {
+		this(charset, salt, padding.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final Charset charset, final String salt, final com.buession.security.crypto.Padding padding) {
 		this(charset, salt);
 		this.padding = padding;
 	}
@@ -259,7 +416,22 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public AESMcrypt(final Mode mode, final Padding padding){
+	@Deprecated
+	public AESMcrypt(final Mode mode, final Padding padding) {
+		this(mode.getOriginal(), padding.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final com.buession.security.crypto.Mode mode, final com.buession.security.crypto.Padding padding) {
 		this(mode);
 		this.padding = padding;
 	}
@@ -272,7 +444,23 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public AESMcrypt(final String characterEncoding, final Mode mode, final Padding padding){
+	@Deprecated
+	public AESMcrypt(final String characterEncoding, final Mode mode, final Padding padding) {
+		this(characterEncoding, mode.getOriginal(), padding.getOriginal());
+	}
+
+	/**
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final String characterEncoding, final com.buession.security.crypto.Mode mode,
+					 final com.buession.security.crypto.Padding padding) {
 		this(characterEncoding, mode);
 		this.padding = padding;
 	}
@@ -285,7 +473,23 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public AESMcrypt(final Charset charset, final Mode mode, final Padding padding){
+	@Deprecated
+	public AESMcrypt(final Charset charset, final Mode mode, final Padding padding) {
+		this(charset, mode.getOriginal(), padding.getOriginal());
+	}
+
+	/**
+	 * @param charset
+	 * 		字符编码
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final Charset charset, final com.buession.security.crypto.Mode mode,
+					 final com.buession.security.crypto.Padding padding) {
 		this(charset, mode);
 		this.padding = padding;
 	}
@@ -300,7 +504,25 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public AESMcrypt(final String characterEncoding, final String salt, final Mode mode, final Padding padding){
+	@Deprecated
+	public AESMcrypt(final String characterEncoding, final String salt, final Mode mode, final Padding padding) {
+		this(characterEncoding, salt, mode.getOriginal(), padding.getOriginal());
+	}
+
+	/**
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final String characterEncoding, final String salt, final com.buession.security.crypto.Mode mode,
+					 final com.buession.security.crypto.Padding padding) {
 		this(characterEncoding, salt, mode);
 		this.padding = padding;
 	}
@@ -315,14 +537,32 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public AESMcrypt(final Charset charset, final String salt, final Mode mode, final Padding padding){
+	@Deprecated
+	public AESMcrypt(final Charset charset, final String salt, final Mode mode, final Padding padding) {
+		this(charset, salt, mode.getOriginal(), padding.getOriginal());
+	}
+
+	/**
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public AESMcrypt(final Charset charset, final String salt, final com.buession.security.crypto.Mode mode,
+					 final com.buession.security.crypto.Padding padding) {
 		this(charset, salt, mode);
 		this.padding = padding;
 	}
 
 	@Override
-	public String encode(final Object object){
-		Assert.isNull(object, "Mcrypt encode object could not be null");
+	public String encrypt(final Object object) {
+		Assert.isNull(object, "Mcrypt encrypt object could not be null");
 
 		try{
 			Key key = getKey();
@@ -332,7 +572,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 			// 初始化为加密模式的密码器
 			cipher.init(Cipher.ENCRYPT_MODE, key);
 
-			byte[] result = cipher.doFinal(object2Bytes(object));
+			byte[] result = cipher.doFinal(ObjectUtils.toBytes(object, getCharset()));
 			return Base64.encodeBase64String(result);
 		}catch(GeneralSecurityException e){
 			logger.error(e.getMessage());
@@ -341,8 +581,8 @@ public final class AESMcrypt extends AbstractMcrypt {
 	}
 
 	@Override
-	public String decode(final CharSequence cs){
-		Assert.isNull(cs, "Mcrypt decode object could not be null");
+	public String decrypt(final CharSequence cs) {
+		Assert.isNull(cs, "Mcrypt decrypt object could not be null");
 
 		try{
 			Key key = getKey();
@@ -361,17 +601,19 @@ public final class AESMcrypt extends AbstractMcrypt {
 		}
 	}
 
-	private Cipher initCipher() throws NoSuchAlgorithmException, NoSuchPaddingException{
-		if(cipher == null){
-			cipher = Cipher.getInstance(Algo.AES.getName() + "/" + mode.name() + "/" + padding.getValue());
+	private Cipher initCipher() throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException {
+		if(this.cipher == null){
+			com.buession.security.crypto.Cipher cipher = new com.buession.security.crypto.Cipher(getAlgorithmName(),
+					mode, padding, getProvider());
+			this.cipher = cipher.create();
 		}
 
-		return cipher;
+		return this.cipher;
 	}
 
-	private Key getKey() throws NoSuchAlgorithmException{
+	private Key getKey() throws NoSuchAlgorithmException {
 		String salt = getRealSalt();
-		KeyGenerator keyGenerator = KeyGenerator.getInstance(Algo.AES.getName());
+		KeyGenerator keyGenerator = KeyGenerator.getInstance(getAlgorithmName());
 
 		keyGenerator.init(128);
 
@@ -381,7 +623,7 @@ public final class AESMcrypt extends AbstractMcrypt {
 			salt = StringUtils.substr(salt, 0, 16);
 		}
 
-		return new SecretKeySpec(salt.getBytes(StandardCharsets.UTF_8), Algo.AES.getName());
+		return new SecretKeySpec(salt.getBytes(StandardCharsets.UTF_8), getAlgorithmName());
 	}
 
 	/**
@@ -389,33 +631,35 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 *
 	 * @since 2.0.0
 	 */
+	@Deprecated
 	public enum Mode {
 
-		ECB("Electronic Codebook Book", "电码本模式"),
+		ECB(com.buession.security.crypto.Mode.ECB),
 
-		CBC("Cipher Block Chaining", "密码分组链接模式"),
+		CBC(com.buession.security.crypto.Mode.CBC),
 
-		CTR("Counter", "计算器模式"),
+		CTR(com.buession.security.crypto.Mode.CTR),
 
-		CFB("Cipher FeedBack", "密码反馈模式"),
+		CFB(com.buession.security.crypto.Mode.CFB),
 
-		OFB("Output FeedBack", "输出反馈模式");
+		OFB(com.buession.security.crypto.Mode.OFB);
 
-		private final String value;
+		private final com.buession.security.crypto.Mode original;
 
-		private final String name;
-
-		Mode(final String value, final String name){
-			this.value = value;
-			this.name = name;
+		Mode(final com.buession.security.crypto.Mode original) {
+			this.original = original;
 		}
 
-		public String getValue(){
-			return value;
+		public String getValue() {
+			return "";
 		}
 
-		public String getName(){
-			return name;
+		public String getName() {
+			return "";
+		}
+
+		public com.buession.security.crypto.Mode getOriginal() {
+			return original;
 		}
 
 	}
@@ -425,28 +669,56 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 *
 	 * @since 2.0.0
 	 */
+	@Deprecated
 	public enum Padding {
 
-		NO_PADDING("NoPadding"),
+		@Deprecated
+		NO_PADDING(com.buession.security.crypto.Padding.NO),
 
-		ZERO_PADDING("ZeroPadding"),
+		@Deprecated
+		ZERO_PADDING(com.buession.security.crypto.Padding.ZERO),
 
-		PKCS5_PADDING("PKCS5Padding"),
+		@Deprecated
+		PKCS5_PADDING(com.buession.security.crypto.Padding.PKCS5),
 
-		PKCS7_PADDING("PKCS7Padding"),
+		@Deprecated
+		PKCS7_PADDING(com.buession.security.crypto.Padding.PKCS7),
 
-		ISO10126_PADDING("ISO10126Padding"),
+		@Deprecated
+		ISO10126_PADDING(com.buession.security.crypto.Padding.ISO10126),
 
-		ANSIX923_PADDING("ANSIX923Padding");
+		@Deprecated
+		ANSIX923_PADDING(com.buession.security.crypto.Padding.ANSIX923),
 
-		private final String value;
+		NO(com.buession.security.crypto.Padding.NO),
 
-		Padding(final String value){
-			this.value = value;
+		ZERO(com.buession.security.crypto.Padding.ZERO),
+
+		PKCS5(com.buession.security.crypto.Padding.PKCS5),
+
+		PKCS7(com.buession.security.crypto.Padding.PKCS7),
+
+		ISO10126(com.buession.security.crypto.Padding.ISO10126),
+
+		ANSIX923(com.buession.security.crypto.Padding.ANSIX923);
+
+		private final com.buession.security.crypto.Padding original;
+
+		Padding(final com.buession.security.crypto.Padding original) {
+			this.original = original;
 		}
 
-		public String getValue(){
-			return value;
+		public String getValue() {
+			return original.toString();
+		}
+
+		public com.buession.security.crypto.Padding getOriginal() {
+			return original;
+		}
+
+		@Override
+		public String toString() {
+			return original.toString();
 		}
 
 	}

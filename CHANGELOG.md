@@ -10,6 +10,13 @@
 - [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.2
 
 
+### ⭐ 新特性
+
+- **buession-security-crypto：** 新增该模块，逐步替代 buession-security-mcrypt
+- **buession-security-mcrypt：** 新增 SM3、SM4 加密
+- **buession-security-mcrypt：** 新增 ShaPasswordGenerator、Sm3PasswordGenerator、Sm4PasswordGenerator 密码生成器
+
+
 ### ⏪ 优化
 
 - 其它优化
