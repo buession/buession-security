@@ -178,6 +178,10 @@ public abstract class AbstractCrypto implements Crypto {
 		this.provider = provider;
 	}
 
+	public Algorithm getAlgorithm() {
+		return algorithm;
+	}
+
 	@Override
 	public String getAlgorithmName() {
 		return algorithm.getName();

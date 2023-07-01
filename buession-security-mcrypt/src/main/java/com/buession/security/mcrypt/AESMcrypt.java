@@ -27,20 +27,10 @@
 package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
-import com.buession.core.utils.StringUtils;
-import com.buession.security.crypto.utils.ObjectUtils;
-import org.apache.commons.codec.binary.Base64;
+import com.buession.security.crypto.internal.SymmetricalCrypto;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 
 /**
  * AES 加密对象
@@ -64,8 +54,6 @@ public final class AESMcrypt extends AbstractMcrypt {
 	 * @since 2.0.0
 	 */
 	private com.buession.security.crypto.Padding padding = com.buession.security.crypto.Padding.PKCS5;
-
-	private Cipher cipher = null;
 
 	/**
 	 * 构造函数
@@ -565,15 +553,9 @@ public final class AESMcrypt extends AbstractMcrypt {
 		Assert.isNull(object, "Mcrypt encrypt object could not be null");
 
 		try{
-			Key key = getKey();
-
-			initCipher();
-
-			// 初始化为加密模式的密码器
-			cipher.init(Cipher.ENCRYPT_MODE, key);
-
-			byte[] result = cipher.doFinal(ObjectUtils.toBytes(object, getCharset()));
-			return Base64.encodeBase64String(result);
+			SymmetricalCrypto crypto = new SymmetricalCrypto(getAlgorithm(), getCharset(), mode, padding, getProvider(),
+					getSalt());
+			return crypto.encrypt(object);
 		}catch(GeneralSecurityException e){
 			logger.error(e.getMessage());
 			throw new SecurityException(e);
@@ -585,45 +567,13 @@ public final class AESMcrypt extends AbstractMcrypt {
 		Assert.isNull(cs, "Mcrypt decrypt object could not be null");
 
 		try{
-			Key key = getKey();
-
-			initCipher();
-
-			// 初始化为解密模式的密码器
-			cipher.init(Cipher.DECRYPT_MODE, key);
-
-			// 明文
-			byte[] result = cipher.doFinal(Base64.decodeBase64(cs.toString()));
-			return new String(result);
+			SymmetricalCrypto crypto = new SymmetricalCrypto(getAlgorithm(), getCharset(), mode, padding,
+					getProvider(), getSalt());
+			return crypto.decrypt(cs);
 		}catch(GeneralSecurityException e){
 			logger.error(e.getMessage());
 			throw new SecurityException(e);
 		}
-	}
-
-	private Cipher initCipher() throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException {
-		if(this.cipher == null){
-			com.buession.security.crypto.Cipher cipher = new com.buession.security.crypto.Cipher(getAlgorithmName(),
-					mode, padding, getProvider());
-			this.cipher = cipher.create();
-		}
-
-		return this.cipher;
-	}
-
-	private Key getKey() throws NoSuchAlgorithmException {
-		String salt = getRealSalt();
-		KeyGenerator keyGenerator = KeyGenerator.getInstance(getAlgorithmName());
-
-		keyGenerator.init(128);
-
-		if(salt.length() < 16){
-			salt += StringUtils.repeat(' ', 16 - salt.length());
-		}else if(salt.length() > 16){
-			salt = StringUtils.substr(salt, 0, 16);
-		}
-
-		return new SecretKeySpec(salt.getBytes(StandardCharsets.UTF_8), getAlgorithmName());
 	}
 
 	/**
@@ -672,35 +622,17 @@ public final class AESMcrypt extends AbstractMcrypt {
 	@Deprecated
 	public enum Padding {
 
-		@Deprecated
 		NO_PADDING(com.buession.security.crypto.Padding.NO),
 
-		@Deprecated
 		ZERO_PADDING(com.buession.security.crypto.Padding.ZERO),
 
-		@Deprecated
 		PKCS5_PADDING(com.buession.security.crypto.Padding.PKCS5),
 
-		@Deprecated
 		PKCS7_PADDING(com.buession.security.crypto.Padding.PKCS7),
 
-		@Deprecated
 		ISO10126_PADDING(com.buession.security.crypto.Padding.ISO10126),
 
-		@Deprecated
-		ANSIX923_PADDING(com.buession.security.crypto.Padding.ANSIX923),
-
-		NO(com.buession.security.crypto.Padding.NO),
-
-		ZERO(com.buession.security.crypto.Padding.ZERO),
-
-		PKCS5(com.buession.security.crypto.Padding.PKCS5),
-
-		PKCS7(com.buession.security.crypto.Padding.PKCS7),
-
-		ISO10126(com.buession.security.crypto.Padding.ISO10126),
-
-		ANSIX923(com.buession.security.crypto.Padding.ANSIX923);
+		ANSIX923_PADDING(com.buession.security.crypto.Padding.ANSIX923);
 
 		private final com.buession.security.crypto.Padding original;
 

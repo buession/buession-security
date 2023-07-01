@@ -19,34 +19,73 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt;
+package com.buession.security.crypto.utils;
 
+import com.buession.core.utils.Assert;
 import com.buession.security.crypto.Mode;
 import com.buession.security.crypto.Padding;
-import org.junit.Test;
 
-import java.nio.charset.StandardCharsets;
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
 
 /**
  * @author Yong.Teng
- * @since 2.0.1
+ * @since 2.3.0
  */
-public class AESMcryptTest {
+public class CipherBuilder {
 
-	@Test
-	public void encrypt() {
-		AESMcrypt mcrypt = new AESMcrypt(StandardCharsets.UTF_8, "1111111111111111", Mode.ECB, Padding.ISO10126);
-		System.out.println(mcrypt.encrypt("aaaaaaaaaaaaaaaa"));
+	private final String algorithmName;
+
+	private Mode mode;
+
+	private Padding padding;
+
+	private Provider provider;
+
+	private CipherBuilder(final String algorithmName) {
+		Assert.isBlank(algorithmName, "Algorithm name cloud not be blank, empty or null.");
+		this.algorithmName = algorithmName;
 	}
 
-	@Test
-	public void decrypt() {
-		AESMcrypt mcrypt = new AESMcrypt(StandardCharsets.UTF_8, "1111111111111111", Mode.ECB,
-				Padding.ISO10126);
-		System.out.println(mcrypt.decrypt("xrnRAt3qsWnzJMvb5zPwCqnmH+FPWV58WpmyUQrEmAg="));
+	public static CipherBuilder getInstance(final String algorithmName) {
+		return new CipherBuilder(algorithmName);
+	}
+
+	public CipherBuilder mode(Mode mode) {
+		this.mode = mode;
+		return this;
+	}
+
+	public CipherBuilder padding(Padding padding) {
+		this.padding = padding;
+		return this;
+	}
+
+	public CipherBuilder provider(Provider provider) {
+		this.provider = provider;
+		return this;
+	}
+
+	public Cipher create() throws NoSuchPaddingException, NoSuchAlgorithmException {
+		StringBuilder sb = new StringBuilder(algorithmName);
+
+		if(mode != null){
+			sb.append('/').append(mode.name());
+		}
+		if(padding != null){
+			sb.append('/').append(padding);
+		}
+
+		if(provider == null){
+			return Cipher.getInstance(sb.toString());
+		}else{
+			return Cipher.getInstance(sb.toString(), provider);
+		}
 	}
 
 }

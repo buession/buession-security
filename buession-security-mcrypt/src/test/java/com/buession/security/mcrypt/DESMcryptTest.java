@@ -19,47 +19,34 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.crypto;
+package com.buession.security.mcrypt;
 
-import javax.crypto.NoSuchPaddingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.Provider;
+import com.buession.security.crypto.Mode;
+import com.buession.security.crypto.Padding;
+import org.junit.Test;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Yong.Teng
  * @since 2.3.0
  */
-public class Cipher {
+public class DESMcryptTest {
 
-	private final String algorithmName;
-
-	private final Mode mode;
-
-	private final Padding padding;
-
-	private final Provider provider;
-
-	public Cipher(final String algorithmName, final Mode mode, final Padding padding) {
-		this(algorithmName, mode, padding, null);
+	@Test
+	public void encrypt() {
+		DESMcrypt mcrypt = new DESMcrypt(StandardCharsets.UTF_8, "1111111111111111", Mode.ECB, Padding.ISO10126);
+		System.out.println(mcrypt.encrypt("aaaaaa"));
 	}
 
-	public Cipher(final String algorithmName, final Mode mode, final Padding padding, final Provider provider) {
-		this.algorithmName = algorithmName;
-		this.mode = mode;
-		this.padding = padding;
-		this.provider = provider;
-	}
-
-	public javax.crypto.Cipher create() throws NoSuchPaddingException, NoSuchAlgorithmException {
-		if(provider == null){
-			return javax.crypto.Cipher.getInstance(algorithmName + "/" + mode.name() + "/" + padding.toString());
-		}else{
-			return javax.crypto.Cipher.getInstance(algorithmName + "/" + mode.name() + "/" + padding.toString(),
-					provider);
-		}
+	@Test
+	public void decrypt() {
+		DESMcrypt mcrypt = new DESMcrypt(StandardCharsets.UTF_8, "1111111111111111", Mode.ECB,
+				Padding.ISO10126);
+		System.out.println(mcrypt.decrypt("sRjNUC2t6Ew="));
 	}
 
 }

@@ -27,19 +27,17 @@
 package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
-import com.buession.security.crypto.utils.ObjectUtils;
-import org.apache.commons.codec.binary.Base64;
+import com.buession.security.crypto.internal.SymmetricalCrypto;
 
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.Provider;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * DES 加密对象
@@ -562,16 +560,9 @@ public final class DESMcrypt extends AbstractMcrypt {
 		Assert.isNull(object, "Mcrypt encrypt object could not be null");
 
 		try{
-			DESKeySpec dks = new DESKeySpec(getRealSalt().getBytes());
-			SecretKeyFactory secretKeyFactory = getSecretKeyFactory();
-			SecretKey secretKey = secretKeyFactory.generateSecret(dks);
-
-			initCipher();
-			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-
-			byte[] result = cipher.doFinal(ObjectUtils.toBytes(object, getCharset()));
-
-			return Base64.encodeBase64String(result);
+			SymmetricalCrypto crypto = new SymmetricalCrypto(getAlgorithm(), getCharset(), mode, padding,
+					getProvider(), getKey());
+			return crypto.encrypt(object);
 		}catch(GeneralSecurityException e){
 			logger.error(e.getMessage());
 			throw new SecurityException(e);
@@ -583,35 +574,21 @@ public final class DESMcrypt extends AbstractMcrypt {
 		Assert.isNull(cs, "Mcrypt decrypt object could not be null");
 
 		try{
-			DESKeySpec dks = new DESKeySpec(getRealSalt().getBytes());
-			SecretKeyFactory secretKeyFactory = getSecretKeyFactory();
-			SecretKey secretKey = secretKeyFactory.generateSecret(dks);
-
-			initCipher();
-			cipher.init(Cipher.DECRYPT_MODE, secretKey);
-
-			byte[] result = cipher.doFinal(Base64.decodeBase64(cs.toString()));
-			return new String(result);
+			SymmetricalCrypto crypto = new SymmetricalCrypto(getAlgorithm(), getCharset(), mode, padding,
+					getProvider(), getKey());
+			return crypto.decrypt(cs);
 		}catch(GeneralSecurityException e){
 			logger.error(e.getMessage());
 			throw new SecurityException(e);
 		}
 	}
 
-	private Cipher initCipher() throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException {
-		if(this.cipher == null){
-			com.buession.security.crypto.Cipher cipher = new com.buession.security.crypto.Cipher(getAlgorithmName(),
-					mode, padding, getProvider());
-			this.cipher = cipher.create();
-		}
-
-		return this.cipher;
-	}
-
-	private SecretKeyFactory getSecretKeyFactory() throws NoSuchAlgorithmException {
-		Provider provider = getProvider();
-		return provider == null ? SecretKeyFactory.getInstance(getAlgorithmName()) :
-				SecretKeyFactory.getInstance(getAlgorithmName(), provider);
+	private Key getKey() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException {
+		final DESKeySpec dks = new DESKeySpec(getRealSalt().getBytes());
+		final SecretKeyFactory secretKeyFactory = getProvider() == null ?
+				SecretKeyFactory.getInstance(getAlgorithmName()) : SecretKeyFactory.getInstance(getAlgorithmName(),
+				getProvider());
+		return secretKeyFactory.generateSecret(dks);
 	}
 
 	/**
@@ -660,35 +637,17 @@ public final class DESMcrypt extends AbstractMcrypt {
 	@Deprecated
 	public enum Padding {
 
-		@Deprecated
 		NO_PADDING(com.buession.security.crypto.Padding.NO),
 
-		@Deprecated
 		ZERO_PADDING(com.buession.security.crypto.Padding.ZERO),
 
-		@Deprecated
 		PKCS5_PADDING(com.buession.security.crypto.Padding.PKCS5),
 
-		@Deprecated
 		PKCS7_PADDING(com.buession.security.crypto.Padding.PKCS7),
 
-		@Deprecated
 		ISO10126_PADDING(com.buession.security.crypto.Padding.ISO10126),
 
-		@Deprecated
-		ANSIX923_PADDING(com.buession.security.crypto.Padding.ANSIX923),
-
-		NO(com.buession.security.crypto.Padding.NO),
-
-		ZERO(com.buession.security.crypto.Padding.ZERO),
-
-		PKCS5(com.buession.security.crypto.Padding.PKCS5),
-
-		PKCS7(com.buession.security.crypto.Padding.PKCS7),
-
-		ISO10126(com.buession.security.crypto.Padding.ISO10126),
-
-		ANSIX923(com.buession.security.crypto.Padding.ANSIX923);
+		ANSIX923_PADDING(com.buession.security.crypto.Padding.ANSIX923);
 
 		private final com.buession.security.crypto.Padding original;
 

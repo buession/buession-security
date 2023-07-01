@@ -19,34 +19,11 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt;
-
-import com.buession.security.crypto.Mode;
-import com.buession.security.crypto.Padding;
-import org.junit.Test;
-
-import java.nio.charset.StandardCharsets;
-
 /**
  * @author Yong.Teng
- * @since 2.0.1
+ * @since 2.3.0
  */
-public class AESMcryptTest {
-
-	@Test
-	public void encrypt() {
-		AESMcrypt mcrypt = new AESMcrypt(StandardCharsets.UTF_8, "1111111111111111", Mode.ECB, Padding.ISO10126);
-		System.out.println(mcrypt.encrypt("aaaaaaaaaaaaaaaa"));
-	}
-
-	@Test
-	public void decrypt() {
-		AESMcrypt mcrypt = new AESMcrypt(StandardCharsets.UTF_8, "1111111111111111", Mode.ECB,
-				Padding.ISO10126);
-		System.out.println(mcrypt.decrypt("xrnRAt3qsWnzJMvb5zPwCqnmH+FPWV58WpmyUQrEmAg="));
-	}
-
-}
+package com.buession.security.crypto.internal;
