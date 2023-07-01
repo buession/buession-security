@@ -157,8 +157,8 @@ public abstract class AbstractHmacMcrypt extends AbstractMcrypt {
 		Assert.isNull(object, "Mcrypt encrypt object could not be null");
 		Assert.isNull(getAlgo(), "Algo could not be null");
 
-		return new HmacUtils(getHmacAlgorithms(), getRealSalt().getBytes(getCharset())).hmacHex(
-				ObjectUtils.toBytes(object, getCharset()));
+		HmacUtils hmacUtils = new HmacUtils(getHmacAlgorithms(), getRealSalt().getBytes(getCharset()));
+		return hmacUtils.hmacHex(ObjectUtils.toBytes(object, getCharset()));
 	}
 
 	protected abstract HmacAlgorithms getHmacAlgorithms();

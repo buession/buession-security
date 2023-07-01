@@ -44,10 +44,6 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 
 	private final static int KEY_LENGTH = 4;
 
-	private final static MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-
-	private final static Base64Mcrypt base64Mcrypt = new Base64Mcrypt();
-
 	/**
 	 * 构造函数
 	 */
@@ -104,11 +100,13 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	public String encrypt(final Object object) {
 		Assert.isNull(object, "Mcrypt encrypt object could not be null");
 
+		Base64Mcrypt base64Mcrypt = new Base64Mcrypt();
 		String s = ObjectUtils.toString(object);
 
 		String key = md5(md5(getRealSalt()));
 		String keya = md5(StringUtils.substr(key, 16, 16));
-		String keyb = StringUtils.substr(md5(StringUtils.replace(DateTime.microtime(), " ", ".")), -4);
+		String keyb = StringUtils.substr(md5(StringUtils.replace(DateTime.microtime(), Constants.SPACING_STRING, ".")),
+				-4);
 		String keyc = getResultKey(key, keyb);
 
 		s = StringUtils.repeat('0', 10) + StringUtils.substr(md5(s + keya), 0, 16) + s;
@@ -121,6 +119,7 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	public String decrypt(final CharSequence cs) {
 		Assert.isNull(cs, "Mcrypt decrypt object could not be null");
 
+		Base64Mcrypt base64Mcrypt = new Base64Mcrypt();
 		String s = cs.toString();
 
 		String key = md5(md5(getRealSalt()));
@@ -135,7 +134,7 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 		String s1 = StringUtils.substr(result, 0, 10);
 		String s2 = StringUtils.substr(result, 26);
 		long j = Long.parseLong(s1);
-		String k1 = md5Mcrypt.encrypt(s2 + keya);
+		String k1 = md5(s2 + keya);
 		long timestamp = DateTime.unixtime();
 
 		return (j == 0 || j - timestamp > 0) && StringUtils.substr(result, 10, 16).equals(StringUtils.substr(k1, 0,
@@ -143,6 +142,7 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	}
 
 	private static String md5(final String str) {
+		MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
 		return md5Mcrypt.encrypt(str == null ? Constants.EMPTY_STRING : str).toLowerCase();
 	}
 
@@ -157,16 +157,16 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 
 	private static String mod(final String str, final String key) {
 		int strLength = str.length();
-		StringBuilder sb = new StringBuilder(strLength);
+		char[] result = new char[strLength];
 
 		for(int i = 0; i < strLength; i++){
 			int j = str.charAt(i);
 			int k = key.charAt(i % 32);
 
-			sb.append((char) (j ^ k));
+			result[i] = (char) (j ^ k);
 		}
 
-		return sb.toString();
+		return new String(result);
 	}
 
 }
