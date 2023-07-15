@@ -29,7 +29,6 @@ package com.buession.security.mcrypt;
 import com.buession.core.utils.Assert;
 import com.buession.security.crypto.internal.SymmetricalCrypto;
 
-import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import java.nio.charset.Charset;
@@ -61,8 +60,6 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @since 2.0.0
 	 */
 	private com.buession.security.crypto.Padding padding = com.buession.security.crypto.Padding.PKCS5;
-
-	private Cipher cipher = null;
 
 	/**
 	 * 构造函数

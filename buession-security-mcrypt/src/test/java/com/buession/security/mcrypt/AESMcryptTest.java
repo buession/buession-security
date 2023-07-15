@@ -38,8 +38,9 @@ public class AESMcryptTest {
 
 	@Test
 	public void encrypt() {
-		AESMcrypt mcrypt = new AESMcrypt(StandardCharsets.UTF_8, "1111111111111111", Mode.ECB, Padding.ISO10126);
-		System.out.println(mcrypt.encrypt("aaaaaaaaaaaaaaaa"));
+		AESMcrypt mcrypt = new AESMcrypt(StandardCharsets.UTF_8, "1234567887654321", Mode.ECB,
+				Padding.ISO10126);
+		System.out.println("1234567887654321" + mcrypt.encrypt("Abc12345678\u5206\u5272Abc12345678"));
 	}
 
 	@Test
