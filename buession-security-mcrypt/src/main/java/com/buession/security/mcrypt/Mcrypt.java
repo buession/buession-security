@@ -19,20 +19,19 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
 
-import java.nio.charset.Charset;
-import java.security.Provider;
+import com.buession.security.crypto.Crypto;
 
 /**
  * 加解密
  *
  * @author Yong.Teng
  */
-public interface Mcrypt {
+public interface Mcrypt extends Crypto {
 
 	/**
 	 * 返回请求算法的名称
@@ -47,52 +46,8 @@ public interface Mcrypt {
 	 * @param algo
 	 * 		请求算法的名称
 	 */
+	@Deprecated
 	void setAlgo(final Algo algo);
-
-	/**
-	 * 返回加密密钥
-	 *
-	 * @return 加密密钥
-	 */
-	String getSalt();
-
-	/**
-	 * 设置加密密钥
-	 *
-	 * @param salt
-	 * 		加密密钥
-	 */
-	void setSalt(final String salt);
-
-	/**
-	 * 获取字符串编码
-	 *
-	 * @return 字符串编码
-	 */
-	Charset getCharset();
-
-	/**
-	 * 设置字符串编码
-	 *
-	 * @param charset
-	 * 		字符串编码
-	 */
-	void setCharset(final Charset charset);
-
-	/**
-	 * 返回此信息摘要对象的提供者
-	 *
-	 * @return 信息摘要对象的提供者
-	 */
-	Provider getProvider();
-
-	/**
-	 * 设置信息摘要对象的提供者
-	 *
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 */
-	void setProvider(final Provider provider);
 
 	/**
 	 * 对象加密
@@ -102,7 +57,9 @@ public interface Mcrypt {
 	 *
 	 * @return 加密后的字符串
 	 */
-	String encode(final Object object);
+	default String encode(final Object object) {
+		return encrypt(object);
+	}
 
 	/**
 	 * 字符串解密
@@ -113,7 +70,9 @@ public interface Mcrypt {
 	 *
 	 * @return 解密后的字符串
 	 */
-	String decode(final CharSequence cs);
+	default String decode(final CharSequence cs) {
+		return decrypt(cs);
+	}
 
 }
 

@@ -7,13 +7,13 @@
 		<groupId>com.buession</groupId>
 		<artifactId>parent</artifactId>
 		<relativePath/>
-		<version>2.2.1</version>
+		<version>2.3.0</version>
 	</parent>
 	<groupId>com.buession.security</groupId>
 	<artifactId>buession-security-parent</artifactId>
 	<url>https://security.buession.com/</url>
 	<description>Buession Security Framework Parent</description>
-	<version>2.2.1</version>
+	<version>2.3.0</version>
 	<packaging>pom</packaging>
 
 	<organization>
@@ -56,6 +56,7 @@
 	<modules>
 		<module>../buession-security-core</module>
 		<module>../buession-security-captcha</module>
+		<module>../buession-security-crypto</module>
 		<module>../buession-security-mcrypt</module>
 		<module>../buession-security-pac4j</module>
 		<module>../buession-security-shiro</module>
@@ -64,8 +65,7 @@
 	</modules>
 
 	<properties>
-		<buession.version>2.2.1</buession.version>
-		<buession.cas.version>2.2.1</buession.cas.version>
+		<buession.version>2.3.0</buession.version>
 	</properties>
 
 	<dependencyManagement>

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha;
@@ -27,6 +27,9 @@ package com.buession.security.captcha;
 import com.buession.core.utils.VersionUtils;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Header;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +82,14 @@ public abstract class AbstractCaptchaClient implements CaptchaClient {
 		headers.add(new Header("X-Sdk-Invoke-Type", "normal"));
 
 		return headers;
+	}
+
+	protected static <T> T parseObject(final String str, final Class<T> clazz) throws JsonProcessingException{
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		return objectMapper.readValue(str, clazz);
 	}
 
 }

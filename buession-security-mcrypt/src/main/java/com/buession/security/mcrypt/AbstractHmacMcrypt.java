@@ -19,12 +19,14 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
+import com.buession.security.crypto.Algorithm;
+import com.buession.security.crypto.utils.ObjectUtils;
 import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.codec.digest.HmacUtils;
 
@@ -41,8 +43,21 @@ public abstract class AbstractHmacMcrypt extends AbstractMcrypt {
 	/**
 	 * 构造函数
 	 */
-	public AbstractHmacMcrypt(){
+	@Deprecated
+	public AbstractHmacMcrypt() {
 		super();
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param algorithm
+	 * 		加密算法
+	 *
+	 * @since 2.3.0
+	 */
+	public AbstractHmacMcrypt(final Algorithm algorithm) {
+		super(algorithm);
 	}
 
 	/**
@@ -51,7 +66,7 @@ public abstract class AbstractHmacMcrypt extends AbstractMcrypt {
 	 * @param algo
 	 * 		请求算法的名称
 	 */
-	public AbstractHmacMcrypt(final Algo algo){
+	public AbstractHmacMcrypt(final Algo algo) {
 		super(algo);
 	}
 
@@ -63,8 +78,22 @@ public abstract class AbstractHmacMcrypt extends AbstractMcrypt {
 	 * @param characterEncoding
 	 * 		字符编码
 	 */
-	public AbstractHmacMcrypt(final Algo algo, final String characterEncoding){
+	public AbstractHmacMcrypt(final Algo algo, final String characterEncoding) {
 		super(algo, characterEncoding);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param algorithm
+	 * 		加密算法
+	 * @param charset
+	 * 		字符编码
+	 *
+	 * @since 2.3.0
+	 */
+	public AbstractHmacMcrypt(final Algorithm algorithm, final Charset charset) {
+		super(algorithm, charset);
 	}
 
 	/**
@@ -75,7 +104,7 @@ public abstract class AbstractHmacMcrypt extends AbstractMcrypt {
 	 * @param charset
 	 * 		字符编码
 	 */
-	public AbstractHmacMcrypt(final Algo algo, final Charset charset){
+	public AbstractHmacMcrypt(final Algo algo, final Charset charset) {
 		super(algo, charset);
 	}
 
@@ -89,8 +118,24 @@ public abstract class AbstractHmacMcrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public AbstractHmacMcrypt(final Algo algo, final String characterEncoding, final String salt){
+	public AbstractHmacMcrypt(final Algo algo, final String characterEncoding, final String salt) {
 		super(algo, characterEncoding, salt);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param algorithm
+	 * 		加密算法
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 *
+	 * @since 2.3.0
+	 */
+	public AbstractHmacMcrypt(final Algorithm algorithm, final Charset charset, final String salt) {
+		super(algorithm, charset, salt);
 	}
 
 	/**
@@ -103,17 +148,17 @@ public abstract class AbstractHmacMcrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public AbstractHmacMcrypt(final Algo algo, final Charset charset, final String salt){
+	public AbstractHmacMcrypt(final Algo algo, final Charset charset, final String salt) {
 		super(algo, charset, salt);
 	}
 
 	@Override
-	public String encode(final Object object){
-		Assert.isNull(object, "Mcrypt encode object could not be null");
+	public String encrypt(final Object object) {
+		Assert.isNull(object, "Mcrypt encrypt object could not be null");
 		Assert.isNull(getAlgo(), "Algo could not be null");
 
-		return new HmacUtils(getHmacAlgorithms(), getRealSalt().getBytes(getCharset())).hmacHex(
-				object2Bytes(object));
+		HmacUtils hmacUtils = new HmacUtils(getHmacAlgorithms(), getRealSalt().getBytes(getCharset()));
+		return hmacUtils.hmacHex(ObjectUtils.toBytes(object, getCharset()));
 	}
 
 	protected abstract HmacAlgorithms getHmacAlgorithms();

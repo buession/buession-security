@@ -19,11 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.serializer;
 
+import com.buession.core.deserializer.DeserializerException;
 import com.buession.core.serializer.SerializerException;
 
 import java.nio.charset.Charset;
@@ -50,7 +51,7 @@ public class StringSerializer implements RedisSerializer<String> {
 	}
 
 	@Override
-	public String deserialize(byte[] bytes) throws SerializerException{
+	public String deserialize(byte[] bytes) throws DeserializerException{
 		return bytes == null ? null : new String(bytes, getCharset());
 	}
 

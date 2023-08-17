@@ -24,6 +24,8 @@
  */
 package com.buession.security.mcrypt;
 
+import com.buession.security.crypto.Mode;
+import com.buession.security.crypto.Padding;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -35,16 +37,17 @@ import java.nio.charset.StandardCharsets;
 public class AESMcryptTest {
 
 	@Test
-	public void test(){
-		AESMcrypt mcrypt = new AESMcrypt("ASCII", "mima", AESMcrypt.Mode.ECB, AESMcrypt.Padding.PKCS5_PADDING);
-		System.out.println(mcrypt.encode("字符串"));
+	public void encrypt() {
+		AESMcrypt mcrypt = new AESMcrypt(StandardCharsets.UTF_8, "1234567887654321", Mode.ECB,
+				Padding.ISO10126);
+		System.out.println("1234567887654321" + mcrypt.encrypt("Abc12345678\u5206\u5272Abc12345678"));
 	}
 
 	@Test
-	public void decode(){
-		AESMcrypt mcrypt = new AESMcrypt("ASCII", "xkxsnx27s6k7mRqVwJ&X%Z&OtTM3K!UT", AESMcrypt.Mode.CBC,
-				AESMcrypt.Padding.PKCS5_PADDING);
-		System.out.println(mcrypt.decode("qLdlRxNkvnYpFuvlfduEXg=="));
+	public void decrypt() {
+		AESMcrypt mcrypt = new AESMcrypt(StandardCharsets.UTF_8, "1111111111111111", Mode.ECB,
+				Padding.ISO10126);
+		System.out.println(mcrypt.decrypt("xrnRAt3qsWnzJMvb5zPwCqnmH+FPWV58WpmyUQrEmAg="));
 	}
 
 }

@@ -27,17 +27,16 @@
 package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
-import org.apache.commons.codec.binary.Base64;
+import com.buession.security.crypto.internal.SymmetricalCrypto;
 
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.security.Provider;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * DES 加密对象
@@ -53,32 +52,20 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 *
 	 * @since 2.0.0
 	 */
-	private Mode mode = Mode.ECB;
+	private com.buession.security.crypto.Mode mode = com.buession.security.crypto.Mode.ECB;
 
 	/**
 	 * 补码方式
 	 *
 	 * @since 2.0.0
 	 */
-	private Padding padding = Padding.PKCS5_PADDING;
-
-	private Cipher cipher = null;
+	private com.buession.security.crypto.Padding padding = com.buession.security.crypto.Padding.PKCS5;
 
 	/**
 	 * 构造函数
 	 */
-	public DESMcrypt(){
+	public DESMcrypt() {
 		super(Algo.DES);
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 */
-	public DESMcrypt(final Provider provider){
-		super(Algo.DES, provider);
 	}
 
 	/**
@@ -88,7 +75,7 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * 		字符编码
 	 */
 	@Deprecated
-	public DESMcrypt(final String characterEncoding){
+	public DESMcrypt(final String characterEncoding) {
 		super(Algo.DES, characterEncoding);
 	}
 
@@ -98,7 +85,7 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param charset
 	 * 		字符编码
 	 */
-	public DESMcrypt(final Charset charset){
+	public DESMcrypt(final Charset charset) {
 		super(Algo.DES, charset);
 	}
 
@@ -107,35 +94,11 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 *
 	 * @param characterEncoding
 	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 */
-	public DESMcrypt(final String characterEncoding, final Provider provider){
-		this(characterEncoding, null, provider);
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param charset
-	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 */
-	public DESMcrypt(final Charset charset, final Provider provider){
-		this(charset, null, provider);
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param characterEncoding
-	 * 		字符编码
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public DESMcrypt(final String characterEncoding, final String salt){
-		this(characterEncoding, salt, (Provider) null);
+	public DESMcrypt(final String characterEncoding, final String salt) {
+		super(Algo.DES, characterEncoding, salt);
 	}
 
 	/**
@@ -146,36 +109,8 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public DESMcrypt(final Charset charset, final String salt){
-		this(charset, salt, (Provider) null);
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 */
-	public DESMcrypt(final String characterEncoding, final String salt, final Provider provider){
-		super(Algo.DES, characterEncoding, salt, provider);
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param charset
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 */
-	public DESMcrypt(final Charset charset, final String salt, final Provider provider){
-		super(Algo.DES, charset, salt, provider);
+	public DESMcrypt(final Charset charset, final String salt) {
+		super(Algo.DES, charset, salt);
 	}
 
 	/**
@@ -184,7 +119,20 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param mode
 	 * 		加密模式
 	 */
-	public DESMcrypt(final Mode mode){
+	@Deprecated
+	public DESMcrypt(final Mode mode) {
+		this(mode.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param mode
+	 * 		加密模式
+	 *
+	 * @since 2.3.0
+	 */
+	public DESMcrypt(final com.buession.security.crypto.Mode mode) {
 		this();
 		this.mode = mode;
 	}
@@ -192,14 +140,14 @@ public final class DESMcrypt extends AbstractMcrypt {
 	/**
 	 * 构造函数
 	 *
-	 * @param provider
-	 * 		信息摘要对象的提供者
+	 * @param characterEncoding
+	 * 		字符编码
 	 * @param mode
 	 * 		加密模式
 	 */
-	public DESMcrypt(final Provider provider, final Mode mode){
-		this(provider);
-		this.mode = mode;
+	@Deprecated
+	public DESMcrypt(final String characterEncoding, final Mode mode) {
+		this(characterEncoding, mode.getOriginal());
 	}
 
 	/**
@@ -209,8 +157,10 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * 		字符编码
 	 * @param mode
 	 * 		加密模式
+	 *
+	 * @since 2.3.0
 	 */
-	public DESMcrypt(final String characterEncoding, final Mode mode){
+	public DESMcrypt(final String characterEncoding, final com.buession.security.crypto.Mode mode) {
 		this(characterEncoding);
 		this.mode = mode;
 	}
@@ -223,24 +173,9 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param mode
 	 * 		加密模式
 	 */
-	public DESMcrypt(final Charset charset, final Mode mode){
-		this(charset);
-		this.mode = mode;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 */
-	public DESMcrypt(final String characterEncoding, final Provider provider, final Mode mode){
-		this(characterEncoding, provider);
-		this.mode = mode;
+	@Deprecated
+	public DESMcrypt(final Charset charset, final Mode mode) {
+		this(charset, mode.getOriginal());
 	}
 
 	/**
@@ -248,13 +183,13 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 *
 	 * @param charset
 	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
 	 * @param mode
 	 * 		加密模式
+	 *
+	 * @since 2.3.0
 	 */
-	public DESMcrypt(final Charset charset, final Provider provider, final Mode mode){
-		this(charset, provider);
+	public DESMcrypt(final Charset charset, final com.buession.security.crypto.Mode mode) {
+		this(charset);
 		this.mode = mode;
 	}
 
@@ -268,7 +203,24 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param mode
 	 * 		加密模式
 	 */
-	public DESMcrypt(final String characterEncoding, final String salt, final Mode mode){
+	@Deprecated
+	public DESMcrypt(final String characterEncoding, final String salt, final Mode mode) {
+		this(characterEncoding, salt, mode.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param mode
+	 * 		加密模式
+	 *
+	 * @since 2.3.0
+	 */
+	public DESMcrypt(final String characterEncoding, final String salt, final com.buession.security.crypto.Mode mode) {
 		this(characterEncoding, salt);
 		this.mode = mode;
 	}
@@ -283,26 +235,9 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param mode
 	 * 		加密模式
 	 */
-	public DESMcrypt(final Charset charset, final String salt, final Mode mode){
-		this(charset, salt);
-		this.mode = mode;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 */
-	public DESMcrypt(final String characterEncoding, final String salt, final Provider provider, final Mode mode){
-		this(characterEncoding, salt, provider);
-		this.mode = mode;
+	@Deprecated
+	public DESMcrypt(final Charset charset, final String salt, final Mode mode) {
+		this(charset, salt, mode.getOriginal());
 	}
 
 	/**
@@ -312,13 +247,11 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * 		字符编码
 	 * @param salt
 	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
 	 * @param mode
 	 * 		加密模式
 	 */
-	public DESMcrypt(final Charset charset, final String salt, final Provider provider, final Mode mode){
-		this(charset, salt, provider);
+	public DESMcrypt(final Charset charset, final String salt, final com.buession.security.crypto.Mode mode) {
+		this(charset, salt);
 		this.mode = mode;
 	}
 
@@ -328,21 +261,21 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public DESMcrypt(final Padding padding){
-		this();
-		this.padding = padding;
+	@Deprecated
+	public DESMcrypt(final Padding padding) {
+		this(padding.getOriginal());
 	}
 
 	/**
 	 * 构造函数
 	 *
-	 * @param provider
-	 * 		信息摘要对象的提供者
 	 * @param padding
 	 * 		补码方式
+	 *
+	 * @since 2.3.0
 	 */
-	public DESMcrypt(final Provider provider, final Padding padding){
-		this(provider);
+	public DESMcrypt(final com.buession.security.crypto.Padding padding) {
+		this();
 		this.padding = padding;
 	}
 
@@ -354,7 +287,22 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public DESMcrypt(final String characterEncoding, final Padding padding){
+	@Deprecated
+	public DESMcrypt(final String characterEncoding, final Padding padding) {
+		this(characterEncoding, padding.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public DESMcrypt(final String characterEncoding, final com.buession.security.crypto.Padding padding) {
 		this(characterEncoding);
 		this.padding = padding;
 	}
@@ -367,24 +315,9 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public DESMcrypt(final Charset charset, final Padding padding){
-		this(charset);
-		this.padding = padding;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param padding
-	 * 		补码方式
-	 */
-	public DESMcrypt(final String characterEncoding, final Provider provider, final Padding padding){
-		this(characterEncoding, provider);
-		this.padding = padding;
+	@Deprecated
+	public DESMcrypt(final Charset charset, final Padding padding) {
+		this(charset, padding.getOriginal());
 	}
 
 	/**
@@ -392,13 +325,13 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 *
 	 * @param charset
 	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
 	 * @param padding
 	 * 		补码方式
+	 *
+	 * @since 2.3.0
 	 */
-	public DESMcrypt(final Charset charset, final Provider provider, final Padding padding){
-		this(charset, provider);
+	public DESMcrypt(final Charset charset, final com.buession.security.crypto.Padding padding) {
+		this(charset);
 		this.padding = padding;
 	}
 
@@ -412,7 +345,25 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public DESMcrypt(final String characterEncoding, final String salt, final Padding padding){
+	@Deprecated
+	public DESMcrypt(final String characterEncoding, final String salt, final Padding padding) {
+		this(characterEncoding, salt, padding.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public DESMcrypt(final String characterEncoding, final String salt,
+					 final com.buession.security.crypto.Padding padding) {
 		this(characterEncoding, salt);
 		this.padding = padding;
 	}
@@ -427,26 +378,9 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public DESMcrypt(final Charset charset, final String salt, final Padding padding){
-		this(charset, salt);
-		this.padding = padding;
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param padding
-	 * 		补码方式
-	 */
-	public DESMcrypt(final String characterEncoding, final String salt, final Provider provider, final Padding padding){
-		this(characterEncoding, salt, provider);
-		this.padding = padding;
+	@Deprecated
+	public DESMcrypt(final Charset charset, final String salt, final Padding padding) {
+		this(charset, salt, padding.getOriginal());
 	}
 
 	/**
@@ -456,13 +390,13 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * 		字符编码
 	 * @param salt
 	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
 	 * @param padding
 	 * 		补码方式
+	 *
+	 * @since 2.3.0
 	 */
-	public DESMcrypt(final Charset charset, final String salt, final Provider provider, final Padding padding){
-		this(charset, salt, provider);
+	public DESMcrypt(final Charset charset, final String salt, final com.buession.security.crypto.Padding padding) {
+		this(charset, salt);
 		this.padding = padding;
 	}
 
@@ -474,22 +408,37 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public DESMcrypt(final Mode mode, final Padding padding){
+	@Deprecated
+	public DESMcrypt(final Mode mode, final Padding padding) {
+		this(mode.getOriginal(), padding.getOriginal());
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public DESMcrypt(final com.buession.security.crypto.Mode mode, final com.buession.security.crypto.Padding padding) {
 		this(mode);
 		this.padding = padding;
 	}
 
 	/**
-	 * @param provider
-	 * 		信息摘要对象的提供者
+	 * @param characterEncoding
+	 * 		字符编码
 	 * @param mode
 	 * 		加密模式
 	 * @param padding
 	 * 		补码方式
 	 */
-	public DESMcrypt(final Provider provider, final Mode mode, final Padding padding){
-		this(provider, mode);
-		this.padding = padding;
+	@Deprecated
+	public DESMcrypt(final String characterEncoding, final Mode mode, final Padding padding) {
+		this(characterEncoding, mode.getOriginal(), padding.getOriginal());
 	}
 
 	/**
@@ -499,8 +448,11 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * 		加密模式
 	 * @param padding
 	 * 		补码方式
+	 *
+	 * @since 2.3.0
 	 */
-	public DESMcrypt(final String characterEncoding, final Mode mode, final Padding padding){
+	public DESMcrypt(final String characterEncoding, final com.buession.security.crypto.Mode mode,
+					 final com.buession.security.crypto.Padding padding) {
 		this(characterEncoding, mode);
 		this.padding = padding;
 	}
@@ -513,38 +465,24 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public DESMcrypt(final Charset charset, final Mode mode, final Padding padding){
-		this(charset, mode);
-		this.padding = padding;
-	}
-
-	/**
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 * @param padding
-	 * 		补码方式
-	 */
-	public DESMcrypt(final String characterEncoding, final Provider provider, final Mode mode, final Padding padding){
-		this(characterEncoding, null, provider, mode);
-		this.padding = padding;
+	@Deprecated
+	public DESMcrypt(final Charset charset, final Mode mode, final Padding padding) {
+		this(charset, mode.getOriginal(), padding.getOriginal());
 	}
 
 	/**
 	 * @param charset
 	 * 		字符编码
-	 * @param provider
-	 * 		信息摘要对象的提供者
 	 * @param mode
 	 * 		加密模式
 	 * @param padding
 	 * 		补码方式
+	 *
+	 * @since 2.3.0
 	 */
-	public DESMcrypt(final Charset charset, final Provider provider, final Mode mode, final Padding padding){
-		this(charset, provider, mode);
+	public DESMcrypt(final Charset charset, final com.buession.security.crypto.Mode mode,
+					 final com.buession.security.crypto.Padding padding) {
+		this(charset, mode);
 		this.padding = padding;
 	}
 
@@ -558,7 +496,25 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public DESMcrypt(final String characterEncoding, final String salt, final Mode mode, final Padding padding){
+	@Deprecated
+	public DESMcrypt(final String characterEncoding, final String salt, final Mode mode, final Padding padding) {
+		this(characterEncoding, salt, mode.getOriginal(), padding.getOriginal());
+	}
+
+	/**
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 * @param mode
+	 * 		加密模式
+	 * @param padding
+	 * 		补码方式
+	 *
+	 * @since 2.3.0
+	 */
+	public DESMcrypt(final String characterEncoding, final String salt, final com.buession.security.crypto.Mode mode,
+					 final com.buession.security.crypto.Padding padding) {
 		this(characterEncoding, salt, mode);
 		this.padding = padding;
 	}
@@ -573,27 +529,9 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * @param padding
 	 * 		补码方式
 	 */
-	public DESMcrypt(final Charset charset, final String salt, final Mode mode, final Padding padding){
-		this(charset, salt, mode);
-		this.padding = padding;
-	}
-
-	/**
-	 * @param characterEncoding
-	 * 		字符编码
-	 * @param salt
-	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
-	 * @param mode
-	 * 		加密模式
-	 * @param padding
-	 * 		补码方式
-	 */
-	public DESMcrypt(final String characterEncoding, final String salt, final Provider provider, final
-	Mode mode, final Padding padding){
-		this(characterEncoding, salt, provider, mode);
-		this.padding = padding;
+	@Deprecated
+	public DESMcrypt(final Charset charset, final String salt, final Mode mode, final Padding padding) {
+		this(charset, salt, mode.getOriginal(), padding.getOriginal());
 	}
 
 	/**
@@ -601,34 +539,27 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 * 		字符编码
 	 * @param salt
 	 * 		加密密钥
-	 * @param provider
-	 * 		信息摘要对象的提供者
 	 * @param mode
 	 * 		加密模式
 	 * @param padding
 	 * 		补码方式
+	 *
+	 * @since 2.3.0
 	 */
-	public DESMcrypt(final Charset charset, final String salt, final Provider provider, final
-	Mode mode, final Padding padding){
-		this(charset, salt, provider, mode);
+	public DESMcrypt(final Charset charset, final String salt, final com.buession.security.crypto.Mode mode,
+					 final com.buession.security.crypto.Padding padding) {
+		this(charset, salt, mode);
 		this.padding = padding;
 	}
 
 	@Override
-	public String encode(final Object object){
-		Assert.isNull(object, "Mcrypt encode object could not be null");
+	public String encrypt(final Object object) {
+		Assert.isNull(object, "Mcrypt encrypt object could not be null");
 
 		try{
-			DESKeySpec dks = new DESKeySpec(getRealSalt().getBytes());
-			SecretKeyFactory secretKeyFactory = getSecretKeyFactory();
-			SecretKey secretKey = secretKeyFactory.generateSecret(dks);
-
-			initCipher();
-			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-
-			byte[] result = cipher.doFinal(object2Bytes(object));
-
-			return Base64.encodeBase64String(result);
+			SymmetricalCrypto crypto = new SymmetricalCrypto(getAlgorithm(), getCharset(), mode, padding,
+					getProvider(), getKey());
+			return crypto.encrypt(object);
 		}catch(GeneralSecurityException e){
 			logger.error(e.getMessage());
 			throw new SecurityException(e);
@@ -636,37 +567,25 @@ public final class DESMcrypt extends AbstractMcrypt {
 	}
 
 	@Override
-	public String decode(final CharSequence cs){
-		Assert.isNull(cs, "Mcrypt decode object could not be null");
+	public String decrypt(final CharSequence cs) {
+		Assert.isNull(cs, "Mcrypt decrypt object could not be null");
 
 		try{
-			DESKeySpec dks = new DESKeySpec(getRealSalt().getBytes());
-			SecretKeyFactory secretKeyFactory = getSecretKeyFactory();
-			SecretKey secretKey = secretKeyFactory.generateSecret(dks);
-
-			initCipher();
-			cipher.init(Cipher.DECRYPT_MODE, secretKey);
-
-			byte[] result = cipher.doFinal(Base64.decodeBase64(cs.toString()));
-			return new String(result);
+			SymmetricalCrypto crypto = new SymmetricalCrypto(getAlgorithm(), getCharset(), mode, padding,
+					getProvider(), getKey());
+			return crypto.decrypt(cs);
 		}catch(GeneralSecurityException e){
 			logger.error(e.getMessage());
 			throw new SecurityException(e);
 		}
 	}
 
-	private Cipher initCipher() throws NoSuchAlgorithmException, NoSuchPaddingException{
-		if(cipher == null){
-			cipher = Cipher.getInstance(Algo.DES.getName() + "/" + mode.name() + "/" + padding.getValue());
-		}
-
-		return cipher;
-	}
-
-	private SecretKeyFactory getSecretKeyFactory() throws NoSuchAlgorithmException{
-		Provider provider = getProvider();
-		return provider == null ? SecretKeyFactory.getInstance(Algo.DES.getName()) :
-				SecretKeyFactory.getInstance(Algo.DES.getName(), provider);
+	private Key getKey() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException {
+		final DESKeySpec dks = new DESKeySpec(getRealSalt().getBytes());
+		final SecretKeyFactory secretKeyFactory = getProvider() == null ?
+				SecretKeyFactory.getInstance(getAlgorithmName()) : SecretKeyFactory.getInstance(getAlgorithmName(),
+				getProvider());
+		return secretKeyFactory.generateSecret(dks);
 	}
 
 	/**
@@ -674,33 +593,35 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 *
 	 * @since 2.0.0
 	 */
+	@Deprecated
 	public enum Mode {
 
-		ECB("Electronic Codebook Book", "电码本模式"),
+		ECB(com.buession.security.crypto.Mode.ECB),
 
-		CBC("Cipher Block Chaining", "密码分组链接模式"),
+		CBC(com.buession.security.crypto.Mode.CBC),
 
-		CTR("Counter", "计算器模式"),
+		CTR(com.buession.security.crypto.Mode.CTR),
 
-		CFB("Cipher FeedBack", "密码反馈模式"),
+		CFB(com.buession.security.crypto.Mode.CFB),
 
-		OFB("Output FeedBack", "输出反馈模式");
+		OFB(com.buession.security.crypto.Mode.OFB);
 
-		private final String value;
+		private final com.buession.security.crypto.Mode original;
 
-		private final String name;
-
-		Mode(final String value, final String name){
-			this.value = value;
-			this.name = name;
+		Mode(final com.buession.security.crypto.Mode original) {
+			this.original = original;
 		}
 
-		public String getValue(){
-			return value;
+		public String getValue() {
+			return "";
 		}
 
-		public String getName(){
-			return name;
+		public String getName() {
+			return "";
+		}
+
+		public com.buession.security.crypto.Mode getOriginal() {
+			return original;
 		}
 
 	}
@@ -710,28 +631,38 @@ public final class DESMcrypt extends AbstractMcrypt {
 	 *
 	 * @since 2.0.0
 	 */
+	@Deprecated
 	public enum Padding {
 
-		NO_PADDING("NoPadding"),
+		NO_PADDING(com.buession.security.crypto.Padding.NO),
 
-		ZERO_PADDING("ZeroPadding"),
+		ZERO_PADDING(com.buession.security.crypto.Padding.ZERO),
 
-		PKCS5_PADDING("PKCS5Padding"),
+		PKCS5_PADDING(com.buession.security.crypto.Padding.PKCS5),
 
-		PKCS7_PADDING("PKCS7Padding"),
+		PKCS7_PADDING(com.buession.security.crypto.Padding.PKCS7),
 
-		ISO10126_PADDING("ISO10126Padding"),
+		ISO10126_PADDING(com.buession.security.crypto.Padding.ISO10126),
 
-		ANSIX923_PADDING("ANSIX923Padding");
+		ANSIX923_PADDING(com.buession.security.crypto.Padding.ANSIX923);
 
-		private final String value;
+		private final com.buession.security.crypto.Padding original;
 
-		Padding(final String value){
-			this.value = value;
+		Padding(final com.buession.security.crypto.Padding original) {
+			this.original = original;
 		}
 
-		public String getValue(){
-			return value;
+		public String getValue() {
+			return original.toString();
+		}
+
+		public com.buession.security.crypto.Padding getOriginal() {
+			return original;
+		}
+
+		@Override
+		public String toString() {
+			return original.toString();
 		}
 
 	}

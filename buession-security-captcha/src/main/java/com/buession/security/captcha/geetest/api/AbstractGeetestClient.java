@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api;
@@ -57,7 +57,7 @@ public abstract class AbstractGeetestClient extends AbstractCaptchaClient implem
 	 * @param secretKey
 	 * 		私钥
 	 */
-	public AbstractGeetestClient(final String appId, final String secretKey){
+	public AbstractGeetestClient(final String appId, final String secretKey) {
 		this.appId = appId;
 		this.secretKey = secretKey;
 	}
@@ -72,18 +72,14 @@ public abstract class AbstractGeetestClient extends AbstractCaptchaClient implem
 	 * @param httpClient
 	 *        {@link HttpClient}
 	 */
-	public AbstractGeetestClient(final String appId, final String secretKey, final HttpClient httpClient){
+	public AbstractGeetestClient(final String appId, final String secretKey, final HttpClient httpClient) {
 		this(appId, secretKey);
 		setHttpClient(httpClient);
 	}
 
-	protected String getSdkName(){
+	protected String getSdkName() {
 		if(sdkName == null){
-			final StringBuilder sb = new StringBuilder("Geetest-Java-SDK-");
-
-			sb.append(getClass().getName()).append('/').append(VersionUtils.determineClassVersion(getClass()));
-
-			sdkName = sb.toString();
+			sdkName = "Geetest-Java-SDK-" + getClass().getName() + '/' + VersionUtils.determineClassVersion(getClass());
 		}
 
 		return sdkName;

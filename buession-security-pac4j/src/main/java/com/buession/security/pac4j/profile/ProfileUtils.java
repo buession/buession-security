@@ -19,13 +19,14 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.profile;
 
 import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.pac4j.core.profile.CommonProfile;
+import org.springframework.beans.BeanUtils;
 
 import java.security.Principal;
 import java.util.LinkedHashMap;
@@ -47,7 +48,7 @@ public class ProfileUtils {
 	 *
 	 * @return 用户 Profile
 	 */
-	public static CommonProfile getProfileFromPac4jPrincipal(Pac4jPrincipal principal){
+	public static CommonProfile getProfileFromPac4jPrincipal(final Pac4jPrincipal principal) {
 		return principal == null ? null : principal.getProfile();
 	}
 
@@ -59,7 +60,7 @@ public class ProfileUtils {
 	 *
 	 * @return Map
 	 */
-	public static Map<String, Object> toMap(final CommonProfile profile){
+	public static Map<String, Object> toMap(final CommonProfile profile) {
 		final Map<String, Object> attributes = new LinkedHashMap<>(profile.getAttributes().size() + 15);
 
 		attributes.put("id", profile.getId());
@@ -81,6 +82,47 @@ public class ProfileUtils {
 		attributes.putAll(profile.getAttributes());
 
 		return attributes;
+	}
+
+	/**
+	 * 将 pac4j {@link CommonProfile} 转换为 Principal 实例
+	 *
+	 * @param profile
+	 *        {@link CommonProfile} 实例
+	 * @param type
+	 * 		Principal 类型
+	 * @param <T>
+	 * 		Principal 类型
+	 *
+	 * @return Principal 实例
+	 *
+	 * @since 2.3.0
+	 */
+	public static <T> T toObject(final CommonProfile profile, final Class<T> type) {
+		T instance = BeanUtils.instantiateClass(type);
+
+		com.buession.beans.BeanUtils.populate(instance, profile);
+		com.buession.beans.BeanUtils.populate(instance, profile.getAttributes());
+
+		return instance;
+	}
+
+	/**
+	 * 将 pac4j {@link Pac4jPrincipal} 转换为 Principal 实例
+	 *
+	 * @param principal
+	 *        {@link Pac4jPrincipal} 实例
+	 * @param type
+	 * 		Principal 类型
+	 * @param <T>
+	 * 		Principal 类型
+	 *
+	 * @return Principal 实例
+	 *
+	 * @since 2.3.0
+	 */
+	public static <T> T toObject(final Pac4jPrincipal principal, final Class<T> type) {
+		return toObject(getProfileFromPac4jPrincipal(principal), type);
 	}
 
 }

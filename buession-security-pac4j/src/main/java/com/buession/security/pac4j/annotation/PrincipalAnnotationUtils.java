@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.annotation;
@@ -32,8 +32,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.MethodParameter;
 
-import java.util.Map;
-
 /**
  * @author Yong.Teng
  * @since 2.1.0
@@ -42,23 +40,13 @@ public class PrincipalAnnotationUtils {
 
 	private final static Logger logger = LoggerFactory.getLogger(PrincipalAnnotationUtils.class);
 
-	public static <T> T toObject(final Pac4jPrincipal principal, final Principal annotation, final Class<T> paramType){
+	public static <T> T toObject(final Pac4jPrincipal principal, final Principal annotation, final Class<T> paramType) {
 		if(principal == null){
 			return null;
 		}
 
-		CommonProfile profile = ProfileUtils.getProfileFromPac4jPrincipal(principal);
-		if(profile == null){
-			return null;
-		}
-
 		try{
-			T instance = BeanUtils.instantiateClass(paramType);
-			Map<String, Object> attributes = ProfileUtils.toMap(profile);
-
-			com.buession.beans.BeanUtils.populate(instance, attributes);
-
-			return instance;
+			return ProfileUtils.toObject(principal, paramType);
 		}catch(Exception e){
 			if(logger.isErrorEnabled()){
 				logger.error("Pac4jPrincipal CommonProfile convert to {} error: {}", paramType.getName(),
@@ -69,7 +57,7 @@ public class PrincipalAnnotationUtils {
 		}
 	}
 
-	public static Object resolve(final MethodParameter parameter, final Pac4jPrincipal principal){
+	public static Object resolve(final MethodParameter parameter, final Pac4jPrincipal principal) {
 		Principal annotation = parameter.getParameterAnnotation(Principal.class);
 		Class<?> paramType = parameter.getParameterType();
 

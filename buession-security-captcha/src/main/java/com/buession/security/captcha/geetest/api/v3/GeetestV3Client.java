@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api.v3;
@@ -36,7 +36,6 @@ import com.buession.security.captcha.core.RequiredParameterCaptchaException;
 import com.buession.security.captcha.geetest.api.AbstractGeetestClient;
 import com.buession.security.captcha.core.InitResponse;
 import com.buession.security.captcha.core.RequestData;
-import com.buession.security.captcha.utils.ObjectMapperUtils;
 import com.buession.security.mcrypt.Algo;
 import com.buession.security.mcrypt.MD5Mcrypt;
 import org.slf4j.Logger;
@@ -115,8 +114,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		try{
 			Response response = getHttpClient().get(REGISTER_URL, parametersBuilder.build());
 
-			initResult = ObjectMapperUtils.createObjectMapper()
-					.readValue(response.getBody(), GeetestV3InitResponse.class);
+			initResult = parseObject(response.getBody(), GeetestV3InitResponse.class);
 
 			if(logger.isInfoEnabled()){
 				logger.info("register api return data: {}", initResult);
@@ -166,8 +164,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 				logger.info("二次验证 response: {}", response);
 			}
 
-			GeetestV3ValidateResponse resp = ObjectMapperUtils.createObjectMapper().readValue(response.getBody(),
-					GeetestV3ValidateResponse.class);
+			GeetestV3ValidateResponse resp = parseObject(response.getBody(), GeetestV3ValidateResponse.class);
 			if("false".equals(resp.getSeccode())){
 				logger.error("二次验证失败: {}", resp);
 				throw new CaptchaValidateFailureException(null, null);

@@ -22,23 +22,31 @@
  * | Copyright @ 2013-2022 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.utils;
+package com.buession.security.mcrypt;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.buession.security.crypto.Mode;
+import com.buession.security.crypto.Padding;
+import org.junit.Test;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 2.3.0
  */
-public class ObjectMapperUtils {
+public class DESMcryptTest {
 
-	public static ObjectMapper createObjectMapper(){
-		ObjectMapper objectMapper = new ObjectMapper();
+	@Test
+	public void encrypt() {
+		DESMcrypt mcrypt = new DESMcrypt(StandardCharsets.UTF_8, "1111111111111111", Mode.ECB, Padding.ISO10126);
+		System.out.println(mcrypt.encrypt("aaaaaa"));
+	}
 
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-		return objectMapper;
+	@Test
+	public void decrypt() {
+		DESMcrypt mcrypt = new DESMcrypt(StandardCharsets.UTF_8, "1111111111111111", Mode.ECB,
+				Padding.ISO10126);
+		System.out.println(mcrypt.decrypt("sRjNUC2t6Ew="));
 	}
 
 }

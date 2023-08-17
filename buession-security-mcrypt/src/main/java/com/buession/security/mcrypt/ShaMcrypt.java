@@ -19,10 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
+
+import com.buession.security.crypto.HashCrypto;
 
 import java.nio.charset.Charset;
 import java.security.Provider;
@@ -32,12 +34,12 @@ import java.security.Provider;
  *
  * @author Yong.Teng
  */
-public final class ShaMcrypt extends AbstractMcrypt {
+public final class ShaMcrypt extends AbstractMcrypt implements HashCrypto {
 
 	/**
 	 * 构造函数
 	 */
-	public ShaMcrypt(){
+	public ShaMcrypt() {
 		super(Algo.SHA);
 	}
 
@@ -47,7 +49,7 @@ public final class ShaMcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public ShaMcrypt(final Provider provider){
+	public ShaMcrypt(final Provider provider) {
 		super(Algo.SHA, provider);
 	}
 
@@ -58,7 +60,7 @@ public final class ShaMcrypt extends AbstractMcrypt {
 	 * 		字符编码
 	 */
 	@Deprecated
-	public ShaMcrypt(final String characterEncoding){
+	public ShaMcrypt(final String characterEncoding) {
 		super(Algo.SHA, characterEncoding);
 	}
 
@@ -68,7 +70,7 @@ public final class ShaMcrypt extends AbstractMcrypt {
 	 * @param charset
 	 * 		字符编码
 	 */
-	public ShaMcrypt(final Charset charset){
+	public ShaMcrypt(final Charset charset) {
 		super(Algo.SHA, charset);
 	}
 
@@ -80,7 +82,7 @@ public final class ShaMcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public ShaMcrypt(final String characterEncoding, final Provider provider){
+	public ShaMcrypt(final String characterEncoding, final Provider provider) {
 		this(characterEncoding, null, provider);
 	}
 
@@ -92,7 +94,7 @@ public final class ShaMcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public ShaMcrypt(final Charset charset, final Provider provider){
+	public ShaMcrypt(final Charset charset, final Provider provider) {
 		this(charset, null, provider);
 	}
 
@@ -104,7 +106,7 @@ public final class ShaMcrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public ShaMcrypt(final String characterEncoding, final String salt){
+	public ShaMcrypt(final String characterEncoding, final String salt) {
 		this(characterEncoding, salt, null);
 	}
 
@@ -116,7 +118,7 @@ public final class ShaMcrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public ShaMcrypt(final Charset charset, final String salt){
+	public ShaMcrypt(final Charset charset, final String salt) {
 		this(charset, salt, null);
 	}
 
@@ -130,7 +132,7 @@ public final class ShaMcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public ShaMcrypt(final String characterEncoding, final String salt, final Provider provider){
+	public ShaMcrypt(final String characterEncoding, final String salt, final Provider provider) {
 		super(Algo.SHA, characterEncoding, salt, provider);
 	}
 
@@ -144,7 +146,7 @@ public final class ShaMcrypt extends AbstractMcrypt {
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public ShaMcrypt(final Charset charset, final String salt, final Provider provider){
+	public ShaMcrypt(final Charset charset, final String salt, final Provider provider) {
 		super(Algo.SHA, charset, salt, provider);
 	}
 

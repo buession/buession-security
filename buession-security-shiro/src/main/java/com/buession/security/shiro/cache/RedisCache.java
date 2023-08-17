@@ -19,11 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.cache;
 
+import com.buession.core.deserializer.DeserializerException;
 import com.buession.core.serializer.SerializerException;
 import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
@@ -308,8 +309,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		Set<byte[]> keys;
 
 		try{
-			byte[] pattern = makeKey("*");
-			keys = redisManager.keys(pattern);
+			keys = redisManager.keys(makeKey("*"));
 		}catch(SerializerException e){
 			logger.error("Get cache keys error", e);
 			return Collections.emptySet();
@@ -324,7 +324,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 				for(byte[] key : keys){
 					newKeys.add((K) keySerializer.deserialize(key));
 				}
-			}catch(SerializerException e){
+			}catch(DeserializerException e){
 				logger.error("deserialize keys error", e);
 			}
 
@@ -342,20 +342,17 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 		try{
 			byte[] rawValue = redisManager.get(makeKey(key));
-
-			if(rawValue == null){
-				return null;
-			}
-
-			return (V) valueSerializer.deserialize(rawValue);
+			return rawValue == null ? null : (V) valueSerializer.deserialize(rawValue);
 		}catch(SerializerException e){
+			logger.error("Get cache error", e);
+			throw new CacheException(e);
+		}catch(DeserializerException e){
 			logger.error("Get cache error", e);
 			throw new CacheException(e);
 		}
 	}
 
 	@Override
-	@SuppressWarnings({"unchecked"})
 	public V put(K key, V value) throws CacheException{
 		logger.debug("Put RedisCache: {} => {}", key, value);
 		if(key == null){
@@ -392,6 +389,9 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 			return previous;
 		}catch(SerializerException e){
+			logger.error("Get cache error", e);
+			throw new CacheException(e);
+		}catch(DeserializerException e){
 			logger.error("Remove cache error", e);
 			throw new CacheException(e);
 		}
@@ -403,8 +403,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		Set<byte[]> keys = null;
 
 		try{
-			byte[] pattern = makeKey("*");
-			keys = redisManager.keys(pattern);
+			keys = redisManager.keys(makeKey("*"));
 		}catch(SerializerException e){
 			logger.error("Clear cache keys failure", e);
 		}
@@ -447,7 +446,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 				V value = (V) valueSerializer.deserialize(redisManager.get(key));
 				values.add(value);
 			}
-		}catch(SerializerException e){
+		}catch(DeserializerException e){
 			logger.error("deserialize values error", e);
 		}
 
@@ -503,8 +502,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		try{
 			principalIdGetter = principalObject.getClass().getMethod(principalIdMethodName);
 		}catch(NoSuchMethodException e){
-			throw new PrincipalInstanceException(principalObject.getClass(),
-					getPrincipalIdFieldName(), e);
+			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName(), e);
 		}
 
 		return principalIdGetter;
@@ -524,14 +522,12 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 			Object idObj = principalIdGetter.invoke(principalObject);
 
 			if(idObj == null){
-				throw new PrincipalIdNullException(principalObject.getClass(),
-						getPrincipalIdFieldName());
+				throw new PrincipalIdNullException(principalObject.getClass(), getPrincipalIdFieldName());
 			}
 
 			str = idObj.toString();
 		}catch(Exception e){
-			throw new PrincipalInstanceException(principalObject.getClass(),
-					getPrincipalIdFieldName(), e);
+			throw new PrincipalInstanceException(principalObject.getClass(), getPrincipalIdFieldName(), e);
 		}
 
 		return str;

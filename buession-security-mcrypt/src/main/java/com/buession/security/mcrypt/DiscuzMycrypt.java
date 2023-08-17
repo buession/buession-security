@@ -21,7 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2022 Buession.com Inc.														|
+ * | Copyright @ 2013-2023 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
@@ -30,6 +30,8 @@ import com.buession.core.datetime.DateTime;
 import com.buession.core.utils.Assert;
 import com.buession.core.utils.StringUtils;
 import com.buession.lang.Constants;
+import com.buession.security.crypto.Algorithm;
+import com.buession.security.crypto.utils.ObjectUtils;
 
 import java.nio.charset.Charset;
 
@@ -42,15 +44,11 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 
 	private final static int KEY_LENGTH = 4;
 
-	private final static MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
-
-	private final static Base64Mcrypt base64Mcrypt = new Base64Mcrypt();
-
 	/**
 	 * 构造函数
 	 */
-	public DiscuzMycrypt(){
-		super(null);
+	public DiscuzMycrypt() {
+		super((Algorithm) null);
 	}
 
 	/**
@@ -60,7 +58,7 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	 * 		字符编码
 	 */
 	@Deprecated
-	public DiscuzMycrypt(final String characterEncoding){
+	public DiscuzMycrypt(final String characterEncoding) {
 		super(null, characterEncoding);
 	}
 
@@ -70,8 +68,8 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	 * @param charset
 	 * 		字符编码
 	 */
-	public DiscuzMycrypt(final Charset charset){
-		super(null, charset);
+	public DiscuzMycrypt(final Charset charset) {
+		super((Algorithm) null, charset);
 	}
 
 	/**
@@ -82,7 +80,7 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public DiscuzMycrypt(final String characterEncoding, final String salt){
+	public DiscuzMycrypt(final String characterEncoding, final String salt) {
 		super(null, characterEncoding, salt);
 	}
 
@@ -94,35 +92,34 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public DiscuzMycrypt(final Charset charset, final String salt){
-		super(null, charset, salt);
+	public DiscuzMycrypt(final Charset charset, final String salt) {
+		super((Algorithm) null, charset, salt);
 	}
 
 	@Override
-	public String encode(final Object object){
-		Assert.isNull(object, "Mcrypt encode object could not be null");
+	public String encrypt(final Object object) {
+		Assert.isNull(object, "Mcrypt encrypt object could not be null");
 
-		String s = object2String(object);
+		Base64Mcrypt base64Mcrypt = new Base64Mcrypt();
+		String s = ObjectUtils.toString(object);
 
 		String key = md5(md5(getRealSalt()));
 		String keya = md5(StringUtils.substr(key, 16, 16));
-		String keyb = StringUtils.substr(md5(StringUtils.replace(DateTime.microtime(), " ", ".")), -4);
+		String keyb = StringUtils.substr(md5(StringUtils.replace(DateTime.microtime(), Constants.SPACING_STRING, ".")),
+				-4);
 		String keyc = getResultKey(key, keyb);
 
 		s = StringUtils.repeat('0', 10) + StringUtils.substr(md5(s + keya), 0, 16) + s;
 		s = StringUtils.replace(base64Mcrypt.encode(mod(s, keyc)), "=", Constants.EMPTY_STRING);
 
-		StringBuilder sb = new StringBuilder(keyb.length() + s.length());
-
-		sb.append(keyb).append(s);
-
-		return sb.toString();
+		return keyb + s;
 	}
 
 	@Override
-	public String decode(final CharSequence cs){
-		Assert.isNull(cs, "Mcrypt decode object could not be null");
+	public String decrypt(final CharSequence cs) {
+		Assert.isNull(cs, "Mcrypt decrypt object could not be null");
 
+		Base64Mcrypt base64Mcrypt = new Base64Mcrypt();
 		String s = cs.toString();
 
 		String key = md5(md5(getRealSalt()));
@@ -130,25 +127,26 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 		String keyb = StringUtils.substr(cs.toString(), 0, KEY_LENGTH);
 		String keyc = getResultKey(key, keyb);
 
-		s = base64Mcrypt.decode(StringUtils.substr(s, KEY_LENGTH));
+		s = base64Mcrypt.decrypt(StringUtils.substr(s, KEY_LENGTH));
 
 		String result = mod(s, keyc);
 
 		String s1 = StringUtils.substr(result, 0, 10);
 		String s2 = StringUtils.substr(result, 26);
 		long j = Long.parseLong(s1);
-		String k1 = md5Mcrypt.encode(s2 + keya);
-		long timestamp = System.currentTimeMillis() / 1000;
+		String k1 = md5(s2 + keya);
+		long timestamp = DateTime.unixtime();
 
 		return (j == 0 || j - timestamp > 0) && StringUtils.substr(result, 10, 16).equals(StringUtils.substr(k1, 0,
 				16)) ? s2 : Constants.EMPTY_STRING;
 	}
 
-	private static String md5(final String str){
-		return md5Mcrypt.encode(str == null ? Constants.EMPTY_STRING : str).toLowerCase();
+	private static String md5(final String str) {
+		MD5Mcrypt md5Mcrypt = new MD5Mcrypt();
+		return md5Mcrypt.encrypt(str == null ? Constants.EMPTY_STRING : str).toLowerCase();
 	}
 
-	private static String getResultKey(final String str, final String key){
+	private static String getResultKey(final String str, final String key) {
 		if(key.length() <= 16){
 			return md5(key + StringUtils.substr(str, 0, 16) + StringUtils.substr(str, 16));
 		}else{
@@ -157,18 +155,18 @@ public final class DiscuzMycrypt extends AbstractMcrypt {
 		}
 	}
 
-	private static String mod(final String str, final String key){
+	private static String mod(final String str, final String key) {
 		int strLength = str.length();
-		StringBuilder sb = new StringBuilder(strLength);
+		char[] result = new char[strLength];
 
 		for(int i = 0; i < strLength; i++){
 			int j = str.charAt(i);
 			int k = key.charAt(i % 32);
 
-			sb.append((char) (j ^ k));
+			result[i] = (char) (j ^ k);
 		}
 
-		return sb.toString();
+		return new String(result);
 	}
 
 }

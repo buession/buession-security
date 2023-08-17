@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.tencent;
@@ -35,7 +35,6 @@ import com.buession.security.captcha.core.CaptchaValidateFailureException;
 import com.buession.security.captcha.core.Manufacturer;
 import com.buession.security.captcha.core.RequestData;
 import com.buession.security.captcha.core.RequiredParameterCaptchaException;
-import com.buession.security.captcha.utils.ObjectMapperUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,8 +119,7 @@ public class TencentCaptchaClient extends AbstractCaptchaClient {
 				logger.info("二次验证 response: {}", response);
 			}
 
-			TencentValidateResponse resp = ObjectMapperUtils.createObjectMapper().readValue(response.getBody(),
-					TencentValidateResponse.class);
+			TencentValidateResponse resp = parseObject(response.getBody(), TencentValidateResponse.class);
 
 			if(resp.getResponse() == 1){
 				return Status.SUCCESS;

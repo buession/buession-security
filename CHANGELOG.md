@@ -2,6 +2,29 @@
 ===========================
 
 
+## [2.3.0](https://github.com/buession/buession-security/releases/tag/v2.3.0) (2023-08-17)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.3.0)
+- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.2
+
+
+### ⭐ 新特性
+
+- **buession-security-crypto：** 新增该模块，逐步替代 buession-security-mcrypt
+- **buession-security-mcrypt：** 新增 SM3、SM4 加密
+- **buession-security-mcrypt：** 新增 ShaPasswordGenerator、Sm3PasswordGenerator、Sm4PasswordGenerator 密码生成器
+
+
+### ⏪ 优化
+
+- 其它优化
+
+
+---
+
+
 ## [2.2.1](https://github.com/buession/buession-security/releases/tag/v2.2.1) (2022-03-31)
 
 ### 🔨依赖升级

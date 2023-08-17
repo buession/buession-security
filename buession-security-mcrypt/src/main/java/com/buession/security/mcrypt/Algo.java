@@ -19,10 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
+
+import com.buession.security.crypto.Algorithm;
 
 /**
  * 加密算法
@@ -31,46 +33,56 @@ package com.buession.security.mcrypt;
  */
 public enum Algo {
 
-	AES("AES"),
+	AES(Algorithm.AES),
 
-	DES("DES"),
+	DES(Algorithm.DES),
 
-	MD5("MD5"),
+	MD5(Algorithm.MD5),
 
-	SHA("SHA"),
+	SHA(Algorithm.SHA),
 
-	SHA1("SHA-1"),
+	SHA1(Algorithm.SHA1),
 
-	SHA224("SHA-224"),
+	SHA224(Algorithm.SHA224),
 
-	SHA256("SHA-256"),
+	SHA256(Algorithm.SHA256),
 
-	SHA384("SHA-384"),
+	SHA384(Algorithm.SHA384),
 
-	SHA512("SHA-512"),
+	SHA512(Algorithm.SHA512),
 
-	HMAC_SHA1("Hmac-SHA1"),
+	HMAC_SHA1(Algorithm.HMAC_SHA1),
 
-	HMAC_SHA224("Hmac-SHA224"),
+	HMAC_SHA224(Algorithm.HMAC_SHA224),
 
-	HMAC_SHA256("Hmac-SHA256"),
+	HMAC_SHA256(Algorithm.HMAC_SHA256),
 
-	HMAC_SHA384("Hmac-SHA384"),
+	HMAC_SHA384(Algorithm.HMAC_SHA384),
 
-	HMAC_SHA512("Hmac-SHA512"),
+	HMAC_SHA512(Algorithm.HMAC_SHA512),
 
-	HMAC_MD5("Hmac-MD5"),
+	HMAC_MD5(Algorithm.HMAC_MD5),
 
-	BASE64("BASE64");
+	SM2(Algorithm.SM2),
 
-	private final String name;
+	SM3(Algorithm.SM3),
 
-	Algo(final String name){
-		this.name = name;
+	SM4(Algorithm.SM4),
+
+	BASE64(Algorithm.BASE64);
+
+	private final Algorithm algorithm;
+
+	Algo(final Algorithm algorithm) {
+		this.algorithm = algorithm;
 	}
 
-	public String getName(){
-		return name;
+	public Algorithm getAlgorithm() {
+		return algorithm;
+	}
+
+	public String getName() {
+		return algorithm.getName();
 	}
 
 }

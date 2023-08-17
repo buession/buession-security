@@ -21,12 +21,13 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2022 Buession.com Inc.														|
+ * | Copyright @ 2013-2023 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
+import com.buession.security.crypto.utils.ObjectUtils;
 import org.apache.commons.codec.binary.Base64;
 
 import java.nio.charset.Charset;
@@ -41,7 +42,7 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	/**
 	 * 构造函数
 	 */
-	public Base64Mcrypt(){
+	public Base64Mcrypt() {
 		super(Algo.BASE64);
 	}
 
@@ -52,7 +53,7 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	 * 		字符编码
 	 */
 	@Deprecated
-	public Base64Mcrypt(final String characterEncoding){
+	public Base64Mcrypt(final String characterEncoding) {
 		super(Algo.BASE64, characterEncoding);
 	}
 
@@ -62,7 +63,7 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	 * @param charset
 	 * 		字符编码
 	 */
-	public Base64Mcrypt(final Charset charset){
+	public Base64Mcrypt(final Charset charset) {
 		super(Algo.BASE64, charset);
 	}
 
@@ -74,7 +75,7 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public Base64Mcrypt(final String characterEncoding, final String salt){
+	public Base64Mcrypt(final String characterEncoding, final String salt) {
 		super(Algo.BASE64, characterEncoding, salt);
 	}
 
@@ -86,19 +87,19 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	 * @param salt
 	 * 		加密密钥
 	 */
-	public Base64Mcrypt(final Charset charset, final String salt){
+	public Base64Mcrypt(final Charset charset, final String salt) {
 		super(Algo.BASE64, charset, salt);
 	}
 
 	@Override
-	public String encode(final Object object){
-		Assert.isNull(object, "Mcrypt encode object could not be null.");
-		return Base64.encodeBase64String((object2String(object) + getRealSalt()).getBytes(getCharset()));
+	public String encrypt(final Object object) {
+		Assert.isNull(object, "Mcrypt encrypt object could not be null.");
+		return Base64.encodeBase64String((ObjectUtils.toString(object) + getRealSalt()).getBytes(getCharset()));
 	}
 
 	@Override
-	public String decode(final CharSequence cs){
-		Assert.isNull(cs, "Mcrypt decode object could not be null.");
+	public String decrypt(final CharSequence cs) {
+		Assert.isNull(cs, "Mcrypt decrypt object could not be null.");
 		return new String(Base64.decodeBase64(cs.toString()), getCharset());
 	}
 

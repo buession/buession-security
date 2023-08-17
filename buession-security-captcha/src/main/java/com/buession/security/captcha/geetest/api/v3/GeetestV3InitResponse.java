@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api.v3;
@@ -86,7 +86,7 @@ public class GeetestV3InitResponse implements GeetestInitResponse {
 
 	@Override
 	public String toString(){
-		return new StringJoiner(", ", GeetestV3InitResponse.class.getSimpleName() + "[", "]")
+		return new StringJoiner(", ", "[", "]")
 				.add("success=" + success)
 				.add("gt=" + gt)
 				.add("challenge=" + challenge)
