@@ -2,6 +2,17 @@
 ===========================
 
 
+## [2.3.1](https://github.com/buession/buession-security/releases/tag/v2.3.1) (2023-xx-xx)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.3.1)
+- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.3
+
+
+---
+
+
 ## [2.3.0](https://github.com/buession/buession-security/releases/tag/v2.3.0) (2023-08-17)
 
 ### 🔨依赖升级
