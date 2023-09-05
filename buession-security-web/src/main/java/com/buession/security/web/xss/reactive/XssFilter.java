@@ -25,6 +25,7 @@
 package com.buession.security.web.xss.reactive;
 
 import org.owasp.validator.html.Policy;
+import org.springframework.lang.Nullable;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
@@ -40,16 +41,16 @@ public class XssFilter implements WebFilter {
 
 	private Policy policy;
 
-	public Policy getPolicy(){
+	public Policy getPolicy() {
 		return policy;
 	}
 
-	public void setPolicy(Policy policy){
+	public void setPolicy(Policy policy) {
 		this.policy = policy;
 	}
 
 	@Override
-	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain){
+	public Mono<Void> filter(@Nullable ServerWebExchange exchange, WebFilterChain chain) {
 		return chain.filter(exchange);
 	}
 

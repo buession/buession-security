@@ -75,7 +75,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	/**
 	 * 构造函数
 	 */
-	public RedisCache(){
+	public RedisCache() {
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param expire
 	 * 		有效期（单位：秒）
 	 */
-	public RedisCache(String keyPrefix, int expire){
+	public RedisCache(String keyPrefix, int expire) {
 		super(keyPrefix, expire);
 	}
 
@@ -100,7 +100,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param principalIdFieldName
 	 * 		身份信息 ID 字段名称
 	 */
-	public RedisCache(String keyPrefix, int expire, String principalIdFieldName){
+	public RedisCache(String keyPrefix, int expire, String principalIdFieldName) {
 		super(keyPrefix, expire, principalIdFieldName);
 	}
 
@@ -114,7 +114,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param expire
 	 * 		有效期（单位：秒）
 	 */
-	public RedisCache(RedisManager redisManager, String keyPrefix, int expire){
+	public RedisCache(RedisManager redisManager, String keyPrefix, int expire) {
 		this(keyPrefix, expire);
 		setRedisManager(redisManager);
 	}
@@ -131,7 +131,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @param principalIdFieldName
 	 * 		身份信息 ID 字段名称
 	 */
-	public RedisCache(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName){
+	public RedisCache(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName) {
 		this(keyPrefix, expire, principalIdFieldName);
 		setRedisManager(redisManager);
 	}
@@ -146,7 +146,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 *
 	 * @since 1.2.2
 	 */
-	public RedisCache(RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer){
+	public RedisCache(RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer) {
 		setKeySerializer(keySerializer);
 		setValueSerializer(valueSerializer);
 	}
@@ -166,7 +166,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @since 1.2.2
 	 */
 	public RedisCache(String keyPrefix, int expire, RedisSerializer<String> keySerializer,
-					  RedisSerializer<Object> valueSerializer){
+					  RedisSerializer<Object> valueSerializer) {
 		super(keyPrefix, expire);
 		setKeySerializer(keySerializer);
 		setValueSerializer(valueSerializer);
@@ -189,7 +189,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @since 1.2.2
 	 */
 	public RedisCache(String keyPrefix, int expire, String principalIdFieldName, RedisSerializer<String> keySerializer
-			, RedisSerializer<Object> valueSerializer){
+			, RedisSerializer<Object> valueSerializer) {
 		super(keyPrefix, expire, principalIdFieldName);
 		setKeySerializer(keySerializer);
 		setValueSerializer(valueSerializer);
@@ -212,7 +212,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @since 1.2.2
 	 */
 	public RedisCache(RedisManager redisManager, String keyPrefix, int expire, RedisSerializer<String> keySerializer,
-					  RedisSerializer<Object> valueSerializer){
+					  RedisSerializer<Object> valueSerializer) {
 		this(keyPrefix, expire);
 		setRedisManager(redisManager);
 		setKeySerializer(keySerializer);
@@ -238,18 +238,18 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 * @since 1.2.2
 	 */
 	public RedisCache(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName,
-					  RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer){
+					  RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer) {
 		this(keyPrefix, expire, principalIdFieldName);
 		setRedisManager(redisManager);
 		setKeySerializer(keySerializer);
 		setValueSerializer(valueSerializer);
 	}
 
-	public RedisManager getRedisManager(){
+	public RedisManager getRedisManager() {
 		return redisManager;
 	}
 
-	public void setRedisManager(final RedisManager redisManager){
+	public void setRedisManager(final RedisManager redisManager) {
 		Assert.isNull(redisManager, "RedisManager could not be null.");
 		this.redisManager = redisManager;
 	}
@@ -261,7 +261,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 *
 	 * @since 1.2.2
 	 */
-	public RedisSerializer<String> getKeySerializer(){
+	public RedisSerializer<String> getKeySerializer() {
 		return keySerializer;
 	}
 
@@ -273,7 +273,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 *
 	 * @since 1.2.2
 	 */
-	public void setKeySerializer(RedisSerializer<String> keySerializer){
+	public void setKeySerializer(RedisSerializer<String> keySerializer) {
 		Assert.isNull(keySerializer, "Key serializer could not be null.");
 		this.keySerializer = keySerializer;
 	}
@@ -285,7 +285,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 *
 	 * @since 1.2.2
 	 */
-	public RedisSerializer<Object> getValueSerializer(){
+	public RedisSerializer<Object> getValueSerializer() {
 		return valueSerializer;
 	}
 
@@ -297,14 +297,14 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	 *
 	 * @since 1.2.2
 	 */
-	public void setValueSerializer(RedisSerializer<Object> valueSerializer){
+	public void setValueSerializer(RedisSerializer<Object> valueSerializer) {
 		Assert.isNull(valueSerializer, "Value serializer could not be null.");
 		this.valueSerializer = valueSerializer;
 	}
 
 	@Override
 	@SuppressWarnings({"unchecked"})
-	public Set<K> keys(){
+	public Set<K> keys() {
 		logger.debug("Get RedisCache Keys");
 		Set<byte[]> keys;
 
@@ -334,7 +334,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 	@Override
 	@SuppressWarnings({"unchecked"})
-	public V get(K key) throws CacheException{
+	public V get(K key) throws CacheException {
 		logger.debug("Get RedisCache: {}", key);
 		if(key == null){
 			return null;
@@ -343,17 +343,14 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		try{
 			byte[] rawValue = redisManager.get(makeKey(key));
 			return rawValue == null ? null : (V) valueSerializer.deserialize(rawValue);
-		}catch(SerializerException e){
-			logger.error("Get cache error", e);
-			throw new CacheException(e);
-		}catch(DeserializerException e){
+		}catch(Exception e){
 			logger.error("Get cache error", e);
 			throw new CacheException(e);
 		}
 	}
 
 	@Override
-	public V put(K key, V value) throws CacheException{
+	public V put(K key, V value) throws CacheException {
 		logger.debug("Put RedisCache: {} => {}", key, value);
 		if(key == null){
 			logger.warn("Saving a null key is meaningless, return value directly without call Redis.");
@@ -374,7 +371,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 	@Override
 	@SuppressWarnings({"unchecked"})
-	public V remove(K key) throws CacheException{
+	public V remove(K key) throws CacheException {
 		logger.debug("Remove RedisCache: {}", key);
 		if(key == null){
 			return null;
@@ -388,17 +385,14 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 			redisManager.delete(cacheKey);
 
 			return previous;
-		}catch(SerializerException e){
-			logger.error("Get cache error", e);
-			throw new CacheException(e);
-		}catch(DeserializerException e){
+		}catch(Exception e){
 			logger.error("Remove cache error", e);
 			throw new CacheException(e);
 		}
 	}
 
 	@Override
-	public void clear() throws CacheException{
+	public void clear() throws CacheException {
 		logger.debug("Clear RedisCache");
 		Set<byte[]> keys = null;
 
@@ -416,7 +410,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 	}
 
 	@Override
-	public int size(){
+	public int size() {
 		try{
 			Long longSize = redisManager.dbSize();
 			return longSize.intValue();
@@ -427,7 +421,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 	@Override
 	@SuppressWarnings({"unchecked"})
-	public Collection<V> values(){
+	public Collection<V> values() {
 		logger.debug("Get RedisCache Values");
 		Set<byte[]> keys;
 
@@ -453,7 +447,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		return Collections.unmodifiableList(values);
 	}
 
-	protected final byte[] makeKey(K key) throws SerializerException{
+	protected final byte[] makeKey(K key) throws SerializerException {
 		if(key == null){
 			return null;
 		}
@@ -462,7 +456,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		return makeKey(redisKey);
 	}
 
-	protected final byte[] makeKey(String key) throws SerializerException{
+	protected final byte[] makeKey(String key) throws SerializerException {
 		if(key == null){
 			return null;
 		}
@@ -479,12 +473,12 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		return keySerializer.serialize(sb.toString());
 	}
 
-	protected String getStringRedisKey(K key){
+	protected String getStringRedisKey(K key) {
 		return key instanceof PrincipalCollection ? getRedisKeyFromPrincipalCollection((PrincipalCollection) key) :
 				key.toString();
 	}
 
-	protected String getRedisKeyFromPrincipalCollection(final PrincipalCollection principalCollection){
+	protected String getRedisKeyFromPrincipalCollection(final PrincipalCollection principalCollection) {
 		Object principalObject = principalCollection.getPrimaryPrincipal();
 
 		if(principalObject instanceof String){
@@ -495,7 +489,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		return getIdObj(principalObject, principalIdGetter);
 	}
 
-	private Method getPrincipalIdGetter(Object principalObject){
+	private Method getPrincipalIdGetter(Object principalObject) {
 		Method principalIdGetter = null;
 		String principalIdMethodName = getPrincipalIdMethodName();
 
@@ -508,7 +502,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		return principalIdGetter;
 	}
 
-	private String getPrincipalIdMethodName(){
+	private String getPrincipalIdMethodName() {
 		if(Validate.isEmpty(getPrincipalIdFieldName())){
 			throw new CacheManagerPrincipalIdNotAssignedException();
 		}
@@ -516,7 +510,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		return "get" + getPrincipalIdFieldName().substring(0, 1).toUpperCase() + getPrincipalIdFieldName().substring(1);
 	}
 
-	private String getIdObj(Object principalObject, Method principalIdGetter){
+	private String getIdObj(Object principalObject, Method principalIdGetter) {
 		String str;
 		try{
 			Object idObj = principalIdGetter.invoke(principalObject);

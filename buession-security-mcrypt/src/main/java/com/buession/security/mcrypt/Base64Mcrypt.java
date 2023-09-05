@@ -28,7 +28,8 @@ package com.buession.security.mcrypt;
 
 import com.buession.core.utils.Assert;
 import com.buession.security.crypto.utils.ObjectUtils;
-import org.apache.commons.codec.binary.Base64;
+
+import java.util.Base64;
 
 import java.nio.charset.Charset;
 
@@ -94,13 +95,14 @@ public final class Base64Mcrypt extends AbstractMcrypt {
 	@Override
 	public String encrypt(final Object object) {
 		Assert.isNull(object, "Mcrypt encrypt object could not be null.");
-		return Base64.encodeBase64String((ObjectUtils.toString(object) + getRealSalt()).getBytes(getCharset()));
+		return Base64.getEncoder()
+				.encodeToString((ObjectUtils.toString(object) + getRealSalt()).getBytes(getCharset()));
 	}
 
 	@Override
 	public String decrypt(final CharSequence cs) {
 		Assert.isNull(cs, "Mcrypt decrypt object could not be null.");
-		return new String(Base64.decodeBase64(cs.toString()), getCharset());
+		return new String(Base64.getDecoder().decode(cs.toString()), getCharset());
 	}
 
 }

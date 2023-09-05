@@ -21,7 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2022 Buession.com Inc.														|
+ * | Copyright @ 2013-2023 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.annotation.servlet;
@@ -43,21 +43,21 @@ import org.springframework.web.method.annotation.AbstractNamedValueMethodArgumen
  */
 public class PrincipalMethodArgumentResolver extends AbstractNamedValueMethodArgumentResolver {
 
-	public PrincipalMethodArgumentResolver(){
+	public PrincipalMethodArgumentResolver() {
 		super();
 	}
 
-	public PrincipalMethodArgumentResolver(@Nullable ConfigurableBeanFactory beanFactory){
+	public PrincipalMethodArgumentResolver(@Nullable ConfigurableBeanFactory beanFactory) {
 		super(beanFactory);
 	}
 
 	@Override
-	public boolean supportsParameter(MethodParameter parameter){
+	public boolean supportsParameter(MethodParameter parameter) {
 		return parameter.hasParameterAnnotation(Principal.class);
 	}
 
 	@Override
-	protected NamedValueInfo createNamedValueInfo(MethodParameter parameter){
+	protected NamedValueInfo createNamedValueInfo(MethodParameter parameter) {
 		Principal principal = parameter.getParameterAnnotation(Principal.class);
 		Assert.isNull(principal, "No Principal annotation");
 		return new PrincipalNamedValueInfo(principal, parameter.getNestedParameterType());
@@ -65,14 +65,14 @@ public class PrincipalMethodArgumentResolver extends AbstractNamedValueMethodArg
 
 	@Override
 	@Nullable
-	protected Object resolveName(String name, MethodParameter parameter, NativeWebRequest request){
+	protected Object resolveName(String name, MethodParameter parameter, NativeWebRequest request) {
 		return PrincipalAnnotationUtils.resolve(parameter, (Pac4jPrincipal) request.getUserPrincipal());
 	}
 
 	private final static class PrincipalNamedValueInfo extends NamedValueInfo {
 
-		private PrincipalNamedValueInfo(Principal annotation, Class<?> paramType){
-			super(Principal.class.getName() + "_" + paramType.getName(), annotation.required(), null);
+		private PrincipalNamedValueInfo(Principal annotation, Class<?> paramType) {
+			super(Principal.class.getName() + '_' + paramType.getName(), annotation.required(), null);
 		}
 
 	}
