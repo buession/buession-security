@@ -10,6 +10,13 @@
 - [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.3
 
 
+### 🔔 变化
+
+- **buession-security-mcrypt：** Base64 编码、解码使用 java 内置 API
+- **buession-security-pac4j：** cas client 不再默认引用
+- **buession-security-web：** 移除 org.bouncycastle 依赖
+
+
 ---
 
 
