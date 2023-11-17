@@ -27,6 +27,7 @@
 package com.buession.security.web.xss.servlet;
 
 import org.owasp.validator.html.Policy;
+import org.springframework.lang.Nullable;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -45,17 +46,18 @@ public class XssFilter extends OncePerRequestFilter {
 
 	private Policy policy;
 
-	public Policy getPolicy(){
+	public Policy getPolicy() {
 		return policy;
 	}
 
-	public void setPolicy(Policy policy){
+	public void setPolicy(Policy policy) {
 		this.policy = policy;
 	}
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException{
+	protected void doFilterInternal(@Nullable HttpServletRequest request, @Nullable HttpServletResponse response,
+									FilterChain filterChain)
+			throws ServletException, IOException {
 		XssServletRequestWrapper xssServletRequestWrapper = new XssServletRequestWrapper(request, getPolicy());
 		filterChain.doFilter(xssServletRequestWrapper, response);
 	}

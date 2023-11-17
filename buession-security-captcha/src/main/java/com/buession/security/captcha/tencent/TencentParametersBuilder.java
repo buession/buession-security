@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.tencent;
@@ -39,22 +39,19 @@ class TencentParametersBuilder implements ParametersBuilder<TencentRequestData> 
 
 	private final String secretKey;
 
-	TencentParametersBuilder(final String secretId, final String secretKey){
+	TencentParametersBuilder(final String secretId, final String secretKey) {
 		this.secretId = secretId;
 		this.secretKey = secretKey;
 	}
 
 	@Override
-	public Map<String, String> build(final TencentRequestData requestData){
+	public Map<String, String> build(final TencentRequestData requestData) {
 		MapBuilder<String, String> builder = MapBuilder.<String, String>create(5)
 				.put("aid", secretId)
 				.put("AppSecretKey", secretKey)
 				.put("Ticket", requestData.getTicket())
-				.put("Randstr", requestData.getRandstr());
-
-		if(requestData.getClientIp() != null){
-			builder.put("UserIP", requestData.getClientIp());
-		}
+				.put("Randstr", requestData.getRandstr())
+				.putIfPresent("UserIP", requestData.getClientIp());
 
 		return builder.build();
 	}

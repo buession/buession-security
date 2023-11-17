@@ -612,6 +612,11 @@ public final class AESMcrypt extends AbstractMcrypt {
 			return original;
 		}
 
+		@Override
+		public String toString() {
+			return original.toString();
+		}
+
 	}
 
 	/**

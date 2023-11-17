@@ -22,44 +22,34 @@
  * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.pac4j.annotation;
+package org.apache.shiro.web.tags;
 
-import com.buession.security.pac4j.profile.ProfileUtils;
-import io.buji.pac4j.subject.Pac4jPrincipal;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.MethodParameter;
+import com.buession.core.utils.StringUtils;
+import org.apache.shiro.subject.Subject;
 
 /**
+ * 判断是否具备任意权限，多个权限名称以","分割
+ *
  * @author Yong.Teng
- * @since 2.1.0
+ * @since 2.3.1
  */
-public class PrincipalAnnotationUtils {
+public class HasAnyPermissionsTag extends PermissionTag {
 
-	private final static Logger logger = LoggerFactory.getLogger(PrincipalAnnotationUtils.class);
+	private final static char PERMISSION_NAMES_SEPARATOR = ',';
 
-	public static <T> T toObject(final Pac4jPrincipal principal, final Principal annotation, final Class<T> paramType) {
-		if(principal == null){
-			return null;
-		}
+	@Override
+	protected boolean showTagBody(String permissionNames) {
+		Subject subject = getSubject();
 
-		try{
-			return ProfileUtils.toObject(principal, paramType);
-		}catch(Exception e){
-			if(logger.isErrorEnabled()){
-				logger.error("Pac4jPrincipal CommonProfile convert to {} error: {}", paramType.getName(),
-						e.getMessage());
+		if(subject != null){
+			for(String permission : StringUtils.split(permissionNames, PERMISSION_NAMES_SEPARATOR)){
+				if(subject.isPermitted(permission.trim())){
+					return true;
+				}
 			}
-
-			return null;
 		}
-	}
 
-	public static Object resolve(final MethodParameter parameter, final Pac4jPrincipal principal) {
-		Principal annotation = parameter.getParameterAnnotation(Principal.class);
-		Class<?> paramType = parameter.getParameterType();
-
-		return toObject(principal, annotation, paramType);
+		return false;
 	}
 
 }

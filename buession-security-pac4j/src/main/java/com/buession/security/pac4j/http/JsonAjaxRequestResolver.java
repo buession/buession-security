@@ -65,7 +65,7 @@ public class JsonAjaxRequestResolver extends DefaultAjaxRequestResolver {
 		final StringBuilder buffer = new StringBuilder("{\"redirect\":{");
 
 		if(CommonHelper.isNotBlank(url)){
-			buffer.append("\"url\":\"").append(url).append("\"");
+			buffer.append("\"url\":\"").append(url).append('"');
 		}
 		buffer.append("}}");
 

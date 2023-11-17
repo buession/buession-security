@@ -24,7 +24,6 @@
  */
 package com.buession.security.shiro.session;
 
-import com.buession.core.deserializer.DeserializerException;
 import com.buession.core.serializer.SerializerException;
 import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
@@ -69,7 +68,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	/**
 	 * 构造函数
 	 */
-	public RedisSessionDAO(){
+	public RedisSessionDAO() {
 		super();
 	}
 
@@ -81,7 +80,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 * @param expire
 	 * 		过期时间（单位：秒）{@link #expire}
 	 */
-	public RedisSessionDAO(String keyPrefix, int expire){
+	public RedisSessionDAO(String keyPrefix, int expire) {
 		super(keyPrefix, expire);
 	}
 
@@ -97,7 +96,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 * @param sessionInMemoryTimeout
 	 * 		SESSION 存储在内存中的过期时间
 	 */
-	public RedisSessionDAO(String keyPrefix, int expire, boolean sessionInMemoryEnabled, long sessionInMemoryTimeout){
+	public RedisSessionDAO(String keyPrefix, int expire, boolean sessionInMemoryEnabled, long sessionInMemoryTimeout) {
 		super(keyPrefix, expire, sessionInMemoryEnabled, sessionInMemoryTimeout);
 	}
 
@@ -111,7 +110,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 * @param expire
 	 * 		过期时间（单位：秒）{@link #expire}
 	 */
-	public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire){
+	public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire) {
 		this(keyPrefix, expire);
 		setRedisManager(redisManager);
 	}
@@ -131,7 +130,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 * 		SESSION 存储在内存中的过期时间
 	 */
 	public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire, boolean sessionInMemoryEnabled,
-						   long sessionInMemoryTimeout){
+						   long sessionInMemoryTimeout) {
 		this(keyPrefix, expire, sessionInMemoryEnabled, sessionInMemoryTimeout);
 		this.redisManager = redisManager;
 	}
@@ -141,7 +140,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 *
 	 * @return {@link RedisManager} 实例
 	 */
-	public RedisManager getRedisManager(){
+	public RedisManager getRedisManager() {
 		return redisManager;
 	}
 
@@ -151,7 +150,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 * @param redisManager
 	 *        {@link RedisManager} 实例
 	 */
-	public void setRedisManager(RedisManager redisManager){
+	public void setRedisManager(RedisManager redisManager) {
 		Assert.isNull(redisManager, "RedisManager could not be null.");
 		this.redisManager = redisManager;
 	}
@@ -163,7 +162,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 *
 	 * @since 1.2.2
 	 */
-	public RedisSerializer<String> getKeySerializer(){
+	public RedisSerializer<String> getKeySerializer() {
 		return keySerializer;
 	}
 
@@ -175,7 +174,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 *
 	 * @since 1.2.2
 	 */
-	public void setKeySerializer(RedisSerializer<String> keySerializer){
+	public void setKeySerializer(RedisSerializer<String> keySerializer) {
 		Assert.isNull(keySerializer, "Key serializer could not be null.");
 		this.keySerializer = keySerializer;
 	}
@@ -187,7 +186,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 *
 	 * @since 1.2.2
 	 */
-	public RedisSerializer<Session> getValueSerializer(){
+	public RedisSerializer<Session> getValueSerializer() {
 		return valueSerializer;
 	}
 
@@ -199,13 +198,13 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 *
 	 * @since 1.2.2
 	 */
-	public void setValueSerializer(RedisSerializer<Session> valueSerializer){
+	public void setValueSerializer(RedisSerializer<Session> valueSerializer) {
 		Assert.isNull(valueSerializer, "Value serializer could not be null.");
 		this.valueSerializer = valueSerializer;
 	}
 
 	@Override
-	protected void doSaveSession(final Session session) throws UnknownSessionException{
+	protected void doSaveSession(final Session session) throws UnknownSessionException {
 		byte[] key;
 		byte[] value;
 
@@ -237,7 +236,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	}
 
 	@Override
-	protected Session doReadSpecialSession(Serializable sessionId){
+	protected Session doReadSpecialSession(Serializable sessionId) {
 		Session session = null;
 
 		try{
@@ -247,9 +246,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 			if(value != null){
 				session = valueSerializer.deserialize(value);
 			}
-		}catch(SerializerException e){
-			logger.error("read session: {} error: {}.", sessionId, e.getMessage());
-		}catch(DeserializerException e){
+		}catch(Exception e){
 			logger.error("read session: {} error: {}.", sessionId, e.getMessage());
 		}
 
@@ -257,7 +254,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	}
 
 	@Override
-	protected Collection<Session> doGetActiveSessions(){
+	protected Collection<Session> doGetActiveSessions() {
 		Set<Session> sessions = new HashSet<>();
 		byte[] pattern;
 
@@ -272,9 +269,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 					sessions.add(session);
 				}
 			}
-		}catch(SerializerException e){
-			logger.error("get active sessions error: {}.", e.getMessage());
-		}catch(DeserializerException e){
+		}catch(Exception e){
 			logger.error("get active sessions error: {}.", e.getMessage());
 		}
 
@@ -282,7 +277,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	}
 
 	@Override
-	protected void doDeleteSession(Session session){
+	protected void doDeleteSession(Session session) {
 		try{
 			redisManager.delete(getSessionKey(session.getId()));
 		}catch(SerializerException e){
@@ -290,11 +285,11 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		}
 	}
 
-	protected byte[] getSessionKey(Serializable sessionId) throws SerializerException{
+	protected byte[] getSessionKey(Serializable sessionId) throws SerializerException {
 		return keySerializer.serialize(makeKey(sessionId.toString()));
 	}
 
-	protected String makeKey(final String key){
+	protected String makeKey(final String key) {
 		return getKeyPrefix() == null ? key : getKeyPrefix() + key;
 	}
 

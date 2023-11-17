@@ -624,6 +624,11 @@ public final class DESMcrypt extends AbstractMcrypt {
 			return original;
 		}
 
+		@Override
+		public String toString() {
+			return original.toString();
+		}
+
 	}
 
 	/**

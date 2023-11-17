@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.aliyun;
@@ -35,8 +35,6 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -69,7 +67,7 @@ class AliyunParametersBuilder implements ParametersBuilder<AliYunRequestData> {
 	private final AliYunCaptchaClient client;
 
 	AliyunParametersBuilder(final String accessKeyId, final String accessKeySecret, final String appKey,
-							final AliYunCaptchaClient client){
+							final AliYunCaptchaClient client) {
 		this.accessKeyId = accessKeyId;
 		this.accessKeySecret = accessKeySecret;
 		this.appKey = appKey;
@@ -77,7 +75,7 @@ class AliyunParametersBuilder implements ParametersBuilder<AliYunRequestData> {
 	}
 
 	@Override
-	public Map<String, String> build(final AliYunRequestData requestData){
+	public Map<String, String> build(final AliYunRequestData requestData) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		Date date = new Date();
 
@@ -89,11 +87,8 @@ class AliyunParametersBuilder implements ParametersBuilder<AliYunRequestData> {
 				.put("SignatureVersion", SIGNATURE_VERSION).put("AccessKeyId", accessKeyId)
 				.put("AppKey", appKey).put("Timestamp", sdf.format(date)).put("Token", requestData.getToken())
 				.put("Sig", requestData.getSig()).put("SessionId", requestData.getSessionId())
-				.put("Scene", requestData.getScene());
-
-		if(requestData.getClientIp() != null){
-			builder.put("RemoteIp", requestData.getClientIp());
-		}
+				.put("Scene", requestData.getScene())
+				.putIfPresent("RemoteIp", requestData.getClientIp());
 
 		Map<String, String> parameters = builder.build();
 
@@ -102,15 +97,11 @@ class AliyunParametersBuilder implements ParametersBuilder<AliYunRequestData> {
 		return parameters;
 	}
 
-	protected static String randomStr(final Date date){
-		final StringBuilder sb = new StringBuilder(20);
-
-		sb.append(StringUtils.random(7)).append('_').append(date.getTime());
-
-		return sb.toString();
+	protected static String randomStr(final Date date) {
+		return StringUtils.random(7) + '_' + date.getTime();
 	}
 
-	protected static String percentEncode(final String value){
+	protected static String percentEncode(final String value) {
 		try{
 			return value != null ? URLEncoder.encode(value, "UTF-8").replace("+", "%20").replace("*", "%2A")
 					.replace("%7E", "~") : null;
@@ -119,7 +110,7 @@ class AliyunParametersBuilder implements ParametersBuilder<AliYunRequestData> {
 		}
 	}
 
-	protected static String signature(final String signKey, final Map<String, String> parameters){
+	protected static String signature(final String signKey, final Map<String, String> parameters) {
 		String[] sortedKeys = parameters.keySet().toArray(new String[0]);
 		Arrays.sort(sortedKeys);
 

@@ -45,32 +45,32 @@ import reactor.core.publisher.Mono;
  */
 public class PrincipalMethodArgumentResolver extends AbstractNamedValueArgumentResolver {
 
-	public PrincipalMethodArgumentResolver(ConfigurableBeanFactory factory, ReactiveAdapterRegistry registry){
+	public PrincipalMethodArgumentResolver(ConfigurableBeanFactory factory, ReactiveAdapterRegistry registry) {
 		super(factory, registry);
 	}
 
 	@Override
-	public boolean supportsParameter(MethodParameter parameter){
+	public boolean supportsParameter(MethodParameter parameter) {
 		return parameter.hasParameterAnnotation(Principal.class);
 	}
 
 	@Override
-	protected NamedValueInfo createNamedValueInfo(MethodParameter parameter){
+	protected NamedValueInfo createNamedValueInfo(MethodParameter parameter) {
 		Principal principal = parameter.getParameterAnnotation(Principal.class);
 		Assert.isNull(principal, "No Principal annotation");
 		return new PrincipalNamedValueInfo(principal, parameter.getNestedParameterType());
 	}
 
 	@Override
-	protected Mono<Object> resolveName(String name, MethodParameter parameter, ServerWebExchange exchange){
+	protected Mono<Object> resolveName(String name, MethodParameter parameter, ServerWebExchange exchange) {
 		return exchange.getPrincipal()
 				.map((principal)->PrincipalAnnotationUtils.resolve(parameter, (Pac4jPrincipal) principal));
 	}
 
 	private final static class PrincipalNamedValueInfo extends NamedValueInfo {
 
-		private PrincipalNamedValueInfo(Principal annotation, Class<?> paramType){
-			super(Principal.class.getName() + "_" + paramType.getName(), annotation.required(), null);
+		private PrincipalNamedValueInfo(Principal annotation, Class<?> paramType) {
+			super(Principal.class.getName() + '_' + paramType.getName(), annotation.required(), null);
 		}
 
 	}
