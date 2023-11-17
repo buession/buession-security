@@ -68,7 +68,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	/**
 	 * 构造函数
 	 */
-	public RedisCacheManager(){
+	public RedisCacheManager() {
 		super();
 	}
 
@@ -80,7 +80,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @param expire
 	 * 		有效期（单位：秒）
 	 */
-	public RedisCacheManager(String keyPrefix, int expire){
+	public RedisCacheManager(String keyPrefix, int expire) {
 		super(keyPrefix, expire);
 	}
 
@@ -94,7 +94,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @param principalIdFieldName
 	 * 		身份信息 ID 字段名称
 	 */
-	public RedisCacheManager(String keyPrefix, int expire, String principalIdFieldName){
+	public RedisCacheManager(String keyPrefix, int expire, String principalIdFieldName) {
 		super(keyPrefix, expire, principalIdFieldName);
 	}
 
@@ -108,7 +108,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @param expire
 	 * 		有效期（单位：秒）
 	 */
-	public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire){
+	public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire) {
 		this(keyPrefix, expire);
 		setRedisManager(redisManager);
 	}
@@ -125,7 +125,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @param principalIdFieldName
 	 * 		身份信息 ID 字段名称
 	 */
-	public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName){
+	public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName) {
 		this(keyPrefix, expire, principalIdFieldName);
 		setRedisManager(redisManager);
 	}
@@ -140,7 +140,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 *
 	 * @since 1.2.2
 	 */
-	public RedisCacheManager(RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer){
+	public RedisCacheManager(RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer) {
 		setKeySerializer(keySerializer);
 		setValueSerializer(valueSerializer);
 	}
@@ -160,7 +160,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @since 1.2.2
 	 */
 	public RedisCacheManager(String keyPrefix, int expire, RedisSerializer<String> keySerializer,
-							 RedisSerializer<Object> valueSerializer){
+							 RedisSerializer<Object> valueSerializer) {
 		super(keyPrefix, expire);
 		setKeySerializer(keySerializer);
 		setValueSerializer(valueSerializer);
@@ -183,7 +183,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @since 1.2.2
 	 */
 	public RedisCacheManager(String keyPrefix, int expire, String principalIdFieldName,
-							 RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer){
+							 RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer) {
 		super(keyPrefix, expire, principalIdFieldName);
 		setKeySerializer(keySerializer);
 		setValueSerializer(valueSerializer);
@@ -206,7 +206,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @since 1.2.2
 	 */
 	public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire,
-							 RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer){
+							 RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer) {
 		this(keyPrefix, expire);
 		setRedisManager(redisManager);
 		setKeySerializer(keySerializer);
@@ -232,7 +232,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @since 1.2.2
 	 */
 	public RedisCacheManager(RedisManager redisManager, String keyPrefix, int expire, String principalIdFieldName,
-							 RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer){
+							 RedisSerializer<String> keySerializer, RedisSerializer<Object> valueSerializer) {
 		this(keyPrefix, expire, principalIdFieldName);
 		setRedisManager(redisManager);
 		setKeySerializer(keySerializer);
@@ -244,7 +244,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 *
 	 * @return Redis 管理器 {@link RedisManager} 实例
 	 */
-	public RedisManager getRedisManager(){
+	public RedisManager getRedisManager() {
 		return redisManager;
 	}
 
@@ -254,7 +254,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 * @param redisManager
 	 * 		Redis 管理器 {@link RedisManager} 实例
 	 */
-	public void setRedisManager(RedisManager redisManager){
+	public void setRedisManager(RedisManager redisManager) {
 		Assert.isNull(redisManager, "RedisManager could not be null.");
 		this.redisManager = redisManager;
 	}
@@ -266,7 +266,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 *
 	 * @since 1.2.2
 	 */
-	public RedisSerializer<String> getKeySerializer(){
+	public RedisSerializer<String> getKeySerializer() {
 		return keySerializer;
 	}
 
@@ -278,7 +278,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 *
 	 * @since 1.2.2
 	 */
-	public void setKeySerializer(RedisSerializer<String> keySerializer){
+	public void setKeySerializer(RedisSerializer<String> keySerializer) {
 		Assert.isNull(keySerializer, "Key serializer could not be null.");
 		this.keySerializer = keySerializer;
 	}
@@ -290,7 +290,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 *
 	 * @since 1.2.2
 	 */
-	public RedisSerializer<Object> getValueSerializer(){
+	public RedisSerializer<Object> getValueSerializer() {
 		return valueSerializer;
 	}
 
@@ -302,14 +302,14 @@ public class RedisCacheManager extends AbstractCacheManager {
 	 *
 	 * @since 1.2.2
 	 */
-	public void setValueSerializer(RedisSerializer<Object> valueSerializer){
+	public void setValueSerializer(RedisSerializer<Object> valueSerializer) {
 		Assert.isNull(valueSerializer, "Value serializer could not be null.");
 		this.valueSerializer = valueSerializer;
 	}
 
 	@Override
 	@SuppressWarnings({"unchecked"})
-	public <K, V> Cache<K, V> getCache(String name) throws CacheException{
+	public <K, V> Cache<K, V> getCache(String name) throws CacheException {
 		if(logger.isDebugEnabled()){
 			logger.debug("Get cache name: {}", name);
 		}
@@ -327,8 +327,8 @@ public class RedisCacheManager extends AbstractCacheManager {
 		return cache;
 	}
 
-	protected String makeKey(final String key){
-		return Validate.isEmpty(getKeyPrefix()) ? key + ":" : getKeyPrefix() + key + ":";
+	protected String makeKey(final String key) {
+		return getKeyPrefix() == null ? key + ':' : getKeyPrefix() + key + ':';
 	}
 
 }

@@ -47,7 +47,7 @@ public abstract class AbstractCrypto implements Crypto {
 	/**
 	 * 加密算法
 	 */
-	private Algorithm algorithm;
+	private final Algorithm algorithm;
 
 	/**
 	 * 加密密钥

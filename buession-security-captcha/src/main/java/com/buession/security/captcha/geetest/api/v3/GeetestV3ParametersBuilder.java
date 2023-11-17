@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api.v3;
@@ -41,32 +41,26 @@ class GeetestV3ParametersBuilder implements ParametersBuilder<GeetestV3RequestDa
 
 	private final String sdkName;
 
-	GeetestV3ParametersBuilder(final String appId, final String secretKey, final String sdkName){
+	GeetestV3ParametersBuilder(final String appId, final String secretKey, final String sdkName) {
 		this.appId = appId;
 		this.secretKey = secretKey;
 		this.sdkName = sdkName;
 	}
 
 	@Override
-	public Map<String, String> build(final GeetestV3RequestData requestData){
+	public Map<String, String> build(final GeetestV3RequestData requestData) {
 		MapBuilder<String, String> builder = MapBuilder.<String, String>create(9)
 				.put("captchaid", appId)
 				.put("challenge", requestData.getChallenge())
 				.put("validate", requestData.getValidate())
 				.put("seccode", requestData.getSeccode())
 				.put("json_format", "1")
-				.put("sdk", sdkName);
-
-		if(requestData.getUserId() != null){
-			builder.put("user_id", requestData.getUserId());
-		}
+				.put("sdk", sdkName)
+				.putIfPresent("user_id", requestData.getUserId())
+				.putIfPresent("ip_address", requestData.getIpAddress());
 
 		if(requestData.getClientType() != null){
 			builder.put("client_type", requestData.getClientType().getValue());
-		}
-
-		if(requestData.getIpAddress() != null){
-			builder.put("ip_address", requestData.getIpAddress());
 		}
 
 		return builder.build();

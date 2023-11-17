@@ -49,12 +49,12 @@ public class DefaultWebSessionManager extends org.apache.shiro.web.session.mgt.D
 	/**
 	 * 构造函数
 	 */
-	public DefaultWebSessionManager(){
+	public DefaultWebSessionManager() {
 		super();
 	}
 
 	@Override
-	protected Session retrieveSession(SessionKey sessionKey) throws UnknownSessionException{
+	protected Session retrieveSession(SessionKey sessionKey) throws UnknownSessionException {
 		Serializable sessionId = getSessionId(sessionKey);
 		if(sessionId == null){
 			logger.debug(
@@ -70,9 +70,9 @@ public class DefaultWebSessionManager extends org.apache.shiro.web.session.mgt.D
 			request = WebUtils.getHttpRequest(sessionKey);
 
 			if(request != null){
-				Object s = request.getAttribute(sessionIdValue);
-				if(s != null){
-					return (Session) s;
+				Object session = request.getAttribute(sessionIdValue);
+				if(session != null){
+					return (Session) session;
 				}
 			}
 		}

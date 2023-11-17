@@ -67,7 +67,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	 * @param secretKey
 	 * 		私钥
 	 */
-	public GeetestV3Client(final String appId, final String secretKey){
+	public GeetestV3Client(final String appId, final String secretKey) {
 		super(appId, secretKey);
 	}
 
@@ -81,12 +81,12 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	 * @param httpClient
 	 *        {@link HttpClient}
 	 */
-	public GeetestV3Client(final String appId, final String secretKey, final HttpClient httpClient){
+	public GeetestV3Client(final String appId, final String secretKey, final HttpClient httpClient) {
 		super(appId, secretKey, httpClient);
 	}
 
 	@Override
-	public InitResponse initialize(RequestData requestData){
+	public InitResponse initialize(RequestData requestData) {
 		if(logger.isDebugEnabled()){
 			logger.debug("验证初始化");
 		}
@@ -96,14 +96,11 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 				.put("gt", appId)
 				.put("json_format", "1")
 				.put("digestmod", Algo.MD5.getName())
-				.put("sdk", getSdkName());
+				.put("sdk", getSdkName())
+				.putIfPresent("ip_address", requestV3Data.getIpAddress());
 
 		if(requestV3Data.getClientType() != null){
 			parametersBuilder.put("client_type", requestV3Data.getClientType().getValue());
-		}
-
-		if(requestV3Data.getIpAddress() != null){
-			parametersBuilder.put("ip_address", requestV3Data.getIpAddress());
 		}
 
 		if(logger.isDebugEnabled()){
@@ -139,7 +136,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	}
 
 	@Override
-	public Status validate(RequestData requestData) throws CaptchaException{
+	public Status validate(RequestData requestData) throws CaptchaException {
 		if(logger.isDebugEnabled()){
 			logger.debug("二次验证, 请求参数：{}.", requestData);
 		}
@@ -178,7 +175,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	}
 
 	@Override
-	public String getVersion(){
+	public String getVersion() {
 		return "v3";
 	}
 
@@ -191,7 +188,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	 * @return 检测结果
 	 */
 	private static boolean checkParam(final GeetestV3RequestData requestData)
-			throws RequiredParameterCaptchaException{
+			throws RequiredParameterCaptchaException {
 		if(Validate.hasText(requestData.getChallenge()) == false){
 			throw new RequiredParameterCaptchaException("challenge");
 		}
@@ -217,7 +214,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	 *
 	 * @return 生成签名结果
 	 */
-	private String sign(final GeetestV3InitResponse initResponse){
+	private String sign(final GeetestV3InitResponse initResponse) {
 		MD5Mcrypt md5Mcrypt = new MD5Mcrypt(StandardCharsets.UTF_8, secretKey);
 		return md5Mcrypt.encode(initResponse.getChallenge());
 	}
