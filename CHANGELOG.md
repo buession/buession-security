@@ -2,6 +2,29 @@
 ===========================
 
 
+## [2.3.1](https://github.com/buession/buession-security/releases/tag/v2.3.2) (2023-xx-xx)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.3.2)
+- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.3
+
+
+### ⭐ 新特性
+
+- **buession-security-shiro：** 新增任意权限 jsp tag HasAnyPermissionsTag
+
+
+### 🔔 变化
+
+- **buession-security-mcrypt：** Base64 编码、解码使用 java 内置 API
+- **buession-security-pac4j：** cas client 不再默认引用
+- **buession-security-web：** 移除 org.bouncycastle 依赖
+
+
+---
+
+
 ## [2.3.1](https://github.com/buession/buession-security/releases/tag/v2.3.1) (2023-11-17)
 
 ### 🔨依赖升级
