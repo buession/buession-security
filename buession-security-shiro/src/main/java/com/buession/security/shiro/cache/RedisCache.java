@@ -425,8 +425,7 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		Set<byte[]> keys;
 
 		try{
-			byte[] pattern = makeKey("*");
-			keys = redisManager.keys(pattern);
+			keys = redisManager.keys(makeKey("*"));
 		}catch(SerializerException e){
 			logger.error("Get cache values error", e);
 			return Collections.emptySet();
