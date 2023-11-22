@@ -20,6 +20,11 @@
 - **buession-security-shiro：** 依赖 javax.servlet.jsp-api 更换为 jakarta.servlet.jsp-api
 
 
+### 漏洞修复
+
+- [owasp antisamy](https://github.com/nahsra/antisamy) 修复 [CVE-2023-43643] 漏洞
+
+
 ---
 
 

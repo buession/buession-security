@@ -65,7 +65,7 @@
 	</modules>
 
 	<properties>
-		<buession.version>2.3.1</buession.version>
+		<buession.version>2.3.2</buession.version>
 	</properties>
 
 	<dependencyManagement>
