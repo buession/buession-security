@@ -12,7 +12,7 @@
 
 ### ⭐ 新特性
 
-- **
+- **buession-security-captcha：** GeetestClient 增加 v3、v4 版本判断方法
 
 
 ### 🔔 变化
@@ -20,9 +20,20 @@
 - **buession-security-shiro：** 依赖 javax.servlet.jsp-api 更换为 jakarta.servlet.jsp-api
 
 
+### 🐞 Bug 修复
+
+- **buession-security-pac4j：** 修复 webflux 模式下 PrincipalMethodArgumentResolver 继承了错误类的 BUG
+
+
 ### 漏洞修复
 
 - [owasp antisamy](https://github.com/nahsra/antisamy) 修复 [CVE-2023-43643] 漏洞
+
+
+### ⏪ 优化
+
+- **buession-security-captcha：** 代码质量优化
+- **buession-security-pac4j：** 代码质量优化
 
 
 ---

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.builder.servlet;
@@ -51,7 +51,6 @@ import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.time.Duration;
 import java.util.Objects;
 
 /**
@@ -75,7 +74,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	 * @param httpSecurity
 	 * 		HttpSecurity 实例
 	 */
-	protected ServletHttpSecurityBuilder(final HttpSecurity httpSecurity){
+	protected ServletHttpSecurityBuilder(final HttpSecurity httpSecurity) {
 		this.httpSecurity = httpSecurity;
 	}
 
@@ -87,12 +86,12 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	 *
 	 * @return ServletHttpSecurityBuilder 实例
 	 */
-	public static ServletHttpSecurityBuilder getInstance(final HttpSecurity httpSecurity){
+	public static ServletHttpSecurityBuilder getInstance(final HttpSecurity httpSecurity) {
 		return new ServletHttpSecurityBuilder(httpSecurity);
 	}
 
 	@Override
-	public ServletHttpSecurityBuilder httpBasic(final HttpBasic config){
+	public ServletHttpSecurityBuilder httpBasic(final HttpBasic config) {
 		if(config.isEnabled() == false){
 			try{
 				httpSecurity.httpBasic().disable();
@@ -107,9 +106,10 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ServletHttpSecurityBuilder csrf(final Csrf config){
+	public ServletHttpSecurityBuilder csrf(final Csrf config) {
 		try{
 			CsrfConfigurer<HttpSecurity> csrfConfigurer = httpSecurity.csrf();
+			PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenHasText();
 
 			if(config.isEnabled()){
 				if(config.getMode() != null){
@@ -119,25 +119,13 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 
 							CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
 
-							if(Validate.hasText(cookie.getParameterName())){
-								cookieCsrfTokenRepository.setParameterName(cookie.getParameterName());
-							}
-
-							if(Validate.hasText(cookie.getHeaderName())){
-								cookieCsrfTokenRepository.setHeaderName(cookie.getHeaderName());
-							}
-
-							if(Validate.hasText(cookie.getCookieName())){
-								cookieCsrfTokenRepository.setCookieName(cookie.getCookieName());
-							}
-
-							if(Validate.hasText(cookie.getCookieDomain())){
-								cookieCsrfTokenRepository.setCookieDomain(cookie.getCookieDomain());
-							}
-
-							if(Validate.hasText(cookie.getCookiePath())){
-								cookieCsrfTokenRepository.setCookiePath(cookie.getCookiePath());
-							}
+							propertyMapper.from(cookie.getParameterName())
+									.to(cookieCsrfTokenRepository::setParameterName);
+							propertyMapper.from(cookie.getHeaderName()).to(cookieCsrfTokenRepository::setHeaderName);
+							propertyMapper.from(cookie.getCookieName()).to(cookieCsrfTokenRepository::setCookieName);
+							propertyMapper.from(cookie.getCookieDomain())
+									.to(cookieCsrfTokenRepository::setCookieDomain);
+							propertyMapper.from(cookie.getCookiePath()).to(cookieCsrfTokenRepository::setCookiePath);
 
 							cookieCsrfTokenRepository.setCookieHttpOnly(cookie.getCookieHttpOnly());
 
@@ -148,17 +136,11 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 
 							HttpSessionCsrfTokenRepository sessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
 
-							if(Validate.hasText(session.getParameterName())){
-								sessionCsrfTokenRepository.setParameterName(session.getParameterName());
-							}
-
-							if(Validate.hasText(session.getHeaderName())){
-								sessionCsrfTokenRepository.setHeaderName(session.getHeaderName());
-							}
-
-							if(Validate.hasText(session.getSessionAttributeName())){
-								sessionCsrfTokenRepository.setSessionAttributeName(session.getSessionAttributeName());
-							}
+							propertyMapper.from(session.getParameterName())
+									.to(sessionCsrfTokenRepository::setParameterName);
+							propertyMapper.from(session.getHeaderName()).to(sessionCsrfTokenRepository::setHeaderName);
+							propertyMapper.from(session.getSessionAttributeName())
+									.to(sessionCsrfTokenRepository::setSessionAttributeName);
 
 							csrfConfigurer.csrfTokenRepository(new LazyCsrfTokenRepository(sessionCsrfTokenRepository));
 							break;
@@ -179,7 +161,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ServletHttpSecurityBuilder cors(final Cors config){
+	public ServletHttpSecurityBuilder cors(final Cors config) {
 		try{
 			CorsConfigurer<HttpSecurity> corsConfigurer = httpSecurity.cors();
 
@@ -201,7 +183,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ServletHttpSecurityBuilder frameOptions(final FrameOptions config){
+	public ServletHttpSecurityBuilder frameOptions(final FrameOptions config) {
 		try{
 			HeadersConfigurer<HttpSecurity>.FrameOptionsConfig frameOptionsConfig = httpSecurity.headers()
 					.frameOptions();
@@ -235,7 +217,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ServletHttpSecurityBuilder hsts(final Hsts config){
+	public ServletHttpSecurityBuilder hsts(final Hsts config) {
 		try{
 			HeadersConfigurer<HttpSecurity>.HstsConfig hstsConfig = httpSecurity.headers()
 					.httpStrictTransportSecurity();
@@ -263,7 +245,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ServletHttpSecurityBuilder hpkp(final Hpkp config){
+	public ServletHttpSecurityBuilder hpkp(final Hpkp config) {
 		try{
 			HeadersConfigurer<HttpSecurity>.HpkpConfig hpkpConfig = httpSecurity.headers().httpPublicKeyPinning();
 
@@ -289,7 +271,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ServletHttpSecurityBuilder contentSecurityPolicy(final ContentSecurityPolicy config){
+	public ServletHttpSecurityBuilder contentSecurityPolicy(final ContentSecurityPolicy config) {
 		try{
 			if(config.isEnabled() && Validate.hasText(config.getPolicyDirectives())){
 				HeadersConfigurer<HttpSecurity>.ContentSecurityPolicyConfig contentSecurityPolicyConfig = httpSecurity.headers()
@@ -309,7 +291,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ServletHttpSecurityBuilder referrerPolicy(final ReferrerPolicy config){
+	public ServletHttpSecurityBuilder referrerPolicy(final ReferrerPolicy config) {
 		if(config.isEnabled() && config.getPolicy() != null){
 			try{
 				ReferrerPolicyConverter.ToNativeReferrerPolicyConverter toNativeReferrerPolicyConverter = new ReferrerPolicyConverter.ToNativeReferrerPolicyConverter();
@@ -330,7 +312,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ServletHttpSecurityBuilder xss(final Xss config){
+	public ServletHttpSecurityBuilder xss(final Xss config) {
 		try{
 			HeadersConfigurer<HttpSecurity>.XXssConfig xssConfig = httpSecurity.headers().xssProtection();
 
@@ -352,7 +334,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ServletHttpSecurityBuilder formLogin(FormLogin config){
+	public ServletHttpSecurityBuilder formLogin(FormLogin config) {
 		try{
 			FormLoginConfigurer<HttpSecurity> formLoginConfigurer = httpSecurity.formLogin();
 
