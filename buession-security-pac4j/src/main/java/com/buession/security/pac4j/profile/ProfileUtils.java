@@ -101,11 +101,14 @@ public class ProfileUtils {
 	 * @since 2.3.0
 	 */
 	public static <T> T toObject(final CommonProfile profile, final Class<T> type) {
-		final BeanConverter beanConverter = new DefaultBeanConverter();
-		T instance = BeanUtils.instantiateClass(type);
+		final T instance = BeanUtils.instantiateClass(type);
 
-		beanConverter.convert(profile, instance);
-		beanConverter.convert(profile.getAttributes(), instance);
+		if(profile != null){
+			final BeanConverter beanConverter = new DefaultBeanConverter();
+			
+			beanConverter.convert(profile, instance);
+			beanConverter.convert(profile.getAttributes(), instance);
+		}
 
 		return instance;
 	}
