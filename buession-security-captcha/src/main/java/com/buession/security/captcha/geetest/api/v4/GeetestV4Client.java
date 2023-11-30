@@ -25,7 +25,7 @@
 package com.buession.security.captcha.geetest.api.v4;
 
 import com.buession.core.builder.MapBuilder;
-import com.buession.core.validator.Validate;
+import com.buession.core.utils.Assert;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.EncodedFormRequestBody;
 import com.buession.httpclient.core.Response;
@@ -62,7 +62,7 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 	 * @param secretKey
 	 * 		私钥
 	 */
-	public GeetestV4Client(final String appId, final String secretKey){
+	public GeetestV4Client(final String appId, final String secretKey) {
 		super(appId, secretKey);
 	}
 
@@ -76,12 +76,12 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 	 * @param httpClient
 	 *        {@link HttpClient}
 	 */
-	public GeetestV4Client(final String appId, final String secretKey, final HttpClient httpClient){
+	public GeetestV4Client(final String appId, final String secretKey, final HttpClient httpClient) {
 		super(appId, secretKey, httpClient);
 	}
 
 	@Override
-	public InitResponse initialize(RequestData requestData){
+	public InitResponse initialize(RequestData requestData) {
 		if(logger.isDebugEnabled()){
 			logger.debug("验证初始化");
 		}
@@ -90,7 +90,7 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 	}
 
 	@Override
-	public Status validate(RequestData requestData) throws CaptchaException{
+	public Status validate(RequestData requestData) throws CaptchaException {
 		if(logger.isDebugEnabled()){
 			logger.debug("二次验证, 请求参数：{}.", requestData);
 		}
@@ -134,7 +134,7 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 	}
 
 	@Override
-	public String getVersion(){
+	public String getVersion() {
 		return "v4";
 	}
 
@@ -147,22 +147,11 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 	 * @return 检测结果
 	 */
 	private static boolean checkParam(final GeetestV4RequestData requestData)
-			throws RequiredParameterCaptchaException{
-		if(Validate.hasText(requestData.getLotNumber()) == false){
-			throw new RequiredParameterCaptchaException("lot_number");
-		}
-
-		if(Validate.hasText(requestData.getCaptchaOutput()) == false){
-			throw new RequiredParameterCaptchaException("captcha_output");
-		}
-
-		if(Validate.hasText(requestData.getPassToken()) == false){
-			throw new RequiredParameterCaptchaException("pass_token");
-		}
-
-		if(Validate.hasText(requestData.getGenTime()) == false){
-			throw new RequiredParameterCaptchaException("gen_time");
-		}
+			throws RequiredParameterCaptchaException {
+		Assert.isBlank(requestData.getLotNumber(), ()->new RequiredParameterCaptchaException("lot_number"));
+		Assert.isBlank(requestData.getCaptchaOutput(), ()->new RequiredParameterCaptchaException("captcha_output"));
+		Assert.isBlank(requestData.getPassToken(), ()->new RequiredParameterCaptchaException("pass_token"));
+		Assert.isBlank(requestData.getGenTime(), ()->new RequiredParameterCaptchaException("gen_time"));
 
 		return true;
 	}
