@@ -24,14 +24,12 @@
  */
 package com.buession.security.mcrypt;
 
-import com.buession.core.utils.Assert;
 import com.buession.security.crypto.Mode;
 import com.buession.security.crypto.Padding;
-import com.buession.security.crypto.internal.SymmetricalCrypto;
+import com.buession.security.crypto.Sm4Crypto;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
 
 /**
  * SM4 加密对象
@@ -295,30 +293,14 @@ public final class Sm4Mcrypt extends AbstractMcrypt {
 
 	@Override
 	public String encrypt(final Object object) {
-		Assert.isNull(object, "Mcrypt encrypt object could not be null");
-
-		try{
-			SymmetricalCrypto crypto = new SymmetricalCrypto(getAlgorithm(), getCharset(), mode, padding, getProvider(),
-					getSalt());
-			return crypto.encrypt(object);
-		}catch(GeneralSecurityException e){
-			logger.error(e.getMessage());
-			throw new SecurityException(e);
-		}
+		final Sm4Crypto crypto = new Sm4Crypto(getCharset(), getSalt(), mode, padding);
+		return crypto.encrypt(object);
 	}
 
 	@Override
 	public String decrypt(final CharSequence cs) {
-		Assert.isNull(cs, "Mcrypt decrypt object could not be null");
-
-		try{
-			SymmetricalCrypto crypto = new SymmetricalCrypto(getAlgorithm(), getCharset(), mode, padding, getProvider(),
-					getSalt());
-			return crypto.decrypt(cs);
-		}catch(GeneralSecurityException e){
-			logger.error(e.getMessage());
-			throw new SecurityException(e);
-		}
+		final Sm4Crypto crypto = new Sm4Crypto(getCharset(), getSalt(), mode, padding);
+		return crypto.decrypt(cs);
 	}
 
 }

@@ -26,11 +26,9 @@
  */
 package com.buession.security.mcrypt;
 
-import com.buession.core.utils.Assert;
-import com.buession.security.crypto.internal.SymmetricalCrypto;
+import com.buession.security.crypto.AESCrypto;
 
 import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
 
 /**
  * AES 加密对象
@@ -550,30 +548,14 @@ public final class AESMcrypt extends AbstractMcrypt {
 
 	@Override
 	public String encrypt(final Object object) {
-		Assert.isNull(object, "Mcrypt encrypt object could not be null");
-
-		try{
-			SymmetricalCrypto crypto = new SymmetricalCrypto(getAlgorithm(), getCharset(), mode, padding, getProvider(),
-					getSalt());
-			return crypto.encrypt(object);
-		}catch(GeneralSecurityException e){
-			logger.error(e.getMessage());
-			throw new SecurityException(e);
-		}
+		final AESCrypto crypto = new AESCrypto(getCharset(), getSalt(), mode, padding);
+		return crypto.encrypt(object);
 	}
 
 	@Override
 	public String decrypt(final CharSequence cs) {
-		Assert.isNull(cs, "Mcrypt decrypt object could not be null");
-
-		try{
-			SymmetricalCrypto crypto = new SymmetricalCrypto(getAlgorithm(), getCharset(), mode, padding,
-					getProvider(), getSalt());
-			return crypto.decrypt(cs);
-		}catch(GeneralSecurityException e){
-			logger.error(e.getMessage());
-			throw new SecurityException(e);
-		}
+		final AESCrypto crypto = new AESCrypto(getCharset(), getSalt(), mode, padding);
+		return crypto.decrypt(cs);
 	}
 
 	/**
