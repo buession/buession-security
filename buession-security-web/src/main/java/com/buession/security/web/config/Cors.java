@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -30,6 +30,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
@@ -81,7 +82,7 @@ public class Cors {
 	 *
 	 * @return 是否启用 Cors
 	 */
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return getEnabled();
 	}
 
@@ -90,7 +91,7 @@ public class Cors {
 	 *
 	 * @return 是否启用 Cors
 	 */
-	public boolean getEnabled(){
+	public boolean getEnabled() {
 		return enabled;
 	}
 
@@ -100,7 +101,7 @@ public class Cors {
 	 * @param enabled
 	 * 		是否启用 Cors
 	 */
-	public void setEnabled(boolean enabled){
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -109,7 +110,7 @@ public class Cors {
 	 *
 	 * @return 允许请求的域
 	 */
-	public Set<String> getOrigins(){
+	public Set<String> getOrigins() {
 		return origins;
 	}
 
@@ -119,7 +120,7 @@ public class Cors {
 	 * @param origins
 	 * 		允许请求的域
 	 */
-	public void setOrigins(Set<String> origins){
+	public void setOrigins(Set<String> origins) {
 		this.origins = origins;
 	}
 
@@ -128,7 +129,7 @@ public class Cors {
 	 *
 	 * @return 允许请求的方法
 	 */
-	public Set<HttpMethod> getAllowedMethods(){
+	public Set<HttpMethod> getAllowedMethods() {
 		return allowedMethods;
 	}
 
@@ -138,7 +139,7 @@ public class Cors {
 	 * @param allowedMethods
 	 * 		允许请求的方法
 	 */
-	public void setAllowedMethods(Set<HttpMethod> allowedMethods){
+	public void setAllowedMethods(Set<HttpMethod> allowedMethods) {
 		this.allowedMethods = allowedMethods;
 	}
 
@@ -147,7 +148,7 @@ public class Cors {
 	 *
 	 * @return 实际请求中允许携带的首部字段
 	 */
-	public Set<String> getAllowedHeaders(){
+	public Set<String> getAllowedHeaders() {
 		return allowedHeaders;
 	}
 
@@ -157,7 +158,7 @@ public class Cors {
 	 * @param allowedHeaders
 	 * 		实际请求中允许携带的首部字段
 	 */
-	public void setAllowedHeaders(Set<String> allowedHeaders){
+	public void setAllowedHeaders(Set<String> allowedHeaders) {
 		this.allowedHeaders = allowedHeaders;
 	}
 
@@ -166,7 +167,7 @@ public class Cors {
 	 *
 	 * @return 允许浏览器访问的头
 	 */
-	public Set<String> getExposedHeaders(){
+	public Set<String> getExposedHeaders() {
 		return exposedHeaders;
 	}
 
@@ -176,7 +177,7 @@ public class Cors {
 	 * @param exposedHeaders
 	 * 		允许浏览器访问的头
 	 */
-	public void setExposedHeaders(Set<String> exposedHeaders){
+	public void setExposedHeaders(Set<String> exposedHeaders) {
 		this.exposedHeaders = exposedHeaders;
 	}
 
@@ -185,7 +186,7 @@ public class Cors {
 	 *
 	 * @return 当浏览器的 credentials 设置为 true 时是否允许浏览器读取 response 的内容
 	 */
-	public Boolean getAllowCredentials(){
+	public Boolean getAllowCredentials() {
 		return allowCredentials;
 	}
 
@@ -195,7 +196,7 @@ public class Cors {
 	 * @param allowCredentials
 	 * 		是否允许浏览器读取 response 的内容
 	 */
-	public void setAllowCredentials(Boolean allowCredentials){
+	public void setAllowCredentials(Boolean allowCredentials) {
 		this.allowCredentials = allowCredentials;
 	}
 
@@ -204,7 +205,7 @@ public class Cors {
 	 *
 	 * @return preflight 请求的结果能够被缓存时间
 	 */
-	public Long getMaxAge(){
+	public Long getMaxAge() {
 		return maxAge;
 	}
 
@@ -214,7 +215,7 @@ public class Cors {
 	 * @param maxAge
 	 * 		preflight 请求的结果能够被缓存时间（单位：秒）
 	 */
-	public void setMaxAge(Long maxAge){
+	public void setMaxAge(Long maxAge) {
 		this.maxAge = maxAge;
 	}
 
@@ -223,7 +224,7 @@ public class Cors {
 	 *
 	 * @return {@link CorsConfiguration} 实例
 	 */
-	public CorsConfiguration toCorsConfiguration(){
+	public CorsConfiguration toCorsConfiguration() {
 		final CorsConfiguration configuration = new CorsConfiguration();
 
 		if(Validate.isNotEmpty(getOrigins())){
@@ -253,6 +254,19 @@ public class Cors {
 		}
 
 		return configuration;
+	}
+
+	@Override
+	public String toString() {
+		return new StringJoiner(", ", "Cors = {", "}")
+				.add("enabled=" + enabled)
+				.add("origins=" + origins)
+				.add("allowedMethods=" + allowedMethods)
+				.add("allowedHeaders=" + allowedHeaders)
+				.add("exposedHeaders=" + exposedHeaders)
+				.add("allowCredentials=" + allowCredentials)
+				.add("maxAge=" + maxAge)
+				.toString();
 	}
 
 }

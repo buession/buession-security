@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.reactive.config;
@@ -50,7 +50,7 @@ public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 	/**
 	 * 构造函数
 	 */
-	public ReactiveWebSecurityConfigurerAdapterConfiguration(){
+	public ReactiveWebSecurityConfigurerAdapterConfiguration() {
 		this.configurer = new Configurer();
 	}
 
@@ -60,7 +60,7 @@ public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 	 * @param httpSecurity
 	 *        {@link ServerHttpSecurity} 实例
 	 */
-	public ReactiveWebSecurityConfigurerAdapterConfiguration(final ServerHttpSecurity httpSecurity){
+	public ReactiveWebSecurityConfigurerAdapterConfiguration(final ServerHttpSecurity httpSecurity) {
 		this(new Configurer(), httpSecurity);
 	}
 
@@ -73,18 +73,18 @@ public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 	 *        {@link ServerHttpSecurity} 实例
 	 */
 	public ReactiveWebSecurityConfigurerAdapterConfiguration(final Configurer configurer,
-															 final ServerHttpSecurity httpSecurity){
+															 final ServerHttpSecurity httpSecurity) {
 		this.configurer = configurer;
 		initialize(httpSecurity);
 	}
 
-	protected void initialize(ServerHttpSecurity httpSecurity){
+	protected void initialize(ServerHttpSecurity httpSecurity) {
 		if(httpSecurity == null){
 			return;
 		}
 
-		PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
-		ReactiveHttpSecurityBuilder builder = ReactiveHttpSecurityBuilder.getInstance(httpSecurity);
+		final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
+		final ReactiveHttpSecurityBuilder builder = ReactiveHttpSecurityBuilder.getInstance(httpSecurity);
 
 		propertyMapper.from(configurer::getHttpBasic).to(builder::httpBasic);
 		propertyMapper.from(configurer::getCsrf).to(builder::csrf);

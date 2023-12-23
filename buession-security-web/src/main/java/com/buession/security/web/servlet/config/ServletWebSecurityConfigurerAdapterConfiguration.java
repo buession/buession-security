@@ -51,7 +51,7 @@ public class ServletWebSecurityConfigurerAdapterConfiguration extends WebSecurit
 	/**
 	 * 构造函数
 	 */
-	public ServletWebSecurityConfigurerAdapterConfiguration(){
+	public ServletWebSecurityConfigurerAdapterConfiguration() {
 		this(new Configurer());
 	}
 
@@ -61,7 +61,7 @@ public class ServletWebSecurityConfigurerAdapterConfiguration extends WebSecurit
 	 * @param configurer
 	 * 		Web 安全适配配置
 	 */
-	public ServletWebSecurityConfigurerAdapterConfiguration(final Configurer configurer){
+	public ServletWebSecurityConfigurerAdapterConfiguration(final Configurer configurer) {
 		super();
 		this.configurer = configurer;
 	}
@@ -74,19 +74,20 @@ public class ServletWebSecurityConfigurerAdapterConfiguration extends WebSecurit
 	 * @param disableDefaults
 	 * 		是否禁用默认配置
 	 */
-	public ServletWebSecurityConfigurerAdapterConfiguration(final Configurer configurer, final boolean disableDefaults){
+	public ServletWebSecurityConfigurerAdapterConfiguration(final Configurer configurer,
+															final boolean disableDefaults) {
 		super(disableDefaults);
 		this.configurer = configurer;
 	}
 
 	@Override
-	protected void configure(HttpSecurity httpSecurity) throws Exception{
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		if(httpSecurity == null){
 			return;
 		}
 
-		PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
-		ServletHttpSecurityBuilder builder = ServletHttpSecurityBuilder.getInstance(httpSecurity);
+		final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
+		final ServletHttpSecurityBuilder builder = ServletHttpSecurityBuilder.getInstance(httpSecurity);
 
 		propertyMapper.from(configurer::getHttpBasic).to(builder::httpBasic);
 		propertyMapper.from(configurer::getCsrf).to(builder::csrf);
