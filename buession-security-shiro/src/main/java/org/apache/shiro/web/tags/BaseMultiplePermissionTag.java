@@ -24,12 +24,28 @@
  */
 package org.apache.shiro.web.tags;
 
+import com.buession.core.utils.StringUtils;
+import org.apache.shiro.subject.Subject;
+
 /**
  * @author Yong.Teng
  * @since 2.3.2
  */
-public abstract class BasePermissionTag extends PermissionTag {
+public abstract class BaseMultiplePermissionTag extends PermissionTag {
 
-	protected final static char PERMISSION_NAMES_SEPARATOR = ',';
+	protected final static String PERMISSION_NAMES_SEPARATOR = ",";
+
+	@Override
+	protected boolean showTagBody(String permissionNames) {
+		Subject subject = getSubject();
+		return subject != null &&
+				isPermitted(subject, StringUtils.split(permissionNames, getPermissionNamesSeparator()));
+	}
+
+	protected String getPermissionNamesSeparator() {
+		return PERMISSION_NAMES_SEPARATOR;
+	}
+
+	protected abstract boolean isPermitted(Subject subject, String[] permissionNames);
 
 }

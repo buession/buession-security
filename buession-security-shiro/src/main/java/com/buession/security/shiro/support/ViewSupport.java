@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.support;
@@ -58,7 +58,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否已通过认证
 	 */
-	default boolean isAuthenticated(){
+	default boolean isAuthenticated() {
 		Subject subject = SecurityUtils.getSubject();
 		return subject != null && subject.isAuthenticated();
 	}
@@ -68,7 +68,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否未通过认证
 	 */
-	default boolean isNotAuthenticated(){
+	default boolean isNotAuthenticated() {
 		Subject subject = SecurityUtils.getSubject();
 		return subject != null && subject.isAuthenticated();
 	}
@@ -78,7 +78,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否为访客
 	 */
-	default boolean isGuest(){
+	default boolean isGuest() {
 		Subject subject = SecurityUtils.getSubject();
 		return subject == null || subject.getPrincipal() == null;
 	}
@@ -88,7 +88,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否认证通过或已记住的用户
 	 */
-	default boolean isUser(){
+	default boolean isUser() {
 		Subject subject = SecurityUtils.getSubject();
 		return subject != null && subject.getPrincipal() != null;
 	}
@@ -98,7 +98,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是通过记住我登录的
 	 */
-	default boolean isRemembered(){
+	default boolean isRemembered() {
 		Subject subject = SecurityUtils.getSubject();
 		return subject != null && subject.isRemembered();
 	}
@@ -108,7 +108,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户 Principal
 	 */
-	default Object getPrincipal(){
+	default Object getPrincipal() {
 		Subject subject = SecurityUtils.getSubject();
 		return subject != null ? subject.getPrincipal() : null;
 	}
@@ -121,7 +121,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户属性
 	 */
-	default Object getPrincipalProperty(String property){
+	default Object getPrincipalProperty(String property) {
 		Assert.isBlank(property, "property must be contains character.");
 
 		Subject subject = SecurityUtils.getSubject();
@@ -138,7 +138,7 @@ public interface ViewSupport {
 
 			for(PropertyDescriptor pd : propertyDescriptors){
 				if(property.equals(pd.getName())){
-					return pd.getReadMethod().invoke(principal, (Object[]) null);
+					return pd.getReadMethod().invoke(principal);
 				}
 			}
 
@@ -164,7 +164,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具备某角色
 	 */
-	default boolean hasRole(String roleName){
+	default boolean hasRole(String roleName) {
 		Subject subject = SecurityUtils.getSubject();
 		return subject != null && subject.hasRole(roleName);
 	}
@@ -177,7 +177,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否不具备某角色
 	 */
-	default boolean lacksRole(String roleName){
+	default boolean lacksRole(String roleName) {
 		return hasRole(roleName) == false;
 	}
 
@@ -192,7 +192,7 @@ public interface ViewSupport {
 	 * @return 用户是否具有以下任意一个角色
 	 */
 	@Deprecated
-	default boolean hasAnyRoles(String roleNames, String delimiter){
+	default boolean hasAnyRoles(String roleNames, String delimiter) {
 		return hasAnyRole(roleNames, delimiter);
 	}
 
@@ -208,7 +208,7 @@ public interface ViewSupport {
 	 *
 	 * @since 1.3.2
 	 */
-	default boolean hasAnyRole(String roleNames, String delimiter){
+	default boolean hasAnyRole(String roleNames, String delimiter) {
 		return hasAnyRole(StringUtils.split(roleNames, Validate.isBlank(delimiter) ? ROLE_NAMES_DELIMITER : delimiter));
 	}
 
@@ -221,7 +221,7 @@ public interface ViewSupport {
 	 * @return 用户是否具有以下任意一个角色
 	 */
 	@Deprecated
-	default boolean hasAnyRoles(String roleNames){
+	default boolean hasAnyRoles(String roleNames) {
 		return hasAnyRole(roleNames);
 	}
 
@@ -233,7 +233,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下任意一个角色
 	 */
-	default boolean hasAnyRole(String roleNames){
+	default boolean hasAnyRole(String roleNames) {
 		return hasAnyRole(roleNames, ROLE_NAMES_DELIMITER);
 	}
 
@@ -246,7 +246,7 @@ public interface ViewSupport {
 	 * @return 用户是否具有以下任意一个角色
 	 */
 	@Deprecated
-	default boolean hasAnyRoles(Collection<String> roleNames){
+	default boolean hasAnyRoles(Collection<String> roleNames) {
 		return hasAnyRole(roleNames);
 	}
 
@@ -260,20 +260,13 @@ public interface ViewSupport {
 	 *
 	 * @since 1.3.2
 	 */
-	default boolean hasAnyRole(Collection<String> roleNames){
-		if(Validate.isNotEmpty(roleNames)){
-			Subject subject = SecurityUtils.getSubject();
-
-			if(subject != null){
-				for(String role : roleNames){
-					if(role != null && subject.hasRole(role.trim())){
-						return true;
-					}
-				}
-			}
+	default boolean hasAnyRole(Collection<String> roleNames) {
+		if(Validate.isEmpty(roleNames)){
+			return false;
 		}
 
-		return false;
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null && roleNames.stream().anyMatch((role)->role != null && subject.hasRole(role.trim()));
 	}
 
 	/**
@@ -285,7 +278,7 @@ public interface ViewSupport {
 	 * @return 用户是否具有以下任意一个角色
 	 */
 	@Deprecated
-	default boolean hasAnyRoles(String... roleNames){
+	default boolean hasAnyRoles(String... roleNames) {
 		return hasAnyRole(roleNames);
 	}
 
@@ -299,20 +292,14 @@ public interface ViewSupport {
 	 *
 	 * @since 1.3.2
 	 */
-	default boolean hasAnyRole(String... roleNames){
-		if(Validate.isNotEmpty(roleNames)){
-			Subject subject = SecurityUtils.getSubject();
-
-			if(subject != null){
-				for(String role : roleNames){
-					if(role != null && subject.hasRole(role.trim())){
-						return true;
-					}
-				}
-			}
+	default boolean hasAnyRole(String... roleNames) {
+		if(Validate.isEmpty(roleNames)){
+			return false;
 		}
 
-		return false;
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null &&
+				Arrays.stream(roleNames).anyMatch((role)->role != null && subject.hasRole(role.trim()));
 	}
 
 	/**
@@ -325,7 +312,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下所有角色
 	 */
-	default boolean hasRolesAll(String roleNames, String delimiter){
+	default boolean hasRolesAll(String roleNames, String delimiter) {
 		return hasRolesAll(
 				StringUtils.split(roleNames, Validate.isBlank(delimiter) ? ROLE_NAMES_DELIMITER : delimiter));
 	}
@@ -338,7 +325,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下所有角色
 	 */
-	default boolean hasRolesAll(String roleNames){
+	default boolean hasRolesAll(String roleNames) {
 		return hasRolesAll(roleNames, ROLE_NAMES_DELIMITER);
 	}
 
@@ -350,7 +337,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下所有角色
 	 */
-	default boolean hasRolesAll(Collection<String> roleNames){
+	default boolean hasRolesAll(Collection<String> roleNames) {
 		if(Validate.isEmpty(roleNames)){
 			return false;
 		}
@@ -369,7 +356,7 @@ public interface ViewSupport {
 	 *
 	 * @since 1.3.2
 	 */
-	default boolean hasRolesAll(String... roleNames){
+	default boolean hasRolesAll(String... roleNames) {
 		return Validate.isNotEmpty(roleNames) && hasRolesAll(Arrays.asList(roleNames));
 	}
 
@@ -381,7 +368,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具备某权限
 	 */
-	default boolean hasPermission(String permission){
+	default boolean hasPermission(String permission) {
 		Subject subject = SecurityUtils.getSubject();
 		return subject != null && subject.isPermitted(permission);
 	}
@@ -394,7 +381,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具备某权限
 	 */
-	default boolean hasPermission(Permission permission){
+	default boolean hasPermission(Permission permission) {
 		Subject subject = SecurityUtils.getSubject();
 		return subject != null && subject.isPermitted(permission);
 	}
@@ -407,7 +394,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否不具备某权限
 	 */
-	default boolean lacksPermission(String permission){
+	default boolean lacksPermission(String permission) {
 		return hasPermission(permission) == false;
 	}
 
@@ -422,7 +409,7 @@ public interface ViewSupport {
 	 * @return 用户是否具有以下任意一个权限
 	 */
 	@Deprecated
-	default boolean hasAnyPermissions(String permissions, String delimiter){
+	default boolean hasAnyPermissions(String permissions, String delimiter) {
 		return hasAnyPermission(permissions, delimiter);
 	}
 
@@ -438,7 +425,7 @@ public interface ViewSupport {
 	 *
 	 * @since 1.3.2
 	 */
-	default boolean hasAnyPermission(String permissions, String delimiter){
+	default boolean hasAnyPermission(String permissions, String delimiter) {
 		return hasAnyPermission(
 				StringUtils.split(permissions, Validate.isBlank(delimiter) ? PERMISSION_NAMES_DELIMITER : delimiter));
 	}
@@ -452,7 +439,7 @@ public interface ViewSupport {
 	 * @return 用户是否具有以下任意一个权限
 	 */
 	@Deprecated
-	default boolean hasAnyPermissions(String permissions){
+	default boolean hasAnyPermissions(String permissions) {
 		return hasAnyPermission(permissions);
 	}
 
@@ -464,7 +451,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下任意一个权限
 	 */
-	default boolean hasAnyPermission(String permissions){
+	default boolean hasAnyPermission(String permissions) {
 		return hasAnyPermission(permissions, PERMISSION_NAMES_DELIMITER);
 	}
 
@@ -477,7 +464,7 @@ public interface ViewSupport {
 	 * @return 用户是否具有以下任意一个权限
 	 */
 	@Deprecated
-	default boolean hasAnyPermissions(Collection<String> permissions){
+	default boolean hasAnyPermissions(Collection<String> permissions) {
 		return hasAnyPermission(permissions);
 	}
 
@@ -489,20 +476,14 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下任意一个权限
 	 */
-	default boolean hasAnyPermission(Collection<String> permissions){
-		if(Validate.isNotEmpty(permissions)){
-			Subject subject = SecurityUtils.getSubject();
-
-			if(subject != null){
-				for(String permission : permissions){
-					if(permission != null && subject.isPermitted(permission.trim())){
-						return true;
-					}
-				}
-			}
+	default boolean hasAnyPermission(Collection<String> permissions) {
+		if(Validate.isEmpty(permissions)){
+			return false;
 		}
 
-		return false;
+		Subject subject = SecurityUtils.getSubject();
+		return permissions.stream()
+				.anyMatch((permission)->permission != null && subject.isPermitted(permission.trim()));
 	}
 
 	/**
@@ -514,7 +495,7 @@ public interface ViewSupport {
 	 * @return 用户是否具有以下任意一个权限
 	 */
 	@Deprecated
-	default boolean hasAnyPermissions(String... permissions){
+	default boolean hasAnyPermissions(String... permissions) {
 		return hasAnyPermission(permissions);
 	}
 
@@ -526,20 +507,14 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下任意一个权限
 	 */
-	default boolean hasAnyPermission(String... permissions){
-		if(Validate.isNotEmpty(permissions)){
-			Subject subject = SecurityUtils.getSubject();
-
-			if(subject != null){
-				for(String permission : permissions){
-					if(permission != null && subject.isPermitted(permission.trim())){
-						return true;
-					}
-				}
-			}
+	default boolean hasAnyPermission(String... permissions) {
+		if(Validate.isEmpty(permissions)){
+			return false;
 		}
 
-		return false;
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null && Arrays.stream(permissions)
+				.anyMatch((permission)->permission != null && subject.isPermitted(permission.trim()));
 	}
 
 	/**
@@ -553,7 +528,7 @@ public interface ViewSupport {
 	 * @since 1.3.2
 	 */
 	@Deprecated
-	default boolean hasAnyPermissions(Permission... permissions){
+	default boolean hasAnyPermissions(Permission... permissions) {
 		return hasAnyPermission(permissions);
 	}
 
@@ -565,20 +540,14 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下任意一个权限
 	 */
-	default boolean hasAnyPermission(Permission... permissions){
-		if(Validate.isNotEmpty(permissions)){
-			Subject subject = SecurityUtils.getSubject();
-
-			if(subject != null){
-				for(Permission permission : permissions){
-					if(permission != null && subject.isPermitted(permission)){
-						return true;
-					}
-				}
-			}
+	default boolean hasAnyPermission(Permission... permissions) {
+		if(Validate.isEmpty(permissions)){
+			return false;
 		}
 
-		return false;
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null && Arrays.stream(permissions)
+				.anyMatch((permission)->permission != null && subject.isPermitted(permission));
 	}
 
 	/**
@@ -591,7 +560,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下所有权限
 	 */
-	default boolean hasPermissionsAll(String permissions, String delimiter){
+	default boolean hasPermissionsAll(String permissions, String delimiter) {
 		return hasPermissionsAll(
 				StringUtils.split(permissions, Validate.isBlank(delimiter) ? PERMISSION_NAMES_DELIMITER : delimiter));
 	}
@@ -604,7 +573,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下所有权限
 	 */
-	default boolean hasPermissionsAll(String permissions){
+	default boolean hasPermissionsAll(String permissions) {
 		return hasPermissionsAll(permissions, PERMISSION_NAMES_DELIMITER);
 	}
 
@@ -616,7 +585,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下所有权限
 	 */
-	default boolean hasPermissionsAll(Collection<String> permissions){
+	default boolean hasPermissionsAll(Collection<String> permissions) {
 		return permissions != null && hasPermissionsAll(permissions.toArray(new String[]{}));
 	}
 
@@ -628,7 +597,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下所有权限
 	 */
-	default boolean hasPermissionsAll(String... permissions){
+	default boolean hasPermissionsAll(String... permissions) {
 		if(Validate.isEmpty(permissions)){
 			return false;
 		}
@@ -645,7 +614,7 @@ public interface ViewSupport {
 	 *
 	 * @return 用户是否具有以下所有权限
 	 */
-	default boolean hasPermissionsAll(Permission... permissions){
+	default boolean hasPermissionsAll(Permission... permissions) {
 		if(Validate.isEmpty(permissions)){
 			return false;
 		}

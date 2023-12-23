@@ -31,27 +31,29 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * 字符串序列化和反序列化
+ *
  * @author Yong.Teng
  */
 public class StringSerializer implements RedisSerializer<String> {
 
 	private Charset charset = StandardCharsets.UTF_8;
 
-	public Charset getCharset(){
+	public Charset getCharset() {
 		return charset;
 	}
 
-	public void setCharset(Charset charset){
+	public void setCharset(Charset charset) {
 		this.charset = charset;
 	}
 
 	@Override
-	public byte[] serialize(String v) throws SerializerException{
+	public byte[] serialize(String v) throws SerializerException {
 		return v == null ? null : v.getBytes(getCharset());
 	}
 
 	@Override
-	public String deserialize(byte[] bytes) throws DeserializerException{
+	public String deserialize(byte[] bytes) throws DeserializerException {
 		return bytes == null ? null : new String(bytes, getCharset());
 	}
 

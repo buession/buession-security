@@ -24,32 +24,21 @@
  */
 package org.apache.shiro.web.tags;
 
-import com.buession.core.utils.StringUtils;
 import org.apache.shiro.subject.Subject;
 
+import java.util.Arrays;
+
 /**
- * 判断是否具备任意权限，多个权限名称以","分割
+ * 判断是否具备所有权限，多个权限名称以","分割
  *
  * @author Yong.Teng
- * @since 2.3.1
+ * @since 2.3.2
  */
-public class HasAnyPermissionsTag extends PermissionTag {
-
-	private final static char PERMISSION_NAMES_SEPARATOR = ',';
+public class HasAllPermissionsTag extends BaseMultiplePermissionTag {
 
 	@Override
-	protected boolean showTagBody(String permissionNames) {
-		Subject subject = getSubject();
-
-		if(subject != null){
-			for(String permission : StringUtils.split(permissionNames, PERMISSION_NAMES_SEPARATOR)){
-				if(subject.isPermitted(permission.trim())){
-					return true;
-				}
-			}
-		}
-
-		return false;
+	protected boolean isPermitted(Subject subject, String[] permissionNames) {
+		return Arrays.stream(permissionNames).allMatch((permission)->subject.isPermitted(permission.trim()));
 	}
 
 }
