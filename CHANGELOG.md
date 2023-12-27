@@ -2,7 +2,7 @@
 ===========================
 
 
-## [2.3.2](https://github.com/buession/buession-security/releases/tag/v2.3.2) (2023-xx-xx)
+## [2.3.2](https://github.com/buession/buession-security/releases/tag/v2.3.2) (2023-12-27)
 
 ### 🔨依赖升级
 
@@ -13,6 +13,7 @@
 ### ⭐ 新特性
 
 - **buession-security-captcha：** GeetestClient 增加 v3、v4 版本判断方法
+- **buession-security-shiro：** 增加判断是否具备所有权限 Tag HasAllPermissionsTag
 
 
 ### 🔔 变化
@@ -34,6 +35,11 @@
 
 - **buession-security-captcha：** 代码质量优化
 - **buession-security-pac4j：** 代码质量优化
+
+
+### 📔 文档
+
+- **buession-security-shiro：** 完善注释
 
 
 ---
