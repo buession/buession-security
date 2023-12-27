@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest;
@@ -37,8 +37,30 @@ public interface GeetestClient extends CaptchaClient {
 	void setHttpClient(HttpClient httpClient);
 
 	@Override
-	default Manufacturer getManufacturer(){
+	default Manufacturer getManufacturer() {
 		return Manufacturer.GEETEST;
+	}
+
+	/**
+	 * 返回是否为 V3 版本
+	 *
+	 * @return true / false
+	 *
+	 * @since 2.3.2
+	 */
+	default boolean isV3() {
+		return "v3".equalsIgnoreCase(getVersion());
+	}
+
+	/**
+	 * 返回是否为 V3 版本
+	 *
+	 * @return true / false
+	 *
+	 * @since 2.3.2
+	 */
+	default boolean isV4() {
+		return "v4".equalsIgnoreCase(getVersion());
 	}
 
 }

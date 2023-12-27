@@ -2,6 +2,49 @@
 ===========================
 
 
+## [2.3.2](https://github.com/buession/buession-security/releases/tag/v2.3.2) (2023-12-27)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.3.2)
+- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.4
+
+
+### ⭐ 新特性
+
+- **buession-security-captcha：** GeetestClient 增加 v3、v4 版本判断方法
+- **buession-security-shiro：** 增加判断是否具备所有权限 Tag HasAllPermissionsTag
+
+
+### 🔔 变化
+
+- **buession-security-shiro：** 依赖 javax.servlet.jsp-api 更换为 jakarta.servlet.jsp-api
+
+
+### 🐞 Bug 修复
+
+- **buession-security-pac4j：** 修复 webflux 模式下 PrincipalMethodArgumentResolver 继承了错误类的 BUG
+
+
+### 漏洞修复
+
+- [owasp antisamy](https://github.com/nahsra/antisamy) 修复 [CVE-2023-43643] 漏洞
+
+
+### ⏪ 优化
+
+- **buession-security-captcha：** 代码质量优化
+- **buession-security-pac4j：** 代码质量优化
+
+
+### 📔 文档
+
+- **buession-security-shiro：** 完善注释
+
+
+---
+
+
 ## [2.3.1](https://github.com/buession/buession-security/releases/tag/v2.3.1) (2023-11-17)
 
 ### 🔨依赖升级

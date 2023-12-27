@@ -39,26 +39,26 @@ import java.io.IOException;
  */
 public class Jackson2Encoder extends AbstractEncoder<JsonDeserializer<String>> {
 
-	public Jackson2Encoder() throws FileNotFoundException{
+	public Jackson2Encoder() throws FileNotFoundException {
 		super();
 	}
 
-	public Jackson2Encoder(final Policy policy) throws FileNotFoundException{
+	public Jackson2Encoder(final Policy policy) throws FileNotFoundException {
 		super(policy);
 	}
 
 	@Override
-	public JsonDeserializer<String> runtime(){
+	public JsonDeserializer<String> runtime() {
 		return new JsonDeserializer<String>() {
 
 			@Override
-			public Class<String> handledType(){
+			public Class<String> handledType() {
 				return String.class;
 			}
 
 			@Override
 			public String deserialize(JsonParser parser, DeserializationContext cxt)
-					throws IOException, JacksonException{
+					throws IOException, JacksonException {
 				String value = parser.getValueAsString();
 
 				if(value != null){
@@ -67,6 +67,7 @@ public class Jackson2Encoder extends AbstractEncoder<JsonDeserializer<String>> {
 
 				return value;
 			}
+
 		};
 	}
 

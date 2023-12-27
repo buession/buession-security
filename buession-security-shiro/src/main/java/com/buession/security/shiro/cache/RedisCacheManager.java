@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.cache;
@@ -314,17 +314,12 @@ public class RedisCacheManager extends AbstractCacheManager {
 			logger.debug("Get cache name: {}", name);
 		}
 
-		Cache<K, V> cache = caches.get(name);
-
-		if(cache == null){
+		return caches.computeIfAbsent(name, (key)->{
 			String principalIdFieldName = Validate.isEmpty(
 					getPrincipalIdFieldName()) ? DEFAULT_PRINCIPAL_ID_FIELD_NAME : getPrincipalIdFieldName();
-			cache = new RedisCache<>(redisManager, makeKey(name), getExpire(), principalIdFieldName,
+			return new RedisCache<>(redisManager, makeKey(name), getExpire(), principalIdFieldName,
 					getKeySerializer(), getValueSerializer());
-			caches.put(name, cache);
-		}
-
-		return cache;
+		});
 	}
 
 	protected String makeKey(final String key) {

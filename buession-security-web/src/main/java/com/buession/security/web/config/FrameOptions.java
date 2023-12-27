@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -51,7 +51,7 @@ public class FrameOptions {
 	 *
 	 * @return 是否启用 Frame Options
 	 */
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return getEnabled();
 	}
 
@@ -60,7 +60,7 @@ public class FrameOptions {
 	 *
 	 * @return 是否启用 Frame Options
 	 */
-	public boolean getEnabled(){
+	public boolean getEnabled() {
 		return enabled;
 	}
 
@@ -70,7 +70,7 @@ public class FrameOptions {
 	 * @param enabled
 	 * 		是否启用 Frame Options
 	 */
-	public void setEnabled(boolean enabled){
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -79,7 +79,7 @@ public class FrameOptions {
 	 *
 	 * @return Frame Options 模式
 	 */
-	public XFrameOptionsMode getMode(){
+	public XFrameOptionsMode getMode() {
 		return mode;
 	}
 
@@ -89,12 +89,12 @@ public class FrameOptions {
 	 * @param mode
 	 * 		Frame Options 模式
 	 */
-	public void setMode(XFrameOptionsMode mode){
+	public void setMode(XFrameOptionsMode mode) {
 		this.mode = mode;
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return new StringJoiner(", ", "FrameOptions = {", "}")
 				.add("enabled=" + enabled)
 				.add("mode=" + mode)
@@ -111,18 +111,19 @@ public class FrameOptions {
 
 		private final String mode;
 
-		XFrameOptionsMode(final String mode){
+		XFrameOptionsMode(final String mode) {
 			this.mode = mode;
 		}
 
-		private String getMode(){
+		private String getMode() {
 			return mode;
 		}
 
 		@Override
-		public String toString(){
+		public String toString() {
 			return getMode();
 		}
+
 	}
 
 }

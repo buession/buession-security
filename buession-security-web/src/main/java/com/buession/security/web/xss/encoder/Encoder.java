@@ -28,6 +28,7 @@ package com.buession.security.web.xss.encoder;
  * @author Yong.Teng
  * @since 2.2.0
  */
+@FunctionalInterface
 public interface Encoder<T> {
 
 	T runtime();

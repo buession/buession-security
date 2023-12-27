@@ -33,9 +33,8 @@ import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ReactiveAdapterRegistry;
-import org.springframework.web.reactive.result.method.annotation.AbstractNamedValueArgumentResolver;
+import org.springframework.web.reactive.result.method.annotation.AbstractNamedValueSyncArgumentResolver;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
 /**
  * 方法参数注解 {@link Principal} 解析器
@@ -43,7 +42,7 @@ import reactor.core.publisher.Mono;
  * @author Yong.Teng
  * @since 2.1.0
  */
-public class PrincipalMethodArgumentResolver extends AbstractNamedValueArgumentResolver {
+public class PrincipalMethodArgumentResolver extends AbstractNamedValueSyncArgumentResolver {
 
 	public PrincipalMethodArgumentResolver(ConfigurableBeanFactory factory, ReactiveAdapterRegistry registry) {
 		super(factory, registry);
@@ -51,18 +50,18 @@ public class PrincipalMethodArgumentResolver extends AbstractNamedValueArgumentR
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return parameter.hasParameterAnnotation(Principal.class);
+		return PrincipalAnnotationUtils.supportsParameter(parameter);
 	}
 
 	@Override
-	protected NamedValueInfo createNamedValueInfo(MethodParameter parameter) {
-		Principal principal = parameter.getParameterAnnotation(Principal.class);
+	protected NamedValueInfo createNamedValueInfo(MethodParameter methodParameter) {
+		Principal principal = methodParameter.getParameterAnnotation(Principal.class);
 		Assert.isNull(principal, "No Principal annotation");
-		return new PrincipalNamedValueInfo(principal, parameter.getNestedParameterType());
+		return new PrincipalNamedValueInfo(principal, methodParameter.getNestedParameterType());
 	}
 
 	@Override
-	protected Mono<Object> resolveName(String name, MethodParameter parameter, ServerWebExchange exchange) {
+	protected Object resolveNamedValue(String name, MethodParameter parameter, ServerWebExchange exchange) {
 		return exchange.getPrincipal()
 				.map((principal)->PrincipalAnnotationUtils.resolve(parameter, (Pac4jPrincipal) principal));
 	}

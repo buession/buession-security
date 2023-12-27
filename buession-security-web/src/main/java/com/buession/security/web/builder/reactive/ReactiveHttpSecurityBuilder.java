@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.builder.reactive;
@@ -66,7 +66,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	 * @param serverHttpSecurity
 	 * 		ServerHttpSecurity 实例
 	 */
-	protected ReactiveHttpSecurityBuilder(final ServerHttpSecurity serverHttpSecurity){
+	protected ReactiveHttpSecurityBuilder(final ServerHttpSecurity serverHttpSecurity) {
 		this.serverHttpSecurity = serverHttpSecurity;
 	}
 
@@ -78,12 +78,12 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	 *
 	 * @return ReactiveHttpSecurityBuilder 实例
 	 */
-	public static ReactiveHttpSecurityBuilder getInstance(final ServerHttpSecurity serverHttpSecurity){
+	public static ReactiveHttpSecurityBuilder getInstance(final ServerHttpSecurity serverHttpSecurity) {
 		return new ReactiveHttpSecurityBuilder(serverHttpSecurity);
 	}
 
 	@Override
-	public ReactiveHttpSecurityBuilder httpBasic(HttpBasic config){
+	public ReactiveHttpSecurityBuilder httpBasic(HttpBasic config) {
 		if(config.isEnabled() == false){
 			serverHttpSecurity.httpBasic().disable();
 		}
@@ -92,7 +92,8 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ReactiveHttpSecurityBuilder csrf(Csrf config){
+	public ReactiveHttpSecurityBuilder csrf(Csrf config) {
+		PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenHasText();
 		ServerHttpSecurity.CsrfSpec csrfSpec = serverHttpSecurity.csrf();
 
 		if(config.isEnabled()){
@@ -103,25 +104,11 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 
 						CookieServerCsrfTokenRepository cookieCsrfTokenRepository = new CookieServerCsrfTokenRepository();
 
-						if(Validate.hasText(cookie.getParameterName())){
-							cookieCsrfTokenRepository.setParameterName(cookie.getParameterName());
-						}
-
-						if(Validate.hasText(cookie.getHeaderName())){
-							cookieCsrfTokenRepository.setHeaderName(cookie.getHeaderName());
-						}
-
-						if(Validate.hasText(cookie.getCookieName())){
-							cookieCsrfTokenRepository.setCookieName(cookie.getCookieName());
-						}
-
-						if(Validate.hasText(cookie.getCookieDomain())){
-							cookieCsrfTokenRepository.setCookieDomain(cookie.getCookieDomain());
-						}
-
-						if(Validate.hasText(cookie.getCookiePath())){
-							cookieCsrfTokenRepository.setCookiePath(cookie.getCookiePath());
-						}
+						propertyMapper.from(cookie.getParameterName()).to(cookieCsrfTokenRepository::setParameterName);
+						propertyMapper.from(cookie.getHeaderName()).to(cookieCsrfTokenRepository::setHeaderName);
+						propertyMapper.from(cookie.getCookieName()).to(cookieCsrfTokenRepository::setCookieName);
+						propertyMapper.from(cookie.getCookieDomain()).to(cookieCsrfTokenRepository::setCookieDomain);
+						propertyMapper.from(cookie.getCookiePath()).to(cookieCsrfTokenRepository::setCookiePath);
 
 						cookieCsrfTokenRepository.setCookieHttpOnly(cookie.getCookieHttpOnly());
 
@@ -132,17 +119,11 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 
 						WebSessionServerCsrfTokenRepository sessionCsrfTokenRepository = new WebSessionServerCsrfTokenRepository();
 
-						if(Validate.hasText(session.getParameterName())){
-							sessionCsrfTokenRepository.setParameterName(session.getParameterName());
-						}
-
-						if(Validate.hasText(session.getHeaderName())){
-							sessionCsrfTokenRepository.setHeaderName(session.getHeaderName());
-						}
-
-						if(Validate.hasText(session.getSessionAttributeName())){
-							sessionCsrfTokenRepository.setSessionAttributeName(session.getSessionAttributeName());
-						}
+						propertyMapper.from(session.getParameterName())
+								.to(sessionCsrfTokenRepository::setParameterName);
+						propertyMapper.from(session.getHeaderName()).to(sessionCsrfTokenRepository::setHeaderName);
+						propertyMapper.from(session.getSessionAttributeName())
+								.to(sessionCsrfTokenRepository::setSessionAttributeName);
 
 						csrfSpec.csrfTokenRepository(sessionCsrfTokenRepository);
 						break;
@@ -158,7 +139,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ReactiveHttpSecurityBuilder cors(Cors config){
+	public ReactiveHttpSecurityBuilder cors(Cors config) {
 		ServerHttpSecurity.CorsSpec corsSpec = serverHttpSecurity.cors();
 
 		if(config.isEnabled()){
@@ -174,7 +155,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ReactiveHttpSecurityBuilder frameOptions(FrameOptions config){
+	public ReactiveHttpSecurityBuilder frameOptions(FrameOptions config) {
 		ServerHttpSecurity.HeaderSpec.FrameOptionsSpec frameOptionsSpec = serverHttpSecurity.headers().frameOptions();
 
 		if(config.isEnabled()){
@@ -201,7 +182,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ReactiveHttpSecurityBuilder hsts(Hsts config){
+	public ReactiveHttpSecurityBuilder hsts(Hsts config) {
 		ServerHttpSecurity.HeaderSpec.HstsSpec hstsSpec = serverHttpSecurity.headers().hsts();
 
 		if(config.isEnabled()){
@@ -222,12 +203,12 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ReactiveHttpSecurityBuilder hpkp(Hpkp config){
+	public ReactiveHttpSecurityBuilder hpkp(Hpkp config) {
 		return this;
 	}
 
 	@Override
-	public ReactiveHttpSecurityBuilder contentSecurityPolicy(ContentSecurityPolicy config){
+	public ReactiveHttpSecurityBuilder contentSecurityPolicy(ContentSecurityPolicy config) {
 		if(config.isEnabled() && Validate.hasText(config.getPolicyDirectives())){
 			ServerHttpSecurity.HeaderSpec.ContentSecurityPolicySpec contentSecurityPolicySpec = serverHttpSecurity.headers()
 					.contentSecurityPolicy(config.getPolicyDirectives());
@@ -241,7 +222,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ReactiveHttpSecurityBuilder referrerPolicy(ReferrerPolicy config){
+	public ReactiveHttpSecurityBuilder referrerPolicy(ReferrerPolicy config) {
 		if(config.isEnabled() && config.getPolicy() != null){
 			ReferrerPolicyConverter.ToNativeReferrerPolicyConverter toNativeReferrerPolicyConverter = new ReferrerPolicyConverter.ToNativeReferrerPolicyConverter();
 			ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy referrerPolicy = toNativeReferrerPolicyConverter.convert(
@@ -256,12 +237,12 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ReactiveHttpSecurityBuilder xss(Xss config){
+	public ReactiveHttpSecurityBuilder xss(Xss config) {
 		ServerHttpSecurity.HeaderSpec.XssProtectionSpec xssProtectionSpec = serverHttpSecurity.headers()
 				.xssProtection();
 
 		if(config.isEnabled()){
-			
+
 		}else{
 			xssProtectionSpec.disable();
 		}
@@ -270,7 +251,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	}
 
 	@Override
-	public ReactiveHttpSecurityBuilder formLogin(FormLogin config){
+	public ReactiveHttpSecurityBuilder formLogin(FormLogin config) {
 		ServerHttpSecurity.FormLoginSpec formLoginSpec = serverHttpSecurity.formLogin();
 
 		if(config.isEnabled()){

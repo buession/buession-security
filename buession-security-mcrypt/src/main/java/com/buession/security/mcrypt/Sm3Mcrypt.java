@@ -24,11 +24,8 @@
  */
 package com.buession.security.mcrypt;
 
-import com.buession.core.utils.Assert;
 import com.buession.security.crypto.HashCrypto;
-import com.buession.security.crypto.utils.ObjectUtils;
-import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.crypto.digests.SM3Digest;
+import com.buession.security.crypto.Sm3Crypto;
 
 import java.nio.charset.Charset;
 
@@ -94,21 +91,8 @@ public final class Sm3Mcrypt extends AbstractMcrypt implements HashCrypto {
 
 	@Override
 	public String encrypt(final Object object) {
-		Assert.isNull(object, "Mcrypt encrypt object could not be null");
-
-		SM3Digest sm3Digest = new SM3Digest();
-		byte[] salt = ObjectUtils.toBytes(getSalt(), getCharset());
-		byte[] in = ObjectUtils.toBytes(object, getCharset());
-
-		byte[] data = new byte[salt.length + in.length];
-		System.arraycopy(salt, 0, data, 0, salt.length);
-		System.arraycopy(in, 0, data, salt.length, in.length);
-
-		sm3Digest.update(data, 0, data.length);
-		byte[] hash = new byte[sm3Digest.getDigestSize()];
-		sm3Digest.doFinal(hash, 0);
-
-		return Base64.encodeBase64String(hash);
+		final Sm3Crypto crypto = new Sm3Crypto(getCharset(), getSalt());
+		return crypto.encrypt(object);
 	}
 
 }

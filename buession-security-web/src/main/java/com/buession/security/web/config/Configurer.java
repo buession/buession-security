@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -87,7 +87,7 @@ public class Configurer {
 	/**
 	 * 构造函数
 	 */
-	public Configurer(){
+	public Configurer() {
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class Configurer {
 	 */
 	public Configurer(HttpBasic httpBasic, Csrf csrf, Cors cors, FrameOptions frameOptions, Hsts hsts,
 					  Hpkp hpkp, ContentSecurityPolicy contentSecurityPolicy,
-					  ReferrerPolicy referrerPolicy, Xss xss, FormLogin formLogin){
+					  ReferrerPolicy referrerPolicy, Xss xss, FormLogin formLogin) {
 		this.httpBasic = httpBasic;
 		this.csrf = csrf;
 		this.cors = cors;
@@ -134,7 +134,7 @@ public class Configurer {
 	 *
 	 * @return Http Basic 配置
 	 */
-	public HttpBasic getHttpBasic(){
+	public HttpBasic getHttpBasic() {
 		return httpBasic;
 	}
 
@@ -144,7 +144,7 @@ public class Configurer {
 	 * @param httpBasic
 	 * 		Http Basic 配置
 	 */
-	public void setHttpBasic(HttpBasic httpBasic){
+	public void setHttpBasic(HttpBasic httpBasic) {
 		this.httpBasic = httpBasic;
 	}
 
@@ -153,7 +153,7 @@ public class Configurer {
 	 *
 	 * @return Csrf 配置
 	 */
-	public Csrf getCsrf(){
+	public Csrf getCsrf() {
 		return csrf;
 	}
 
@@ -163,7 +163,7 @@ public class Configurer {
 	 * @param csrf
 	 * 		Csrf 配置
 	 */
-	public void setCsrf(Csrf csrf){
+	public void setCsrf(Csrf csrf) {
 		this.csrf = csrf;
 	}
 
@@ -172,7 +172,7 @@ public class Configurer {
 	 *
 	 * @return Cors 配置
 	 */
-	public Cors getCors(){
+	public Cors getCors() {
 		return cors;
 	}
 
@@ -182,7 +182,7 @@ public class Configurer {
 	 * @param cors
 	 * 		Cors 配置
 	 */
-	public void setCors(Cors cors){
+	public void setCors(Cors cors) {
 		this.cors = cors;
 	}
 
@@ -191,7 +191,7 @@ public class Configurer {
 	 *
 	 * @return Frame Options 配置
 	 */
-	public FrameOptions getFrameOptions(){
+	public FrameOptions getFrameOptions() {
 		return frameOptions;
 	}
 
@@ -201,7 +201,7 @@ public class Configurer {
 	 * @param frameOptions
 	 * 		Frame Options 配置
 	 */
-	public void setFrameOptions(FrameOptions frameOptions){
+	public void setFrameOptions(FrameOptions frameOptions) {
 		this.frameOptions = frameOptions;
 	}
 
@@ -210,7 +210,7 @@ public class Configurer {
 	 *
 	 * @return Hsts 配置
 	 */
-	public Hsts getHsts(){
+	public Hsts getHsts() {
 		return hsts;
 	}
 
@@ -220,7 +220,7 @@ public class Configurer {
 	 * @param hsts
 	 * 		Hsts 配置
 	 */
-	public void setHsts(Hsts hsts){
+	public void setHsts(Hsts hsts) {
 		this.hsts = hsts;
 	}
 
@@ -229,7 +229,7 @@ public class Configurer {
 	 *
 	 * @return Hpkp 配置
 	 */
-	public Hpkp getHpkp(){
+	public Hpkp getHpkp() {
 		return hpkp;
 	}
 
@@ -239,7 +239,7 @@ public class Configurer {
 	 * @param hpkp
 	 * 		Hpkp 配置
 	 */
-	public void setHpkp(Hpkp hpkp){
+	public void setHpkp(Hpkp hpkp) {
 		this.hpkp = hpkp;
 	}
 
@@ -248,7 +248,7 @@ public class Configurer {
 	 *
 	 * @return Content Security Policy 配置
 	 */
-	public ContentSecurityPolicy getContentSecurityPolicy(){
+	public ContentSecurityPolicy getContentSecurityPolicy() {
 		return contentSecurityPolicy;
 	}
 
@@ -258,7 +258,7 @@ public class Configurer {
 	 * @param contentSecurityPolicy
 	 * 		Content Security Policy 配置
 	 */
-	public void setContentSecurityPolicy(ContentSecurityPolicy contentSecurityPolicy){
+	public void setContentSecurityPolicy(ContentSecurityPolicy contentSecurityPolicy) {
 		this.contentSecurityPolicy = contentSecurityPolicy;
 	}
 
@@ -267,7 +267,7 @@ public class Configurer {
 	 *
 	 * @return Referrer Policy 配置
 	 */
-	public ReferrerPolicy getReferrerPolicy(){
+	public ReferrerPolicy getReferrerPolicy() {
 		return referrerPolicy;
 	}
 
@@ -277,7 +277,7 @@ public class Configurer {
 	 * @param referrerPolicy
 	 * 		Referrer Policy 配置
 	 */
-	public void setReferrerPolicy(ReferrerPolicy referrerPolicy){
+	public void setReferrerPolicy(ReferrerPolicy referrerPolicy) {
 		this.referrerPolicy = referrerPolicy;
 	}
 
@@ -286,7 +286,7 @@ public class Configurer {
 	 *
 	 * @return XSS 配置
 	 */
-	public Xss getXss(){
+	public Xss getXss() {
 		return xss;
 	}
 
@@ -296,7 +296,7 @@ public class Configurer {
 	 * @param xss
 	 * 		XSS 配置
 	 */
-	public void setXss(Xss xss){
+	public void setXss(Xss xss) {
 		this.xss = xss;
 	}
 
@@ -305,7 +305,7 @@ public class Configurer {
 	 *
 	 * @return 登录表单配置
 	 */
-	public FormLogin getFormLogin(){
+	public FormLogin getFormLogin() {
 		return formLogin;
 	}
 
@@ -315,13 +315,13 @@ public class Configurer {
 	 * @param formLogin
 	 * 		登录表单配置
 	 */
-	public void setFormLogin(FormLogin formLogin){
+	public void setFormLogin(FormLogin formLogin) {
 		this.formLogin = formLogin;
 	}
 
 	@Override
-	public String toString(){
-		return new StringJoiner(", ", "{", "}")
+	public String toString() {
+		return new StringJoiner(", ", "Configurer = {", "}")
 				.add("httpBasic=" + httpBasic)
 				.add("csrf=" + csrf)
 				.add("frameOptions=" + frameOptions)

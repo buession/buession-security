@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.core;
@@ -34,27 +34,28 @@ public class RequiredParameterCaptchaException extends CaptchaException {
 
 	private final String parameter;
 
-	public RequiredParameterCaptchaException(String parameter){
+	public RequiredParameterCaptchaException(String parameter) {
 		super("Parameter \"" + parameter + "\" cloud not be empty or null.");
 		this.parameter = parameter;
 	}
 
-	public RequiredParameterCaptchaException(String parameter, String message){
+	public RequiredParameterCaptchaException(String parameter, String message) {
 		super(message);
 		this.parameter = parameter;
 	}
 
-	public RequiredParameterCaptchaException(String parameter, Throwable cause){
+	public RequiredParameterCaptchaException(String parameter, Throwable cause) {
 		super("Parameter \"" + parameter + "\" cloud not be empty or null.", cause);
 		this.parameter = parameter;
 	}
 
-	public RequiredParameterCaptchaException(String parameter, String message, Throwable cause){
+	public RequiredParameterCaptchaException(String parameter, String message, Throwable cause) {
 		super(message, cause);
 		this.parameter = parameter;
 	}
 
-	public String getParameter(){
+	public String getParameter() {
 		return parameter;
 	}
+
 }

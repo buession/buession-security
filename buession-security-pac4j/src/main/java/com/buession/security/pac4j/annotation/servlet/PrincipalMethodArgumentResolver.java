@@ -53,7 +53,7 @@ public class PrincipalMethodArgumentResolver extends AbstractNamedValueMethodArg
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return parameter.hasParameterAnnotation(Principal.class);
+		return PrincipalAnnotationUtils.supportsParameter(parameter);
 	}
 
 	@Override
