@@ -224,21 +224,10 @@ public class AliYunCaptchaClient extends AbstractCaptchaClient {
 	 * @return 检测结果
 	 */
 	private static boolean checkParam(final AliYunRequestData requestData) throws RequiredParameterCaptchaException {
-		if(Validate.hasText(requestData.getToken()) == false){
-			throw new RequiredParameterCaptchaException("Token");
-		}
-
-		if(Validate.hasText(requestData.getSig()) == false){
-			throw new RequiredParameterCaptchaException("Sig");
-		}
-
-		if(Validate.hasText(requestData.getSessionId()) == false){
-			throw new RequiredParameterCaptchaException("SessionId");
-		}
-
-		if(Validate.hasText(requestData.getScene()) == false){
-			throw new RequiredParameterCaptchaException("Scene");
-		}
+		Assert.isBlank(requestData.getToken(), ()->new RequiredParameterCaptchaException("Token"));
+		Assert.isBlank(requestData.getSig(), ()->new RequiredParameterCaptchaException("Sig"));
+		Assert.isBlank(requestData.getSessionId(), ()->new RequiredParameterCaptchaException("SessionId"));
+		Assert.isBlank(requestData.getScene(), ()->new RequiredParameterCaptchaException("Scene"));
 
 		return true;
 	}

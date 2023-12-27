@@ -107,6 +107,20 @@ public abstract class AbstractCrypto implements Crypto {
 	 *
 	 * @param algorithm
 	 * 		加密算法
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public AbstractCrypto(final Algorithm algorithm, final String characterEncoding, final String salt) {
+		this(algorithm, Charset.forName(characterEncoding), salt);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param algorithm
+	 * 		加密算法
 	 * @param charset
 	 * 		字符编码
 	 * @param salt
@@ -135,6 +149,21 @@ public abstract class AbstractCrypto implements Crypto {
 	 *
 	 * @param algorithm
 	 * 		加密算法
+	 * @param salt
+	 * 		加密密钥
+	 * @param provider
+	 * 		信息摘要对象的提供者
+	 */
+	public AbstractCrypto(final Algorithm algorithm, final String salt, final Provider provider) {
+		this(algorithm, salt);
+		this.provider = provider;
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param algorithm
+	 * 		加密算法
 	 * @param charset
 	 * 		字符编码
 	 * @param provider
@@ -150,13 +179,16 @@ public abstract class AbstractCrypto implements Crypto {
 	 *
 	 * @param algorithm
 	 * 		加密算法
+	 * @param characterEncoding
+	 * 		字符编码
 	 * @param salt
 	 * 		加密密钥
 	 * @param provider
 	 * 		信息摘要对象的提供者
 	 */
-	public AbstractCrypto(final Algorithm algorithm, final String salt, final Provider provider) {
-		this(algorithm, salt);
+	public AbstractCrypto(final Algorithm algorithm, final String characterEncoding, final String salt,
+						  final Provider provider) {
+		this(algorithm, Charset.forName(characterEncoding), salt);
 		this.provider = provider;
 	}
 

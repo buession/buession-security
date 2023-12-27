@@ -32,6 +32,11 @@ import com.buession.core.serializer.DefaultByteArraySerializer;
 import com.buession.core.serializer.SerializerException;
 
 /**
+ * 类型为 T 的对象序列化和反序列化
+ *
+ * @param <T>
+ * 		对象类型引用
+ *
  * @author Yong.Teng
  */
 public class ObjectSerializer<T> implements RedisSerializer<T> {
@@ -41,12 +46,12 @@ public class ObjectSerializer<T> implements RedisSerializer<T> {
 	private final static ByteArrayDeserializer DESERIALIZER = new DefaultByteArrayDeserializer();
 
 	@Override
-	public byte[] serialize(T object) throws SerializerException{
+	public byte[] serialize(T object) throws SerializerException {
 		return SERIALIZER.serializeAsBytes(object);
 	}
 
 	@Override
-	public T deserialize(byte[] bytes) throws DeserializerException{
+	public T deserialize(byte[] bytes) throws DeserializerException {
 		return DESERIALIZER.deserialize(bytes);
 	}
 

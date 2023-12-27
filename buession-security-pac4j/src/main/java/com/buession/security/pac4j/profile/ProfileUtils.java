@@ -24,6 +24,8 @@
  */
 package com.buession.security.pac4j.profile;
 
+import com.buession.beans.BeanConverter;
+import com.buession.beans.DefaultBeanConverter;
 import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.pac4j.core.profile.CommonProfile;
 import org.springframework.beans.BeanUtils;
@@ -99,10 +101,14 @@ public class ProfileUtils {
 	 * @since 2.3.0
 	 */
 	public static <T> T toObject(final CommonProfile profile, final Class<T> type) {
-		T instance = BeanUtils.instantiateClass(type);
+		final T instance = BeanUtils.instantiateClass(type);
 
-		com.buession.beans.BeanUtils.populate(instance, profile);
-		com.buession.beans.BeanUtils.populate(instance, profile.getAttributes());
+		if(profile != null){
+			final BeanConverter beanConverter = new DefaultBeanConverter();
+			
+			beanConverter.convert(profile, instance);
+			beanConverter.convert(profile.getAttributes(), instance);
+		}
 
 		return instance;
 	}

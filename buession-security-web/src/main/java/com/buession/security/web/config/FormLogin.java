@@ -19,10 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
+
+import java.util.StringJoiner;
 
 /**
  * 登录表单
@@ -47,7 +49,7 @@ public class FormLogin {
 	 *
 	 * @return 是否启动登录表单
 	 */
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return enabled;
 	}
 
@@ -57,7 +59,7 @@ public class FormLogin {
 	 * @param enabled
 	 * 		是否启动登录表单
 	 */
-	public void setEnabled(boolean enabled){
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -66,7 +68,7 @@ public class FormLogin {
 	 *
 	 * @return 登录页地址
 	 */
-	public String getLoginPage(){
+	public String getLoginPage() {
 		return loginPage;
 	}
 
@@ -76,8 +78,16 @@ public class FormLogin {
 	 * @param loginPage
 	 * 		登录页地址
 	 */
-	public void setLoginPage(String loginPage){
+	public void setLoginPage(String loginPage) {
 		this.loginPage = loginPage;
 	}
-	
+
+	@Override
+	public String toString() {
+		return new StringJoiner(", ", "FormLogin = {", "}")
+				.add("enabled=" + enabled)
+				.add("loginPage='" + loginPage + "'")
+				.toString();
+	}
+
 }

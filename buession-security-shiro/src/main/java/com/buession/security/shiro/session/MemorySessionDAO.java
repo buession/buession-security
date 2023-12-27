@@ -43,24 +43,24 @@ class MemorySessionDAO extends org.apache.shiro.session.mgt.eis.MemorySessionDAO
 
 	private final static Logger logger = LoggerFactory.getLogger(MemorySessionDAO.class);
 
-	public MemorySessionDAO(final long sessionTimeout){
+	public MemorySessionDAO(final long sessionTimeout) {
 		super();
 		this.sessionTimeout = sessionTimeout;
 	}
 
 	@Override
-	protected Serializable doCreate(Session session){
+	protected Serializable doCreate(Session session) {
 		session.setTimeout(sessionTimeout);
 		return super.doCreate(session);
 	}
 
-	public void clearExpiredSession(){
+	public void clearExpiredSession() {
 		logger.debug("Clean expired session in memory.");
 		Collection<Session> activeSessions = getActiveSessions();
 		if(activeSessions == null){
 			return;
 		}
-
+		
 		for(Session session : activeSessions){
 			if(System.currentTimeMillis() - session.getStartTimestamp().getTime() >= session.getTimeout()){
 				delete(session);

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.validator.servlet;
@@ -57,13 +57,13 @@ public class ServletGeetestCaptchaValidator extends GeetestCaptchaValidator impl
 	 *        {@link GeetestParameter} 实例
 	 */
 	public ServletGeetestCaptchaValidator(final GeetestCaptchaClient geetestCaptchaClient,
-										  final GeetestParameter parameter){
+										  final GeetestParameter parameter) {
 		super(geetestCaptchaClient, parameter);
 	}
 
 	@Override
-	public Status validate(final HttpServletRequest request) throws CaptchaException{
-		if("v3".equals(captchaClient.getVersion())){
+	public Status validate(final HttpServletRequest request) throws CaptchaException {
+		if(captchaClient.isV3()){
 			final GeetestV3Parameter geetestV3Parameter = (GeetestV3Parameter) parameter;
 			final GeetestV3RequestData requestData = new GeetestV3RequestData();
 
@@ -82,7 +82,7 @@ public class ServletGeetestCaptchaValidator extends GeetestCaptchaValidator impl
 			}
 
 			return validate(requestData);
-		}else if("v4".equals(captchaClient.getVersion())){
+		}else if(captchaClient.isV4()){
 			final GeetestV4Parameter geetestV4Parameter = (GeetestV4Parameter) parameter;
 			final GeetestV4RequestData requestData = new GeetestV4RequestData();
 

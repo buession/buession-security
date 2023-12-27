@@ -25,7 +25,6 @@
 package com.buession.security.captcha.tencent;
 
 import com.buession.core.utils.Assert;
-import com.buession.core.validator.Validate;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
 import com.buession.lang.Status;
@@ -71,7 +70,7 @@ public class TencentCaptchaClient extends AbstractCaptchaClient {
 	 * @param secretKey
 	 * 		原始的 SecretKey
 	 */
-	public TencentCaptchaClient(final String secretId, final String secretKey){
+	public TencentCaptchaClient(final String secretId, final String secretKey) {
 		Assert.isBlank(secretId, "Secret Id cloud not be empty or null");
 		Assert.isBlank(secretKey, "Secret Key cloud not be empty or null");
 		this.secretId = secretId;
@@ -88,13 +87,13 @@ public class TencentCaptchaClient extends AbstractCaptchaClient {
 	 * @param httpClient
 	 *        {@link HttpClient} 实例
 	 */
-	public TencentCaptchaClient(final String secretId, final String secretKey, final HttpClient httpClient){
+	public TencentCaptchaClient(final String secretId, final String secretKey, final HttpClient httpClient) {
 		this(secretId, secretKey);
 		setHttpClient(httpClient);
 	}
 
 	@Override
-	public Status validate(RequestData requestData) throws CaptchaException{
+	public Status validate(RequestData requestData) throws CaptchaException {
 		if(logger.isDebugEnabled()){
 			logger.debug("二次验证, 请求参数：{}.", requestData);
 		}
@@ -135,12 +134,12 @@ public class TencentCaptchaClient extends AbstractCaptchaClient {
 	}
 
 	@Override
-	public Manufacturer getManufacturer(){
+	public Manufacturer getManufacturer() {
 		return Manufacturer.TENCENT;
 	}
 
 	@Override
-	public String getVersion(){
+	public String getVersion() {
 		return "2019-07-22";
 	}
 
@@ -153,14 +152,9 @@ public class TencentCaptchaClient extends AbstractCaptchaClient {
 	 * @return 检测结果
 	 */
 	private static boolean checkParam(final TencentRequestData requestData)
-			throws RequiredParameterCaptchaException{
-		if(Validate.hasText(requestData.getTicket()) == false){
-			throw new RequiredParameterCaptchaException("Ticket");
-		}
-
-		if(Validate.hasText(requestData.getRandstr()) == false){
-			throw new RequiredParameterCaptchaException("Randstr");
-		}
+			throws RequiredParameterCaptchaException {
+		Assert.isBlank(requestData.getTicket(), ()->new RequiredParameterCaptchaException("Ticket"));
+		Assert.isBlank(requestData.getRandstr(), ()->new RequiredParameterCaptchaException("Randstr"));
 
 		return true;
 	}

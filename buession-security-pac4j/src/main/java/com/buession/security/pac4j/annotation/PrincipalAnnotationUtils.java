@@ -38,6 +38,28 @@ public class PrincipalAnnotationUtils {
 
 	private final static Logger logger = LoggerFactory.getLogger(PrincipalAnnotationUtils.class);
 
+	/**
+	 * 判断是否支持
+	 *
+	 * @param parameter
+	 *        {@link MethodParameter}
+	 *
+	 * @return true / false
+	 *
+	 * @since 2.3.2
+	 */
+	public static boolean supportsParameter(MethodParameter parameter) {
+		if(parameter.hasParameterAnnotation(Principal.class) == true){
+			final Class<?> parameterType = parameter.getParameterType();
+
+			return parameterType.isPrimitive() == false && parameterType.isArray() == false &&
+					parameterType.isAnnotation() == false && parameterType.isEnum() == false &&
+					parameterType.isInterface() == false;
+		}
+
+		return false;
+	}
+
 	public static <T> T toObject(final Pac4jPrincipal principal, final Principal annotation, final Class<T> paramType) {
 		if(principal == null){
 			return null;

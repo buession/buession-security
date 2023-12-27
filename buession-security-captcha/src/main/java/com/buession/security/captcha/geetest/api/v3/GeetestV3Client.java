@@ -26,6 +26,7 @@ package com.buession.security.captcha.geetest.api.v3;
 
 import com.buession.core.builder.MapBuilder;
 import com.buession.core.id.SimpleIdGenerator;
+import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
@@ -189,17 +190,9 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	 */
 	private static boolean checkParam(final GeetestV3RequestData requestData)
 			throws RequiredParameterCaptchaException {
-		if(Validate.hasText(requestData.getChallenge()) == false){
-			throw new RequiredParameterCaptchaException("challenge");
-		}
-
-		if(Validate.hasText(requestData.getValidate()) == false){
-			throw new RequiredParameterCaptchaException("validate");
-		}
-
-		if(Validate.hasText(requestData.getSeccode()) == false){
-			throw new RequiredParameterCaptchaException("seccode");
-		}
+		Assert.isBlank(requestData.getChallenge(), ()->new RequiredParameterCaptchaException("challenge"));
+		Assert.isBlank(requestData.getValidate(), ()->new RequiredParameterCaptchaException("validate"));
+		Assert.isBlank(requestData.getSeccode(), ()->new RequiredParameterCaptchaException("seccode"));
 
 		return true;
 	}
