@@ -22,20 +22,23 @@
  * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt.passwordgenerator;
+package com.buession.security.crypto.passwordgenerator;
 
-import com.buession.security.mcrypt.HmacSha1Mcrypt;
+import com.buession.security.crypto.HmacSha1Crypto;
 
 /**
  * HmacSHA1 密码生成器
  *
  * @author Yong.Teng
- * @since 2.1.0
+ * @since 2.3.3
  */
 public class HmacSha1PasswordGenerator extends AbstractPasswordGenerator {
 
+	/**
+	 * 构造函数
+	 */
 	public HmacSha1PasswordGenerator() {
-		super(new HmacSha1Mcrypt());
+		super(new HmacSha1Crypto());
 	}
 
 }

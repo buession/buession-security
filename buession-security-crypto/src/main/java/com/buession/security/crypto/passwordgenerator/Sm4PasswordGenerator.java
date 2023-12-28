@@ -22,20 +22,23 @@
  * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt.passwordgenerator;
+package com.buession.security.crypto.passwordgenerator;
 
-import com.buession.security.mcrypt.Sm4Mcrypt;
+import com.buession.security.crypto.Sm4Crypto;
 
 /**
  * SM4 密码生成器
  *
  * @author Yong.Teng
- * @since 2.3.0
+ * @since 2.3.3
  */
 public class Sm4PasswordGenerator extends AbstractPasswordGenerator {
 
+	/**
+	 * 构造函数
+	 */
 	public Sm4PasswordGenerator() {
-		super(new Sm4Mcrypt());
+		super(new Sm4Crypto());
 	}
 
 }

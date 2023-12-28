@@ -22,20 +22,23 @@
  * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt.passwordgenerator;
+package com.buession.security.crypto.passwordgenerator;
 
-import com.buession.security.mcrypt.Sha224Mcrypt;
+import com.buession.security.crypto.Sha224Crypto;
 
 /**
  * SHA-224 密码生成器
  *
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 2.3.3
  */
 public class Sha224PasswordGenerator extends AbstractPasswordGenerator {
 
+	/**
+	 * 构造函数
+	 */
 	public Sha224PasswordGenerator() {
-		super(new Sha224Mcrypt());
+		super(new Sha224Crypto());
 	}
 
 }

@@ -24,18 +24,19 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.HmacSha1Mcrypt;
+import com.buession.security.crypto.HmacSha1Crypto;
 
 /**
  * HmacSHA1 密码生成器
  *
  * @author Yong.Teng
+ * @see com.buession.security.crypto.passwordgenerator.HmacSha1PasswordGenerator
  * @since 2.1.0
  */
 public class HmacSha1PasswordGenerator extends AbstractPasswordGenerator {
 
 	public HmacSha1PasswordGenerator() {
-		super(new HmacSha1Mcrypt());
+		super(new HmacSha1Crypto());
 	}
 
 }

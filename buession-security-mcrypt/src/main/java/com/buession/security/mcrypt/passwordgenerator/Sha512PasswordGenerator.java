@@ -24,17 +24,18 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.Sha512Mcrypt;
+import com.buession.security.crypto.Sha512Crypto;
 
 /**
  * SHA-512 密码生成器
  *
  * @author Yong.Teng
+ * @see com.buession.security.crypto.passwordgenerator.Sha512PasswordGenerator
  */
 public class Sha512PasswordGenerator extends AbstractPasswordGenerator {
 
 	public Sha512PasswordGenerator() {
-		super(new Sha512Mcrypt());
+		super(new Sha512Crypto());
 	}
 
 }

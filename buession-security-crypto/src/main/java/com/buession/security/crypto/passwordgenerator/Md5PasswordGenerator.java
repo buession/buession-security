@@ -22,19 +22,23 @@
  * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt.passwordgenerator;
+package com.buession.security.crypto.passwordgenerator;
 
-import com.buession.security.mcrypt.MD5Mcrypt;
+import com.buession.security.crypto.MD5Crypto;
 
 /**
  * MD5 密码生成器
  *
  * @author Yong.Teng
+ * @since 2.3.3
  */
 public class Md5PasswordGenerator extends AbstractPasswordGenerator {
 
+	/**
+	 * 构造函数
+	 */
 	public Md5PasswordGenerator() {
-		super(new MD5Mcrypt());
+		super(new MD5Crypto());
 	}
 
 }

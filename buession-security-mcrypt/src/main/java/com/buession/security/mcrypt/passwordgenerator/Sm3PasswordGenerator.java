@@ -24,18 +24,19 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.Sm3Mcrypt;
+import com.buession.security.crypto.Sm3Crypto;
 
 /**
  * SM3 密码生成器
  *
  * @author Yong.Teng
+ * @see com.buession.security.crypto.passwordgenerator.Sm3PasswordGenerator
  * @since 2.3.0
  */
 public class Sm3PasswordGenerator extends AbstractPasswordGenerator {
 
 	public Sm3PasswordGenerator() {
-		super(new Sm3Mcrypt());
+		super(new Sm3Crypto());
 	}
 
 }

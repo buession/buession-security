@@ -24,18 +24,19 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.HmacMD5Mcrypt;
+import com.buession.security.crypto.HmacMD5Crypto;
 
 /**
  * HmacMD5 密码生成器
  *
  * @author Yong.Teng
+ * @see com.buession.security.crypto.passwordgenerator.HmacMd5PasswordGenerator
  * @since 2.1.0
  */
 public class HmacMd5PasswordGenerator extends AbstractPasswordGenerator {
 
 	public HmacMd5PasswordGenerator() {
-		super(new HmacMD5Mcrypt());
+		super(new HmacMD5Crypto());
 	}
 
 }
