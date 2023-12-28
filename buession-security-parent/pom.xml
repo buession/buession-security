@@ -65,7 +65,7 @@
 	</modules>
 
 	<properties>
-		<buession.version>2.3.2</buession.version>
+		<buession.version>2.3.3</buession.version>
 	</properties>
 
 	<dependencyManagement>
@@ -85,22 +85,6 @@
 
 	<build>
 		<finalName>buession-security-parent</finalName>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
-				<includes>
-					<include>**/*.*</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>${project.basedir}</directory>
-				<filtering>false</filtering>
-				<includes>
-					<include>changelog.txt</include>
-				</includes>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
