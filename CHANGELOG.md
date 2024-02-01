@@ -4,6 +4,25 @@
 
 ## [2.3.3](https://github.com/buession/buession-security/releases/tag/v2.3.3) (2024-xx-xx)
 
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.3.3)
+
+
+### ⭐ 新特性
+
+- **buession-security-crypto：** 新增密码生成器
+
+
+### 🔔 变化
+
+- **buession-security-mcrypt：** 密码生成器逐步过渡至 buession-security-crypto
+
+
+### 🐞 Bug 修复
+
+- **buession-security-web：** 修复 Csrf 未 指定 mode 时，csrf 配置参数无效的问题
+
 
 ---
 

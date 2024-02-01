@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -46,7 +46,7 @@ public class Csrf {
 	/**
 	 * Csrf 模式
 	 */
-	private CsrfMode mode;
+	private CsrfMode mode = CsrfMode.COOKIE;
 
 	/**
 	 * Cookie Csrf Token Repository 配置
@@ -63,7 +63,7 @@ public class Csrf {
 	 *
 	 * @return 是否启用 Csrf
 	 */
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return getEnabled();
 	}
 
@@ -72,7 +72,7 @@ public class Csrf {
 	 *
 	 * @return 是否启用 Csrf
 	 */
-	public boolean getEnabled(){
+	public boolean getEnabled() {
 		return enabled;
 	}
 
@@ -82,7 +82,7 @@ public class Csrf {
 	 * @param enabled
 	 * 		是否启用 Csrf
 	 */
-	public void setEnabled(boolean enabled){
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -91,7 +91,7 @@ public class Csrf {
 	 *
 	 * @return Csrf 模式
 	 */
-	public CsrfMode getMode(){
+	public CsrfMode getMode() {
 		return mode;
 	}
 
@@ -101,7 +101,7 @@ public class Csrf {
 	 * @param mode
 	 * 		Csrf 模式
 	 */
-	public void setMode(CsrfMode mode){
+	public void setMode(CsrfMode mode) {
 		this.mode = mode;
 	}
 
@@ -110,7 +110,7 @@ public class Csrf {
 	 *
 	 * @return Cookie Csrf Token Repository 配置
 	 */
-	public Cookie getCookie(){
+	public Cookie getCookie() {
 		return cookie;
 	}
 
@@ -120,7 +120,7 @@ public class Csrf {
 	 * @param cookie
 	 * 		Cookie Csrf Token Repository 配置
 	 */
-	public void setCookie(Cookie cookie){
+	public void setCookie(Cookie cookie) {
 		this.cookie = cookie;
 	}
 
@@ -129,7 +129,7 @@ public class Csrf {
 	 *
 	 * @return Session Csrf Token Repository 配置
 	 */
-	public Session getSession(){
+	public Session getSession() {
 		return session;
 	}
 
@@ -139,12 +139,12 @@ public class Csrf {
 	 * @param session
 	 * 		Session Csrf Token Repository 配置
 	 */
-	public void setSession(Session session){
+	public void setSession(Session session) {
 		this.session = session;
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return new StringJoiner(", ", "Csrf = {", "}")
 				.add("enabled=" + enabled)
 				.add("mode=" + mode)
@@ -204,7 +204,7 @@ public class Csrf {
 		 *
 		 * @return Csrf 请求参数名
 		 */
-		public String getParameterName(){
+		public String getParameterName() {
 			return parameterName;
 		}
 
@@ -214,7 +214,7 @@ public class Csrf {
 		 * @param parameterName
 		 * 		Csrf 请求参数名
 		 */
-		public void setParameterName(String parameterName){
+		public void setParameterName(String parameterName) {
 			this.parameterName = parameterName;
 		}
 
@@ -223,7 +223,7 @@ public class Csrf {
 		 *
 		 * @return Csrf 请求头名称
 		 */
-		public String getHeaderName(){
+		public String getHeaderName() {
 			return headerName;
 		}
 
@@ -233,7 +233,7 @@ public class Csrf {
 		 * @param headerName
 		 * 		Csrf 请求头名称
 		 */
-		public void setHeaderName(String headerName){
+		public void setHeaderName(String headerName) {
 			this.headerName = headerName;
 		}
 
@@ -242,7 +242,7 @@ public class Csrf {
 		 *
 		 * @return Csrf Cookie 名称
 		 */
-		public String getCookieName(){
+		public String getCookieName() {
 			return cookieName;
 		}
 
@@ -252,7 +252,7 @@ public class Csrf {
 		 * @param cookieName
 		 * 		Csrf Cookie 名称
 		 */
-		public void setCookieName(String cookieName){
+		public void setCookieName(String cookieName) {
 			this.cookieName = cookieName;
 		}
 
@@ -261,7 +261,7 @@ public class Csrf {
 		 *
 		 * @return Csrf Cookie 作用域
 		 */
-		public String getCookieDomain(){
+		public String getCookieDomain() {
 			return cookieDomain;
 		}
 
@@ -271,7 +271,7 @@ public class Csrf {
 		 * @param cookieDomain
 		 * 		Csrf Cookie 作用域
 		 */
-		public void setCookieDomain(String cookieDomain){
+		public void setCookieDomain(String cookieDomain) {
 			this.cookieDomain = cookieDomain;
 		}
 
@@ -280,7 +280,7 @@ public class Csrf {
 		 *
 		 * @return Csrf Cookie 作用路径
 		 */
-		public String getCookiePath(){
+		public String getCookiePath() {
 			return cookiePath;
 		}
 
@@ -290,7 +290,7 @@ public class Csrf {
 		 * @param cookiePath
 		 * 		Csrf Cookie 作用路径
 		 */
-		public void setCookiePath(String cookiePath){
+		public void setCookiePath(String cookiePath) {
 			this.cookiePath = cookiePath;
 		}
 
@@ -299,7 +299,7 @@ public class Csrf {
 		 *
 		 * @return Csrf Cookie 是否可通过客户端脚本访问
 		 */
-		public boolean isCookieHttpOnly(){
+		public boolean isCookieHttpOnly() {
 			return getCookieHttpOnly();
 		}
 
@@ -308,7 +308,7 @@ public class Csrf {
 		 *
 		 * @return Csrf Cookie 是否可通过客户端脚本访问
 		 */
-		public boolean getCookieHttpOnly(){
+		public boolean getCookieHttpOnly() {
 			return cookieHttpOnly;
 		}
 
@@ -318,12 +318,12 @@ public class Csrf {
 		 * @param cookieHttpOnly
 		 * 		Csrf Cookie 是否可通过客户端脚本访问
 		 */
-		public void setCookieHttpOnly(boolean cookieHttpOnly){
+		public void setCookieHttpOnly(boolean cookieHttpOnly) {
 			this.cookieHttpOnly = cookieHttpOnly;
 		}
 
 		@Override
-		public String toString(){
+		public String toString() {
 			return new StringJoiner(", ", "Cookie = {", "}")
 					.add("parameterName=" + parameterName)
 					.add("headerName=" + headerName)
@@ -361,7 +361,7 @@ public class Csrf {
 		 *
 		 * @return Csrf 请求参数名
 		 */
-		public String getParameterName(){
+		public String getParameterName() {
 			return parameterName;
 		}
 
@@ -371,7 +371,7 @@ public class Csrf {
 		 * @param parameterName
 		 * 		Csrf 请求参数名
 		 */
-		public void setParameterName(String parameterName){
+		public void setParameterName(String parameterName) {
 			this.parameterName = parameterName;
 		}
 
@@ -380,7 +380,7 @@ public class Csrf {
 		 *
 		 * @return Csrf 请求头名称
 		 */
-		public String getHeaderName(){
+		public String getHeaderName() {
 			return headerName;
 		}
 
@@ -390,7 +390,7 @@ public class Csrf {
 		 * @param headerName
 		 * 		Csrf 请求头名称
 		 */
-		public void setHeaderName(String headerName){
+		public void setHeaderName(String headerName) {
 			this.headerName = headerName;
 		}
 
@@ -399,7 +399,7 @@ public class Csrf {
 		 *
 		 * @return Csrf Session 属性名称
 		 */
-		public String getSessionAttributeName(){
+		public String getSessionAttributeName() {
 			return sessionAttributeName;
 		}
 
@@ -409,12 +409,12 @@ public class Csrf {
 		 * @param sessionAttributeName
 		 * 		Csrf Session 属性名称
 		 */
-		public void setSessionAttributeName(String sessionAttributeName){
+		public void setSessionAttributeName(String sessionAttributeName) {
 			this.sessionAttributeName = sessionAttributeName;
 		}
 
 		@Override
-		public String toString(){
+		public String toString() {
 			return new StringJoiner(", ", "Session = {", "}")
 					.add("parameterName=" + parameterName)
 					.add("headerName=" + headerName)
