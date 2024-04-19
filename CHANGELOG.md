@@ -17,10 +17,12 @@
 ### 🔔 变化
 
 - **buession-security-mcrypt：** 密码生成器逐步过渡至 buession-security-crypto
+- **buession-security-pac4j：** 移除依赖 org.pac4j:spring-webmvc-pac4j
 
 
 ### 🐞 Bug 修复
 
+- **buession-security-shiro：** 修复 RedisCache 中序列化、反序列化未对 null 进行判断的 BUG
 - **buession-security-web：** 修复 Csrf 未 指定 mode 时，csrf 配置参数无效的问题
 
 

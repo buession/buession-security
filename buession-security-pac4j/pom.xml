@@ -185,10 +185,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>spring-webmvc-pac4j</artifactId>
-		</dependency>
 		<!-- pac4j end -->
 
 		<dependency>
