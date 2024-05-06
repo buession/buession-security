@@ -2,6 +2,34 @@
 ===========================
 
 
+## [2.3.3](https://github.com/buession/buession-security/releases/tag/v2.3.3) (2024-05-06)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v2.3.3)
+
+
+### ⭐ 新特性
+
+- **buession-security-crypto：** 新增密码生成器
+- **buession-security-web：** XSSFilter 支持 HTML 标签转义和删除
+
+
+### 🔔 变化
+
+- **buession-security-mcrypt：** 密码生成器逐步过渡至 buession-security-crypto
+- **buession-security-pac4j：** 移除依赖 org.pac4j:spring-webmvc-pac4j
+
+
+### 🐞 Bug 修复
+
+- **buession-security-shiro：** 修复 RedisCache 中序列化、反序列化未对 null 进行判断的 BUG
+- **buession-security-web：** 修复 Csrf 未 指定 mode 时，csrf 配置参数无效的问题
+
+
+---
+
+
 ## [2.3.2](https://github.com/buession/buession-security/releases/tag/v2.3.2) (2023-12-27)
 
 ### 🔨依赖升级

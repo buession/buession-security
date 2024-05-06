@@ -24,18 +24,19 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.Sha224Mcrypt;
+import com.buession.security.crypto.Sha224Crypto;
 
 /**
  * SHA-224 密码生成器
  *
  * @author Yong.Teng
+ * @see com.buession.security.crypto.passwordgenerator.Sha224PasswordGenerator
  * @since 2.0.0
  */
 public class Sha224PasswordGenerator extends AbstractPasswordGenerator {
 
 	public Sha224PasswordGenerator() {
-		super(new Sha224Mcrypt());
+		super(new Sha224Crypto());
 	}
 
 }

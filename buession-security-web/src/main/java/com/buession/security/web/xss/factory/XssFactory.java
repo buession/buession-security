@@ -19,11 +19,28 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
+package com.buession.security.web.xss.factory;
+
 /**
+ * XSS 工厂
+ *
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 2.3.3
  */
-package com.buession.security.web.utils;
+@FunctionalInterface
+public interface XssFactory {
+
+	/**
+	 * XSS 处理
+	 *
+	 * @param str
+	 * 		待处理字符串
+	 *
+	 * @return 处理后字符串
+	 */
+	String handle(String str);
+
+}

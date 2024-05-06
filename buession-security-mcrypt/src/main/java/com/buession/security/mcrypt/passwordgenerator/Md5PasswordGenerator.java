@@ -24,17 +24,18 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.MD5Mcrypt;
+import com.buession.security.crypto.MD5Crypto;
 
 /**
  * MD5 密码生成器
  *
  * @author Yong.Teng
+ * @see com.buession.security.crypto.passwordgenerator.Md5PasswordGenerator
  */
 public class Md5PasswordGenerator extends AbstractPasswordGenerator {
 
 	public Md5PasswordGenerator() {
-		super(new MD5Mcrypt());
+		super(new MD5Crypto());
 	}
 
 }

@@ -19,18 +19,20 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.xss.encoder;
 
+import com.buession.security.web.xss.Options;
+import com.buession.security.web.xss.factory.CleanXssFactory;
+import com.buession.security.web.xss.factory.EscapeXssFactory;
+import com.buession.security.web.xss.factory.XssFactory;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import org.owasp.validator.html.Policy;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -39,16 +41,30 @@ import java.io.IOException;
  */
 public class Jackson2Encoder extends AbstractEncoder<JsonDeserializer<String>> {
 
-	public Jackson2Encoder() throws FileNotFoundException {
+	/**
+	 * 构造函数
+	 */
+	public Jackson2Encoder() {
 		super();
 	}
 
-	public Jackson2Encoder(final Policy policy) throws FileNotFoundException {
-		super(policy);
+	/**
+	 * 构造函数
+	 *
+	 * @param options
+	 *        {@link Options}
+	 *
+	 * @since 2.3.3
+	 */
+	public Jackson2Encoder(final Options options) {
+		super(options);
 	}
 
 	@Override
 	public JsonDeserializer<String> runtime() {
+		final XssFactory xssFactory = getOptions().getPolicy() == Options.Policy.ESCAPE ?
+				new EscapeXssFactory(getOptions()) : new CleanXssFactory(getOptions());
+
 		return new JsonDeserializer<String>() {
 
 			@Override
@@ -59,13 +75,7 @@ public class Jackson2Encoder extends AbstractEncoder<JsonDeserializer<String>> {
 			@Override
 			public String deserialize(JsonParser parser, DeserializationContext cxt)
 					throws IOException, JacksonException {
-				String value = parser.getValueAsString();
-
-				if(value != null){
-					return antiSamyFactory.clean(value);
-				}
-
-				return value;
+				return xssFactory.handle(parser.getValueAsString());
 			}
 
 		};

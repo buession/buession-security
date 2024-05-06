@@ -19,16 +19,13 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.xss.encoder;
 
-import com.buession.security.web.xss.AntiSamyFactory;
-import org.owasp.validator.html.Policy;
-import org.owasp.validator.html.PolicyException;
-
-import java.io.FileNotFoundException;
+import com.buession.core.utils.Assert;
+import com.buession.security.web.xss.Options;
 
 /**
  * @author Yong.Teng
@@ -36,18 +33,52 @@ import java.io.FileNotFoundException;
  */
 public abstract class AbstractEncoder<T> implements Encoder<T> {
 
-	protected AntiSamyFactory antiSamyFactory;
+	/**
+	 * XSS 处理选项
+	 */
+	private Options options = Options.Builder.getInstance().build();
 
-	public AbstractEncoder() throws FileNotFoundException{
-		this(null);
+	/**
+	 * 构造函数
+	 */
+	public AbstractEncoder() {
+
 	}
 
-	public AbstractEncoder(final Policy policy) throws FileNotFoundException{
-		try{
-			antiSamyFactory = AntiSamyFactory.getInstance(policy == null ? Policy.getInstance() : policy);
-		}catch(PolicyException e){
-			throw new FileNotFoundException("Policy file 'resources/antisamy.xml' not be found.");
-		}
+	/**
+	 * 构造函数
+	 *
+	 * @param options
+	 *        {@link Options}
+	 *
+	 * @since 2.3.3
+	 */
+	public AbstractEncoder(final Options options) {
+		setOptions(options);
+	}
+
+	/**
+	 * 返回 XSS 处理选项
+	 *
+	 * @return XSS 处理选项
+	 *
+	 * @since 2.3.3
+	 */
+	public Options getOptions() {
+		return options;
+	}
+
+	/**
+	 * 设置 XSS 处理选项
+	 *
+	 * @param options
+	 * 		XSS 处理选项
+	 *
+	 * @since 2.3.3
+	 */
+	public void setOptions(Options options) {
+		Assert.isNull(options, "Options cloud not be null");
+		this.options = options;
 	}
 
 }

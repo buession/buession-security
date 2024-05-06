@@ -21,21 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2020 Buession.com Inc.														|
+ * | Copyright @ 2013-2024 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web;
-
-import org.junit.Test;
-import org.owasp.validator.html.AntiSamy;
-import org.owasp.validator.html.CleanResults;
-import org.owasp.validator.html.Policy;
-import org.owasp.validator.html.PolicyException;
-import org.owasp.validator.html.ScanException;
-
-/**
- * @author Yong.Teng
- */
-public class AntiSamyTest {
-
-}
+package com.buession.security.web.xss.factory;

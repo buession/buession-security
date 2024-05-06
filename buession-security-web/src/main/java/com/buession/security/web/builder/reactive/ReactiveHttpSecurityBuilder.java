@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.builder.reactive;
@@ -98,37 +98,32 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 
 		if(config.isEnabled()){
 			if(config.getMode() != null){
-				switch(config.getMode()){
-					case COOKIE:
-						Csrf.Cookie cookie = config.getCookie();
+				if(config.getMode() == Csrf.CsrfMode.SESSION){
+					Csrf.Session session = config.getSession();
 
-						CookieServerCsrfTokenRepository cookieCsrfTokenRepository = new CookieServerCsrfTokenRepository();
+					WebSessionServerCsrfTokenRepository sessionCsrfTokenRepository = new WebSessionServerCsrfTokenRepository();
 
-						propertyMapper.from(cookie.getParameterName()).to(cookieCsrfTokenRepository::setParameterName);
-						propertyMapper.from(cookie.getHeaderName()).to(cookieCsrfTokenRepository::setHeaderName);
-						propertyMapper.from(cookie.getCookieName()).to(cookieCsrfTokenRepository::setCookieName);
-						propertyMapper.from(cookie.getCookieDomain()).to(cookieCsrfTokenRepository::setCookieDomain);
-						propertyMapper.from(cookie.getCookiePath()).to(cookieCsrfTokenRepository::setCookiePath);
+					propertyMapper.from(session.getParameterName())
+							.to(sessionCsrfTokenRepository::setParameterName);
+					propertyMapper.from(session.getHeaderName()).to(sessionCsrfTokenRepository::setHeaderName);
+					propertyMapper.from(session.getSessionAttributeName())
+							.to(sessionCsrfTokenRepository::setSessionAttributeName);
 
-						cookieCsrfTokenRepository.setCookieHttpOnly(cookie.getCookieHttpOnly());
+					csrfSpec.csrfTokenRepository(sessionCsrfTokenRepository);
+				}else{
+					Csrf.Cookie cookie = config.getCookie();
 
-						csrfSpec.csrfTokenRepository(cookieCsrfTokenRepository);
-						break;
-					case SESSION:
-						Csrf.Session session = config.getSession();
+					CookieServerCsrfTokenRepository cookieCsrfTokenRepository = new CookieServerCsrfTokenRepository();
 
-						WebSessionServerCsrfTokenRepository sessionCsrfTokenRepository = new WebSessionServerCsrfTokenRepository();
+					propertyMapper.from(cookie.getParameterName()).to(cookieCsrfTokenRepository::setParameterName);
+					propertyMapper.from(cookie.getHeaderName()).to(cookieCsrfTokenRepository::setHeaderName);
+					propertyMapper.from(cookie.getCookieName()).to(cookieCsrfTokenRepository::setCookieName);
+					propertyMapper.from(cookie.getCookieDomain()).to(cookieCsrfTokenRepository::setCookieDomain);
+					propertyMapper.from(cookie.getCookiePath()).to(cookieCsrfTokenRepository::setCookiePath);
 
-						propertyMapper.from(session.getParameterName())
-								.to(sessionCsrfTokenRepository::setParameterName);
-						propertyMapper.from(session.getHeaderName()).to(sessionCsrfTokenRepository::setHeaderName);
-						propertyMapper.from(session.getSessionAttributeName())
-								.to(sessionCsrfTokenRepository::setSessionAttributeName);
+					cookieCsrfTokenRepository.setCookieHttpOnly(cookie.getCookieHttpOnly());
 
-						csrfSpec.csrfTokenRepository(sessionCsrfTokenRepository);
-						break;
-					default:
-						break;
+					csrfSpec.csrfTokenRepository(cookieCsrfTokenRepository);
 				}
 			}
 		}else{

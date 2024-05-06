@@ -21,19 +21,19 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2023 Buession.com Inc.														|
+ * | Copyright @ 2013-2024 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.xss.servlet;
 
 import com.buession.core.validator.Validate;
-import com.buession.security.web.xss.AntiSamyFactory;
-import org.owasp.validator.html.Policy;
-import org.owasp.validator.html.PolicyException;
+import com.buession.security.web.xss.Options;
+import com.buession.security.web.xss.factory.CleanXssFactory;
+import com.buession.security.web.xss.factory.EscapeXssFactory;
+import com.buession.security.web.xss.factory.XssFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -42,41 +42,28 @@ import java.util.Map;
  */
 public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 
-	private final AntiSamyFactory antiSamyFactory;
+	private final XssFactory xssFactory;
 
-	public XssServletRequestWrapper(HttpServletRequest request, Policy policy) throws FileNotFoundException{
+	public XssServletRequestWrapper(HttpServletRequest request, Options options) {
 		super(request);
-
-		try{
-			antiSamyFactory = AntiSamyFactory.getInstance(policy == null ? Policy.getInstance() : policy);
-		}catch(PolicyException e){
-			throw new FileNotFoundException("Policy file 'resources/antisamy.xml' not be found.");
-		}
+		xssFactory = options.getPolicy() == Options.Policy.ESCAPE ? new EscapeXssFactory(options) : new CleanXssFactory(
+				options);
 	}
 
 	@Override
-	public String getParameter(String name){
+	public String getParameter(String name) {
 		String value = super.getParameter(name);
-		return value == null ? null : antiSamyFactory.clean(value);
+		return Validate.isBlank(value) ? value : xssFactory.handle(value);
 	}
 
 	@Override
-	public String[] getParameterValues(String name){
+	public String[] getParameterValues(String name) {
 		String[] values = super.getParameterValues(name);
-
-		if(Validate.isEmpty(values)){
-			return values;
-		}
-
-		for(int i = 0; i < values.length; i++){
-			values[i] = antiSamyFactory.clean(values[i]);
-		}
-
-		return values;
+		return Validate.isEmpty(values) ? values : handle(values);
 	}
 
 	@Override
-	public Map<String, String[]> getParameterMap(){
+	public Map<String, String[]> getParameterMap() {
 		Map<String, String[]> parameterMap = super.getParameterMap();
 
 		if(Validate.isEmpty(parameterMap)){
@@ -85,9 +72,17 @@ public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 
 		Map<String, String[]> result = new LinkedHashMap<>(parameterMap.size());
 
-		parameterMap.forEach((name, value)->{
-			result.put(name, antiSamyFactory.clean(value));
-		});
+		parameterMap.forEach((name, value)->result.put(name, handle(value)));
+
+		return result;
+	}
+
+	private String[] handle(final String[] source) {
+		String[] result = new String[source.length];
+
+		for(int i = 0; i < source.length; i++){
+			result[i] = Validate.isBlank(source[i]) ? source[i] : xssFactory.handle(source[i]);
+		}
 
 		return result;
 	}

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.cache;
@@ -357,10 +357,12 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 		}
 
 		try{
-			byte[] redisKey = makeKey(key);
+			byte[] cacheKey = makeKey(key);
 			byte[] rawValue = valueSerializer.serialize(value);
 
-			redisManager.set(redisKey, rawValue, getExpire());
+			if(cacheKey != null && rawValue != null){
+				redisManager.set(cacheKey, rawValue, getExpire());
+			}
 			return value;
 		}catch(SerializerException e){
 			logger.error("Put cache error", e);
@@ -377,8 +379,13 @@ public class RedisCache<K, V> extends AbstractCache<K, V> {
 
 		try{
 			byte[] cacheKey = makeKey(key);
+
+			if(cacheKey == null){
+				return null;
+			}
+
 			byte[] rawValue = redisManager.get(cacheKey);
-			V previous = valueSerializer.deserialize(rawValue);
+			V previous = rawValue == null ? null : valueSerializer.deserialize(rawValue);
 
 			redisManager.delete(cacheKey);
 
