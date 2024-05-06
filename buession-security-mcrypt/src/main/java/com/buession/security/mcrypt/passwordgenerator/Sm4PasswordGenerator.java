@@ -24,18 +24,19 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.Sm4Mcrypt;
+import com.buession.security.crypto.Sm4Crypto;
 
 /**
  * SM4 密码生成器
  *
  * @author Yong.Teng
+ * @see com.buession.security.crypto.passwordgenerator.Sm4PasswordGenerator
  * @since 2.3.0
  */
 public class Sm4PasswordGenerator extends AbstractPasswordGenerator {
 
 	public Sm4PasswordGenerator() {
-		super(new Sm4Mcrypt());
+		super(new Sm4Crypto());
 	}
 
 }

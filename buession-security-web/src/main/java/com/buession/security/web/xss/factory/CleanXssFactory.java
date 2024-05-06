@@ -19,12 +19,13 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.xss;
+package com.buession.security.web.xss.factory;
 
 import com.buession.core.validator.Validate;
+import com.buession.security.web.xss.Options;
 import org.owasp.validator.html.AntiSamy;
 import org.owasp.validator.html.CleanResults;
 import org.owasp.validator.html.Policy;
@@ -33,70 +34,42 @@ import org.owasp.validator.html.ScanException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 /**
+ * 清理模式 XSS 处理工厂
+ *
  * @author Yong.Teng
- * @since 2.2.0
+ * @since 2.3.3
  */
-public class AntiSamyFactory {
+public class CleanXssFactory extends AbstractXssFactory {
 
-	private final static Logger logger = LoggerFactory.getLogger(AntiSamyFactory.class);
+	private AntiSamy antiSamy;
 
-	private final AntiSamy antiSamy;
+	private final static Logger logger = LoggerFactory.getLogger(CleanXssFactory.class);
 
-	private AntiSamyFactory(final Policy policy){
-		antiSamy = policy == null ? new AntiSamy() : new AntiSamy(policy);
-	}
-
-	public static AntiSamyFactory getInstance(final Policy policy){
-		return new AntiSamyFactory(policy);
-	}
-
-	public List<String> clean(List<String> values){
-		if(Validate.isNotEmpty(values)){
-			return values.stream().map(this::clean).collect(Collectors.toList());
+	/**
+	 * 构造函数
+	 *
+	 * @param options
+	 * 		XSS 处理选项
+	 */
+	public CleanXssFactory(Options options) {
+		super(options);
+		try{
+			antiSamy =
+					options.getClean() == null ||
+							Validate.isEmpty(options.getClean().getPolicyConfigLocation()) ? new AntiSamy() :
+							new AntiSamy(Policy.getInstance(options.getClean().getPolicyConfigLocation()));
+		}catch(PolicyException e){
+			antiSamy = new AntiSamy();
 		}
-
-		return values;
 	}
 
-	public Set<String> clean(Set<String> values){
-		if(Validate.isNotEmpty(values)){
-			return values.stream().map(this::clean).collect(Collectors.toSet());
-		}
-
-		return values;
-	}
-
-	public Queue<String> clean(Queue<String> values){
-		if(Validate.isNotEmpty(values)){
-			return values.stream().map(this::clean).collect(Collectors.toCollection(ArrayDeque::new));
-		}
-
-		return values;
-	}
-
-	public String[] clean(String[] values){
-		if(Validate.isNotEmpty(values)){
-			for(int i = 0; i < values.length; i++){
-				values[i] = clean(values[i]);
-			}
-		}
-
-		return values;
-	}
-
-	public String clean(String value){
+	@Override
+	public String handle(String str) {
 		final CleanResults cleanResults;
 
 		try{
-			cleanResults = antiSamy.scan(value);
+			cleanResults = antiSamy.scan(str);
 			return cleanResults.getCleanHTML();
 		}catch(ScanException e){
 			logger.warn("AntiSamy scan error: {}.", e.getMessage(), e);
@@ -104,7 +77,7 @@ public class AntiSamyFactory {
 			logger.warn("AntiSamy scan policy error{}.", e.getMessage(), e);
 		}
 
-		return value;
+		return str;
 	}
 
 }

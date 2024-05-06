@@ -19,46 +19,26 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.utils;
+package com.buession.security.crypto.passwordgenerator;
 
-import com.buession.core.utils.Assert;
-import org.owasp.validator.html.Policy;
-import org.owasp.validator.html.PolicyException;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-
-import java.io.IOException;
+import com.buession.security.crypto.HmacSha384Crypto;
 
 /**
- * {@link Policy} 工具类
+ * HmacSHA384 密码生成器
  *
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 2.3.3
  */
-public class PolicyUtils {
+public class HmacSha384PasswordGenerator extends AbstractPasswordGenerator {
 
 	/**
-	 * 从配置文件创建 {@link Policy} 实例
-	 *
-	 * @param configLocation
-	 * 		配置文件路径
-	 *
-	 * @return {@link Policy} 实例
-	 *
-	 * @throws IOException
-	 * 		配置文件不存在时抛出
-	 * @throws PolicyException
-	 *        {@link Policy} 实例初始化时抛出
+	 * 构造函数
 	 */
-	public static Policy createFromConfigFile(final String configLocation) throws IOException, PolicyException{
-		Assert.isBlank(configLocation, "Policy config location cloud not be empty or null.");
-		PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
-		Resource[] resources = resourceResolver.getResources(configLocation);
-
-		return Policy.getInstance(resources[0].getInputStream());
+	public HmacSha384PasswordGenerator() {
+		super(new HmacSha384Crypto());
 	}
 
 }

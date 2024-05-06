@@ -24,18 +24,19 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.ShaMcrypt;
+import com.buession.security.crypto.ShaCrypto;
 
 /**
  * SHA 密码生成器
  *
  * @author Yong.Teng
+ * @see com.buession.security.crypto.passwordgenerator.ShaPasswordGenerator
  * @since 2.3.0
  */
 public class ShaPasswordGenerator extends AbstractPasswordGenerator {
 
 	public ShaPasswordGenerator() {
-		super(new ShaMcrypt());
+		super(new ShaCrypto());
 	}
 
 }

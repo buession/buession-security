@@ -19,24 +19,34 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt.passwordgenerator;
+package com.buession.security.web.xss.factory;
 
-import com.buession.security.crypto.HmacMD5Crypto;
+import com.buession.security.web.xss.Options;
 
 /**
- * HmacMD5 密码生成器
+ * XSS 处理工厂抽象类
  *
  * @author Yong.Teng
- * @see com.buession.security.crypto.passwordgenerator.HmacMd5PasswordGenerator
- * @since 2.1.0
+ * @since 2.3.3
  */
-public class HmacMd5PasswordGenerator extends AbstractPasswordGenerator {
+public abstract class AbstractXssFactory implements XssFactory {
 
-	public HmacMd5PasswordGenerator() {
-		super(new HmacMD5Crypto());
+	/**
+	 * XSS 处理选项
+	 */
+	protected Options options;
+
+	/**
+	 * 构造函数
+	 *
+	 * @param options
+	 * 		XSS 处理选项
+	 */
+	public AbstractXssFactory(Options options) {
+		this.options = options;
 	}
 
 }

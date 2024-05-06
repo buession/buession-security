@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.builder.servlet;
@@ -109,44 +109,38 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	public ServletHttpSecurityBuilder csrf(final Csrf config) {
 		try{
 			CsrfConfigurer<HttpSecurity> csrfConfigurer = httpSecurity.csrf();
-			PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenHasText();
 
 			if(config.isEnabled()){
-				if(config.getMode() != null){
-					switch(config.getMode()){
-						case COOKIE:
-							Csrf.Cookie cookie = config.getCookie();
+				PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenHasText();
 
-							CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
+				if(config.getMode() == Csrf.CsrfMode.SESSION){
+					Csrf.Session session = config.getSession();
 
-							propertyMapper.from(cookie.getParameterName())
-									.to(cookieCsrfTokenRepository::setParameterName);
-							propertyMapper.from(cookie.getHeaderName()).to(cookieCsrfTokenRepository::setHeaderName);
-							propertyMapper.from(cookie.getCookieName()).to(cookieCsrfTokenRepository::setCookieName);
-							propertyMapper.from(cookie.getCookieDomain())
-									.to(cookieCsrfTokenRepository::setCookieDomain);
-							propertyMapper.from(cookie.getCookiePath()).to(cookieCsrfTokenRepository::setCookiePath);
+					HttpSessionCsrfTokenRepository sessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
 
-							cookieCsrfTokenRepository.setCookieHttpOnly(cookie.getCookieHttpOnly());
+					propertyMapper.from(session.getParameterName())
+							.to(sessionCsrfTokenRepository::setParameterName);
+					propertyMapper.from(session.getHeaderName()).to(sessionCsrfTokenRepository::setHeaderName);
+					propertyMapper.from(session.getSessionAttributeName())
+							.to(sessionCsrfTokenRepository::setSessionAttributeName);
 
-							csrfConfigurer.csrfTokenRepository(new LazyCsrfTokenRepository(cookieCsrfTokenRepository));
-							break;
-						case SESSION:
-							Csrf.Session session = config.getSession();
+					csrfConfigurer.csrfTokenRepository(new LazyCsrfTokenRepository(sessionCsrfTokenRepository));
+				}else{
+					Csrf.Cookie cookie = config.getCookie();
 
-							HttpSessionCsrfTokenRepository sessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
+					CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
 
-							propertyMapper.from(session.getParameterName())
-									.to(sessionCsrfTokenRepository::setParameterName);
-							propertyMapper.from(session.getHeaderName()).to(sessionCsrfTokenRepository::setHeaderName);
-							propertyMapper.from(session.getSessionAttributeName())
-									.to(sessionCsrfTokenRepository::setSessionAttributeName);
+					propertyMapper.from(cookie.getParameterName())
+							.to(cookieCsrfTokenRepository::setParameterName);
+					propertyMapper.from(cookie.getHeaderName()).to(cookieCsrfTokenRepository::setHeaderName);
+					propertyMapper.from(cookie.getCookieName()).to(cookieCsrfTokenRepository::setCookieName);
+					propertyMapper.from(cookie.getCookieDomain())
+							.to(cookieCsrfTokenRepository::setCookieDomain);
+					propertyMapper.from(cookie.getCookiePath()).to(cookieCsrfTokenRepository::setCookiePath);
 
-							csrfConfigurer.csrfTokenRepository(new LazyCsrfTokenRepository(sessionCsrfTokenRepository));
-							break;
-						default:
-							break;
-					}
+					cookieCsrfTokenRepository.setCookieHttpOnly(cookie.getCookieHttpOnly());
+
+					csrfConfigurer.csrfTokenRepository(new LazyCsrfTokenRepository(cookieCsrfTokenRepository));
 				}
 			}else{
 				csrfConfigurer.disable();
@@ -272,18 +266,18 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 
 	@Override
 	public ServletHttpSecurityBuilder contentSecurityPolicy(final ContentSecurityPolicy config) {
-		try{
-			if(config.isEnabled() && Validate.hasText(config.getPolicyDirectives())){
+		if(config.isEnabled() && Validate.hasText(config.getPolicyDirectives())){
+			try{
 				HeadersConfigurer<HttpSecurity>.ContentSecurityPolicyConfig contentSecurityPolicyConfig = httpSecurity.headers()
 						.contentSecurityPolicy(config.getPolicyDirectives());
 
 				if(Objects.equals(config.getReportOnly(), true)){
 					contentSecurityPolicyConfig.reportOnly();
 				}
-			}
-		}catch(Exception e){
-			if(logger.isErrorEnabled()){
-				logger.error("contentSecurityPolicy config error: {}<{}>", e.getMessage(), config);
+			}catch(Exception e){
+				if(logger.isErrorEnabled()){
+					logger.error("contentSecurityPolicy config error: {}<{}>", e.getMessage(), config);
+				}
 			}
 		}
 

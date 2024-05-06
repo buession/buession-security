@@ -7,7 +7,7 @@
 		<groupId>com.buession.security</groupId>
 		<artifactId>buession-security-parent</artifactId>
 		<relativePath>../buession-security-parent</relativePath>
-		<version>2.3.2</version>
+		<version>2.3.3</version>
 	</parent>
 	<artifactId>buession-security-pac4j</artifactId>
 	<url>https://security.buession.com/</url>
@@ -184,10 +184,6 @@
 					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>spring-webmvc-pac4j</artifactId>
 		</dependency>
 		<!-- pac4j end -->
 

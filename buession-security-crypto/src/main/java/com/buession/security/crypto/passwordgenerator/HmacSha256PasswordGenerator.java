@@ -22,21 +22,23 @@
  * | Copyright @ 2013-2023 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.mcrypt.passwordgenerator;
+package com.buession.security.crypto.passwordgenerator;
 
-import com.buession.security.crypto.HmacMD5Crypto;
+import com.buession.security.crypto.HmacSha256Crypto;
 
 /**
- * HmacMD5 密码生成器
+ * HmacSHA256 密码生成器
  *
  * @author Yong.Teng
- * @see com.buession.security.crypto.passwordgenerator.HmacMd5PasswordGenerator
- * @since 2.1.0
+ * @since 2.3.3
  */
-public class HmacMd5PasswordGenerator extends AbstractPasswordGenerator {
+public class HmacSha256PasswordGenerator extends AbstractPasswordGenerator {
 
-	public HmacMd5PasswordGenerator() {
-		super(new HmacMD5Crypto());
+	/**
+	 * 构造函数
+	 */
+	public HmacSha256PasswordGenerator() {
+		super(new HmacSha256Crypto());
 	}
 
 }

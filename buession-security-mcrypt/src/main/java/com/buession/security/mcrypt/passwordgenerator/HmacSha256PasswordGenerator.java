@@ -24,18 +24,19 @@
  */
 package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.mcrypt.HmacSha256Mcrypt;
+import com.buession.security.crypto.HmacSha256Crypto;
 
 /**
  * HmacSHA256 密码生成器
  *
  * @author Yong.Teng
+ * @see com.buession.security.crypto.passwordgenerator.HmacSha256PasswordGenerator
  * @since 2.1.0
  */
 public class HmacSha256PasswordGenerator extends AbstractPasswordGenerator {
 
 	public HmacSha256PasswordGenerator() {
-		super(new HmacSha256Mcrypt());
+		super(new HmacSha256Crypto());
 	}
 
 }

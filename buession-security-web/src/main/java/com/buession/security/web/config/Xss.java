@@ -19,10 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
+
+import com.buession.security.web.xss.Options;
 
 import java.util.StringJoiner;
 
@@ -46,6 +48,13 @@ public class Xss {
 	private Boolean enabledProtection;
 
 	/**
+	 * 策略模式
+	 *
+	 * @since 2.3.3
+	 */
+	private Options.Policy policy = Options.Policy.ESCAPE;
+
+	/**
 	 * XSS 策略配置文件路径
 	 */
 	private String policyConfigLocation;
@@ -55,7 +64,7 @@ public class Xss {
 	 *
 	 * @return 是否启用 Xss 配置
 	 */
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return getEnabled();
 	}
 
@@ -64,7 +73,7 @@ public class Xss {
 	 *
 	 * @return 是否启用 Xss 配置
 	 */
-	public boolean getEnabled(){
+	public boolean getEnabled() {
 		return enabled;
 	}
 
@@ -74,34 +83,53 @@ public class Xss {
 	 * @param enabled
 	 * 		是否启用 Xss 配置
 	 */
-	public void setEnabled(boolean enabled){
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
 	@Deprecated
-	public Boolean isBlock(){
+	public Boolean isBlock() {
 		return getBlock();
 	}
 
-	public Boolean getBlock(){
+	public Boolean getBlock() {
 		return block;
 	}
 
-	public void setBlock(Boolean block){
+	public void setBlock(Boolean block) {
 		this.block = block;
 	}
 
 	@Deprecated
-	public Boolean isEnabledProtection(){
+	public Boolean isEnabledProtection() {
 		return getEnabledProtection();
 	}
 
-	public Boolean getEnabledProtection(){
+	public Boolean getEnabledProtection() {
 		return enabledProtection;
 	}
 
-	public void setEnabledProtection(Boolean enabledProtection){
+	public void setEnabledProtection(Boolean enabledProtection) {
 		this.enabledProtection = enabledProtection;
+	}
+
+	/**
+	 * 返回策略模式
+	 *
+	 * @return 策略模式
+	 */
+	public Options.Policy getPolicy() {
+		return policy;
+	}
+
+	/**
+	 * 设置策略模式
+	 *
+	 * @param policy
+	 * 		策略模式
+	 */
+	public void setPolicy(Options.Policy policy) {
+		this.policy = policy;
 	}
 
 	/**
@@ -109,7 +137,7 @@ public class Xss {
 	 *
 	 * @return XSS 策略配置文件路径
 	 */
-	public String getPolicyConfigLocation(){
+	public String getPolicyConfigLocation() {
 		return policyConfigLocation;
 	}
 
@@ -119,12 +147,12 @@ public class Xss {
 	 * @param policyConfigLocation
 	 * 		XSS 策略配置文件路径
 	 */
-	public void setPolicyConfigLocation(String policyConfigLocation){
+	public void setPolicyConfigLocation(String policyConfigLocation) {
 		this.policyConfigLocation = policyConfigLocation;
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return new StringJoiner(", ", "Xss = {", "}")
 				.add("enabled=" + enabled)
 				.add("block=" + block)
