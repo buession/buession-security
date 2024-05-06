@@ -22,94 +22,32 @@
  * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.xss.reactive;
+package com.buession.security.web.xss.factory;
 
-import com.buession.core.utils.Assert;
 import com.buession.security.web.xss.Options;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.lang.Nullable;
-import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
-import reactor.core.publisher.Mono;
+import org.apache.commons.text.StringEscapeUtils;
 
 /**
- * XSS 过滤器
+ * 转义模式 XSS 处理工厂
  *
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 2.3.3
  */
-public class XssFilter implements WebFilter {
-
-	/**
-	 * XSS 选项
-	 */
-	private Options options = Options.Builder.getInstance().build();
+public class EscapeXssFactory extends AbstractXssFactory {
 
 	/**
 	 * 构造函数
-	 */
-	public XssFilter() {
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param options
-	 *        {@link Options}
-	 *
-	 * @since 2.3.3
-	 */
-	public XssFilter(Options options) {
-		setOptions(options);
-	}
-
-	/**
-	 * 返回 XSS 处理选项
-	 *
-	 * @return XSS 处理选项
-	 *
-	 * @since 2.3.3
-	 */
-	public Options getOptions() {
-		return options;
-	}
-
-	/**
-	 * 设置 XSS 处理选项
 	 *
 	 * @param options
 	 * 		XSS 处理选项
-	 *
-	 * @since 2.3.3
 	 */
-	public void setOptions(Options options) {
-		Assert.isNull(options, "Options cloud not be null");
-		this.options = options;
-	}
-
-	/**
-	 * 设置策略
-	 *
-	 * @param policy
-	 * 		策略
-	 *
-	 * @since 2.3.3
-	 */
-	public void setPolicy(Options.Policy policy) {
-		getOptions().setPolicy(policy);
+	public EscapeXssFactory(Options options) {
+		super(options);
 	}
 
 	@Override
-	public Mono<Void> filter(@Nullable ServerWebExchange exchange, WebFilterChain chain) {
-		if(exchange != null){
-			ServerHttpRequest request = exchange.getRequest();
-
-			return chain.filter(
-					exchange.mutate().request(new XssServerHttpRequestDecorator(request, getOptions())).build());
-		}
-
-		return chain.filter(exchange);
+	public String handle(String str) {
+		return StringEscapeUtils.escapeHtml4(str);
 	}
 
 }

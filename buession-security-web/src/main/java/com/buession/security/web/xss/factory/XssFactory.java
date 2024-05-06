@@ -22,63 +22,25 @@
  * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.xss.encoder;
-
-import com.buession.security.web.xss.Options;
-import com.buession.security.web.xss.factory.CleanXssFactory;
-import com.buession.security.web.xss.factory.EscapeXssFactory;
-import com.buession.security.web.xss.factory.XssFactory;
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-
-import java.io.IOException;
+package com.buession.security.web.xss.factory;
 
 /**
+ * XSS 工厂
+ *
  * @author Yong.Teng
- * @since 2.2.0
+ * @since 2.3.3
  */
-public class Jackson2Encoder extends AbstractEncoder<JsonDeserializer<String>> {
+@FunctionalInterface
+public interface XssFactory {
 
 	/**
-	 * 构造函数
-	 */
-	public Jackson2Encoder() {
-		super();
-	}
-
-	/**
-	 * 构造函数
+	 * XSS 处理
 	 *
-	 * @param options
-	 *        {@link Options}
+	 * @param str
+	 * 		待处理字符串
 	 *
-	 * @since 2.3.3
+	 * @return 处理后字符串
 	 */
-	public Jackson2Encoder(final Options options) {
-		super(options);
-	}
-
-	@Override
-	public JsonDeserializer<String> runtime() {
-		final XssFactory xssFactory = getOptions().getPolicy() == Options.Policy.ESCAPE ?
-				new EscapeXssFactory(getOptions()) : new CleanXssFactory(getOptions());
-
-		return new JsonDeserializer<String>() {
-
-			@Override
-			public Class<String> handledType() {
-				return String.class;
-			}
-
-			@Override
-			public String deserialize(JsonParser parser, DeserializationContext cxt)
-					throws IOException, JacksonException {
-				return xssFactory.handle(parser.getValueAsString());
-			}
-
-		};
-	}
+	String handle(String str);
 
 }

@@ -22,94 +22,62 @@
  * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.xss.reactive;
+package com.buession.security.web.xss.factory;
 
-import com.buession.core.utils.Assert;
+import com.buession.core.validator.Validate;
 import com.buession.security.web.xss.Options;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.lang.Nullable;
-import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
-import reactor.core.publisher.Mono;
+import org.owasp.validator.html.AntiSamy;
+import org.owasp.validator.html.CleanResults;
+import org.owasp.validator.html.Policy;
+import org.owasp.validator.html.PolicyException;
+import org.owasp.validator.html.ScanException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * XSS 过滤器
+ * 清理模式 XSS 处理工厂
  *
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 2.3.3
  */
-public class XssFilter implements WebFilter {
+public class CleanXssFactory extends AbstractXssFactory {
 
-	/**
-	 * XSS 选项
-	 */
-	private Options options = Options.Builder.getInstance().build();
+	private AntiSamy antiSamy;
 
-	/**
-	 * 构造函数
-	 */
-	public XssFilter() {
-	}
+	private final static Logger logger = LoggerFactory.getLogger(CleanXssFactory.class);
 
 	/**
 	 * 构造函数
-	 *
-	 * @param options
-	 *        {@link Options}
-	 *
-	 * @since 2.3.3
-	 */
-	public XssFilter(Options options) {
-		setOptions(options);
-	}
-
-	/**
-	 * 返回 XSS 处理选项
-	 *
-	 * @return XSS 处理选项
-	 *
-	 * @since 2.3.3
-	 */
-	public Options getOptions() {
-		return options;
-	}
-
-	/**
-	 * 设置 XSS 处理选项
 	 *
 	 * @param options
 	 * 		XSS 处理选项
-	 *
-	 * @since 2.3.3
 	 */
-	public void setOptions(Options options) {
-		Assert.isNull(options, "Options cloud not be null");
-		this.options = options;
-	}
-
-	/**
-	 * 设置策略
-	 *
-	 * @param policy
-	 * 		策略
-	 *
-	 * @since 2.3.3
-	 */
-	public void setPolicy(Options.Policy policy) {
-		getOptions().setPolicy(policy);
+	public CleanXssFactory(Options options) {
+		super(options);
+		try{
+			antiSamy =
+					options.getClean() == null ||
+							Validate.isEmpty(options.getClean().getPolicyConfigLocation()) ? new AntiSamy() :
+							new AntiSamy(Policy.getInstance(options.getClean().getPolicyConfigLocation()));
+		}catch(PolicyException e){
+			antiSamy = new AntiSamy();
+		}
 	}
 
 	@Override
-	public Mono<Void> filter(@Nullable ServerWebExchange exchange, WebFilterChain chain) {
-		if(exchange != null){
-			ServerHttpRequest request = exchange.getRequest();
+	public String handle(String str) {
+		final CleanResults cleanResults;
 
-			return chain.filter(
-					exchange.mutate().request(new XssServerHttpRequestDecorator(request, getOptions())).build());
+		try{
+			cleanResults = antiSamy.scan(str);
+			return cleanResults.getCleanHTML();
+		}catch(ScanException e){
+			logger.warn("AntiSamy scan error: {}.", e.getMessage(), e);
+		}catch(PolicyException e){
+			logger.warn("AntiSamy scan policy error{}.", e.getMessage(), e);
 		}
 
-		return chain.filter(exchange);
+		return str;
 	}
 
 }

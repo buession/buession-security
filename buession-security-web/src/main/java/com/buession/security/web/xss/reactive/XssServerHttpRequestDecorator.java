@@ -24,92 +24,51 @@
  */
 package com.buession.security.web.xss.reactive;
 
-import com.buession.core.utils.Assert;
+import com.buession.core.validator.Validate;
 import com.buession.security.web.xss.Options;
+import com.buession.security.web.xss.factory.CleanXssFactory;
+import com.buession.security.web.xss.factory.EscapeXssFactory;
+import com.buession.security.web.xss.factory.XssFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.lang.Nullable;
-import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
-import reactor.core.publisher.Mono;
+import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * XSS 过滤器
- *
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 2.3.3
  */
-public class XssFilter implements WebFilter {
+public class XssServerHttpRequestDecorator extends ServerHttpRequestDecorator {
 
-	/**
-	 * XSS 选项
-	 */
-	private Options options = Options.Builder.getInstance().build();
+	private final XssFactory xssFactory;
 
-	/**
-	 * 构造函数
-	 */
-	public XssFilter() {
-	}
-
-	/**
-	 * 构造函数
-	 *
-	 * @param options
-	 *        {@link Options}
-	 *
-	 * @since 2.3.3
-	 */
-	public XssFilter(Options options) {
-		setOptions(options);
-	}
-
-	/**
-	 * 返回 XSS 处理选项
-	 *
-	 * @return XSS 处理选项
-	 *
-	 * @since 2.3.3
-	 */
-	public Options getOptions() {
-		return options;
-	}
-
-	/**
-	 * 设置 XSS 处理选项
-	 *
-	 * @param options
-	 * 		XSS 处理选项
-	 *
-	 * @since 2.3.3
-	 */
-	public void setOptions(Options options) {
-		Assert.isNull(options, "Options cloud not be null");
-		this.options = options;
-	}
-
-	/**
-	 * 设置策略
-	 *
-	 * @param policy
-	 * 		策略
-	 *
-	 * @since 2.3.3
-	 */
-	public void setPolicy(Options.Policy policy) {
-		getOptions().setPolicy(policy);
+	public XssServerHttpRequestDecorator(ServerHttpRequest delegate, Options options) {
+		super(delegate);
+		xssFactory = options.getPolicy() == Options.Policy.ESCAPE ? new EscapeXssFactory(options) : new CleanXssFactory(
+				options);
 	}
 
 	@Override
-	public Mono<Void> filter(@Nullable ServerWebExchange exchange, WebFilterChain chain) {
-		if(exchange != null){
-			ServerHttpRequest request = exchange.getRequest();
+	public MultiValueMap<String, String> getQueryParams() {
+		MultiValueMap<String, String> queryParams = super.getQueryParams();
 
-			return chain.filter(
-					exchange.mutate().request(new XssServerHttpRequestDecorator(request, getOptions())).build());
+		if(Validate.isNotEmpty(queryParams)){
+			MultiValueMap<String, String> newQueryParams = new LinkedMultiValueMap<>(queryParams.size());
+
+			queryParams.forEach((name, value)->newQueryParams.put(name, handle(value)));
+
+			return newQueryParams;
 		}
 
-		return chain.filter(exchange);
+		return queryParams;
+	}
+
+	private List<String> handle(final List<String> source) {
+		return source.stream().map((value)->Validate.isBlank(value) ? value : xssFactory.handle(value)).collect(
+				Collectors.toList());
 	}
 
 }

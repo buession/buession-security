@@ -24,4 +24,4 @@
  * | Copyright @ 2013-2024 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.xss;
+package com.buession.security.web.xss.factory;
