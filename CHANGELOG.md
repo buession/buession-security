@@ -2,7 +2,7 @@
 ===========================
 
 
-## [2.3.3](https://github.com/buession/buession-security/releases/tag/v2.3.3) (2024-xx-xx)
+## [2.3.3](https://github.com/buession/buession-security/releases/tag/v2.3.3) (2024-05-06)
 
 ### 🔨依赖升级
 
@@ -12,6 +12,7 @@
 ### ⭐ 新特性
 
 - **buession-security-crypto：** 新增密码生成器
+- **buession-security-web：** XSSFilter 支持 HTML 标签转义和删除
 
 
 ### 🔔 变化
