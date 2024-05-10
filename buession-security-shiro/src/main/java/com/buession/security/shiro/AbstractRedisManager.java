@@ -19,13 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro;
 
 import com.buession.core.utils.Assert;
-import com.buession.core.utils.StatusUtils;
 import com.buession.core.validator.Validate;
 import com.buession.lang.Status;
 import com.buession.redis.RedisTemplate;
@@ -60,7 +59,7 @@ public abstract class AbstractRedisManager implements RedisManager {
 	/**
 	 * 构造函数
 	 */
-	public AbstractRedisManager(){
+	public AbstractRedisManager() {
 	}
 
 	/**
@@ -69,7 +68,7 @@ public abstract class AbstractRedisManager implements RedisManager {
 	 * @param redisTemplate
 	 *        {@link RedisTemplate}
 	 */
-	public AbstractRedisManager(final RedisTemplate redisTemplate){
+	public AbstractRedisManager(final RedisTemplate redisTemplate) {
 		setRedisTemplate(redisTemplate);
 	}
 
@@ -78,7 +77,7 @@ public abstract class AbstractRedisManager implements RedisManager {
 	 *
 	 * @return 返回 Key 数量
 	 */
-	public int getReturnKeysCount(){
+	public int getReturnKeysCount() {
 		return returnKeysCount;
 	}
 
@@ -88,7 +87,7 @@ public abstract class AbstractRedisManager implements RedisManager {
 	 * @param returnKeysCount
 	 * 		返回 Key 数量
 	 */
-	public void setReturnKeysCount(int returnKeysCount){
+	public void setReturnKeysCount(int returnKeysCount) {
 		this.returnKeysCount = returnKeysCount;
 	}
 
@@ -97,7 +96,7 @@ public abstract class AbstractRedisManager implements RedisManager {
 	 *
 	 * @return {@link RedisTemplate}
 	 */
-	public RedisTemplate getRedisTemplate(){
+	public RedisTemplate getRedisTemplate() {
 		return redisTemplate;
 	}
 
@@ -107,13 +106,13 @@ public abstract class AbstractRedisManager implements RedisManager {
 	 * @param redisTemplate
 	 *        {@link RedisTemplate}
 	 */
-	public void setRedisTemplate(RedisTemplate redisTemplate){
+	public void setRedisTemplate(RedisTemplate redisTemplate) {
 		Assert.isNull(redisTemplate, "RedisTemplate cloud not be null");
 		this.redisTemplate = redisTemplate;
 	}
 
 	@Override
-	public Set<byte[]> keys(byte[] pattern){
+	public Set<byte[]> keys(byte[] pattern) {
 		Set<byte[]> keys = new HashSet<>();
 
 		byte[] cursor = Constants.SCAN_POINTER_START_BINARY;
@@ -133,29 +132,29 @@ public abstract class AbstractRedisManager implements RedisManager {
 	}
 
 	@Override
-	public byte[] set(byte[] key, byte[] value, int expire){
+	public byte[] set(byte[] key, byte[] value, int expire) {
 		return redisTemplate.setEx(key, value, expire == 0 ? -1 : expire) == Status.SUCCESS ? value : null;
 	}
 
 	@Override
-	public byte[] get(byte[] key){
+	public byte[] get(byte[] key) {
 		return redisTemplate.get(key);
 	}
 
 	@Override
-	public Status delete(byte[] key){
+	public Status delete(byte[] key) {
 		Long result = redisTemplate.del(key);
-		return result == null ? Status.FAILURE : StatusUtils.valueOf(result);
+		return result == null ? Status.FAILURE : Status.valueOf(result);
 	}
 
 	@Override
-	public Status delete(byte[]... keys){
+	public Status delete(byte[]... keys) {
 		Long result = redisTemplate.del(keys);
-		return result == null ? Status.FAILURE : StatusUtils.valueOf(result);
+		return result == null ? Status.FAILURE : Status.valueOf(result);
 	}
 
 	@Override
-	public Long dbSize(){
+	public Long dbSize() {
 		try{
 			return redisTemplate.dbSize();
 		}catch(NotSupportedCommandException e){
