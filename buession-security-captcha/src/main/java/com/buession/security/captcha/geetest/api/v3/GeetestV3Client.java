@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api.v3;
@@ -37,8 +37,8 @@ import com.buession.security.captcha.core.RequiredParameterCaptchaException;
 import com.buession.security.captcha.geetest.api.AbstractGeetestClient;
 import com.buession.security.captcha.core.InitResponse;
 import com.buession.security.captcha.core.RequestData;
-import com.buession.security.mcrypt.Algo;
-import com.buession.security.mcrypt.MD5Mcrypt;
+import com.buession.security.crypto.Algorithm;
+import com.buession.security.crypto.MD5Crypto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +96,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		MapBuilder<String, Object> parametersBuilder = MapBuilder.<String, Object>create(4)
 				.put("gt", appId)
 				.put("json_format", "1")
-				.put("digestmod", Algo.MD5.getName())
+				.put("digestmod", Algorithm.MD5.getName())
 				.put("sdk", getSdkName())
 				.putIfPresent("ip_address", requestV3Data.getIpAddress());
 
@@ -208,8 +208,8 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	 * @return 生成签名结果
 	 */
 	private String sign(final GeetestV3InitResponse initResponse) {
-		MD5Mcrypt md5Mcrypt = new MD5Mcrypt(StandardCharsets.UTF_8, secretKey);
-		return md5Mcrypt.encode(initResponse.getChallenge());
+		final MD5Crypto crypto = new MD5Crypto(StandardCharsets.UTF_8, secretKey);
+		return crypto.encrypt(initResponse.getChallenge());
 	}
 
 }

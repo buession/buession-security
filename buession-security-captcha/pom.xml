@@ -59,8 +59,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.buession.security</groupId>
-			<artifactId>buession-security-mcrypt</artifactId>
+			<artifactId>buession-security-crypto</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bouncycastle</groupId>
+					<artifactId>bcprov-jdk18on</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
