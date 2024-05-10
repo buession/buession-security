@@ -60,6 +60,14 @@
 					<groupId>org.springframework</groupId>
 					<artifactId>*</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
