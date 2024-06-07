@@ -21,7 +21,22 @@
 ### 🔔 变化
 
 - **buession-security-captcha：** buession-security-mcrypt 替换为 buession-security-crypto
-- **buession-security-shiro：** Session DAO 不再实现接口 com.buession.security.shiro.session.SessionDAO
+- **buession-security-shiro：** Session DAO 不再实现接口 com.buession.security.shiro.session.SessionDAO，并删除 com.buession.security.shiro.session.SessionDAO
+- **buession-security-shiro：** Cache 类不再实现接口 com.buession.security.shiro.cache.Cache，并删除 com.buession.security.shiro.cache.Cache
+- **buession-security-shiro：** Cache Manager 类不再实现接口 com.buession.security.shiro.cache.CacheManager，并删除 com.buession.security.shiro.cache.CacheManager
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.env.Pac4jIniEnvironment
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.context.ShiroSessionStore
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.filter.CallbackFilter
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.filter.SecurityFilter
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.filter.LogoutFilter
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.engine.ShiroCallbackLogic
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.engine.ShiroSecurityLogic
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.profile.ShiroProfileManager
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.realm.Pac4jRealm
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.subject.Pac4jPrincipal
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.subject.Pac4jSubjectFactory
+- **buession-security-pac4j：** 删除 com.buession.security.pac4j.token.Pac4jToken
+- **buession-security-mcrypt：** 代码移至 buession-security-crypto，废弃 Mcrypt 和 Mcrypt PasswordGenerator 相关类
 
 
 ### 🐞 Bug 修复
