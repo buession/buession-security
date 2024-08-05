@@ -7,36 +7,31 @@
 ### 🔨依赖升级
 
 - [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v3.0.0)
-- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.5
+- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.6
 
 
 ### ⭐ 新特性
 
-- **buession-core：** ClassUtils 新增检测类是否存在方法
-- **buession-httpclient：** Configuration 新增 expectContinueEnabled、hardCancellationEnabled、targetPreferredAuthSchemes、cookieSpec、proxy 配置
-- **buession-httpclient：** 新增代理支持
-- **buession-httpclient：** 新增支持 apache httpcomponents 5
-
 
 ### 🔔 变化
 
-- **buession-security-captcha：** buession-security-mcrypt 替换为 buession-security-crypto
-- **buession-security-shiro：** Session DAO 不再实现接口 com.buession.security.shiro.session.SessionDAO，并删除 com.buession.security.shiro.session.SessionDAO
-- **buession-security-shiro：** Cache 类不再实现接口 com.buession.security.shiro.cache.Cache，并删除 com.buession.security.shiro.cache.Cache
-- **buession-security-shiro：** Cache Manager 类不再实现接口 com.buession.security.shiro.cache.CacheManager，并删除 com.buession.security.shiro.cache.CacheManager
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.env.Pac4jIniEnvironment
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.context.ShiroSessionStore
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.filter.CallbackFilter
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.filter.SecurityFilter
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.filter.LogoutFilter
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.engine.ShiroCallbackLogic
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.engine.ShiroSecurityLogic
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.profile.ShiroProfileManager
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.realm.Pac4jRealm
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.subject.Pac4jPrincipal
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.subject.Pac4jSubjectFactory
-- **buession-security-pac4j：** 删除 com.buession.security.pac4j.token.Pac4jToken
-- **buession-security-mcrypt：** 代码移至 buession-security-crypto，废弃 Mcrypt 和 Mcrypt PasswordGenerator 相关类
+- buession-security-mcrypt 替换为 buession-security-crypto
+- shiro Session DAO 不再实现接口 com.buession.security.shiro.session.SessionDAO，并删除 com.buession.security.shiro.session.SessionDAO
+- shiro Cache 类不再实现接口 com.buession.security.shiro.cache.Cache，并删除 com.buession.security.shiro.cache.Cache
+- shiro Cache Manager 类不再实现接口 com.buession.security.shiro.cache.CacheManager，并删除 com.buession.security.shiro.cache.CacheManager
+- 删除 com.buession.security.pac4j.env.Pac4jIniEnvironment
+- 删除 com.buession.security.pac4j.context.ShiroSessionStore
+- 删除 com.buession.security.pac4j.filter.CallbackFilter
+- 删除 com.buession.security.pac4j.filter.SecurityFilter
+- 删除 com.buession.security.pac4j.filter.LogoutFilter
+- 删除 com.buession.security.pac4j.engine.ShiroCallbackLogic
+- 删除 com.buession.security.pac4j.engine.ShiroSecurityLogic
+- 删除 com.buession.security.pac4j.profile.ShiroProfileManager
+- 删除 com.buession.security.pac4j.realm.Pac4jRealm
+- 删除 com.buession.security.pac4j.subject.Pac4jPrincipal
+- 删除 com.buession.security.pac4j.subject.Pac4jSubjectFactory
+- 删除 com.buession.security.pac4j.token.Pac4jToken
+- buession-security-mcrypt 代码移至 buession-security-crypto，废弃 Mcrypt 和 Mcrypt PasswordGenerator 相关类
 
 
 ### 🐞 Bug 修复

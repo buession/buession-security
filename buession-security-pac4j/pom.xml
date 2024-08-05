@@ -73,6 +73,12 @@
 			<artifactId>buession-web</artifactId>
 			<version>${buession.version}</version>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.buession</groupId>
+					<artifactId>buession-net</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
