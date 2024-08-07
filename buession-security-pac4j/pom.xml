@@ -66,19 +66,13 @@
 			<groupId>com.buession</groupId>
 			<artifactId>buession-beans</artifactId>
 			<version>${buession.version}</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.buession</groupId>
 			<artifactId>buession-web</artifactId>
 			<version>${buession.version}</version>
-			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.buession</groupId>
-					<artifactId>buession-net</artifactId>
-				</exclusion>
-			</exclusions>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -107,60 +101,6 @@
 			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.jasig.cas.client</groupId>
-			<artifactId>cas-client-core</artifactId>
-			<version>${cas.client.version}</version>
-			<scope>provided</scope>
-			<optional>true</optional>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-codec</groupId>
-					<artifactId>commons-codec</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.bouncycastle</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.xml.bind</groupId>
-					<artifactId>jaxb-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.glassfish.jaxb</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.jasig.cas.client</groupId>
-			<artifactId>cas-client-support-saml</artifactId>
-			<version>${cas.client.version}</version>
-			<scope>provided</scope>
-			<optional>true</optional>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-codec</groupId>
-					<artifactId>commons-codec</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.bouncycastle</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.xml.bind</groupId>
-					<artifactId>jaxb-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.glassfish.jaxb</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 
 		<!-- pac4j start -->
 		<dependency>
@@ -184,12 +124,6 @@
 		<dependency>
 			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-oauth</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-codec</groupId>
-					<artifactId>commons-codec</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.pac4j</groupId>
@@ -202,17 +136,6 @@
 			</exclusions>
 		</dependency>
 		<!-- pac4j end -->
-
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-core</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-web</artifactId>
-			<scope>provided</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>io.buji</groupId>
@@ -231,33 +154,16 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk18on</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>jakarta.servlet</groupId>
-			<artifactId>jakarta.servlet-api</artifactId>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
 		</dependency>
-
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
 		<dependency>
@@ -266,8 +172,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
 		</dependency>
 	</dependencies>
 

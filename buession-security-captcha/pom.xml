@@ -84,6 +84,7 @@
 			<groupId>com.buession</groupId>
 			<artifactId>buession-json</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>com.buession</groupId>
 			<artifactId>buession-web</artifactId>
@@ -93,14 +94,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>jakarta.servlet</groupId>
-			<artifactId>jakarta.servlet-api</artifactId>
-			<scope>provided</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>jakarta.xml.bind</groupId>
-			<artifactId>jakarta.xml.bind-api</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
 			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
@@ -113,13 +108,28 @@
 		</dependency>
 
 		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
+		<!--
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
+		-->
+
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
 		</dependency>
 	</dependencies>
 

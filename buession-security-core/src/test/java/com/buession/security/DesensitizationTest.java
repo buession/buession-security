@@ -19,14 +19,14 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2019 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security;
 
 import com.buession.security.core.Desensitization;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Yong.Teng
@@ -35,8 +35,8 @@ public class DesensitizationTest {
 
 	@Test
 	public void encode(){
-		Assert.assertEquals("1380***8000", Desensitization.encode("13800138000", 3));
-		Assert.assertEquals("0138***38000", Desensitization.encode("013800138000", 3));
+		Assertions.assertEquals("1380***8000", Desensitization.encode("13800138000", 3));
+		Assertions.assertEquals("0138***38000", Desensitization.encode("013800138000", 3));
 	}
 
 }
