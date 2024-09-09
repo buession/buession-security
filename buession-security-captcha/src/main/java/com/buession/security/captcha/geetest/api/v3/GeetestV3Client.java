@@ -37,6 +37,7 @@ import com.buession.security.captcha.core.RequiredParameterCaptchaException;
 import com.buession.security.captcha.geetest.api.AbstractGeetestClient;
 import com.buession.security.captcha.core.InitResponse;
 import com.buession.security.captcha.core.RequestData;
+import com.buession.security.captcha.utils.ResponseUtils;
 import com.buession.security.crypto.Algorithm;
 import com.buession.security.crypto.MD5Crypto;
 import org.slf4j.Logger;
@@ -108,9 +109,10 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			logger.debug("验证初始化, parameters：{}.", parametersBuilder.build());
 		}
 
+		Response response = null;
 		GeetestV3InitResponse initResult;
 		try{
-			Response response = getHttpClient().get(REGISTER_URL, parametersBuilder.build());
+			response = getHttpClient().get(REGISTER_URL, parametersBuilder.build());
 
 			initResult = parseObject(response.getBody(), GeetestV3InitResponse.class);
 
@@ -120,6 +122,8 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		}catch(Exception e){
 			logger.error("验证初始化失败: {}", e.getMessage());
 			initResult = new GeetestV3InitResponse();
+		}finally{
+			ResponseUtils.close(response);
 		}
 
 		initResult.setSuccess(true);
@@ -154,7 +158,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			logger.debug("二次验证, parameters：{}.", parameters);
 		}
 
-		Response response;
+		Response response = null;
 		try{
 			response = getHttpClient().post(VALIDATE_URL, parameters, getHeaders());
 
@@ -172,6 +176,8 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		}catch(Exception e){
 			logger.error("二次验证失败: {}", e.getMessage());
 			throw new CaptchaException(e.getMessage(), e);
+		}finally{
+			ResponseUtils.close(response);
 		}
 	}
 
