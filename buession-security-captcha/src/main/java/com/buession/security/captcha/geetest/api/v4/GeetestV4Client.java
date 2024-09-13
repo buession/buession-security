@@ -29,6 +29,7 @@ import com.buession.core.utils.Assert;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.EncodedFormRequestBody;
 import com.buession.httpclient.core.Response;
+import com.buession.httpclient.exception.RequestException;
 import com.buession.lang.Status;
 import com.buession.security.captcha.core.CaptchaException;
 import com.buession.security.captcha.core.CaptchaValidateFailureException;
@@ -37,9 +38,11 @@ import com.buession.security.captcha.geetest.api.AbstractGeetestClient;
 import com.buession.security.captcha.core.InitResponse;
 import com.buession.security.captcha.core.RequestData;
 import com.buession.security.captcha.utils.ResponseUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -128,7 +131,10 @@ public final class GeetestV4Client extends AbstractGeetestClient {
 				logger.error("二次验证失败: {}", resp);
 				throw new CaptchaValidateFailureException(resp.getCode(), resp.getMsg(), resp.getReason());
 			}
-		}catch(Exception e){
+		}catch(RequestException e){
+			logger.error("二次验证失败: {}", e.getMessage());
+			throw new CaptchaException(e.getMessage());
+		}catch(IOException e){
 			logger.error("二次验证失败: {}", e.getMessage());
 			throw new CaptchaException(e.getMessage());
 		}finally{

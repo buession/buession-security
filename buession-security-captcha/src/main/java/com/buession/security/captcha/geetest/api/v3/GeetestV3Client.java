@@ -30,6 +30,7 @@ import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
+import com.buession.httpclient.exception.RequestException;
 import com.buession.lang.Status;
 import com.buession.security.captcha.core.CaptchaException;
 import com.buession.security.captcha.core.CaptchaValidateFailureException;
@@ -43,6 +44,7 @@ import com.buession.security.crypto.MD5Crypto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -173,9 +175,12 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			}else{
 				return Status.SUCCESS;
 			}
-		}catch(Exception e){
+		}catch(RequestException e){
 			logger.error("二次验证失败: {}", e.getMessage());
-			throw new CaptchaException(e.getMessage(), e);
+			throw new CaptchaException(e.getMessage());
+		}catch(IOException e){
+			logger.error("二次验证失败: {}", e.getMessage());
+			throw new CaptchaException(e.getMessage());
 		}finally{
 			ResponseUtils.close(response);
 		}
