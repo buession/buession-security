@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.tencent;
@@ -34,6 +34,7 @@ import com.buession.security.captcha.core.CaptchaValidateFailureException;
 import com.buession.security.captcha.core.Manufacturer;
 import com.buession.security.captcha.core.RequestData;
 import com.buession.security.captcha.core.RequiredParameterCaptchaException;
+import com.buession.security.captcha.utils.ResponseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,7 +111,7 @@ public class TencentCaptchaClient extends AbstractCaptchaClient {
 			logger.debug("二次验证, parameters：{}.", parameters);
 		}
 
-		Response response;
+		Response response = null;
 		try{
 			response = getHttpClient().get(VALIDATE_URL, parameters, getHeaders());
 
@@ -130,6 +131,8 @@ public class TencentCaptchaClient extends AbstractCaptchaClient {
 		}catch(Exception e){
 			logger.error("二次验证失败: {}", e.getMessage());
 			throw new CaptchaException(e.getMessage(), e);
+		}finally{
+			ResponseUtils.close(response);
 		}
 	}
 

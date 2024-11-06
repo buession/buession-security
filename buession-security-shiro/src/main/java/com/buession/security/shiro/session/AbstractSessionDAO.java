@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.session;
@@ -38,8 +38,7 @@ import java.util.Collection;
  * @author Yong.Teng
  * @see org.apache.shiro.session.mgt.eis.SessionDAO
  */
-public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.eis.AbstractSessionDAO
-		implements SessionDAO {
+public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.eis.AbstractSessionDAO {
 
 	/**
 	 * 默认 SESSION Key 前缀
@@ -96,7 +95,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	/**
 	 * 构造函数
 	 */
-	public AbstractSessionDAO(){
+	public AbstractSessionDAO() {
 		super();
 	}
 
@@ -108,7 +107,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	 * @param expire
 	 * 		过期时间（单位：秒）{@link #expire}
 	 */
-	public AbstractSessionDAO(String keyPrefix, int expire){
+	public AbstractSessionDAO(String keyPrefix, int expire) {
 		super();
 		this.keyPrefix = keyPrefix;
 		this.expire = expire;
@@ -127,7 +126,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	 * 		SESSION 存储在内存中的过期时间
 	 */
 	public AbstractSessionDAO(String keyPrefix, int expire, boolean sessionInMemoryEnabled,
-							  long sessionInMemoryTimeout){
+							  long sessionInMemoryTimeout) {
 		this(keyPrefix, expire);
 		this.sessionInMemoryEnabled = sessionInMemoryEnabled;
 		this.sessionInMemoryTimeout = sessionInMemoryTimeout;
@@ -138,7 +137,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	 *
 	 * @return SESSION Key 前缀
 	 */
-	public String getKeyPrefix(){
+	public String getKeyPrefix() {
 		return keyPrefix;
 	}
 
@@ -148,7 +147,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	 * @param keyPrefix
 	 * 		SESSION Key 前缀
 	 */
-	public void setKeyPrefix(String keyPrefix){
+	public void setKeyPrefix(String keyPrefix) {
 		this.keyPrefix = keyPrefix;
 	}
 
@@ -159,7 +158,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	 *
 	 * @see #expire
 	 */
-	public int getExpire(){
+	public int getExpire() {
 		return expire;
 	}
 
@@ -171,7 +170,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	 *
 	 * @see #expire
 	 */
-	public void setExpire(int expire){
+	public void setExpire(int expire) {
 		this.expire = expire;
 	}
 
@@ -180,7 +179,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	 *
 	 * @return SESSION 是否存储在内存中
 	 */
-	public boolean isSessionInMemoryEnabled(){
+	public boolean isSessionInMemoryEnabled() {
 		return sessionInMemoryEnabled;
 	}
 
@@ -190,7 +189,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	 * @param sessionInMemoryEnabled
 	 * 		SESSION 是否存储在内存中
 	 */
-	public void setSessionInMemoryEnabled(boolean sessionInMemoryEnabled){
+	public void setSessionInMemoryEnabled(boolean sessionInMemoryEnabled) {
 		this.sessionInMemoryEnabled = sessionInMemoryEnabled;
 	}
 
@@ -199,7 +198,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	 *
 	 * @return SESSION 存储在内存中的过期时间
 	 */
-	public long getSessionInMemoryTimeout(){
+	public long getSessionInMemoryTimeout() {
 		return sessionInMemoryTimeout;
 	}
 
@@ -209,12 +208,12 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	 * @param sessionInMemoryTimeout
 	 * 		SESSION 存储在内存中的过期时间（单位：毫秒）
 	 */
-	public void setSessionInMemoryTimeout(long sessionInMemoryTimeout){
+	public void setSessionInMemoryTimeout(long sessionInMemoryTimeout) {
 		this.sessionInMemoryTimeout = sessionInMemoryTimeout;
 	}
 
 	@Override
-	public void update(Session session) throws UnknownSessionException{
+	public void update(Session session) throws UnknownSessionException {
 		if(logger.isDebugEnabled()){
 			logger.debug("Update session: {}.", session == null ? "null" : session.getId());
 		}
@@ -233,7 +232,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	}
 
 	@Override
-	public Collection<Session> getActiveSessions(){
+	public Collection<Session> getActiveSessions() {
 		logger.debug("Get active sessions.");
 		removeExpiredSessionInMemory();
 
@@ -241,7 +240,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	}
 
 	@Override
-	public void delete(Session session){
+	public void delete(Session session) {
 		if(logger.isDebugEnabled()){
 			logger.debug("Delete session: {}.", session == null ? "null" : session.getId());
 		}
@@ -256,7 +255,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	}
 
 	@Override
-	protected Serializable doCreate(Session session){
+	protected Serializable doCreate(Session session) {
 		if(logger.isDebugEnabled()){
 			logger.debug("Create session: {}.", session == null ? "null" : session.getId());
 		}
@@ -278,7 +277,7 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 	protected abstract void doSaveSession(final Session session) throws UnknownSessionException;
 
 	@Override
-	protected Session doReadSession(Serializable sessionId){
+	protected Session doReadSession(Serializable sessionId) {
 		if(logger.isDebugEnabled()){
 			logger.debug("Read session: {}.", sessionId);
 		}
@@ -314,13 +313,13 @@ public abstract class AbstractSessionDAO extends org.apache.shiro.session.mgt.ei
 
 	protected abstract void doDeleteSession(Session session);
 
-	protected void removeExpiredSessionInMemory(){
+	protected void removeExpiredSessionInMemory() {
 		if(sessionInMemoryEnabled){
 			getMemorySessionDAO().clearExpiredSession();
 		}
 	}
 
-	private MemorySessionDAO getMemorySessionDAO(){
+	private MemorySessionDAO getMemorySessionDAO() {
 		if(memorySessionDao == null){
 			memorySessionDao = new MemorySessionDAO(sessionInMemoryTimeout);
 		}

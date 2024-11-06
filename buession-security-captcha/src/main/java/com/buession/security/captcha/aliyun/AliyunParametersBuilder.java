@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.aliyun;
@@ -27,7 +27,7 @@ package com.buession.security.captcha.aliyun;
 import com.buession.core.builder.MapBuilder;
 import com.buession.core.utils.StringUtils;
 import com.buession.security.captcha.core.ParametersBuilder;
-import com.buession.security.mcrypt.Algo;
+import com.buession.security.crypto.Algorithm;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -52,7 +52,7 @@ class AliyunParametersBuilder implements ParametersBuilder<AliYunRequestData> {
 
 	private final static String FORMAT = "JSON";
 
-	private final static Algo SIGNATURE_METHOD = Algo.HMAC_SHA1;
+	private final static Algorithm SIGNATURE_METHOD = Algorithm.HMAC_SHA1;
 
 	private final static String SIGNATURE_VERSION = "1.0";
 

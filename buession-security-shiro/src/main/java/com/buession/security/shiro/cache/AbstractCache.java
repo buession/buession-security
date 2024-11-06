@@ -19,10 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.cache;
+
+import org.apache.shiro.cache.Cache;
 
 import java.util.StringJoiner;
 
@@ -35,9 +37,9 @@ import java.util.StringJoiner;
  * 		值类型
  *
  * @author Yong.Teng
- * @see org.apache.shiro.cache.Cache
+ * @see Cache
  */
-public abstract class AbstractCache<K, V> implements Cache<K, V>, org.apache.shiro.cache.Cache<K, V> {
+public abstract class AbstractCache<K, V> implements Cache<K, V> {
 
 	/**
 	 * Key 前缀
@@ -57,7 +59,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>, org.apache.shi
 	/**
 	 * 构造函数
 	 */
-	public AbstractCache(){
+	public AbstractCache() {
 	}
 
 	/**
@@ -68,7 +70,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>, org.apache.shi
 	 * @param expire
 	 * 		有效期（单位：秒）
 	 */
-	public AbstractCache(String keyPrefix, int expire){
+	public AbstractCache(String keyPrefix, int expire) {
 		this.keyPrefix = keyPrefix;
 		this.expire = expire;
 	}
@@ -83,7 +85,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>, org.apache.shi
 	 * @param principalIdFieldName
 	 * 		身份信息 ID 字段名称
 	 */
-	public AbstractCache(String keyPrefix, int expire, String principalIdFieldName){
+	public AbstractCache(String keyPrefix, int expire, String principalIdFieldName) {
 		this(keyPrefix, expire);
 		setPrincipalIdFieldName(principalIdFieldName);
 	}
@@ -93,7 +95,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>, org.apache.shi
 	 *
 	 * @return Key 前缀
 	 */
-	public String getKeyPrefix(){
+	public String getKeyPrefix() {
 		return keyPrefix;
 	}
 
@@ -103,7 +105,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>, org.apache.shi
 	 * @param keyPrefix
 	 * 		Key 前缀
 	 */
-	public void setKeyPrefix(String keyPrefix){
+	public void setKeyPrefix(String keyPrefix) {
 		this.keyPrefix = keyPrefix;
 	}
 
@@ -112,7 +114,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>, org.apache.shi
 	 *
 	 * @return 有效期
 	 */
-	public int getExpire(){
+	public int getExpire() {
 		return expire;
 	}
 
@@ -122,7 +124,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>, org.apache.shi
 	 * @param expire
 	 * 		有效期（单位：秒）
 	 */
-	public void setExpire(int expire){
+	public void setExpire(int expire) {
 		this.expire = expire;
 	}
 
@@ -131,7 +133,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>, org.apache.shi
 	 *
 	 * @return 身份信息 ID 字段名称
 	 */
-	public String getPrincipalIdFieldName(){
+	public String getPrincipalIdFieldName() {
 		return principalIdFieldName;
 	}
 
@@ -141,12 +143,12 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>, org.apache.shi
 	 * @param principalIdFieldName
 	 * 		身份信息 ID 字段名称
 	 */
-	public void setPrincipalIdFieldName(String principalIdFieldName){
+	public void setPrincipalIdFieldName(String principalIdFieldName) {
 		this.principalIdFieldName = principalIdFieldName;
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return new StringJoiner(", ", getClass().getName() + "[", "]")
 				.add("keyPrefix=" + keyPrefix)
 				.add("expire=" + expire)

@@ -19,14 +19,14 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api.v4;
 
 import com.buession.core.builder.MapBuilder;
 import com.buession.security.captcha.core.ParametersBuilder;
-import com.buession.security.mcrypt.HmacSha256Mcrypt;
+import com.buession.security.crypto.HmacSha256Crypto;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -43,14 +43,14 @@ class GeetestV4ParametersBuilder implements ParametersBuilder<GeetestV4RequestDa
 
 	private final String sdkName;
 
-	GeetestV4ParametersBuilder(final String appId, final String secretKey, final String sdkName){
+	GeetestV4ParametersBuilder(final String appId, final String secretKey, final String sdkName) {
 		this.appId = appId;
 		this.secretKey = secretKey;
 		this.sdkName = sdkName;
 	}
 
 	@Override
-	public Map<String, String> build(final GeetestV4RequestData requestData){
+	public Map<String, String> build(final GeetestV4RequestData requestData) {
 		MapBuilder<String, String> builder = MapBuilder.<String, String>create(5)
 				.put("lot_number", requestData.getLotNumber())
 				.put("captcha_output", requestData.getCaptchaOutput())
@@ -71,9 +71,9 @@ class GeetestV4ParametersBuilder implements ParametersBuilder<GeetestV4RequestDa
 	 *
 	 * @return 生成签名结果
 	 */
-	private String sign(final GeetestV4RequestData requestData){
-		HmacSha256Mcrypt hmacSha256Mcrypt = new HmacSha256Mcrypt(StandardCharsets.UTF_8, secretKey);
-		return hmacSha256Mcrypt.encode(requestData.getLotNumber());
+	private String sign(final GeetestV4RequestData requestData) {
+		final HmacSha256Crypto crypto = new HmacSha256Crypto(StandardCharsets.UTF_8, secretKey);
+		return crypto.encrypt(requestData.getLotNumber());
 	}
 
 }

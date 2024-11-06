@@ -22,21 +22,68 @@
  * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security;
+package com.buession.security.mcrypt;
 
-import com.buession.security.core.Desensitization;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.buession.security.crypto.Algorithm;
 
 /**
+ * 加密算法
+ *
  * @author Yong.Teng
  */
-public class DesensitizationTest {
+@Deprecated
+public enum Algo {
 
-	@Test
-	public void encode(){
-		Assertions.assertEquals("1380***8000", Desensitization.encode("13800138000", 3));
-		Assertions.assertEquals("0138***38000", Desensitization.encode("013800138000", 3));
+	AES(Algorithm.AES),
+
+	DES(Algorithm.DES),
+
+	MD5(Algorithm.MD5),
+
+	SHA(Algorithm.SHA),
+
+	SHA1(Algorithm.SHA1),
+
+	SHA224(Algorithm.SHA224),
+
+	SHA256(Algorithm.SHA256),
+
+	SHA384(Algorithm.SHA384),
+
+	SHA512(Algorithm.SHA512),
+
+	HMAC_SHA1(Algorithm.HMAC_SHA1),
+
+	HMAC_SHA224(Algorithm.HMAC_SHA224),
+
+	HMAC_SHA256(Algorithm.HMAC_SHA256),
+
+	HMAC_SHA384(Algorithm.HMAC_SHA384),
+
+	HMAC_SHA512(Algorithm.HMAC_SHA512),
+
+	HMAC_MD5(Algorithm.HMAC_MD5),
+
+	SM2(Algorithm.SM2),
+
+	SM3(Algorithm.SM3),
+
+	SM4(Algorithm.SM4),
+
+	BASE64(Algorithm.BASE64);
+
+	private final Algorithm algorithm;
+
+	Algo(final Algorithm algorithm) {
+		this.algorithm = algorithm;
+	}
+
+	public Algorithm getAlgorithm() {
+		return algorithm;
+	}
+
+	public String getName() {
+		return algorithm.getName();
 	}
 
 }

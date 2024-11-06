@@ -22,21 +22,21 @@
  * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security;
+package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.core.Desensitization;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.buession.security.crypto.MD5Crypto;
 
 /**
+ * MD5 密码生成器
+ *
  * @author Yong.Teng
+ * @see com.buession.security.crypto.passwordgenerator.Md5PasswordGenerator
  */
-public class DesensitizationTest {
+@Deprecated
+public class Md5PasswordGenerator extends AbstractPasswordGenerator {
 
-	@Test
-	public void encode(){
-		Assertions.assertEquals("1380***8000", Desensitization.encode("13800138000", 3));
-		Assertions.assertEquals("0138***38000", Desensitization.encode("013800138000", 3));
+	public Md5PasswordGenerator() {
+		super(new MD5Crypto());
 	}
 
 }

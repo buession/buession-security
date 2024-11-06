@@ -22,21 +22,78 @@
  * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security;
+package com.buession.security.mcrypt;
 
-import com.buession.security.core.Desensitization;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.buession.security.crypto.HashCrypto;
+import com.buession.security.crypto.Sm3Crypto;
+
+import java.nio.charset.Charset;
 
 /**
+ * SM3 加密对象
+ *
  * @author Yong.Teng
+ * @since 2.3.0
  */
-public class DesensitizationTest {
+@Deprecated
+public final class Sm3Mcrypt extends AbstractMcrypt implements HashCrypto {
 
-	@Test
-	public void encode(){
-		Assertions.assertEquals("1380***8000", Desensitization.encode("13800138000", 3));
-		Assertions.assertEquals("0138***38000", Desensitization.encode("013800138000", 3));
+	/**
+	 * 构造函数
+	 */
+	public Sm3Mcrypt() {
+		super(Algo.SM3);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public Sm3Mcrypt(final String salt) {
+		super(Algo.SM3);
+		setSalt(salt);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 */
+	public Sm3Mcrypt(final Charset charset) {
+		super(Algo.SM3, charset);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public Sm3Mcrypt(final String characterEncoding, final String salt) {
+		super(Algo.SM3, characterEncoding, salt);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public Sm3Mcrypt(final Charset charset, final String salt) {
+		super(Algo.SM3, charset, salt);
+	}
+
+	@Override
+	public String encrypt(final Object object) {
+		final Sm3Crypto crypto = new Sm3Crypto(getCharset(), getSalt());
+		return crypto.encrypt(object);
 	}
 
 }

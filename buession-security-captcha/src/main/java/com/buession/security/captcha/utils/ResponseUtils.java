@@ -22,21 +22,33 @@
  * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security;
+package com.buession.security.captcha.utils;
 
-import com.buession.security.core.Desensitization;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.buession.httpclient.core.Response;
+
+import java.io.IOException;
 
 /**
+ * {@link Response} 工具类
  * @author Yong.Teng
+ * @since 3.0.0
  */
-public class DesensitizationTest {
+public class ResponseUtils {
 
-	@Test
-	public void encode(){
-		Assertions.assertEquals("1380***8000", Desensitization.encode("13800138000", 3));
-		Assertions.assertEquals("0138***38000", Desensitization.encode("013800138000", 3));
+	protected ResponseUtils(){
+
+	}
+
+	public static void close(final Response response){
+		if(response != null){
+			if(response.getInputStream() != null){
+				try{
+					response.getInputStream().close();
+				}catch(IOException e){
+
+				}
+			}
+		}
 	}
 
 }

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2020 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api.v4;
@@ -37,6 +37,12 @@ import java.util.StringJoiner;
  * @since 2.0.0
  */
 public class GeetestV4RequestData implements GeetestRequestData {
+
+	/**
+	 * 验证 ID
+	 */
+	@JsonProperty(value = "captcha_id")
+	private String captchaId;
 
 	/**
 	 * 验证流水号
@@ -63,11 +69,30 @@ public class GeetestV4RequestData implements GeetestRequestData {
 	private String genTime;
 
 	/**
+	 * 返回验证 ID
+	 *
+	 * @return 验证 ID
+	 */
+	public String getCaptchaId() {
+		return captchaId;
+	}
+
+	/**
+	 * 设置验证 ID
+	 *
+	 * @param captchaId
+	 * 		验证 ID
+	 */
+	public void setCaptchaId(String captchaId) {
+		this.captchaId = captchaId;
+	}
+
+	/**
 	 * 返回验证流水号
 	 *
 	 * @return 验证流水号
 	 */
-	public String getLotNumber(){
+	public String getLotNumber() {
 		return lotNumber;
 	}
 
@@ -77,7 +102,7 @@ public class GeetestV4RequestData implements GeetestRequestData {
 	 * @param lotNumber
 	 * 		验证流水号
 	 */
-	public void setLotNumber(String lotNumber){
+	public void setLotNumber(String lotNumber) {
 		this.lotNumber = lotNumber;
 	}
 
@@ -86,7 +111,7 @@ public class GeetestV4RequestData implements GeetestRequestData {
 	 *
 	 * @return 验证输出信息
 	 */
-	public String getCaptchaOutput(){
+	public String getCaptchaOutput() {
 		return captchaOutput;
 	}
 
@@ -96,7 +121,7 @@ public class GeetestV4RequestData implements GeetestRequestData {
 	 * @param captchaOutput
 	 * 		验证输出信息
 	 */
-	public void setCaptchaOutput(String captchaOutput){
+	public void setCaptchaOutput(String captchaOutput) {
 		this.captchaOutput = captchaOutput;
 	}
 
@@ -105,7 +130,7 @@ public class GeetestV4RequestData implements GeetestRequestData {
 	 *
 	 * @return 验证通过标识
 	 */
-	public String getPassToken(){
+	public String getPassToken() {
 		return passToken;
 	}
 
@@ -115,7 +140,7 @@ public class GeetestV4RequestData implements GeetestRequestData {
 	 * @param passToken
 	 * 		验证通过标识
 	 */
-	public void setPassToken(String passToken){
+	public void setPassToken(String passToken) {
 		this.passToken = passToken;
 	}
 
@@ -124,7 +149,7 @@ public class GeetestV4RequestData implements GeetestRequestData {
 	 *
 	 * @return 验证通过时间戳
 	 */
-	public String getGenTime(){
+	public String getGenTime() {
 		return genTime;
 	}
 
@@ -134,25 +159,26 @@ public class GeetestV4RequestData implements GeetestRequestData {
 	 * @param genTime
 	 * 		验证通过时间戳
 	 */
-	public void setGenTime(String genTime){
+	public void setGenTime(String genTime) {
 		this.genTime = genTime;
 	}
 
 	@JsonIgnore
 	@Override
-	public String getClientIp(){
+	public String getClientIp() {
 		return null;
 	}
 
 	@JsonIgnore
 	@Override
-	public void setClientIp(String clientIp){
+	public void setClientIp(String clientIp) {
 
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return new StringJoiner(", ", "[", "]")
+				.add("captchaId=" + captchaId)
 				.add("lotNumber=" + lotNumber)
 				.add("captchaOutput=" + captchaOutput)
 				.add("passToken=" + passToken)

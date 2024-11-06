@@ -22,21 +22,22 @@
  * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security;
+package com.buession.security.mcrypt.passwordgenerator;
 
-import com.buession.security.core.Desensitization;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.buession.security.crypto.HmacSha1Crypto;
 
 /**
+ * HmacSHA1 密码生成器
+ *
  * @author Yong.Teng
+ * @see com.buession.security.crypto.passwordgenerator.HmacSha1PasswordGenerator
+ * @since 2.1.0
  */
-public class DesensitizationTest {
+@Deprecated
+public class HmacSha1PasswordGenerator extends AbstractPasswordGenerator {
 
-	@Test
-	public void encode(){
-		Assertions.assertEquals("1380***8000", Desensitization.encode("13800138000", 3));
-		Assertions.assertEquals("0138***38000", Desensitization.encode("013800138000", 3));
+	public HmacSha1PasswordGenerator() {
+		super(new HmacSha1Crypto());
 	}
 
 }

@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api.v3;
@@ -30,6 +30,7 @@ import com.buession.core.utils.Assert;
 import com.buession.core.validator.Validate;
 import com.buession.httpclient.HttpClient;
 import com.buession.httpclient.core.Response;
+import com.buession.httpclient.exception.RequestException;
 import com.buession.lang.Status;
 import com.buession.security.captcha.core.CaptchaException;
 import com.buession.security.captcha.core.CaptchaValidateFailureException;
@@ -37,11 +38,13 @@ import com.buession.security.captcha.core.RequiredParameterCaptchaException;
 import com.buession.security.captcha.geetest.api.AbstractGeetestClient;
 import com.buession.security.captcha.core.InitResponse;
 import com.buession.security.captcha.core.RequestData;
-import com.buession.security.mcrypt.Algo;
-import com.buession.security.mcrypt.MD5Mcrypt;
+import com.buession.security.captcha.utils.ResponseUtils;
+import com.buession.security.crypto.Algorithm;
+import com.buession.security.crypto.MD5Crypto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -96,7 +99,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		MapBuilder<String, Object> parametersBuilder = MapBuilder.<String, Object>create(4)
 				.put("gt", appId)
 				.put("json_format", "1")
-				.put("digestmod", Algo.MD5.getName())
+				.put("digestmod", Algorithm.MD5.getName())
 				.put("sdk", getSdkName())
 				.putIfPresent("ip_address", requestV3Data.getIpAddress());
 
@@ -108,9 +111,10 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			logger.debug("验证初始化, parameters：{}.", parametersBuilder.build());
 		}
 
+		Response response = null;
 		GeetestV3InitResponse initResult;
 		try{
-			Response response = getHttpClient().get(REGISTER_URL, parametersBuilder.build());
+			response = getHttpClient().get(REGISTER_URL, parametersBuilder.build());
 
 			initResult = parseObject(response.getBody(), GeetestV3InitResponse.class);
 
@@ -120,6 +124,8 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 		}catch(Exception e){
 			logger.error("验证初始化失败: {}", e.getMessage());
 			initResult = new GeetestV3InitResponse();
+		}finally{
+			ResponseUtils.close(response);
 		}
 
 		initResult.setSuccess(true);
@@ -154,7 +160,7 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			logger.debug("二次验证, parameters：{}.", parameters);
 		}
 
-		Response response;
+		Response response = null;
 		try{
 			response = getHttpClient().post(VALIDATE_URL, parameters, getHeaders());
 
@@ -169,9 +175,14 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 			}else{
 				return Status.SUCCESS;
 			}
-		}catch(Exception e){
+		}catch(RequestException e){
 			logger.error("二次验证失败: {}", e.getMessage());
-			throw new CaptchaException(e.getMessage(), e);
+			throw new CaptchaException(e.getMessage());
+		}catch(IOException e){
+			logger.error("二次验证失败: {}", e.getMessage());
+			throw new CaptchaException(e.getMessage());
+		}finally{
+			ResponseUtils.close(response);
 		}
 	}
 
@@ -208,8 +219,8 @@ public final class GeetestV3Client extends AbstractGeetestClient {
 	 * @return 生成签名结果
 	 */
 	private String sign(final GeetestV3InitResponse initResponse) {
-		MD5Mcrypt md5Mcrypt = new MD5Mcrypt(StandardCharsets.UTF_8, secretKey);
-		return md5Mcrypt.encode(initResponse.getChallenge());
+		final MD5Crypto crypto = new MD5Crypto(StandardCharsets.UTF_8, secretKey);
+		return crypto.encrypt(initResponse.getChallenge());
 	}
 
 }

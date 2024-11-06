@@ -22,21 +22,58 @@
  * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security;
+package com.buession.security.mcrypt;
 
-import com.buession.security.core.Desensitization;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.buession.security.crypto.Crypto;
 
 /**
+ * 加解密
+ *
  * @author Yong.Teng
  */
-public class DesensitizationTest {
+@Deprecated
+public interface Mcrypt extends Crypto {
 
-	@Test
-	public void encode(){
-		Assertions.assertEquals("1380***8000", Desensitization.encode("13800138000", 3));
-		Assertions.assertEquals("0138***38000", Desensitization.encode("013800138000", 3));
+	/**
+	 * 返回请求算法的名称
+	 *
+	 * @return 返回请求算法的名称
+	 */
+	Algo getAlgo();
+
+	/**
+	 * 设置请求算法的名称
+	 *
+	 * @param algo
+	 * 		请求算法的名称
+	 */
+	@Deprecated
+	void setAlgo(final Algo algo);
+
+	/**
+	 * 对象加密
+	 *
+	 * @param object
+	 * 		需要加密的字符串
+	 *
+	 * @return 加密后的字符串
+	 */
+	default String encode(final Object object) {
+		return encrypt(object);
+	}
+
+	/**
+	 * 字符串解密
+	 * 该方法需要提供信息摘要算法支持双向解密才可用
+	 *
+	 * @param cs
+	 * 		要被解密的 char 值序列
+	 *
+	 * @return 解密后的字符串
+	 */
+	default String decode(final CharSequence cs) {
+		return decrypt(cs);
 	}
 
 }
+

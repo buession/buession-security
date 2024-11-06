@@ -2,6 +2,58 @@
 ===========================
 
 
+## [3.0.0](https://github.com/buession/buession-security/releases/tag/v3.0.0) (2024-11-07)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v3.0.0)
+- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.6
+
+
+### ⭐ 新特性
+
+
+### 🔔 变化
+
+- buession-security-mcrypt 替换为 buession-security-crypto
+- shiro Session DAO 不再实现接口 com.buession.security.shiro.session.SessionDAO，并删除 com.buession.security.shiro.session.SessionDAO
+- shiro Cache 类不再实现接口 com.buession.security.shiro.cache.Cache，并删除 com.buession.security.shiro.cache.Cache
+- shiro Cache Manager 类不再实现接口 com.buession.security.shiro.cache.CacheManager，并删除 com.buession.security.shiro.cache.CacheManager
+- 删除 com.buession.security.pac4j.env.Pac4jIniEnvironment
+- 删除 com.buession.security.pac4j.context.ShiroSessionStore
+- 删除 com.buession.security.pac4j.filter.CallbackFilter
+- 删除 com.buession.security.pac4j.filter.SecurityFilter
+- 删除 com.buession.security.pac4j.filter.LogoutFilter
+- 删除 com.buession.security.pac4j.engine.ShiroCallbackLogic
+- 删除 com.buession.security.pac4j.engine.ShiroSecurityLogic
+- 删除 com.buession.security.pac4j.profile.ShiroProfileManager
+- 删除 com.buession.security.pac4j.realm.Pac4jRealm
+- 删除 com.buession.security.pac4j.subject.Pac4jPrincipal
+- 删除 com.buession.security.pac4j.subject.Pac4jSubjectFactory
+- 删除 com.buession.security.pac4j.token.Pac4jToken
+- buession-security-mcrypt 代码移至 buession-security-crypto，废弃 Mcrypt 和 Mcrypt PasswordGenerator 相关类
+
+
+### 🐞 Bug 修复
+
+- **buession-httpclient：** 修复 ConnectionManager 未设置 connectionManagerShared 时，无法从 Configuration 中获取 connectionManagerShared 值的 BUG
+- **buession-httpclient：** 修复 okhttp 设置 followRedirects 时，followSslRedirects 未生效的 BUG
+
+
+### ⏪ 优化
+
+- **buession-security-core：** 排除不必要依赖
+- **buession-security-pac4j：** 排除不必要依赖
+
+
+### 漏洞修复
+
+- [owasp antisamy](https://github.com/nahsra/antisamy) 修复 [CVE-2024-23635](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-23635) 漏洞
+
+
+---
+
+
 ## [2.3.3](https://github.com/buession/buession-security/releases/tag/v2.3.3) (2024-05-06)
 
 ### 🔨依赖升级

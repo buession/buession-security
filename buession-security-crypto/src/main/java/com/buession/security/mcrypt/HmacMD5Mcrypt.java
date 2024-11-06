@@ -22,21 +22,77 @@
  * | Copyright @ 2013-2024 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security;
+package com.buession.security.mcrypt;
 
-import com.buession.security.core.Desensitization;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.buession.security.crypto.HmacCrypto;
+import org.apache.commons.codec.digest.HmacAlgorithms;
+
+import java.nio.charset.Charset;
 
 /**
+ * Hmac MD5 加密对象
+ *
  * @author Yong.Teng
+ * @since 2.0.0
  */
-public class DesensitizationTest {
+@Deprecated
+public final class HmacMD5Mcrypt extends AbstractHmacMcrypt implements HmacCrypto {
 
-	@Test
-	public void encode(){
-		Assertions.assertEquals("1380***8000", Desensitization.encode("13800138000", 3));
-		Assertions.assertEquals("0138***38000", Desensitization.encode("013800138000", 3));
+	/**
+	 * 构造函数
+	 */
+	public HmacMD5Mcrypt() {
+		super(Algo.HMAC_MD5);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 */
+	@Deprecated
+	public HmacMD5Mcrypt(final String characterEncoding) {
+		super(Algo.HMAC_MD5, characterEncoding);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 */
+	public HmacMD5Mcrypt(final Charset charset) {
+		super(Algo.HMAC_MD5, charset);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param characterEncoding
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public HmacMD5Mcrypt(final String characterEncoding, final String salt) {
+		super(Algo.HMAC_MD5, characterEncoding, salt);
+	}
+
+	/**
+	 * 构造函数
+	 *
+	 * @param charset
+	 * 		字符编码
+	 * @param salt
+	 * 		加密密钥
+	 */
+	public HmacMD5Mcrypt(final Charset charset, final String salt) {
+		super(Algo.HMAC_MD5, charset, salt);
+	}
+
+	@Override
+	protected HmacAlgorithms getHmacAlgorithms() {
+		return HmacAlgorithms.HMAC_MD5;
 	}
 
 }
