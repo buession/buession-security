@@ -1,0 +1,39 @@
+name: Docs CI
+
+on:
+  release:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: 1. set environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: 2. install dependency
+        run: |
+          cd site
+          rm -rf node_modules
+          npm install ydoc -g
+          yarn --frozen-lockfile
+          ydoc build
+        env:
+          CI: true
+      - name: 3. script deploy
+        env:
+          DEPLOY_ACCESS_TOKEN: ${{ secrets.DEPLOY_ACCESS_TOKEN }}
+          PUBLISH_BRANCH: site
+          PUBLISH_DIR: ./_site
+          CNAME: www.buession.com
+        run: |
+          chmod +x ./scripts/deploy.sh
+          bash ./scripts/deploy.sh

@@ -1,0 +1,13 @@
+{
+  "title": "Buession Security",
+  "keywords": "buession java spring security shiro pac4j mcrypt desensitization geetest",
+  "description": "Buession 安全框架，整合了 spring security、shiro、pac4j；封装了极验等行为验证产品 SDK。",
+  "author": "buession",
+  "theme": "demo",
+  "root": "src",
+  "pluginsConfig": {
+    "import-asset": {
+      "js": ["/js/stat.js"]
+    }
+  }
+}
