@@ -8,6 +8,10 @@
 
 - [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v4.0.0)
 
+### 🔔 变化
+
+- 删除包 com.buession.security.mcrypt 和 com.buession.security.mcrypt.passwordgenerator
+
 
 ---
 

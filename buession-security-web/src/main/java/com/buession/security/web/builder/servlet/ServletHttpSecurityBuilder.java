@@ -124,7 +124,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 					propertyMapper.from(session.getSessionAttributeName())
 							.to(sessionCsrfTokenRepository::setSessionAttributeName);
 
-					csrfConfigurer.csrfTokenRepository(new LazyCsrfTokenRepository(sessionCsrfTokenRepository));
+					csrfConfigurer.csrfTokenRepository(sessionCsrfTokenRepository);
 				}else{
 					Csrf.Cookie cookie = config.getCookie();
 

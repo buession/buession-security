@@ -19,21 +19,22 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.http;
 
 import org.pac4j.core.context.HttpConstants;
 import org.pac4j.core.context.WebContext;
+import org.pac4j.core.context.session.SessionStore;
 import org.pac4j.core.exception.http.HttpAction;
 import org.pac4j.core.exception.http.RedirectionAction;
-import org.pac4j.core.exception.http.RedirectionActionHelper;
 import org.pac4j.core.exception.http.UnauthorizedAction;
 import org.pac4j.core.exception.http.WithLocationAction;
 import org.pac4j.core.http.ajax.DefaultAjaxRequestResolver;
 import org.pac4j.core.redirect.RedirectionActionBuilder;
 import org.pac4j.core.util.CommonHelper;
+import org.pac4j.core.util.HttpActionHelper;
 
 /**
  * JSON way to compute if a HTTP request is an AJAX one.
@@ -44,12 +45,13 @@ import org.pac4j.core.util.CommonHelper;
 public class JsonAjaxRequestResolver extends DefaultAjaxRequestResolver {
 
 	@Override
-	public HttpAction buildAjaxResponse(final WebContext context,
+	public HttpAction buildAjaxResponse(final WebContext context, final SessionStore sessionStore,
 										final RedirectionActionBuilder redirectionActionBuilder) {
 		String url = null;
 
 		if(isAddRedirectionUrlAsHeader()){
-			final RedirectionAction action = redirectionActionBuilder.getRedirectionAction(context).orElse(null);
+			final RedirectionAction action = redirectionActionBuilder.getRedirectionAction(context, sessionStore)
+					.orElse(null);
 			if(action instanceof WithLocationAction){
 				url = ((WithLocationAction) action).getLocation();
 			}
@@ -59,7 +61,7 @@ public class JsonAjaxRequestResolver extends DefaultAjaxRequestResolver {
 			if(CommonHelper.isNotBlank(url)){
 				context.setResponseHeader(HttpConstants.LOCATION_HEADER, url);
 			}
-			throw UnauthorizedAction.INSTANCE;
+			throw new UnauthorizedAction();
 		}
 
 		final StringBuilder buffer = new StringBuilder("{\"redirect\":{");
@@ -69,7 +71,7 @@ public class JsonAjaxRequestResolver extends DefaultAjaxRequestResolver {
 		}
 		buffer.append("}}");
 
-		return RedirectionActionHelper.buildFormPostContentAction(context, buffer.toString());
+		return HttpActionHelper.buildFormPostContentAction(context, buffer.toString());
 	}
 
 }
