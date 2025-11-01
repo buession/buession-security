@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -43,6 +43,34 @@ public class FormLogin {
 	 * 登录页地址
 	 */
 	private String loginPage;
+
+	/**
+	 * 用户名参数名称
+	 *
+	 * @since 4.0.0
+	 */
+	private String usernameParameter;
+
+	/**
+	 * 密码参数名称
+	 *
+	 * @since 4.0.0
+	 */
+	private String passwordParameter;
+
+	/**
+	 * 认证成功跳转地址
+	 *
+	 * @since 4.0.0
+	 */
+	private String successForwardUrl;
+
+	/**
+	 * 认证失败跳转地址
+	 *
+	 * @since 4.0.0
+	 */
+	private String failureForwardUrl;
 
 	/**
 	 * 返回是否启动登录表单
@@ -82,11 +110,107 @@ public class FormLogin {
 		this.loginPage = loginPage;
 	}
 
+	/**
+	 * 返回用户名参数名称
+	 *
+	 * @return 用户名参数名称
+	 *
+	 * @since 4.0.0
+	 */
+	public String getUsernameParameter() {
+		return usernameParameter;
+	}
+
+	/**
+	 * 设置用户名参数名称
+	 *
+	 * @param usernameParameter
+	 * 		用户名参数名称
+	 *
+	 * @since 4.0.0
+	 */
+	public void setUsernameParameter(String usernameParameter) {
+		this.usernameParameter = usernameParameter;
+	}
+
+	/**
+	 * 返回密码参数名称
+	 *
+	 * @return 密码参数名称
+	 *
+	 * @since 4.0.0
+	 */
+	public String getPasswordParameter() {
+		return passwordParameter;
+	}
+
+	/**
+	 * 设置密码参数名称
+	 *
+	 * @param passwordParameter
+	 * 		密码参数名称
+	 *
+	 * @since 4.0.0
+	 */
+	public void setPasswordParameter(String passwordParameter) {
+		this.passwordParameter = passwordParameter;
+	}
+
+	/**
+	 * 返回认证成功跳转地址
+	 *
+	 * @return 认证成功跳转地址
+	 *
+	 * @since 4.0.0
+	 */
+	public String getSuccessForwardUrl() {
+		return successForwardUrl;
+	}
+
+	/**
+	 * 设置认证成功跳转地址
+	 *
+	 * @param successForwardUrl
+	 * 		认证成功跳转地址
+	 *
+	 * @since 4.0.0
+	 */
+	public void setSuccessForwardUrl(String successForwardUrl) {
+		this.successForwardUrl = successForwardUrl;
+	}
+
+	/**
+	 * 返回认证失败跳转地址
+	 *
+	 * @return 认证失败跳转地址
+	 *
+	 * @since 4.0.0
+	 */
+	public String getFailureForwardUrl() {
+		return failureForwardUrl;
+	}
+
+	/**
+	 * 设置认证失败跳转地址
+	 *
+	 * @param failureForwardUrl
+	 * 		认证失败跳转地址
+	 *
+	 * @since 4.0.0
+	 */
+	public void setFailureForwardUrl(String failureForwardUrl) {
+		this.failureForwardUrl = failureForwardUrl;
+	}
+
 	@Override
 	public String toString() {
 		return new StringJoiner(", ", "FormLogin = {", "}")
 				.add("enabled=" + enabled)
 				.add("loginPage='" + loginPage + "'")
+				.add("usernameParameter='" + usernameParameter + "'")
+				.add("passwordParameter='" + passwordParameter + "'")
+				.add("successForwardUrl='" + successForwardUrl + "'")
+				.add("failureForwardUrl='" + failureForwardUrl + "'")
 				.toString();
 	}
 

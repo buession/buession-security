@@ -19,13 +19,14 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2024 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
 
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
+import java.util.Set;
 import java.util.StringJoiner;
 
 /**
@@ -57,6 +58,13 @@ public class Csrf {
 	 * Session Csrf Token Repository 配置
 	 */
 	private Session session;
+
+	/**
+	 * 忽略请求匹配
+	 *
+	 * @since 4.0.0
+	 */
+	private Set<String> ignoringRequestMatchers;
 
 	/**
 	 * 返回是否启用 Csrf
@@ -143,6 +151,29 @@ public class Csrf {
 		this.session = session;
 	}
 
+	/**
+	 * 返回忽略请求匹配
+	 *
+	 * @return 忽略请求匹配
+	 *
+	 * @since 4.0.0
+	 */
+	public Set<String> getIgnoringRequestMatchers() {
+		return ignoringRequestMatchers;
+	}
+
+	/**
+	 * 设置忽略请求匹配
+	 *
+	 * @param ignoringRequestMatchers
+	 * 		忽略请求匹配
+	 *
+	 * @since 4.0.0
+	 */
+	public void setIgnoringRequestMatchers(Set<String> ignoringRequestMatchers) {
+		this.ignoringRequestMatchers = ignoringRequestMatchers;
+	}
+
 	@Override
 	public String toString() {
 		return new StringJoiner(", ", "Csrf = {", "}")
@@ -150,6 +181,7 @@ public class Csrf {
 				.add("mode=" + mode)
 				.add("cookie=" + cookie)
 				.add("session=" + session)
+				.add("ignoringRequestMatchers=" + ignoringRequestMatchers)
 				.toString();
 	}
 

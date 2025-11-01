@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -60,11 +60,6 @@ public class Configurer {
 	private Hsts hsts;
 
 	/**
-	 * Hpkp 配置
-	 */
-	private Hpkp hpkp;
-
-	/**
 	 * Content Security Policy 配置
 	 */
 	private ContentSecurityPolicy contentSecurityPolicy;
@@ -103,8 +98,6 @@ public class Configurer {
 	 * 		Frame Options 配置
 	 * @param hsts
 	 * 		Hsts 配置
-	 * @param hpkp
-	 * 		Hpkp 配置
 	 * @param contentSecurityPolicy
 	 * 		Content Security Policy 配置
 	 * @param referrerPolicy
@@ -115,14 +108,13 @@ public class Configurer {
 	 * 		登录表单配置
 	 */
 	public Configurer(HttpBasic httpBasic, Csrf csrf, Cors cors, FrameOptions frameOptions, Hsts hsts,
-					  Hpkp hpkp, ContentSecurityPolicy contentSecurityPolicy,
-					  ReferrerPolicy referrerPolicy, Xss xss, FormLogin formLogin) {
+					  ContentSecurityPolicy contentSecurityPolicy, ReferrerPolicy referrerPolicy, Xss xss,
+					  FormLogin formLogin) {
 		this.httpBasic = httpBasic;
 		this.csrf = csrf;
 		this.cors = cors;
 		this.frameOptions = frameOptions;
 		this.hsts = hsts;
-		this.hpkp = hpkp;
 		this.contentSecurityPolicy = contentSecurityPolicy;
 		this.referrerPolicy = referrerPolicy;
 		this.xss = xss;
@@ -225,25 +217,6 @@ public class Configurer {
 	}
 
 	/**
-	 * 返回 Hpkp 配置
-	 *
-	 * @return Hpkp 配置
-	 */
-	public Hpkp getHpkp() {
-		return hpkp;
-	}
-
-	/**
-	 * 设置 Hpkp 配置
-	 *
-	 * @param hpkp
-	 * 		Hpkp 配置
-	 */
-	public void setHpkp(Hpkp hpkp) {
-		this.hpkp = hpkp;
-	}
-
-	/**
 	 * 返回 Content Security Policy 配置
 	 *
 	 * @return Content Security Policy 配置
@@ -326,7 +299,6 @@ public class Configurer {
 				.add("csrf=" + csrf)
 				.add("frameOptions=" + frameOptions)
 				.add("hsts=" + hsts)
-				.add("hpkp=" + hpkp)
 				.add("contentSecurityPolicy=" + contentSecurityPolicy)
 				.add("referrerPolicy=" + referrerPolicy)
 				.add("xss=" + xss)

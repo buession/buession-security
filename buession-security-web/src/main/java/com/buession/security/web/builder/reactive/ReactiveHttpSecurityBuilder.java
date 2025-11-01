@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2024 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.builder.reactive;
@@ -32,17 +32,19 @@ import com.buession.security.web.config.Cors;
 import com.buession.security.web.config.Csrf;
 import com.buession.security.web.config.FormLogin;
 import com.buession.security.web.config.FrameOptions;
-import com.buession.security.web.config.Hpkp;
 import com.buession.security.web.config.Hsts;
 import com.buession.security.web.config.HttpBasic;
 import com.buession.security.web.config.ReferrerPolicy;
 import com.buession.security.web.config.Xss;
 import com.buession.security.web.config.converter.reactive.ReferrerPolicyConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.security.web.server.csrf.WebSessionServerCsrfTokenRepository;
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter;
+import org.springframework.security.web.server.header.XXssProtectionServerHttpHeadersWriter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import java.time.Duration;
@@ -59,6 +61,10 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	 * ServerHttpSecurity 实例
 	 */
 	private final ServerHttpSecurity serverHttpSecurity;
+
+	private final static PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenHasText();
+
+	private final static Logger logger = LoggerFactory.getLogger(ReactiveHttpSecurityBuilder.class);
 
 	/**
 	 * 构造函数
@@ -84,178 +90,203 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 
 	@Override
 	public ReactiveHttpSecurityBuilder httpBasic(HttpBasic config) {
-		if(config.isEnabled() == false){
-			serverHttpSecurity.httpBasic().disable();
-		}
+		serverHttpSecurity.httpBasic((configurer)->{
+			if(config.isEnabled()){
+			}else{
+				configurer.disable();
+			}
+		});
 
 		return this;
 	}
 
 	@Override
 	public ReactiveHttpSecurityBuilder csrf(Csrf config) {
-		PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenHasText();
-		ServerHttpSecurity.CsrfSpec csrfSpec = serverHttpSecurity.csrf();
+		serverHttpSecurity.csrf((configurer)->{
+			if(config.isEnabled()){
+				if(config.getMode() != null){
+					if(config.getMode() == Csrf.CsrfMode.SESSION){
+						Csrf.Session session = config.getSession();
 
-		if(config.isEnabled()){
-			if(config.getMode() != null){
-				if(config.getMode() == Csrf.CsrfMode.SESSION){
-					Csrf.Session session = config.getSession();
+						WebSessionServerCsrfTokenRepository sessionCsrfTokenRepository = new WebSessionServerCsrfTokenRepository();
 
-					WebSessionServerCsrfTokenRepository sessionCsrfTokenRepository = new WebSessionServerCsrfTokenRepository();
+						propertyMapper.from(session.getParameterName())
+								.to(sessionCsrfTokenRepository::setParameterName);
+						propertyMapper.from(session.getHeaderName()).to(sessionCsrfTokenRepository::setHeaderName);
+						propertyMapper.from(session.getSessionAttributeName())
+								.to(sessionCsrfTokenRepository::setSessionAttributeName);
 
-					propertyMapper.from(session.getParameterName())
-							.to(sessionCsrfTokenRepository::setParameterName);
-					propertyMapper.from(session.getHeaderName()).to(sessionCsrfTokenRepository::setHeaderName);
-					propertyMapper.from(session.getSessionAttributeName())
-							.to(sessionCsrfTokenRepository::setSessionAttributeName);
+						configurer.csrfTokenRepository(sessionCsrfTokenRepository);
+					}else{
+						Csrf.Cookie cookie = config.getCookie();
 
-					csrfSpec.csrfTokenRepository(sessionCsrfTokenRepository);
-				}else{
-					Csrf.Cookie cookie = config.getCookie();
+						CookieServerCsrfTokenRepository cookieCsrfTokenRepository = new CookieServerCsrfTokenRepository();
 
-					CookieServerCsrfTokenRepository cookieCsrfTokenRepository = new CookieServerCsrfTokenRepository();
+						propertyMapper.from(cookie.getParameterName()).to(cookieCsrfTokenRepository::setParameterName);
+						propertyMapper.from(cookie.getHeaderName()).to(cookieCsrfTokenRepository::setHeaderName);
+						propertyMapper.from(cookie.getCookieName()).to(cookieCsrfTokenRepository::setCookieName);
+						propertyMapper.from(cookie.getCookiePath()).to(cookieCsrfTokenRepository::setCookiePath);
 
-					propertyMapper.from(cookie.getParameterName()).to(cookieCsrfTokenRepository::setParameterName);
-					propertyMapper.from(cookie.getHeaderName()).to(cookieCsrfTokenRepository::setHeaderName);
-					propertyMapper.from(cookie.getCookieName()).to(cookieCsrfTokenRepository::setCookieName);
-					propertyMapper.from(cookie.getCookieDomain()).to(cookieCsrfTokenRepository::setCookieDomain);
-					propertyMapper.from(cookie.getCookiePath()).to(cookieCsrfTokenRepository::setCookiePath);
+						cookieCsrfTokenRepository.setCookieCustomizer((builder)->{
+							builder.domain(cookie.getCookieDomain()).httpOnly(cookie.getCookieHttpOnly());
+						});
 
-					cookieCsrfTokenRepository.setCookieHttpOnly(cookie.getCookieHttpOnly());
-
-					csrfSpec.csrfTokenRepository(cookieCsrfTokenRepository);
+						configurer.csrfTokenRepository(cookieCsrfTokenRepository);
+					}
 				}
+			}else{
+				configurer.disable();
 			}
-		}else{
-			csrfSpec.disable();
-		}
+		});
 
 		return this;
 	}
 
 	@Override
 	public ReactiveHttpSecurityBuilder cors(Cors config) {
-		ServerHttpSecurity.CorsSpec corsSpec = serverHttpSecurity.cors();
+		serverHttpSecurity.cors((configurer)->{
+			if(config.isEnabled()){
+				UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+				urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", config.toCorsConfiguration());
 
-		if(config.isEnabled()){
-			UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-			urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", config.toCorsConfiguration());
-
-			corsSpec.configurationSource(urlBasedCorsConfigurationSource);
-		}else{
-			corsSpec.disable();
-		}
+				configurer.configurationSource(urlBasedCorsConfigurationSource);
+			}else{
+				configurer.disable();
+			}
+		});
 
 		return this;
 	}
 
 	@Override
 	public ReactiveHttpSecurityBuilder frameOptions(FrameOptions config) {
-		ServerHttpSecurity.HeaderSpec.FrameOptionsSpec frameOptionsSpec = serverHttpSecurity.headers().frameOptions();
-
-		if(config.isEnabled()){
-			if(config.getMode() != null){
-				switch(config.getMode()){
-					case ALLOW_FROM:
-						// empty
-						break;
-					case SAMEORIGIN:
-						frameOptionsSpec.mode(XFrameOptionsServerHttpHeadersWriter.Mode.SAMEORIGIN);
-						break;
-					case DENY:
-						frameOptionsSpec.mode(XFrameOptionsServerHttpHeadersWriter.Mode.DENY);
-						break;
-					default:
-						break;
+		serverHttpSecurity.headers((configurer)->{
+			configurer.frameOptions((frameOptionsConfig)->{
+				if(config.isEnabled()){
+					if(config.getMode() != null){
+						switch(config.getMode()){
+							case ALLOW_FROM:
+								// empty
+								break;
+							case SAMEORIGIN:
+								frameOptionsConfig.mode(XFrameOptionsServerHttpHeadersWriter.Mode.SAMEORIGIN);
+								break;
+							case DENY:
+								frameOptionsConfig.mode(XFrameOptionsServerHttpHeadersWriter.Mode.DENY);
+								break;
+							default:
+								break;
+						}
+					}
+				}else{
+					frameOptionsConfig.disable();
 				}
-			}
-		}else{
-			frameOptionsSpec.disable();
-		}
+			});
+		});
 
 		return this;
 	}
 
 	@Override
 	public ReactiveHttpSecurityBuilder hsts(Hsts config) {
-		ServerHttpSecurity.HeaderSpec.HstsSpec hstsSpec = serverHttpSecurity.headers().hsts();
+		serverHttpSecurity.headers((configurer)->{
+			configurer.hsts((hstsConfig)->{
+				if(config.isEnabled()){
+					PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
-		if(config.isEnabled()){
-			PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
+					propertyMapper.from(config::getMaxAge).as(Duration::ofMillis).to(hstsConfig::maxAge);
+					propertyMapper.from(config::getIncludeSubDomains).to(hstsConfig::includeSubdomains);
+					propertyMapper.from(config::getPreload).to(hstsConfig::preload);
 
-			propertyMapper.from(config::getMaxAge).as(Duration::ofMillis).to(hstsSpec::maxAge);
-			propertyMapper.from(config::getIncludeSubDomains).to(hstsSpec::includeSubdomains);
-			propertyMapper.from(config::getPreload).to(hstsSpec::preload);
+					if(config.getMatcher() != null){
+					}
+				}else{
+					hstsConfig.disable();
+				}
+			});
+		});
 
-			if(config.getMatcher() != null){
-				// empty
-			}
-		}else{
-			hstsSpec.disable();
-		}
-
-		return this;
-	}
-
-	@Override
-	public ReactiveHttpSecurityBuilder hpkp(Hpkp config) {
 		return this;
 	}
 
 	@Override
 	public ReactiveHttpSecurityBuilder contentSecurityPolicy(ContentSecurityPolicy config) {
-		if(config.isEnabled() && Validate.hasText(config.getPolicyDirectives())){
-			ServerHttpSecurity.HeaderSpec.ContentSecurityPolicySpec contentSecurityPolicySpec = serverHttpSecurity.headers()
-					.contentSecurityPolicy(config.getPolicyDirectives());
-
-			if(config.getReportOnly() != null){
-				contentSecurityPolicySpec.reportOnly(config.getReportOnly());
+		serverHttpSecurity.headers((configurer)->{
+			if(config.isEnabled() && Validate.hasText(config.getPolicyDirectives())){
+				configurer.contentSecurityPolicy((contentSecurityPolicyConfig)->{
+					contentSecurityPolicyConfig.policyDirectives(config.getPolicyDirectives());
+					if(config.getReportOnly() != null){
+						contentSecurityPolicyConfig.reportOnly(config.getReportOnly());
+					}
+				});
+			}else{
+				configurer.disable();
 			}
-		}
+		});
 
 		return this;
 	}
 
 	@Override
 	public ReactiveHttpSecurityBuilder referrerPolicy(ReferrerPolicy config) {
-		if(config.isEnabled() && config.getPolicy() != null){
-			ReferrerPolicyConverter.ToNativeReferrerPolicyConverter toNativeReferrerPolicyConverter = new ReferrerPolicyConverter.ToNativeReferrerPolicyConverter();
-			ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy referrerPolicy = toNativeReferrerPolicyConverter.convert(
-					config.getPolicy());
+		serverHttpSecurity.headers((configurer)->{
+			if(config.isEnabled() && config.getPolicy() != null){
+				ReferrerPolicyConverter.ToNativeReferrerPolicyConverter toNativeReferrerPolicyConverter = new ReferrerPolicyConverter.ToNativeReferrerPolicyConverter();
+				ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy referrerPolicy = toNativeReferrerPolicyConverter.convert(
+						config.getPolicy());
 
-			if(referrerPolicy != null){
-				serverHttpSecurity.headers().referrerPolicy(referrerPolicy);
+				configurer.referrerPolicy((referrerPolicyConfig)->{
+					referrerPolicyConfig.policy(referrerPolicy);
+				});
+			}else{
+				configurer.disable();
 			}
-		}
+		});
 
 		return this;
 	}
 
 	@Override
 	public ReactiveHttpSecurityBuilder xss(Xss config) {
-		ServerHttpSecurity.HeaderSpec.XssProtectionSpec xssProtectionSpec = serverHttpSecurity.headers()
-				.xssProtection();
-
-		if(config.isEnabled()){
-
-		}else{
-			xssProtectionSpec.disable();
-		}
+		serverHttpSecurity.headers((configurer)->{
+			configurer.xssProtection((xssProtectionConfig)->{
+				if(config.isEnabled()){
+					if(config.getPolicy() != null){
+						switch(config.getPolicy()){
+							case DISABLED:
+								xssProtectionConfig.headerValue(
+										XXssProtectionServerHttpHeadersWriter.HeaderValue.DISABLED);
+								break;
+							case ENABLED:
+								xssProtectionConfig.headerValue(
+										XXssProtectionServerHttpHeadersWriter.HeaderValue.ENABLED);
+								break;
+							case ENABLED_MODE_BLOCK:
+								xssProtectionConfig.headerValue(
+										XXssProtectionServerHttpHeadersWriter.HeaderValue.ENABLED_MODE_BLOCK);
+								break;
+							default:
+								break;
+						}
+					}
+				}else{
+					xssProtectionConfig.disable();
+				}
+			});
+		});
 
 		return this;
 	}
 
 	@Override
 	public ReactiveHttpSecurityBuilder formLogin(FormLogin config) {
-		ServerHttpSecurity.FormLoginSpec formLoginSpec = serverHttpSecurity.formLogin();
-
-		if(config.isEnabled()){
-			if(Validate.hasText(config.getLoginPage())){
-				formLoginSpec.loginPage(config.getLoginPage());
+		serverHttpSecurity.formLogin((configurer)->{
+			if(config.isEnabled()){
+				propertyMapper.from(config.getLoginPage()).to(configurer::loginPage);
+			}else{
+				configurer.disable();
 			}
-		}else{
-			formLoginSpec.disable();
-		}
+		});
 
 		return this;
 	}

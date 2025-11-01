@@ -7,10 +7,13 @@
 ### 🔨依赖升级
 
 - [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v4.0.0)
+- [buji-pac4j](https://github.com/bujiio/buji-pac4j) 版本升级至 8.2.0
 
 ### 🔔 变化
 
 - 删除包 com.buession.security.mcrypt 和 com.buession.security.mcrypt.passwordgenerator
+- com.buession.security.web.servlet.config.ServletWebSecurityConfigurerAdapterConfiguration 修改为 com.buession.security.web.servlet.config.ServletHttpSecurityConfiguration
+-- web security 删除 Hpkp 相关
 
 
 ---

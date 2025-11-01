@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.servlet.config;
@@ -28,10 +28,11 @@ import com.buession.core.converter.mapper.PropertyMapper;
 import com.buession.security.web.builder.servlet.ServletHttpSecurityBuilder;
 import com.buession.security.web.config.Configurer;
 import com.buession.web.servlet.OnServletCondition;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * Servlet Web 安全适配配置类
@@ -41,7 +42,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration(proxyBeanMethods = false)
 @Conditional(OnServletCondition.class)
-public class ServletWebSecurityConfigurerAdapterConfiguration extends WebSecurityConfigurerAdapter {
+public class ServletHttpSecurityConfiguration {
 
 	/**
 	 * Web 安全适配配置
@@ -51,7 +52,7 @@ public class ServletWebSecurityConfigurerAdapterConfiguration extends WebSecurit
 	/**
 	 * 构造函数
 	 */
-	public ServletWebSecurityConfigurerAdapterConfiguration() {
+	public ServletHttpSecurityConfiguration() {
 		this(new Configurer());
 	}
 
@@ -61,44 +62,27 @@ public class ServletWebSecurityConfigurerAdapterConfiguration extends WebSecurit
 	 * @param configurer
 	 * 		Web 安全适配配置
 	 */
-	public ServletWebSecurityConfigurerAdapterConfiguration(final Configurer configurer) {
+	public ServletHttpSecurityConfiguration(final Configurer configurer) {
 		super();
 		this.configurer = configurer;
 	}
 
-	/**
-	 * 构造函数
-	 *
-	 * @param configurer
-	 * 		Web 安全适配配置
-	 * @param disableDefaults
-	 * 		是否禁用默认配置
-	 */
-	public ServletWebSecurityConfigurerAdapterConfiguration(final Configurer configurer,
-															final boolean disableDefaults) {
-		super(disableDefaults);
-		this.configurer = configurer;
-	}
-
-	@Override
-	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		if(httpSecurity == null){
-			return;
-		}
-
-		final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		final ServletHttpSecurityBuilder builder = ServletHttpSecurityBuilder.getInstance(httpSecurity);
+		final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
 		propertyMapper.from(configurer::getHttpBasic).to(builder::httpBasic);
 		propertyMapper.from(configurer::getCsrf).to(builder::csrf);
 		propertyMapper.from(configurer::getCors).to(builder::cors);
 		propertyMapper.from(configurer::getFrameOptions).to(builder::frameOptions);
 		propertyMapper.from(configurer::getHsts).to(builder::hsts);
-		propertyMapper.from(configurer::getHpkp).to(builder::hpkp);
 		propertyMapper.from(configurer::getContentSecurityPolicy).to(builder::contentSecurityPolicy);
 		propertyMapper.from(configurer::getReferrerPolicy).to(builder::referrerPolicy);
 		propertyMapper.from(configurer::getXss).to(builder::xss);
 		propertyMapper.from(configurer::getFormLogin).to(builder::formLogin);
+
+		return httpSecurity.build();
 	}
 
 }

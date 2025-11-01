@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.reactive.config;
@@ -91,7 +91,6 @@ public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 		propertyMapper.from(configurer::getCors).to(builder::cors);
 		propertyMapper.from(configurer::getFrameOptions).to(builder::frameOptions);
 		propertyMapper.from(configurer::getHsts).to(builder::hsts);
-		propertyMapper.from(configurer::getHpkp).to(builder::hpkp);
 		propertyMapper.from(configurer::getContentSecurityPolicy).to(builder::contentSecurityPolicy);
 		propertyMapper.from(configurer::getReferrerPolicy).to(builder::referrerPolicy);
 		propertyMapper.from(configurer::getXss).to(builder::xss);

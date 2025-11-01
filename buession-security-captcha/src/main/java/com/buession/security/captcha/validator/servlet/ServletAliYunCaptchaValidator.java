@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.validator.servlet;
@@ -31,8 +31,7 @@ import com.buession.security.captcha.aliyun.AliyunParameter;
 import com.buession.security.captcha.core.CaptchaException;
 import com.buession.security.captcha.validator.AliYunCaptchaValidator;
 import com.buession.web.servlet.http.request.RequestUtils;
-
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Servlet 环境阿里云验证码验证
@@ -51,12 +50,12 @@ public class ServletAliYunCaptchaValidator extends AliYunCaptchaValidator implem
 	 *        {@link AliyunParameter} 实例
 	 */
 	public ServletAliYunCaptchaValidator(final AliYunCaptchaClient aliYunCaptchaClient,
-										 final AliyunParameter parameter){
+										 final AliyunParameter parameter) {
 		super(aliYunCaptchaClient, parameter);
 	}
 
 	@Override
-	public Status validate(final HttpServletRequest request) throws CaptchaException{
+	public Status validate(final HttpServletRequest request) throws CaptchaException {
 		final AliYunRequestData requestData = new AliYunRequestData();
 
 		requestData.setSessionId(request.getParameter(parameter.getSessionId()));

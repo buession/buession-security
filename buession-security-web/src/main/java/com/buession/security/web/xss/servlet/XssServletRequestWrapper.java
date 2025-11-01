@@ -21,7 +21,7 @@
  * +------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										|
  * | Author: Yong.Teng <webmaster@buession.com> 													|
- * | Copyright @ 2013-2024 Buession.com Inc.														|
+ * | Copyright @ 2013-2025 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.xss.servlet;
@@ -31,9 +31,9 @@ import com.buession.security.web.xss.Options;
 import com.buession.security.web.xss.factory.CleanXssFactory;
 import com.buession.security.web.xss.factory.EscapeXssFactory;
 import com.buession.security.web.xss.factory.XssFactory;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

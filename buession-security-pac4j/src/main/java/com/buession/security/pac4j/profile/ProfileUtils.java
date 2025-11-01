@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.profile;
@@ -28,6 +28,7 @@ import com.buession.beans.BeanConverter;
 import com.buession.beans.DefaultBeanConverter;
 import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.pac4j.core.profile.CommonProfile;
+import org.pac4j.core.profile.UserProfile;
 import org.springframework.beans.BeanUtils;
 
 import java.security.Principal;
@@ -43,14 +44,14 @@ import java.util.Map;
 public class ProfileUtils {
 
 	/**
-	 * 从 {@link Principal} 获取用户 Profile
+	 * 从 {@link Principal} 获取用户 Profile {@link UserProfile}
 	 *
 	 * @param principal
 	 *        {@link Principal}
 	 *
 	 * @return 用户 Profile
 	 */
-	public static CommonProfile getProfileFromPac4jPrincipal(final Pac4jPrincipal principal) {
+	public static UserProfile getProfileFromPac4jPrincipal(final Pac4jPrincipal principal) {
 		return principal == null ? null : principal.getProfile();
 	}
 
@@ -87,10 +88,10 @@ public class ProfileUtils {
 	}
 
 	/**
-	 * 将 pac4j {@link CommonProfile} 转换为 Principal 实例
+	 * 将 pac4j {@link UserProfile} 转换为 Principal 实例
 	 *
 	 * @param profile
-	 *        {@link CommonProfile} 实例
+	 *        {@link UserProfile} 实例
 	 * @param type
 	 * 		Principal 类型
 	 * @param <T>
@@ -100,12 +101,12 @@ public class ProfileUtils {
 	 *
 	 * @since 2.3.0
 	 */
-	public static <T> T toObject(final CommonProfile profile, final Class<T> type) {
+	public static <T> T toObject(final UserProfile profile, final Class<T> type) {
 		final T instance = BeanUtils.instantiateClass(type);
 
 		if(profile != null){
 			final BeanConverter beanConverter = new DefaultBeanConverter();
-			
+
 			beanConverter.convert(profile, instance);
 			beanConverter.convert(profile.getAttributes(), instance);
 		}

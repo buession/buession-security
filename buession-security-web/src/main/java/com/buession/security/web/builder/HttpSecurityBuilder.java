@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.builder;
@@ -29,7 +29,6 @@ import com.buession.security.web.config.Cors;
 import com.buession.security.web.config.Csrf;
 import com.buession.security.web.config.FormLogin;
 import com.buession.security.web.config.FrameOptions;
-import com.buession.security.web.config.Hpkp;
 import com.buession.security.web.config.Hsts;
 import com.buession.security.web.config.HttpBasic;
 import com.buession.security.web.config.ReferrerPolicy;
@@ -92,16 +91,6 @@ public interface HttpSecurityBuilder {
 	 * @return HttpSecurityBuilder 实例
 	 */
 	HttpSecurityBuilder hsts(final Hsts config);
-
-	/**
-	 * 设置 Hpkp {@link Hpkp} 配置
-	 *
-	 * @param config
-	 * 		Hpkp {@link Hpkp} 配置
-	 *
-	 * @return HttpSecurityBuilder 实例
-	 */
-	HttpSecurityBuilder hpkp(final Hpkp config);
 
 	/**
 	 * 设置 ContentSecurityPolicy {@link ContentSecurityPolicy} 配置
