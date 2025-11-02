@@ -38,7 +38,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * Servlet Web 安全适配配置类
  *
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 4.0.0
  */
 @Configuration(proxyBeanMethods = false)
 @Conditional(OnServletCondition.class)
@@ -68,7 +68,7 @@ public class ServletHttpSecurityConfiguration {
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		final ServletHttpSecurityBuilder builder = ServletHttpSecurityBuilder.getInstance(httpSecurity);
 		final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 

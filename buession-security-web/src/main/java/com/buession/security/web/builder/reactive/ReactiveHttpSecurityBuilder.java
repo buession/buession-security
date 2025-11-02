@@ -37,8 +37,6 @@ import com.buession.security.web.config.HttpBasic;
 import com.buession.security.web.config.ReferrerPolicy;
 import com.buession.security.web.config.Xss;
 import com.buession.security.web.config.converter.reactive.ReferrerPolicyConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.security.web.server.csrf.WebSessionServerCsrfTokenRepository;
@@ -63,8 +61,6 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	private final ServerHttpSecurity serverHttpSecurity;
 
 	private final static PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenHasText();
-
-	private final static Logger logger = LoggerFactory.getLogger(ReactiveHttpSecurityBuilder.class);
 
 	/**
 	 * 构造函数

@@ -36,11 +36,11 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
  * Reactive Web 安全适配配置类
  *
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 4.0.0
  */
 @Configuration(proxyBeanMethods = false)
 @Conditional(OnWebFluxCondition.class)
-public class ReactiveWebSecurityConfigurerAdapterConfiguration {
+public class ReactiveHttpSecurityConfiguration {
 
 	/**
 	 * Web 安全适配配置
@@ -50,7 +50,7 @@ public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 	/**
 	 * 构造函数
 	 */
-	public ReactiveWebSecurityConfigurerAdapterConfiguration() {
+	public ReactiveHttpSecurityConfiguration() {
 		this.configurer = new Configurer();
 	}
 
@@ -60,7 +60,7 @@ public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 	 * @param httpSecurity
 	 *        {@link ServerHttpSecurity} 实例
 	 */
-	public ReactiveWebSecurityConfigurerAdapterConfiguration(final ServerHttpSecurity httpSecurity) {
+	public ReactiveHttpSecurityConfiguration(final ServerHttpSecurity httpSecurity) {
 		this(new Configurer(), httpSecurity);
 	}
 
@@ -72,8 +72,8 @@ public class ReactiveWebSecurityConfigurerAdapterConfiguration {
 	 * @param httpSecurity
 	 *        {@link ServerHttpSecurity} 实例
 	 */
-	public ReactiveWebSecurityConfigurerAdapterConfiguration(final Configurer configurer,
-															 final ServerHttpSecurity httpSecurity) {
+	public ReactiveHttpSecurityConfiguration(final Configurer configurer,
+											 final ServerHttpSecurity httpSecurity) {
 		this.configurer = configurer;
 		initialize(httpSecurity);
 	}
