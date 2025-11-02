@@ -14,7 +14,9 @@
 - 删除包 com.buession.security.mcrypt 和 com.buession.security.mcrypt.passwordgenerator
 - com.buession.security.web.servlet.config.ServletWebSecurityConfigurerAdapterConfiguration 修改为 com.buession.security.web.servlet.config.ServletHttpSecurityConfiguration
 - com.buession.security.web.servlet.config.ReactiveWebSecurityConfigurerAdapterConfiguration 修改为 com.buession.security.web.servlet.config.ReactiveHttpSecurityConfiguration
--- web security 删除 Hpkp 相关
+- web security 删除 Hpkp 相关
+- buession-security-shiro 删除对 velocity 的支持
+- 删除 com.buession.security.shiro.session.mgt.DefaultWebSessionManager
 
 
 ---
