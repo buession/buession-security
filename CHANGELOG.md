@@ -13,6 +13,7 @@
 
 - 删除包 com.buession.security.mcrypt 和 com.buession.security.mcrypt.passwordgenerator
 - com.buession.security.web.servlet.config.ServletWebSecurityConfigurerAdapterConfiguration 修改为 com.buession.security.web.servlet.config.ServletHttpSecurityConfiguration
+- com.buession.security.web.servlet.config.ReactiveWebSecurityConfigurerAdapterConfiguration 修改为 com.buession.security.web.servlet.config.ReactiveHttpSecurityConfiguration
 -- web security 删除 Hpkp 相关
 
 
