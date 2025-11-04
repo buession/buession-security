@@ -7,7 +7,8 @@
 ### 🔨依赖升级
 
 - [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v4.0.0)
-- [buji-pac4j](https://github.com/bujiio/buji-pac4j) 版本升级至 8.2.0
+- [buji-pac4j](https://github.com/bujiio/buji-pac4j) 版本升级至 9.1.0
+- [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.8
 
 ### 🔔 变化
 
