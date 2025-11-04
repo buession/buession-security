@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2024 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.aliyun;
@@ -28,11 +28,10 @@ import com.buession.core.builder.MapBuilder;
 import com.buession.core.utils.StringUtils;
 import com.buession.security.captcha.core.ParametersBuilder;
 import com.buession.security.crypto.Algorithm;
+import com.buession.security.crypto.Base64Crypto;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -102,12 +101,8 @@ class AliyunParametersBuilder implements ParametersBuilder<AliYunRequestData> {
 	}
 
 	protected static String percentEncode(final String value) {
-		try{
-			return value != null ? URLEncoder.encode(value, "UTF-8").replace("+", "%20").replace("*", "%2A")
-					.replace("%7E", "~") : null;
-		}catch(UnsupportedEncodingException e){
-			return value;
-		}
+		return value != null ? URLEncoder.encode(value, StandardCharsets.UTF_8).replace("+", "%20").replace("*", "%2A")
+				.replace("%7E", "~") : null;
 	}
 
 	protected static String signature(final String signKey, final Map<String, String> parameters) {
@@ -133,7 +128,8 @@ class AliyunParametersBuilder implements ParametersBuilder<AliYunRequestData> {
 			Mac mac = Mac.getInstance("HmacSHA1");
 			mac.init(new SecretKeySpec((signKey + "&").getBytes(StandardCharsets.UTF_8), "HmacSHA1"));
 			byte[] signData = mac.doFinal(signature.toString().getBytes(StandardCharsets.UTF_8));
-			return DatatypeConverter.printBase64Binary(signData);
+			Base64Crypto base64Crypto = new Base64Crypto();
+			return base64Crypto.encrypt(signData);
 		}catch(Exception e){
 			throw new IllegalArgumentException(e.getMessage());
 		}
