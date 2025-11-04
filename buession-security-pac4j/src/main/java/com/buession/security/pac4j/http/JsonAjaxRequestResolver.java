@@ -24,16 +24,16 @@
  */
 package com.buession.security.pac4j.http;
 
+import com.buession.core.validator.Validate;
+import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.HttpConstants;
 import org.pac4j.core.context.WebContext;
-import org.pac4j.core.context.session.SessionStore;
 import org.pac4j.core.exception.http.HttpAction;
 import org.pac4j.core.exception.http.RedirectionAction;
 import org.pac4j.core.exception.http.UnauthorizedAction;
 import org.pac4j.core.exception.http.WithLocationAction;
 import org.pac4j.core.http.ajax.DefaultAjaxRequestResolver;
 import org.pac4j.core.redirect.RedirectionActionBuilder;
-import org.pac4j.core.util.CommonHelper;
 import org.pac4j.core.util.HttpActionHelper;
 
 /**
@@ -45,33 +45,33 @@ import org.pac4j.core.util.HttpActionHelper;
 public class JsonAjaxRequestResolver extends DefaultAjaxRequestResolver {
 
 	@Override
-	public HttpAction buildAjaxResponse(final WebContext context, final SessionStore sessionStore,
+	public HttpAction buildAjaxResponse(final CallContext context,
 										final RedirectionActionBuilder redirectionActionBuilder) {
 		String url = null;
 
 		if(isAddRedirectionUrlAsHeader()){
-			final RedirectionAction action = redirectionActionBuilder.getRedirectionAction(context, sessionStore)
-					.orElse(null);
+			final RedirectionAction action = redirectionActionBuilder.getRedirectionAction(context).orElse(null);
 			if(action instanceof WithLocationAction){
 				url = ((WithLocationAction) action).getLocation();
 			}
 		}
 
-		if(context.getRequestParameter(FACES_PARTIAL_AJAX_PARAMETER).isPresent() == false){
-			if(CommonHelper.isNotBlank(url)){
-				context.setResponseHeader(HttpConstants.LOCATION_HEADER, url);
+		WebContext webContext = context.webContext();
+		if(webContext.getRequestParameter(FACES_PARTIAL_AJAX_PARAMETER).isPresent() == false){
+			if(Validate.isNotBlank(url)){
+				webContext.setResponseHeader(HttpConstants.LOCATION_HEADER, url);
 			}
 			throw new UnauthorizedAction();
 		}
 
 		final StringBuilder buffer = new StringBuilder("{\"redirect\":{");
 
-		if(CommonHelper.isNotBlank(url)){
+		if(Validate.isNotBlank(url)){
 			buffer.append("\"url\":\"").append(url).append('"');
 		}
 		buffer.append("}}");
 
-		return HttpActionHelper.buildFormPostContentAction(context, buffer.toString());
+		return HttpActionHelper.buildFormPostContentAction(webContext, buffer.toString());
 	}
 
 }

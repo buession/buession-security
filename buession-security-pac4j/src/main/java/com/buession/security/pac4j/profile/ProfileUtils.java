@@ -80,7 +80,7 @@ public class ProfileUtils {
 		attributes.put("expired", profile.isExpired());
 		attributes.put("remembered", profile.isRemembered());
 		attributes.put("roles", profile.getRoles());
-		attributes.put("permissions", profile.getPermissions());
+		//attributes.put("permissions", profile.getPermissions());
 
 		attributes.putAll(profile.getAttributes());
 
