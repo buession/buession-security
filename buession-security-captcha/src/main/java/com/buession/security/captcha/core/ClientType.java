@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.core;
@@ -34,25 +34,25 @@ public enum ClientType {
 	/**
 	 * 电脑上的浏览器
 	 */
-	WEB("web"),
+	WEB,
 
 	/**
 	 * 手机上的浏览器，包括移动应用内完全内置的 web view
 	 */
-	H5("h5"),
+	H5,
 
 	/**
 	 * 通过原生 SDK 植入 APP 应用的方式
 	 */
-	NATIVE("native");
+	NATIVE;
 
 	private final String value;
 
-	ClientType(final String value){
-		this.value = value;
+	ClientType() {
+		this.value = name().toLowerCase();
 	}
 
-	public String getValue(){
+	public String getValue() {
 		return value;
 	}
 

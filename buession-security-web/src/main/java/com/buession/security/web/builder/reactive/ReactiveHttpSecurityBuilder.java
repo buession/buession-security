@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2025 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.builder.reactive;
@@ -60,7 +60,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	 */
 	private final ServerHttpSecurity serverHttpSecurity;
 
-	private final static PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenHasText();
+	private final static PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
 	/**
 	 * 构造函数
@@ -87,8 +87,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 	@Override
 	public ReactiveHttpSecurityBuilder httpBasic(HttpBasic config) {
 		serverHttpSecurity.httpBasic((configurer)->{
-			if(config.isEnabled()){
-			}else{
+			if(config.isEnabled() == false){
 				configurer.disable();
 			}
 		});
@@ -188,8 +187,6 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 		serverHttpSecurity.headers((configurer)->{
 			configurer.hsts((hstsConfig)->{
 				if(config.isEnabled()){
-					PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
-
 					propertyMapper.from(config::getMaxAge).as(Duration::ofMillis).to(hstsConfig::maxAge);
 					propertyMapper.from(config::getIncludeSubDomains).to(hstsConfig::includeSubdomains);
 					propertyMapper.from(config::getPreload).to(hstsConfig::preload);
@@ -211,9 +208,7 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 			if(config.isEnabled() && Validate.hasText(config.getPolicyDirectives())){
 				configurer.contentSecurityPolicy((contentSecurityPolicyConfig)->{
 					contentSecurityPolicyConfig.policyDirectives(config.getPolicyDirectives());
-					if(config.getReportOnly() != null){
-						contentSecurityPolicyConfig.reportOnly(config.getReportOnly());
-					}
+					propertyMapper.from(config::getReportOnly).to(contentSecurityPolicyConfig::reportOnly);
 				});
 			}else{
 				configurer.disable();

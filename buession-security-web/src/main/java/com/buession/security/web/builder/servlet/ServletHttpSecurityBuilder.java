@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2025 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.builder.servlet;
@@ -62,7 +62,7 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 	 */
 	private final HttpSecurity httpSecurity;
 
-	private final static PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenHasText();
+	private final static PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
 	private final static Logger logger = LoggerFactory.getLogger(ServletHttpSecurityBuilder.class);
 
@@ -221,8 +221,6 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 			httpSecurity.headers((configurer)->{
 				configurer.httpStrictTransportSecurity((hstsConfig)->{
 					if(config.isEnabled()){
-						PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
-
 						propertyMapper.from(config::getMaxAge).to(hstsConfig::maxAgeInSeconds);
 						propertyMapper.from(config::getIncludeSubDomains).to(hstsConfig::includeSubDomains);
 						propertyMapper.from(config::getPreload).to(hstsConfig::preload);

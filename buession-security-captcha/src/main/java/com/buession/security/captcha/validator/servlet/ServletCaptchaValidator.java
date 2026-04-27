@@ -49,5 +49,5 @@ public interface ServletCaptchaValidator extends CaptchaValidator {
 	 * 		验证异常
 	 */
 	Status validate(final HttpServletRequest request) throws CaptchaException;
-
+ 
 }

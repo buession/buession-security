@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2024 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.xss.encoder;
@@ -65,7 +65,7 @@ public class Jackson2Encoder extends AbstractEncoder<JsonDeserializer<String>> {
 		final XssFactory xssFactory = getOptions().getPolicy() == Options.Policy.ESCAPE ?
 				new EscapeXssFactory(getOptions()) : new CleanXssFactory(getOptions());
 
-		return new JsonDeserializer<String>() {
+		return new JsonDeserializer<>() {
 
 			@Override
 			public Class<String> handledType() {

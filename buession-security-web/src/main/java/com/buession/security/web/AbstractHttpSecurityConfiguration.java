@@ -22,68 +22,48 @@
  * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.captcha.geetest.api;
+package com.buession.security.web;
 
-import com.buession.core.utils.VersionUtils;
-import com.buession.httpclient.HttpClient;
-import com.buession.security.captcha.AbstractCaptchaClient;
-import com.buession.security.captcha.geetest.GeetestClient;
+import com.buession.core.converter.mapper.PropertyMapper;
+import com.buession.security.web.builder.HttpSecurityBuilder;
+import com.buession.security.web.config.Configurer;
 
 /**
- * 极验行为验证 API Client 抽象类
+ *
  *
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 4.0.0
  */
-public abstract class AbstractGeetestClient extends AbstractCaptchaClient implements GeetestClient {
+public abstract class AbstractHttpSecurityConfiguration {
 
 	/**
-	 * 公钥
+	 * Web 安全适配配置
 	 */
-	protected final String appId;
-
-	/**
-	 * 私钥
-	 */
-	protected final String secretKey;
-
-	protected String sdkName = null;
+	protected final Configurer configurer;
 
 	/**
 	 * 构造函数
 	 *
-	 * @param appId
-	 * 		应用 ID
-	 * @param secretKey
-	 * 		私钥
+	 * @param configurer
+	 * 		Web 安全适配配置
 	 */
-	public AbstractGeetestClient(final String appId, final String secretKey) {
-		this.appId = appId;
-		this.secretKey = secretKey;
+	public AbstractHttpSecurityConfiguration(final Configurer configurer) {
+		super();
+		this.configurer = configurer;
 	}
 
-	/**
-	 * 构造函数
-	 *
-	 * @param appId
-	 * 		应用 ID
-	 * @param secretKey
-	 * 		私钥
-	 * @param httpClient
-	 *        {@link HttpClient}
-	 */
-	public AbstractGeetestClient(final String appId, final String secretKey, final HttpClient httpClient) {
-		this(appId, secretKey);
-		setHttpClient(httpClient);
-	}
+	protected void apply(final HttpSecurityBuilder httpSecurityBuilder) {
+		final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
-	protected String getSdkName() {
-		if(sdkName == null){
-			sdkName = "Geetest-Java-SDK-" + getClass().getSimpleName() + '/' +
-					VersionUtils.determineClassVersion(getClass());
-		}
-
-		return sdkName;
+		propertyMapper.from(configurer::getHttpBasic).to(httpSecurityBuilder::httpBasic);
+		propertyMapper.from(configurer::getCsrf).to(httpSecurityBuilder::csrf);
+		propertyMapper.from(configurer::getCors).to(httpSecurityBuilder::cors);
+		propertyMapper.from(configurer::getFrameOptions).to(httpSecurityBuilder::frameOptions);
+		propertyMapper.from(configurer::getHsts).to(httpSecurityBuilder::hsts);
+		propertyMapper.from(configurer::getContentSecurityPolicy).to(httpSecurityBuilder::contentSecurityPolicy);
+		propertyMapper.from(configurer::getReferrerPolicy).to(httpSecurityBuilder::referrerPolicy);
+		propertyMapper.from(configurer::getXss).to(httpSecurityBuilder::xss);
+		propertyMapper.from(configurer::getFormLogin).to(httpSecurityBuilder::formLogin);
 	}
 
 }

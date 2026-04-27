@@ -19,12 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2025 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.servlet.config;
 
-import com.buession.core.converter.mapper.PropertyMapper;
+import com.buession.security.web.AbstractHttpSecurityConfiguration;
 import com.buession.security.web.builder.servlet.ServletHttpSecurityBuilder;
 import com.buession.security.web.config.Configurer;
 import com.buession.web.servlet.OnServletCondition;
@@ -42,12 +42,7 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 @Configuration(proxyBeanMethods = false)
 @Conditional(OnServletCondition.class)
-public class ServletHttpSecurityConfiguration {
-
-	/**
-	 * Web 安全适配配置
-	 */
-	private final Configurer configurer;
+public class ServletHttpSecurityConfiguration extends AbstractHttpSecurityConfiguration {
 
 	/**
 	 * 构造函数
@@ -63,24 +58,14 @@ public class ServletHttpSecurityConfiguration {
 	 * 		Web 安全适配配置
 	 */
 	public ServletHttpSecurityConfiguration(final Configurer configurer) {
-		super();
-		this.configurer = configurer;
+		super(configurer);
 	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		final ServletHttpSecurityBuilder builder = ServletHttpSecurityBuilder.getInstance(httpSecurity);
-		final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
-		propertyMapper.from(configurer::getHttpBasic).to(builder::httpBasic);
-		propertyMapper.from(configurer::getCsrf).to(builder::csrf);
-		propertyMapper.from(configurer::getCors).to(builder::cors);
-		propertyMapper.from(configurer::getFrameOptions).to(builder::frameOptions);
-		propertyMapper.from(configurer::getHsts).to(builder::hsts);
-		propertyMapper.from(configurer::getContentSecurityPolicy).to(builder::contentSecurityPolicy);
-		propertyMapper.from(configurer::getReferrerPolicy).to(builder::referrerPolicy);
-		propertyMapper.from(configurer::getXss).to(builder::xss);
-		propertyMapper.from(configurer::getFormLogin).to(builder::formLogin);
+		apply(builder);
 
 		return httpSecurity.build();
 	}
