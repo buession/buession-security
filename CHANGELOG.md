@@ -10,6 +10,12 @@
 - [buji-pac4j](https://github.com/bujiio/buji-pac4j) 版本升级至 9.1.0
 - [owasp antisamy](https://github.com/nahsra/antisamy) 版本升级至 1.7.8
 
+
+### ⭐ 新特性
+
+- pac4j filter 新增 webflux 支持
+
+
 ### 🔔 变化
 
 - 删除包 com.buession.security.mcrypt 和 com.buession.security.mcrypt.passwordgenerator
@@ -18,6 +24,12 @@
 - web security 删除 Hpkp 相关
 - buession-security-shiro 删除对 velocity 的支持
 - 删除 com.buession.security.shiro.session.mgt.DefaultWebSessionManager
+- Pac4jWebMvcConfigurerAdapter 重命名为 Pac4jServletConfigurerAdapter
+
+
+### 🐞 Bug 修复
+
+- 修复 security csrf 中 cookie 和 session 报空指针的 BUG
 
 
 ---

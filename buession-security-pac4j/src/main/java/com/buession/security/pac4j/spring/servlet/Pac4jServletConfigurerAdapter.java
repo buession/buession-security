@@ -39,10 +39,10 @@ import java.util.List;
  */
 @Configuration(proxyBeanMethods = false)
 @Conditional(OnServletCondition.class)
-public class Pac4jWebMvcConfigurerAdapter implements WebMvcConfigurer {
+public class Pac4jServletConfigurerAdapter implements WebMvcConfigurer {
 
 	@Override
-	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers){
+	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		argumentResolvers.add(new PrincipalMethodArgumentResolver());
 	}
 
