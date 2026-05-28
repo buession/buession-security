@@ -103,6 +103,9 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 					if(config.getMode() == Csrf.CsrfMode.SESSION){
 						Csrf.Session session = config.getSession();
 
+						if(session == null){
+							return;
+						}
 						WebSessionServerCsrfTokenRepository sessionCsrfTokenRepository = new WebSessionServerCsrfTokenRepository();
 
 						propertyMapper.from(session.getParameterName())
@@ -115,6 +118,10 @@ public class ReactiveHttpSecurityBuilder implements HttpSecurityBuilder {
 					}else{
 						Csrf.Cookie cookie = config.getCookie();
 
+						if(cookie == null){
+							return;
+						}
+						
 						CookieServerCsrfTokenRepository cookieCsrfTokenRepository = new CookieServerCsrfTokenRepository();
 
 						propertyMapper.from(cookie.getParameterName()).to(cookieCsrfTokenRepository::setParameterName);

@@ -119,6 +119,10 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 					if(config.getMode() == Csrf.CsrfMode.SESSION){
 						Csrf.Session session = config.getSession();
 
+						if(session == null){
+							return;
+						}
+
 						HttpSessionCsrfTokenRepository sessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
 
 						propertyMapper.from(session.getParameterName())
@@ -130,6 +134,10 @@ public class ServletHttpSecurityBuilder implements HttpSecurityBuilder {
 						configurer.csrfTokenRepository(sessionCsrfTokenRepository);
 					}else{
 						Csrf.Cookie cookie = config.getCookie();
+
+						if(cookie == null){
+							return;
+						}
 
 						CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
 
