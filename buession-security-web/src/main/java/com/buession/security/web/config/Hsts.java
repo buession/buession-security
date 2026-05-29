@@ -19,12 +19,10 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
-
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.StringJoiner;
 
@@ -36,19 +34,9 @@ import java.util.StringJoiner;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class Hsts {
+public class Hsts extends BaseConfig {
 
 	private final static long DEFAULT_MAX_AGE = 31536000L;
-
-	/**
-	 * 是否启用 Hsts
-	 */
-	private boolean enabled = true;
-
-	/**
-	 * Request 匹配器类
-	 */
-	private Class<? extends RequestMatcher> matcher;
 
 	/**
 	 * 缓存时间，在浏览器收到这个请求后的 maxAge 秒的时间内凡是访问这个域名下的请求都使用HTTPS请求，默认缓存一年
@@ -65,51 +53,8 @@ public class Hsts {
 	 */
 	private Boolean preload;
 
-	/**
-	 * 返回是否启用 Hsts
-	 *
-	 * @return 是否启用 Hsts
-	 */
-	public boolean isEnabled(){
-		return getEnabled();
-	}
-
-	/**
-	 * 返回是否启用 Hsts
-	 *
-	 * @return 是否启用 Hsts
-	 */
-	public boolean getEnabled(){
-		return enabled;
-	}
-
-	/**
-	 * 配置是否启用 Hsts
-	 *
-	 * @param enabled
-	 * 		是否启用 Hsts
-	 */
-	public void setEnabled(boolean enabled){
-		this.enabled = enabled;
-	}
-
-	/**
-	 * 返回 Request 匹配器类
-	 *
-	 * @return Request 匹配器类
-	 */
-	public Class<? extends RequestMatcher> getMatcher(){
-		return matcher;
-	}
-
-	/**
-	 * 设置 Request 匹配器类
-	 *
-	 * @param matcher
-	 * 		Request 匹配器类
-	 */
-	public void setMatcher(Class<? extends RequestMatcher> matcher){
-		this.matcher = matcher;
+	public Hsts() {
+		super(true);
 	}
 
 	/**
@@ -117,7 +62,7 @@ public class Hsts {
 	 *
 	 * @return 缓存时间
 	 */
-	public Long getMaxAge(){
+	public Long getMaxAge() {
 		return maxAge;
 	}
 
@@ -127,7 +72,7 @@ public class Hsts {
 	 * @param maxAge
 	 * 		缓存时间（单位：秒）
 	 */
-	public void setMaxAge(Long maxAge){
+	public void setMaxAge(Long maxAge) {
 		this.maxAge = maxAge;
 	}
 
@@ -136,8 +81,7 @@ public class Hsts {
 	 *
 	 * @return 此规则是否适用于该网站的所有子域名
 	 */
-	@Deprecated
-	public boolean isIncludeSubDomains(){
+	public boolean isIncludeSubDomains() {
 		return getIncludeSubDomains();
 	}
 
@@ -146,7 +90,7 @@ public class Hsts {
 	 *
 	 * @return 此规则是否也适用于该网站的所有子域名
 	 */
-	public Boolean getIncludeSubDomains(){
+	public Boolean getIncludeSubDomains() {
 		return includeSubDomains;
 	}
 
@@ -156,7 +100,7 @@ public class Hsts {
 	 * @param includeSubDomains
 	 * 		此规则是否也适用于该网站的所有子域名
 	 */
-	public void setIncludeSubDomains(Boolean includeSubDomains){
+	public void setIncludeSubDomains(Boolean includeSubDomains) {
 		this.includeSubDomains = includeSubDomains;
 	}
 
@@ -165,8 +109,7 @@ public class Hsts {
 	 *
 	 * @return 是否预加载 HSTS
 	 */
-	@Deprecated
-	public Boolean isPreload(){
+	public Boolean isPreload() {
 		return getPreload();
 	}
 
@@ -175,7 +118,7 @@ public class Hsts {
 	 *
 	 * @return 是否预加载 HSTS
 	 */
-	public Boolean getPreload(){
+	public Boolean getPreload() {
 		return preload;
 	}
 
@@ -185,15 +128,14 @@ public class Hsts {
 	 * @param preload
 	 * 		是否预加载 HSTS
 	 */
-	public void setPreload(Boolean preload){
+	public void setPreload(Boolean preload) {
 		this.preload = preload;
 	}
 
 	@Override
-	public String toString(){
-		return new StringJoiner(", ", "Hsts = {", "}")
-				.add("enabled=" + enabled)
-				.add("matcher=" + matcher)
+	public String toString() {
+		return new StringJoiner(", ", "{", "}")
+				.add("enabled=" + getEnabled())
 				.add("maxAge=" + maxAge)
 				.add("includeSubDomains=" + includeSubDomains)
 				.add("preload=" + preload)

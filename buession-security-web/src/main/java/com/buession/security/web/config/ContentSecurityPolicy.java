@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -28,18 +28,14 @@ import java.util.StringJoiner;
 
 /**
  * Content Security Policy 配置
- * <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP"
- * target="_blank">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP</a></p>
+ * <p>
+ * <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP" target="_blank">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP</a>
+ * </p>
  *
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class ContentSecurityPolicy {
-
-	/**
-	 * 是否启用 ContentSecurityPolicy
-	 */
-	private boolean enabled = true;
+public class ContentSecurityPolicy extends BaseConfig {
 
 	private Boolean reportOnly;
 
@@ -48,44 +44,20 @@ public class ContentSecurityPolicy {
 	 */
 	private String policyDirectives;
 
-	/**
-	 * 返回是否启用 ContentSecurityPolicy
-	 *
-	 * @return 是否启用 ContentSecurityPolicy
-	 */
-	public boolean isEnabled(){
-		return getEnabled();
-	}
-
-	/**
-	 * 返回是否启用 ContentSecurityPolicy
-	 *
-	 * @return 是否启用 ContentSecurityPolicy
-	 */
-	public boolean getEnabled(){
-		return enabled;
-	}
-
-	/**
-	 * 配置是否启用 ContentSecurityPolicy
-	 *
-	 * @param enabled
-	 * 		是否启用 ContentSecurityPolicy
-	 */
-	public void setEnabled(boolean enabled){
-		this.enabled = enabled;
+	public ContentSecurityPolicy() {
+		super(true);
 	}
 
 	@Deprecated
-	public Boolean isReportOnly(){
+	public Boolean isReportOnly() {
 		return getReportOnly();
 	}
 
-	public Boolean getReportOnly(){
+	public Boolean getReportOnly() {
 		return reportOnly;
 	}
 
-	public void setReportOnly(Boolean reportOnly){
+	public void setReportOnly(Boolean reportOnly) {
 		this.reportOnly = reportOnly;
 	}
 
@@ -94,7 +66,7 @@ public class ContentSecurityPolicy {
 	 *
 	 * @return 策略
 	 */
-	public String getPolicyDirectives(){
+	public String getPolicyDirectives() {
 		return policyDirectives;
 	}
 
@@ -104,14 +76,14 @@ public class ContentSecurityPolicy {
 	 * @param policyDirectives
 	 * 		策略
 	 */
-	public void setPolicyDirectives(String policyDirectives){
+	public void setPolicyDirectives(String policyDirectives) {
 		this.policyDirectives = policyDirectives;
 	}
 
 	@Override
-	public String toString(){
-		return new StringJoiner(", ", "ContentSecurityPolicy = {", "}")
-				.add("enabled=" + enabled)
+	public String toString() {
+		return new StringJoiner(", ", "{", "}")
+				.add("enabled=" + getEnabled())
 				.add("reportOnly=" + reportOnly)
 				.add("policyDirectives=" + policyDirectives)
 				.toString();

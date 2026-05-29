@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2025 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -36,12 +36,7 @@ import java.util.StringJoiner;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class Xss {
-
-	/**
-	 * 是否启用 Xss 配置
-	 */
-	private boolean enabled = true;
+public class Xss extends BaseConfig {
 
 	/**
 	 * 策略模式
@@ -50,32 +45,8 @@ public class Xss {
 	 */
 	private XssProtection policy;
 
-	/**
-	 * 返回是否启用 Xss 配置
-	 *
-	 * @return 是否启用 Xss 配置
-	 */
-	public boolean isEnabled() {
-		return getEnabled();
-	}
-
-	/**
-	 * 返回是否启用 Xss 配置
-	 *
-	 * @return 是否启用 Xss 配置
-	 */
-	public boolean getEnabled() {
-		return enabled;
-	}
-
-	/**
-	 * 配置是否启用 Xss 配置
-	 *
-	 * @param enabled
-	 * 		是否启用 Xss 配置
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	public Xss() {
+		super(true);
 	}
 
 	/**
@@ -103,8 +74,8 @@ public class Xss {
 
 	@Override
 	public String toString() {
-		return new StringJoiner(", ", "Xss = {", "}")
-				.add("enabled=" + enabled)
+		return new StringJoiner(", ", "{", "}")
+				.add("enabled=" + getEnabled())
 				.add("policy=" + policy)
 				.toString();
 	}

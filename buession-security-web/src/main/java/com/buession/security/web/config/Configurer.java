@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2025 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -35,9 +35,21 @@ import java.util.StringJoiner;
 public class Configurer {
 
 	/**
-	 * Http Basic 配置
+	 * 授权配置
+	 *
+	 * @since 4.0.0
 	 */
-	private HttpBasic httpBasic;
+	private AuthorizeExchange authorizeExchange;
+
+	/**
+	 * Content Security Policy 配置
+	 */
+	private ContentSecurityPolicy contentSecurityPolicy;
+
+	/**
+	 * Cors 配置
+	 */
+	private Cors cors;
 
 	/**
 	 * Csrf 配置
@@ -45,9 +57,16 @@ public class Configurer {
 	private Csrf csrf;
 
 	/**
-	 * Cors 配置
+	 * Feature Policy 配置
+	 *
+	 * @since 4.0.0
 	 */
-	private Cors cors;
+	private FeaturePolicy featurePolicy;
+
+	/**
+	 * 登录表单配置
+	 */
+	private FormLogin formLogin;
 
 	/**
 	 * Frame Options 配置
@@ -60,9 +79,23 @@ public class Configurer {
 	private Hsts hsts;
 
 	/**
-	 * Content Security Policy 配置
+	 * Http Basic 配置
 	 */
-	private ContentSecurityPolicy contentSecurityPolicy;
+	private HttpBasic httpBasic;
+
+	/**
+	 * 退出登录配置
+	 *
+	 * @since 4.0.0
+	 */
+	private Logout logout;
+
+	/**
+	 * Permissions Policy 配置
+	 *
+	 * @since 4.0.0
+	 */
+	private PermissionsPolicy permissionsPolicy;
 
 	/**
 	 * Referrer Policy 配置
@@ -75,69 +108,64 @@ public class Configurer {
 	private Xss xss;
 
 	/**
-	 * 登录表单配置
+	 * 返回授权配置
+	 *
+	 * @return 授权配置
+	 *
+	 * @since 4.0.0
 	 */
-	private FormLogin formLogin;
-
-	/**
-	 * 构造函数
-	 */
-	public Configurer() {
+	public AuthorizeExchange getAuthorizeExchange() {
+		return authorizeExchange;
 	}
 
 	/**
-	 * 构造函数
+	 * 设置授权配置
 	 *
-	 * @param httpBasic
-	 * 		Http Basic 配置
-	 * @param csrf
-	 * 		Csrf 配置
-	 * @param cors
-	 * 		Cors 配置
-	 * @param frameOptions
-	 * 		Frame Options 配置
-	 * @param hsts
-	 * 		Hsts 配置
+	 * @param authorizeExchange
+	 * 		授权配置
+	 *
+	 * @since 4.0.0
+	 */
+	public void setAuthorizeExchange(AuthorizeExchange authorizeExchange) {
+		this.authorizeExchange = authorizeExchange;
+	}
+
+	/**
+	 * 返回 Content Security Policy 配置
+	 *
+	 * @return Content Security Policy 配置
+	 */
+	public ContentSecurityPolicy getContentSecurityPolicy() {
+		return contentSecurityPolicy;
+	}
+
+	/**
+	 * 设置 Content Security Policy 配置
+	 *
 	 * @param contentSecurityPolicy
 	 * 		Content Security Policy 配置
-	 * @param referrerPolicy
-	 * 		Referrer Policy 配置
-	 * @param xss
-	 * 		XSS 配置
-	 * @param formLogin
-	 * 		登录表单配置
 	 */
-	public Configurer(HttpBasic httpBasic, Csrf csrf, Cors cors, FrameOptions frameOptions, Hsts hsts,
-					  ContentSecurityPolicy contentSecurityPolicy, ReferrerPolicy referrerPolicy, Xss xss,
-					  FormLogin formLogin) {
-		this.httpBasic = httpBasic;
-		this.csrf = csrf;
-		this.cors = cors;
-		this.frameOptions = frameOptions;
-		this.hsts = hsts;
+	public void setContentSecurityPolicy(ContentSecurityPolicy contentSecurityPolicy) {
 		this.contentSecurityPolicy = contentSecurityPolicy;
-		this.referrerPolicy = referrerPolicy;
-		this.xss = xss;
-		this.formLogin = formLogin;
 	}
 
 	/**
-	 * 返回 Http Basic 配置
+	 * 返回 Cors 配置
 	 *
-	 * @return Http Basic 配置
+	 * @return Cors 配置
 	 */
-	public HttpBasic getHttpBasic() {
-		return httpBasic;
+	public Cors getCors() {
+		return cors;
 	}
 
 	/**
-	 * 设置 Http Basic 配置
+	 * 设置 Cors 配置
 	 *
-	 * @param httpBasic
-	 * 		Http Basic 配置
+	 * @param cors
+	 * 		Cors 配置
 	 */
-	public void setHttpBasic(HttpBasic httpBasic) {
-		this.httpBasic = httpBasic;
+	public void setCors(Cors cors) {
+		this.cors = cors;
 	}
 
 	/**
@@ -160,22 +188,45 @@ public class Configurer {
 	}
 
 	/**
-	 * 返回 Cors 配置
+	 * 返回 Feature Policy 配置
 	 *
-	 * @return Cors 配置
+	 * @return Feature Policy 配置
+	 *
+	 * @since 4.0.0
 	 */
-	public Cors getCors() {
-		return cors;
+	public FeaturePolicy getFeaturePolicy() {
+		return featurePolicy;
 	}
 
 	/**
-	 * 设置 Cors 配置
+	 * 设置 Feature Policy 配置
 	 *
-	 * @param cors
-	 * 		Cors 配置
+	 * @param featurePolicy
+	 * 		Feature Policy 配置
+	 *
+	 * @since 4.0.0
 	 */
-	public void setCors(Cors cors) {
-		this.cors = cors;
+	public void setFeaturePolicy(FeaturePolicy featurePolicy) {
+		this.featurePolicy = featurePolicy;
+	}
+
+	/**
+	 * 返回登录表单配置
+	 *
+	 * @return 登录表单配置
+	 */
+	public FormLogin getFormLogin() {
+		return formLogin;
+	}
+
+	/**
+	 * 设置登录表单配置
+	 *
+	 * @param formLogin
+	 * 		登录表单配置
+	 */
+	public void setFormLogin(FormLogin formLogin) {
+		this.formLogin = formLogin;
 	}
 
 	/**
@@ -217,22 +268,68 @@ public class Configurer {
 	}
 
 	/**
-	 * 返回 Content Security Policy 配置
+	 * 返回 Http Basic 配置
 	 *
-	 * @return Content Security Policy 配置
+	 * @return Http Basic 配置
 	 */
-	public ContentSecurityPolicy getContentSecurityPolicy() {
-		return contentSecurityPolicy;
+	public HttpBasic getHttpBasic() {
+		return httpBasic;
 	}
 
 	/**
-	 * 设置 Content Security Policy 配置
+	 * 设置 Http Basic 配置
 	 *
-	 * @param contentSecurityPolicy
-	 * 		Content Security Policy 配置
+	 * @param httpBasic
+	 * 		Http Basic 配置
 	 */
-	public void setContentSecurityPolicy(ContentSecurityPolicy contentSecurityPolicy) {
-		this.contentSecurityPolicy = contentSecurityPolicy;
+	public void setHttpBasic(HttpBasic httpBasic) {
+		this.httpBasic = httpBasic;
+	}
+
+	/**
+	 * 返回退出登录配置
+	 *
+	 * @return 退出登录配置
+	 *
+	 * @since 4.0.0
+	 */
+	public Logout getLogout() {
+		return logout;
+	}
+
+	/**
+	 * 设置退出登录配置
+	 *
+	 * @param logout
+	 * 		退出登录配置
+	 *
+	 * @since 4.0.0
+	 */
+	public void setLogout(Logout logout) {
+		this.logout = logout;
+	}
+
+	/**
+	 * 返回 Permissions Policy 配置
+	 *
+	 * @return Permissions Policy 配置
+	 *
+	 * @since 4.0.0
+	 */
+	public PermissionsPolicy getPermissionsPolicy() {
+		return permissionsPolicy;
+	}
+
+	/**
+	 * 设置 Permissions Policy 配置
+	 *
+	 * @param permissionsPolicy
+	 * 		Permissions Policy 配置
+	 *
+	 * @since 4.0.0
+	 */
+	public void setPermissionsPolicy(PermissionsPolicy permissionsPolicy) {
+		this.permissionsPolicy = permissionsPolicy;
 	}
 
 	/**
@@ -273,36 +370,22 @@ public class Configurer {
 		this.xss = xss;
 	}
 
-	/**
-	 * 返回登录表单配置
-	 *
-	 * @return 登录表单配置
-	 */
-	public FormLogin getFormLogin() {
-		return formLogin;
-	}
-
-	/**
-	 * 设置登录表单配置
-	 *
-	 * @param formLogin
-	 * 		登录表单配置
-	 */
-	public void setFormLogin(FormLogin formLogin) {
-		this.formLogin = formLogin;
-	}
-
 	@Override
 	public String toString() {
 		return new StringJoiner(", ", "Configurer = {", "}")
-				.add("httpBasic=" + httpBasic)
+				.add("authorizeExchange=" + authorizeExchange)
+				.add("contentSecurityPolicy=" + contentSecurityPolicy)
+				.add("cors=" + cors)
 				.add("csrf=" + csrf)
+				.add("featurePolicy=" + featurePolicy)
+				.add("formLogin=" + formLogin)
 				.add("frameOptions=" + frameOptions)
 				.add("hsts=" + hsts)
-				.add("contentSecurityPolicy=" + contentSecurityPolicy)
+				.add("httpBasic=" + httpBasic)
+				.add("logout=" + logout)
+				.add("permissionsPolicy=" + permissionsPolicy)
 				.add("referrerPolicy=" + referrerPolicy)
 				.add("xss=" + xss)
-				.add("formLogin=" + formLogin)
 				.toString();
 	}
 

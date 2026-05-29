@@ -19,11 +19,41 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
+package com.buession.security.web.config;
+
+import java.util.StringJoiner;
+
 /**
+ *
+ *
  * @author Yong.Teng
- * @since 2.0.0
+ * @since 4.0.0
  */
-package com.buession.security.web.builder.reactive;
+public class PermissionsPolicy extends BaseConfig {
+
+	private String policy;
+
+	public PermissionsPolicy() {
+		super(false);
+	}
+
+	public String getPolicy() {
+		return policy;
+	}
+
+	public void setPolicy(String policy) {
+		this.policy = policy;
+	}
+
+	@Override
+	public String toString() {
+		return new StringJoiner(", ", "{", "}")
+				.add("enabled=" + getEnabled())
+				.add("policy=" + policy)
+				.toString();
+	}
+
+}

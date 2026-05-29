@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -34,44 +34,15 @@ import java.util.StringJoiner;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class FrameOptions {
-
-	/**
-	 * 是否启用 Frame Options
-	 */
-	private boolean enabled = true;
+public class FrameOptions extends BaseConfig {
 
 	/**
 	 * Frame Options 模式
 	 */
 	private XFrameOptionsMode mode = XFrameOptionsMode.DENY;
 
-	/**
-	 * 返回是否启用 Frame Options
-	 *
-	 * @return 是否启用 Frame Options
-	 */
-	public boolean isEnabled() {
-		return getEnabled();
-	}
-
-	/**
-	 * 返回是否启用 Frame Options
-	 *
-	 * @return 是否启用 Frame Options
-	 */
-	public boolean getEnabled() {
-		return enabled;
-	}
-
-	/**
-	 * 配置是否启用 Frame Options
-	 *
-	 * @param enabled
-	 * 		是否启用 Frame Options
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	public FrameOptions() {
+		super(true);
 	}
 
 	/**
@@ -95,8 +66,8 @@ public class FrameOptions {
 
 	@Override
 	public String toString() {
-		return new StringJoiner(", ", "FrameOptions = {", "}")
-				.add("enabled=" + enabled)
+		return new StringJoiner(", ", "{", "}")
+				.add("enabled=" + getEnabled())
 				.add("mode=" + mode)
 				.toString();
 	}

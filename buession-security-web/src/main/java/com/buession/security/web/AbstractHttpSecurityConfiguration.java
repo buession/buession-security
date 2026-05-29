@@ -25,21 +25,32 @@
 package com.buession.security.web;
 
 import com.buession.core.converter.mapper.PropertyMapper;
-import com.buession.security.web.builder.HttpSecurityBuilder;
-import com.buession.security.web.config.Configurer;
+import com.buession.security.web.config.*;
 
 /**
+ * HttpSecurity 配置基类
  *
+ * @param <T>
+ * 		HttpSecurity 类型
  *
  * @author Yong.Teng
  * @since 4.0.0
  */
-public abstract class AbstractHttpSecurityConfiguration {
+public abstract class AbstractHttpSecurityConfiguration<T> {
+
+	protected final static PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
 	/**
 	 * Web 安全适配配置
 	 */
 	protected final Configurer configurer;
+
+	/**
+	 * 构造函数
+	 */
+	public AbstractHttpSecurityConfiguration() {
+		this(new Configurer());
+	}
 
 	/**
 	 * 构造函数
@@ -52,18 +63,50 @@ public abstract class AbstractHttpSecurityConfiguration {
 		this.configurer = configurer;
 	}
 
-	protected void apply(final HttpSecurityBuilder httpSecurityBuilder) {
-		final PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
+	protected T apply(final T httpSecurity) {
+		if(httpSecurity != null){
+			authorizeExchange(httpSecurity, configurer.getAuthorizeExchange());
+			contentSecurityPolicy(httpSecurity, configurer.getContentSecurityPolicy());
+			cors(httpSecurity, configurer.getCors());
+			csrf(httpSecurity, configurer.getCsrf());
+			featurePolicy(httpSecurity, configurer.getFeaturePolicy());
+			formLogin(httpSecurity, configurer.getFormLogin());
+			frameOptions(httpSecurity, configurer.getFrameOptions());
+			hsts(httpSecurity, configurer.getHsts());
+			httpBasic(httpSecurity, configurer.getHttpBasic());
+			logout(httpSecurity, configurer.getLogout());
+			permissionsPolicy(httpSecurity, configurer.getPermissionsPolicy());
+			referrerPolicy(httpSecurity, configurer.getReferrerPolicy());
+			xss(httpSecurity, configurer.getXss());
+		}
 
-		propertyMapper.from(configurer::getHttpBasic).to(httpSecurityBuilder::httpBasic);
-		propertyMapper.from(configurer::getCsrf).to(httpSecurityBuilder::csrf);
-		propertyMapper.from(configurer::getCors).to(httpSecurityBuilder::cors);
-		propertyMapper.from(configurer::getFrameOptions).to(httpSecurityBuilder::frameOptions);
-		propertyMapper.from(configurer::getHsts).to(httpSecurityBuilder::hsts);
-		propertyMapper.from(configurer::getContentSecurityPolicy).to(httpSecurityBuilder::contentSecurityPolicy);
-		propertyMapper.from(configurer::getReferrerPolicy).to(httpSecurityBuilder::referrerPolicy);
-		propertyMapper.from(configurer::getXss).to(httpSecurityBuilder::xss);
-		propertyMapper.from(configurer::getFormLogin).to(httpSecurityBuilder::formLogin);
+		return httpSecurity;
 	}
+
+	protected abstract T authorizeExchange(final T httpSecurity, final AuthorizeExchange config);
+
+	protected abstract T contentSecurityPolicy(final T httpSecurity, final ContentSecurityPolicy config);
+
+	protected abstract T cors(final T httpSecurity, final Cors config);
+
+	protected abstract T csrf(final T httpSecurity, final Csrf config);
+
+	protected abstract T featurePolicy(final T httpSecurity, final FeaturePolicy config);
+
+	protected abstract T formLogin(final T httpSecurity, final FormLogin config);
+
+	protected abstract T frameOptions(final T httpSecurity, final FrameOptions config);
+
+	protected abstract T hsts(final T httpSecurity, final Hsts config);
+
+	protected abstract T httpBasic(final T httpSecurity, final HttpBasic config);
+
+	protected abstract T logout(final T httpSecurity, final Logout config);
+
+	protected abstract T permissionsPolicy(final T httpSecurity, final PermissionsPolicy config);
+
+	protected abstract T referrerPolicy(final T httpSecurity, final ReferrerPolicy config);
+
+	protected abstract T xss(final T httpSecurity, final Xss config);
 
 }

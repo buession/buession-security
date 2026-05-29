@@ -22,6 +22,8 @@
 - com.buession.security.web.servlet.config.ServletWebSecurityConfigurerAdapterConfiguration 修改为 com.buession.security.web.servlet.config.ServletHttpSecurityConfiguration
 - com.buession.security.web.servlet.config.ReactiveWebSecurityConfigurerAdapterConfiguration 修改为 com.buession.security.web.servlet.config.ReactiveHttpSecurityConfiguration
 - web security 删除 Hpkp 相关
+- web security 更完善的配置
+- web security cors 支持定义多路径
 - buession-security-shiro 删除对 velocity 的支持
 - 删除 com.buession.security.shiro.session.mgt.DefaultWebSessionManager
 - Pac4jWebMvcConfigurerAdapter 重命名为 Pac4jServletConfigurerAdapter

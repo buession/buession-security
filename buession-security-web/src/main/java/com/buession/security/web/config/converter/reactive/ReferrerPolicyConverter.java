@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config.converter.reactive;
@@ -54,31 +54,21 @@ public interface ReferrerPolicyConverter<S, T>
 			com.buession.security.web.config.converter.ReferrerPolicyConverter.NativeReferrerPolicyConverter<ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy> {
 
 		@Override
-		public ReferrerPolicy.Policy convert(final ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy source){
+		public ReferrerPolicy.Policy convert(final ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy source) {
 			if(source == null){
 				return null;
 			}
 
-			switch(source){
-				case NO_REFERRER:
-					return ReferrerPolicy.Policy.NO_REFERRER;
-				case NO_REFERRER_WHEN_DOWNGRADE:
-					return ReferrerPolicy.Policy.NO_REFERRER_WHEN_DOWNGRADE;
-				case SAME_ORIGIN:
-					return ReferrerPolicy.Policy.SAME_ORIGIN;
-				case ORIGIN:
-					return ReferrerPolicy.Policy.ORIGIN;
-				case STRICT_ORIGIN:
-					return ReferrerPolicy.Policy.STRICT_ORIGIN;
-				case ORIGIN_WHEN_CROSS_ORIGIN:
-					return ReferrerPolicy.Policy.ORIGIN_WHEN_CROSS_ORIGIN;
-				case STRICT_ORIGIN_WHEN_CROSS_ORIGIN:
-					return ReferrerPolicy.Policy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN;
-				case UNSAFE_URL:
-					return ReferrerPolicy.Policy.UNSAFE_URL;
-				default:
-					return null;
-			}
+			return switch(source){
+				case NO_REFERRER -> ReferrerPolicy.Policy.NO_REFERRER;
+				case NO_REFERRER_WHEN_DOWNGRADE -> ReferrerPolicy.Policy.NO_REFERRER_WHEN_DOWNGRADE;
+				case SAME_ORIGIN -> ReferrerPolicy.Policy.SAME_ORIGIN;
+				case ORIGIN -> ReferrerPolicy.Policy.ORIGIN;
+				case STRICT_ORIGIN -> ReferrerPolicy.Policy.STRICT_ORIGIN;
+				case ORIGIN_WHEN_CROSS_ORIGIN -> ReferrerPolicy.Policy.ORIGIN_WHEN_CROSS_ORIGIN;
+				case STRICT_ORIGIN_WHEN_CROSS_ORIGIN -> ReferrerPolicy.Policy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN;
+				case UNSAFE_URL -> ReferrerPolicy.Policy.UNSAFE_URL;
+			};
 		}
 
 	}
@@ -94,31 +84,24 @@ public interface ReferrerPolicyConverter<S, T>
 			com.buession.security.web.config.converter.ReferrerPolicyConverter.ToNativeReferrerPolicyConverter<ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy> {
 
 		@Override
-		public ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy convert(final ReferrerPolicy.Policy source){
+		public ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy convert(final ReferrerPolicy.Policy source) {
 			if(source == null){
 				return null;
 			}
 
-			switch(source){
-				case NO_REFERRER:
-					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER;
-				case NO_REFERRER_WHEN_DOWNGRADE:
-					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE;
-				case SAME_ORIGIN:
-					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.SAME_ORIGIN;
-				case ORIGIN:
-					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN;
-				case STRICT_ORIGIN:
-					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN;
-				case ORIGIN_WHEN_CROSS_ORIGIN:
-					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN_WHEN_CROSS_ORIGIN;
-				case STRICT_ORIGIN_WHEN_CROSS_ORIGIN:
-					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN;
-				case UNSAFE_URL:
-					return ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.UNSAFE_URL;
-				default:
-					return null;
-			}
+			return switch(source){
+				case NO_REFERRER -> ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER;
+				case NO_REFERRER_WHEN_DOWNGRADE ->
+						ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE;
+				case SAME_ORIGIN -> ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.SAME_ORIGIN;
+				case ORIGIN -> ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN;
+				case STRICT_ORIGIN -> ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN;
+				case ORIGIN_WHEN_CROSS_ORIGIN ->
+						ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.ORIGIN_WHEN_CROSS_ORIGIN;
+				case STRICT_ORIGIN_WHEN_CROSS_ORIGIN ->
+						ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN;
+				case UNSAFE_URL -> ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.UNSAFE_URL;
+			};
 		}
 
 	}

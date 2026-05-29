@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2025 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -32,12 +32,7 @@ import java.util.StringJoiner;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class FormLogin {
-
-	/**
-	 * 是否启动登录表单
-	 */
-	private boolean enabled = false;
+public class FormLogin extends BaseConfig {
 
 	/**
 	 * 登录页地址
@@ -72,23 +67,8 @@ public class FormLogin {
 	 */
 	private String failureForwardUrl;
 
-	/**
-	 * 返回是否启动登录表单
-	 *
-	 * @return 是否启动登录表单
-	 */
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	/**
-	 * 设置是否启动登录表单
-	 *
-	 * @param enabled
-	 * 		是否启动登录表单
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	public FormLogin() {
+		super(false);
 	}
 
 	/**
@@ -204,13 +184,13 @@ public class FormLogin {
 
 	@Override
 	public String toString() {
-		return new StringJoiner(", ", "FormLogin = {", "}")
-				.add("enabled=" + enabled)
-				.add("loginPage='" + loginPage + "'")
-				.add("usernameParameter='" + usernameParameter + "'")
-				.add("passwordParameter='" + passwordParameter + "'")
-				.add("successForwardUrl='" + successForwardUrl + "'")
-				.add("failureForwardUrl='" + failureForwardUrl + "'")
+		return new StringJoiner(", ", "{", "}")
+				.add("enabled=" + getEnabled())
+				.add("loginPage=" + loginPage)
+				.add("usernameParameter=" + usernameParameter)
+				.add("passwordParameter=" + passwordParameter)
+				.add("successForwardUrl=" + successForwardUrl)
+				.add("failureForwardUrl=" + failureForwardUrl)
 				.toString();
 	}
 
