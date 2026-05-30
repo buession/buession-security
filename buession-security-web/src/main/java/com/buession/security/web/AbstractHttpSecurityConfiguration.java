@@ -65,19 +65,70 @@ public abstract class AbstractHttpSecurityConfiguration<T> {
 
 	protected T apply(final T httpSecurity) {
 		if(httpSecurity != null){
-			authorizeExchange(httpSecurity, configurer.getAuthorizeExchange());
-			contentSecurityPolicy(httpSecurity, configurer.getContentSecurityPolicy());
-			cors(httpSecurity, configurer.getCors());
-			csrf(httpSecurity, configurer.getCsrf());
-			featurePolicy(httpSecurity, configurer.getFeaturePolicy());
-			formLogin(httpSecurity, configurer.getFormLogin());
-			frameOptions(httpSecurity, configurer.getFrameOptions());
-			hsts(httpSecurity, configurer.getHsts());
-			httpBasic(httpSecurity, configurer.getHttpBasic());
-			logout(httpSecurity, configurer.getLogout());
-			permissionsPolicy(httpSecurity, configurer.getPermissionsPolicy());
-			referrerPolicy(httpSecurity, configurer.getReferrerPolicy());
-			xss(httpSecurity, configurer.getXss());
+			AuthorizeExchange authorizeExchange = configurer.getAuthorizeExchange();
+			if(authorizeExchange != null){
+				authorizeExchange(httpSecurity, authorizeExchange);
+			}
+
+			ContentSecurityPolicy contentSecurityPolicy = configurer.getContentSecurityPolicy();
+			if(contentSecurityPolicy != null){
+				contentSecurityPolicy(httpSecurity, contentSecurityPolicy);
+			}
+
+			Cors cors = configurer.getCors();
+			if(cors != null){
+				cors(httpSecurity, cors);
+			}
+
+			Csrf csrf = configurer.getCsrf();
+			if(csrf != null){
+				csrf(httpSecurity, csrf);
+			}
+
+			FeaturePolicy featurePolicy = configurer.getFeaturePolicy();
+			if(featurePolicy != null){
+				featurePolicy(httpSecurity, featurePolicy);
+			}
+
+			FormLogin formLogin = configurer.getFormLogin();
+			if(formLogin != null){
+				formLogin(httpSecurity, formLogin);
+			}
+
+			FrameOptions frameOptions = configurer.getFrameOptions();
+			if(frameOptions != null){
+				frameOptions(httpSecurity, frameOptions);
+			}
+
+			Hsts hsts = configurer.getHsts();
+			if(hsts != null){
+				hsts(httpSecurity, hsts);
+			}
+
+			HttpBasic httpBasic = configurer.getHttpBasic();
+			if(httpBasic != null){
+				httpBasic(httpSecurity, httpBasic);
+			}
+
+			Logout logout = configurer.getLogout();
+			if(logout != null){
+				logout(httpSecurity, logout);
+			}
+
+			PermissionsPolicy permissionsPolicy = configurer.getPermissionsPolicy();
+			if(permissionsPolicy != null){
+				permissionsPolicy(httpSecurity, permissionsPolicy);
+			}
+
+			ReferrerPolicy referrerPolicy = configurer.getReferrerPolicy();
+			if(referrerPolicy != null){
+				referrerPolicy(httpSecurity, referrerPolicy);
+			}
+
+			Xss xss = configurer.getXss();
+			if(xss != null){
+				xss(httpSecurity, xss);
+			}
 		}
 
 		return httpSecurity;
