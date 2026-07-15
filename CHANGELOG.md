@@ -2,7 +2,7 @@
 ===========================
 
 
-## [4.0.0](https://github.com/buession/buession-security/releases/tag/v4.0.0) (2025-xx-xx)
+## [4.0.0](https://github.com/buession/buession-security/releases/tag/v4.0.0) (2026-07-15)
 
 ### 🔨依赖升级
 
@@ -14,6 +14,7 @@
 ### ⭐ 新特性
 
 - pac4j filter 新增 webflux 支持
+- 扩展 pac4j FormClient，以解决 ajax 区分未认证、认证失败及具体原因
 
 
 ### 🔔 变化
