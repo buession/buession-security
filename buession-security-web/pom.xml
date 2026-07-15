@@ -7,7 +7,7 @@
 		<groupId>com.buession.security</groupId>
 		<artifactId>buession-security-parent</artifactId>
 		<relativePath>../buession-security-parent</relativePath>
-		<version>3.0.1</version>
+		<version>4.0.0</version>
 	</parent>
 	<artifactId>buession-security-web</artifactId>
 	<url>https://security.buession.com/</url>
@@ -125,7 +125,7 @@
 		<dependency>
 			<groupId>org.owasp.antisamy</groupId>
 			<artifactId>antisamy</artifactId>
-			<version>1.7.6</version>
+			<version>1.7.8</version>
 			<scope>provided</scope>
 			<exclusions>
 				<exclusion>

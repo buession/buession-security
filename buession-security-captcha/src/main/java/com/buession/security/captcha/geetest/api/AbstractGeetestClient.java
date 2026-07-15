@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.geetest.api;
@@ -79,7 +79,8 @@ public abstract class AbstractGeetestClient extends AbstractCaptchaClient implem
 
 	protected String getSdkName() {
 		if(sdkName == null){
-			sdkName = "Geetest-Java-SDK-" + getClass().getName() + '/' + VersionUtils.determineClassVersion(getClass());
+			sdkName = "Geetest-Java-SDK-" + getClass().getSimpleName() + '/' +
+					VersionUtils.determineClassVersion(getClass());
 		}
 
 		return sdkName;

@@ -19,21 +19,22 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.http;
 
+import com.buession.core.validator.Validate;
+import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.HttpConstants;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.exception.http.HttpAction;
 import org.pac4j.core.exception.http.RedirectionAction;
-import org.pac4j.core.exception.http.RedirectionActionHelper;
 import org.pac4j.core.exception.http.UnauthorizedAction;
 import org.pac4j.core.exception.http.WithLocationAction;
 import org.pac4j.core.http.ajax.DefaultAjaxRequestResolver;
 import org.pac4j.core.redirect.RedirectionActionBuilder;
-import org.pac4j.core.util.CommonHelper;
+import org.pac4j.core.util.HttpActionHelper;
 
 /**
  * JSON way to compute if a HTTP request is an AJAX one.
@@ -44,7 +45,7 @@ import org.pac4j.core.util.CommonHelper;
 public class JsonAjaxRequestResolver extends DefaultAjaxRequestResolver {
 
 	@Override
-	public HttpAction buildAjaxResponse(final WebContext context,
+	public HttpAction buildAjaxResponse(final CallContext context,
 										final RedirectionActionBuilder redirectionActionBuilder) {
 		String url = null;
 
@@ -55,21 +56,22 @@ public class JsonAjaxRequestResolver extends DefaultAjaxRequestResolver {
 			}
 		}
 
-		if(context.getRequestParameter(FACES_PARTIAL_AJAX_PARAMETER).isPresent() == false){
-			if(CommonHelper.isNotBlank(url)){
-				context.setResponseHeader(HttpConstants.LOCATION_HEADER, url);
+		WebContext webContext = context.webContext();
+		if(webContext.getRequestParameter(FACES_PARTIAL_AJAX_PARAMETER).isPresent() == false){
+			if(Validate.isNotBlank(url)){
+				webContext.setResponseHeader(HttpConstants.LOCATION_HEADER, url);
 			}
-			throw UnauthorizedAction.INSTANCE;
+			throw new UnauthorizedAction();
 		}
 
 		final StringBuilder buffer = new StringBuilder("{\"redirect\":{");
 
-		if(CommonHelper.isNotBlank(url)){
+		if(Validate.isNotBlank(url)){
 			buffer.append("\"url\":\"").append(url).append('"');
 		}
 		buffer.append("}}");
 
-		return RedirectionActionHelper.buildFormPostContentAction(context, buffer.toString());
+		return HttpActionHelper.buildFormPostContentAction(webContext, buffer.toString());
 	}
 
 }

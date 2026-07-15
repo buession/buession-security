@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<name>Buession Security Shiro</name>
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.buession.security</groupId>
 		<artifactId>buession-security-parent</artifactId>
 		<relativePath>../buession-security-parent</relativePath>
-		<version>3.0.1</version>
+		<version>4.0.0</version>
 	</parent>
 	<artifactId>buession-security-shiro</artifactId>
 	<url>https://security.buession.com/</url>
@@ -69,11 +69,18 @@
 			<version>${buession.version}</version>
 			<scope>compile</scope>
 			<optional>true</optional>
+			<exclusions>
+				<exclusion>
+					<groupId>io.micrometer</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-core</artifactId>
+			<classifier>jakarta</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
@@ -82,10 +89,12 @@
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-spring</artifactId>
+			<classifier>jakarta</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-web</artifactId>
+			<classifier>jakarta</classifier>
 		</dependency>
 
 		<dependency>
@@ -99,25 +108,6 @@
 			<artifactId>jakarta.servlet.jsp-api</artifactId>
 			<scope>provided</scope>
 			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity-engine-core</artifactId>
-			<scope>provided</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.velocity.tools</groupId>
-			<artifactId>velocity-tools-generic</artifactId>
-			<scope>provided</scope>
-			<optional>true</optional>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.commons</groupId>
-					<artifactId>commons-digester3</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<dependency>

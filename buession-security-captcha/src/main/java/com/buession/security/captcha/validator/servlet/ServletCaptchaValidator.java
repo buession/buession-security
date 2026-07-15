@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.validator.servlet;
@@ -27,8 +27,7 @@ package com.buession.security.captcha.validator.servlet;
 import com.buession.lang.Status;
 import com.buession.security.captcha.core.CaptchaException;
 import com.buession.security.captcha.validator.CaptchaValidator;
-
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Servlet 环境验证码验证
@@ -50,5 +49,5 @@ public interface ServletCaptchaValidator extends CaptchaValidator {
 	 * 		验证异常
 	 */
 	Status validate(final HttpServletRequest request) throws CaptchaException;
-
+ 
 }

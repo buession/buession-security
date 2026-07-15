@@ -55,10 +55,9 @@ public class CleanXssFactory extends AbstractXssFactory {
 	public CleanXssFactory(Options options) {
 		super(options);
 		try{
-			antiSamy =
-					options.getClean() == null ||
-							Validate.isEmpty(options.getClean().getPolicyConfigLocation()) ? new AntiSamy() :
-							new AntiSamy(Policy.getInstance(options.getClean().getPolicyConfigLocation()));
+			antiSamy = options.getClean() == null ||
+					Validate.isEmpty(options.getClean().getPolicyConfigLocation()) ? new AntiSamy() :
+					new AntiSamy(Policy.getInstance(options.getClean().getPolicyConfigLocation()));
 		}catch(PolicyException e){
 			antiSamy = new AntiSamy();
 		}

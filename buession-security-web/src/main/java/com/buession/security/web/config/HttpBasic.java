@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -34,45 +34,47 @@ import java.util.StringJoiner;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class HttpBasic {
+public class HttpBasic extends BaseConfig {
 
 	/**
-	 * 是否启用 Http Basic 验证
-	 */
-	private boolean enabled = false;
-
-	/**
-	 * 返回是否启用 Http Basic 验证
+	 * The HTTP Basic realm to use.
 	 *
-	 * @return 是否启用 Http Basic 验证
+	 * @since 4.0.0
 	 */
-	public boolean isEnabled(){
-		return getEnabled();
+	private String realmName;
+
+	public HttpBasic() {
+		super(true);
 	}
 
 	/**
-	 * 返回是否启用 Http Basic 验证
+	 * Return the HTTP Basic realm to use.
 	 *
-	 * @return 是否启用 Http Basic 验证
+	 * @return The HTTP Basic realm to use.
+	 *
+	 * @since 4.0.0
 	 */
-	public boolean getEnabled(){
-		return enabled;
+	public String getRealmName() {
+		return realmName;
 	}
 
 	/**
-	 * 设置是否启用 Http Basic 验证
+	 * Sets the HTTP Basic realm to use.
 	 *
-	 * @param enabled
-	 * 		是否启用 Http Basic 验证
+	 * @param realmName
+	 * 		The HTTP Basic realm to use.
+	 *
+	 * @since 4.0.0
 	 */
-	public void setEnabled(boolean enabled){
-		this.enabled = enabled;
+	public void setRealmName(String realmName) {
+		this.realmName = realmName;
 	}
 
 	@Override
-	public String toString(){
-		return new StringJoiner(", ", "HttpBasic = {", "}")
-				.add("enabled=" + enabled)
+	public String toString() {
+		return new StringJoiner(", ", "{", "}")
+				.add("enabled=" + getEnabled())
+				.add("realmName=" + realmName)
 				.toString();
 	}
 

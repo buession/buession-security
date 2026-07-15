@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2024 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.xss;
@@ -143,6 +143,22 @@ public class Options {
 		private String policyConfigLocation;
 
 		/**
+		 * 构造函数
+		 */
+		public Clean() {
+		}
+
+		/**
+		 * 构造函数
+		 *
+		 * @param policyConfigLocation
+		 * 		策略配置文件
+		 */
+		public Clean(String policyConfigLocation) {
+			setPolicyConfigLocation(policyConfigLocation);
+		}
+
+		/**
 		 * 返回策略配置文件
 		 *
 		 * @return 策略配置文件
@@ -228,6 +244,7 @@ public class Options {
 		public Options build() {
 			return options;
 		}
+
 	}
 
 }

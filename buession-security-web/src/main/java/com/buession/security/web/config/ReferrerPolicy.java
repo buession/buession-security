@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
@@ -32,55 +32,26 @@ import java.util.StringJoiner;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class ReferrerPolicy {
-
-	/**
-	 * 是否启用 ReferrerPolicy
-	 */
-	private boolean enabled = true;
+public class ReferrerPolicy extends BaseConfig {
 
 	private Policy policy = Policy.NO_REFERRER;
 
-	/**
-	 * 返回是否启用 ReferrerPolicy
-	 *
-	 * @return 是否启用 ReferrerPolicy
-	 */
-	public boolean isEnabled(){
-		return getEnabled();
+	public ReferrerPolicy() {
+		super(true);
 	}
 
-	/**
-	 * 返回是否启用 ReferrerPolicy
-	 *
-	 * @return 是否启用 ReferrerPolicy
-	 */
-	public boolean getEnabled(){
-		return enabled;
-	}
-
-	/**
-	 * 配置是否启用 ReferrerPolicy
-	 *
-	 * @param enabled
-	 * 		是否启用 ReferrerPolicy
-	 */
-	public void setEnabled(boolean enabled){
-		this.enabled = enabled;
-	}
-
-	public Policy getPolicy(){
+	public Policy getPolicy() {
 		return policy;
 	}
 
-	public void setPolicy(Policy policy){
+	public void setPolicy(Policy policy) {
 		this.policy = policy;
 	}
 
 	@Override
-	public String toString(){
-		return new StringJoiner(", ", "ReferrerPolicy = {", "}")
-				.add("enabled=" + enabled)
+	public String toString() {
+		return new StringJoiner(", ", "{", "}")
+				.add("enabled=" + getEnabled())
 				.add("policy=" + policy)
 				.toString();
 	}
@@ -105,16 +76,16 @@ public class ReferrerPolicy {
 
 		private final String policy;
 
-		Policy(final String policy){
+		Policy(final String policy) {
 			this.policy = policy;
 		}
 
-		public String getPolicy(){
+		public String getPolicy() {
 			return this.policy;
 		}
 
 		@Override
-		public String toString(){
+		public String toString() {
 			return getPolicy();
 		}
 

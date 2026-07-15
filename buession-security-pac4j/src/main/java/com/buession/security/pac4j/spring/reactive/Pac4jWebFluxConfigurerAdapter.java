@@ -47,7 +47,7 @@ public class Pac4jWebFluxConfigurerAdapter implements WebFluxConfigurer {
 	private final ReactiveAdapterRegistry registry;
 
 	public Pac4jWebFluxConfigurerAdapter(@NonNull ConfigurableBeanFactory factory,
-										 @NonNull ReactiveAdapterRegistry registry) {
+	                                     @NonNull ReactiveAdapterRegistry registry) {
 		this.factory = factory;
 		this.registry = registry;
 	}

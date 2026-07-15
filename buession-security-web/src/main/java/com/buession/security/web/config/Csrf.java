@@ -19,13 +19,16 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2024 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
 
+import com.buession.security.core.SameSite;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
+import java.time.Duration;
+import java.util.Set;
 import java.util.StringJoiner;
 
 /**
@@ -36,12 +39,7 @@ import java.util.StringJoiner;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class Csrf {
-
-	/**
-	 * 是否启用 Csrf
-	 */
-	private boolean enabled = true;
+public class Csrf extends BaseConfig {
 
 	/**
 	 * Csrf 模式
@@ -59,31 +57,14 @@ public class Csrf {
 	private Session session;
 
 	/**
-	 * 返回是否启用 Csrf
+	 * 忽略请求匹配
 	 *
-	 * @return 是否启用 Csrf
+	 * @since 4.0.0
 	 */
-	public boolean isEnabled() {
-		return getEnabled();
-	}
+	private Set<String> ignoringRequestMatchers;
 
-	/**
-	 * 返回是否启用 Csrf
-	 *
-	 * @return 是否启用 Csrf
-	 */
-	public boolean getEnabled() {
-		return enabled;
-	}
-
-	/**
-	 * 设置是否启用 Csrf
-	 *
-	 * @param enabled
-	 * 		是否启用 Csrf
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	public Csrf() {
+		super(true);
 	}
 
 	/**
@@ -143,13 +124,37 @@ public class Csrf {
 		this.session = session;
 	}
 
+	/**
+	 * 返回忽略请求匹配
+	 *
+	 * @return 忽略请求匹配
+	 *
+	 * @since 4.0.0
+	 */
+	public Set<String> getIgnoringRequestMatchers() {
+		return ignoringRequestMatchers;
+	}
+
+	/**
+	 * 设置忽略请求匹配
+	 *
+	 * @param ignoringRequestMatchers
+	 * 		忽略请求匹配
+	 *
+	 * @since 4.0.0
+	 */
+	public void setIgnoringRequestMatchers(Set<String> ignoringRequestMatchers) {
+		this.ignoringRequestMatchers = ignoringRequestMatchers;
+	}
+
 	@Override
 	public String toString() {
 		return new StringJoiner(", ", "Csrf = {", "}")
-				.add("enabled=" + enabled)
+				.add("enabled=" + getEnabled())
 				.add("mode=" + mode)
 				.add("cookie=" + cookie)
 				.add("session=" + session)
+				.add("ignoringRequestMatchers=" + ignoringRequestMatchers)
 				.toString();
 	}
 
@@ -182,22 +187,50 @@ public class Csrf {
 		/**
 		 * Csrf Cookie 名称
 		 */
-		private String cookieName = "XSRF-TOKEN";
+		private String name = "XSRF-TOKEN";
 
 		/**
 		 * Csrf Cookie 作用域
 		 */
-		private String cookieDomain;
+		private String domain;
 
 		/**
 		 * Csrf Cookie 作用路径
 		 */
-		private String cookiePath;
+		private String path;
 
 		/**
 		 * Csrf Cookie 是否可通过客户端脚本访问
 		 */
-		private boolean cookieHttpOnly = true;
+		private boolean httpOnly = true;
+
+		/**
+		 * Csrf Cookie 是否仅通过安全的 HTTPS 连接访问
+		 *
+		 * @since 4.0.0
+		 */
+		private boolean secure = true;
+
+		/**
+		 * The cookie "Max-Age" attribute.
+		 *
+		 * @since 4.0.0
+		 */
+		private Duration maxAge;
+
+		/**
+		 * The "Partitioned" attribute to the cookie.
+		 *
+		 * @since 4.0.0
+		 */
+		private boolean partitioned;
+
+		/**
+		 * The "SameSite" attribute to the cookie.
+		 *
+		 * @since 4.0.0
+		 */
+		private SameSite sameSite;
 
 		/**
 		 * 返回 Csrf 请求参数名
@@ -238,88 +271,202 @@ public class Csrf {
 		}
 
 		/**
-		 * 返回 Csrf Cookie 名称
+		 * 返回 Csrf 名称
 		 *
-		 * @return Csrf Cookie 名称
+		 * @return Csrf 名称
 		 */
-		public String getCookieName() {
-			return cookieName;
+		public String getName() {
+			return name;
 		}
 
 		/**
-		 * 设置 Csrf Cookie 名称
+		 * 设置 Csrf 名称
 		 *
-		 * @param cookieName
-		 * 		Csrf Cookie 名称
+		 * @param name
+		 * 		Csrf 名称
 		 */
-		public void setCookieName(String cookieName) {
-			this.cookieName = cookieName;
+		public void setName(String name) {
+			this.name = name;
 		}
 
 		/**
-		 * 返回 Csrf Cookie 作用域
+		 * 返回 Csrf 作用域
 		 *
-		 * @return Csrf Cookie 作用域
+		 * @return Csrf 作用域
 		 */
-		public String getCookieDomain() {
-			return cookieDomain;
+		public String getDomain() {
+			return domain;
 		}
 
 		/**
-		 * 设置 Csrf Cookie 作用域
+		 * 设置 Csrf 作用域
 		 *
-		 * @param cookieDomain
-		 * 		Csrf Cookie 作用域
+		 * @param domain
+		 * 		Csrf 作用域
 		 */
-		public void setCookieDomain(String cookieDomain) {
-			this.cookieDomain = cookieDomain;
+		public void setDomain(String domain) {
+			this.domain = domain;
 		}
 
 		/**
-		 * 返回 Csrf Cookie 作用路径
+		 * 返回 Csrf 作用路径
 		 *
-		 * @return Csrf Cookie 作用路径
+		 * @return Csrf 作用路径
 		 */
-		public String getCookiePath() {
-			return cookiePath;
+		public String getPath() {
+			return path;
 		}
 
 		/**
-		 * 设置 Csrf Cookie 作用路径
+		 * 设置 Csrf 作用路径
 		 *
-		 * @param cookiePath
-		 * 		Csrf Cookie 作用路径
+		 * @param path
+		 * 		Csrf 作用路径
 		 */
-		public void setCookiePath(String cookiePath) {
-			this.cookiePath = cookiePath;
+		public void setPath(String path) {
+			this.path = path;
 		}
 
 		/**
-		 * 返回 Csrf Cookie 是否可通过客户端脚本访问
+		 * 返回 Csrf 是否可通过客户端脚本访问
 		 *
-		 * @return Csrf Cookie 是否可通过客户端脚本访问
+		 * @return Csrf 是否可通过客户端脚本访问
 		 */
-		public boolean isCookieHttpOnly() {
-			return getCookieHttpOnly();
+		public boolean isHttpOnly() {
+			return getHttpOnly();
 		}
 
 		/**
-		 * 返回 Csrf Cookie 是否可通过客户端脚本访问
+		 * 返回 Csrf 是否可通过客户端脚本访问
 		 *
-		 * @return Csrf Cookie 是否可通过客户端脚本访问
+		 * @return Csrf 是否可通过客户端脚本访问
 		 */
-		public boolean getCookieHttpOnly() {
-			return cookieHttpOnly;
+		public boolean getHttpOnly() {
+			return httpOnly;
 		}
 
 		/**
-		 * 设置 Csrf Cookie 是否可通过客户端脚本访问
+		 * 设置 Csrf 是否可通过客户端脚本访问
 		 *
-		 * @param cookieHttpOnly
-		 * 		Csrf Cookie 是否可通过客户端脚本访问
+		 * @param httpOnly
+		 * 		Csrf 是否可通过客户端脚本访问
 		 */
-		public void setCookieHttpOnly(boolean cookieHttpOnly) {
-			this.cookieHttpOnly = cookieHttpOnly;
+		public void setHttpOnly(boolean httpOnly) {
+			this.httpOnly = httpOnly;
+		}
+
+		/**
+		 * 返回 Csrf 是否仅通过安全的 HTTPS 连接访问
+		 *
+		 * @return true / false
+		 *
+		 * @since 4.0.0
+		 */
+		public boolean isSecure() {
+			return getSecure();
+		}
+
+		/**
+		 * 返回 Csrf 是否仅通过安全的 HTTPS 连接访问
+		 *
+		 * @return true / false
+		 *
+		 * @since 4.0.0
+		 */
+		public boolean getSecure() {
+			return secure;
+		}
+
+		/**
+		 * 设置 Csrf 是否仅通过安全的 HTTPS 连接访问
+		 *
+		 * @param secure
+		 * 		true / false
+		 *
+		 * @since 4.0.0
+		 */
+		public void setSecure(boolean secure) {
+			this.secure = secure;
+		}
+
+		/**
+		 * Return the cookie "Max-Age" attribute.
+		 *
+		 * @return The cookie "Max-Age" attribute.
+		 *
+		 * @since 4.0.0
+		 */
+		public Duration getMaxAge() {
+			return maxAge;
+		}
+
+		/**
+		 * Set the cookie "Max-Age" attribute.
+		 *
+		 * @param maxAge
+		 * 		The cookie "Max-Age" attribute.
+		 *
+		 * @since 4.0.0
+		 */
+		public void setMaxAge(Duration maxAge) {
+			this.maxAge = maxAge;
+		}
+
+		/**
+		 * Return the "Partitioned" attribute to the cookie.
+		 *
+		 * @return The "Partitioned" attribute to the cookie.
+		 *
+		 * @since 4.0.0
+		 */
+		public boolean isPartitioned() {
+			return getPartitioned();
+		}
+
+		/**
+		 * Return the "Partitioned" attribute to the cookie.
+		 *
+		 * @return The "Partitioned" attribute to the cookie.
+		 *
+		 * @since 4.0.0
+		 */
+		public boolean getPartitioned() {
+			return partitioned;
+		}
+
+		/**
+		 * Set the "Partitioned" attribute to the cookie.
+		 *
+		 * @param partitioned
+		 * 		The "Partitioned" attribute to the cookie.
+		 *
+		 * @since 4.0.0
+		 */
+		public void setPartitioned(boolean partitioned) {
+			this.partitioned = partitioned;
+		}
+
+		/**
+		 * Return the "SameSite" attribute to the cookie.
+		 *
+		 * @return The "SameSite" attribute to the cookie.
+		 *
+		 * @since 4.0.0
+		 */
+		public SameSite getSameSite() {
+			return sameSite;
+		}
+
+		/**
+		 * Set the "SameSite" attribute to the cookie.
+		 *
+		 * @param sameSite
+		 * 		The "SameSite" attribute to the cookie.
+		 *
+		 * @since 4.0.0
+		 */
+		public void setSameSite(SameSite sameSite) {
+			this.sameSite = sameSite;
 		}
 
 		@Override
@@ -327,10 +474,14 @@ public class Csrf {
 			return new StringJoiner(", ", "Cookie = {", "}")
 					.add("parameterName=" + parameterName)
 					.add("headerName=" + headerName)
-					.add("cookieName=" + cookieName)
-					.add("cookieDomain=" + cookieDomain)
-					.add("cookiePath=" + cookiePath)
-					.add("cookieHttpOnly=" + cookieHttpOnly)
+					.add("name=" + name)
+					.add("domain=" + domain)
+					.add("path=" + path)
+					.add("httpOnly=" + httpOnly)
+					.add("secure=" + secure)
+					.add("maxAge=" + maxAge)
+					.add("partitioned=" + partitioned)
+					.add("sameSite=" + sameSite)
 					.toString();
 		}
 

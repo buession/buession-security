@@ -19,12 +19,12 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2024 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.web.config;
 
-import com.buession.security.web.xss.Options;
+import com.buession.web.http.XssProtection;
 
 import java.util.StringJoiner;
 
@@ -36,89 +36,27 @@ import java.util.StringJoiner;
  * @author Yong.Teng
  * @since 2.0.0
  */
-public class Xss {
-
-	/**
-	 * 是否启用 Xss 配置
-	 */
-	private boolean enabled = true;
-
-	private Boolean block;
-
-	private Boolean enabledProtection;
+public class Xss extends BaseConfig {
 
 	/**
 	 * 策略模式
 	 *
-	 * @since 2.3.3
+	 * @since 4.0.0
 	 */
-	private Options.Policy policy = Options.Policy.ESCAPE;
+	private XssProtection policy;
 
-	/**
-	 * XSS 策略配置文件路径
-	 */
-	private String policyConfigLocation;
-
-	/**
-	 * 返回是否启用 Xss 配置
-	 *
-	 * @return 是否启用 Xss 配置
-	 */
-	public boolean isEnabled() {
-		return getEnabled();
-	}
-
-	/**
-	 * 返回是否启用 Xss 配置
-	 *
-	 * @return 是否启用 Xss 配置
-	 */
-	public boolean getEnabled() {
-		return enabled;
-	}
-
-	/**
-	 * 配置是否启用 Xss 配置
-	 *
-	 * @param enabled
-	 * 		是否启用 Xss 配置
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	@Deprecated
-	public Boolean isBlock() {
-		return getBlock();
-	}
-
-	public Boolean getBlock() {
-		return block;
-	}
-
-	public void setBlock(Boolean block) {
-		this.block = block;
-	}
-
-	@Deprecated
-	public Boolean isEnabledProtection() {
-		return getEnabledProtection();
-	}
-
-	public Boolean getEnabledProtection() {
-		return enabledProtection;
-	}
-
-	public void setEnabledProtection(Boolean enabledProtection) {
-		this.enabledProtection = enabledProtection;
+	public Xss() {
+		super(true);
 	}
 
 	/**
 	 * 返回策略模式
 	 *
 	 * @return 策略模式
+	 *
+	 * @since 4.0.0
 	 */
-	public Options.Policy getPolicy() {
+	public XssProtection getPolicy() {
 		return policy;
 	}
 
@@ -127,37 +65,18 @@ public class Xss {
 	 *
 	 * @param policy
 	 * 		策略模式
+	 *
+	 * @since 4.0.0
 	 */
-	public void setPolicy(Options.Policy policy) {
+	public void setPolicy(XssProtection policy) {
 		this.policy = policy;
-	}
-
-	/**
-	 * 返回 XSS 策略配置文件路径
-	 *
-	 * @return XSS 策略配置文件路径
-	 */
-	public String getPolicyConfigLocation() {
-		return policyConfigLocation;
-	}
-
-	/**
-	 * 设置 XSS 策略配置文件路径
-	 *
-	 * @param policyConfigLocation
-	 * 		XSS 策略配置文件路径
-	 */
-	public void setPolicyConfigLocation(String policyConfigLocation) {
-		this.policyConfigLocation = policyConfigLocation;
 	}
 
 	@Override
 	public String toString() {
-		return new StringJoiner(", ", "Xss = {", "}")
-				.add("enabled=" + enabled)
-				.add("block=" + block)
-				.add("enabledProtection=" + enabledProtection)
-				.add("policyConfigLocation=" + policyConfigLocation)
+		return new StringJoiner(", ", "{", "}")
+				.add("enabled=" + getEnabled())
+				.add("policy=" + policy)
 				.toString();
 	}
 

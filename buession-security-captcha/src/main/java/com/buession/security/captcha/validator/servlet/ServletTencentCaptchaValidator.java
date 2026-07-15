@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.captcha.validator.servlet;
@@ -30,8 +30,7 @@ import com.buession.security.captcha.tencent.TencentCaptchaClient;
 import com.buession.security.captcha.tencent.TencentParameter;
 import com.buession.security.captcha.tencent.TencentRequestData;
 import com.buession.security.captcha.validator.TencentCaptchaValidator;
-
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Servlet 环境腾讯云验证码验证
@@ -50,12 +49,12 @@ public class ServletTencentCaptchaValidator extends TencentCaptchaValidator impl
 	 *        {@link TencentParameter} 实例
 	 */
 	public ServletTencentCaptchaValidator(final TencentCaptchaClient tencentCaptchaClient,
-										  final TencentParameter parameter){
+										  final TencentParameter parameter) {
 		super(tencentCaptchaClient, parameter);
 	}
 
 	@Override
-	public Status validate(final HttpServletRequest request) throws CaptchaException{
+	public Status validate(final HttpServletRequest request) throws CaptchaException {
 		final TencentRequestData requestData = new TencentRequestData();
 
 		requestData.setRandstr(request.getParameter(parameter.getRandStr()));

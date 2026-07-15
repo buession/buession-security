@@ -19,22 +19,23 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2022 Buession.com Inc.														       |
+ * | Copyright @ 2013-2025 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.http;
 
+import com.buession.core.validator.Validate;
 import com.buession.lang.Constants;
+import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.HttpConstants;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.exception.http.HttpAction;
 import org.pac4j.core.exception.http.RedirectionAction;
-import org.pac4j.core.exception.http.RedirectionActionHelper;
 import org.pac4j.core.exception.http.UnauthorizedAction;
 import org.pac4j.core.exception.http.WithLocationAction;
 import org.pac4j.core.http.ajax.DefaultAjaxRequestResolver;
 import org.pac4j.core.redirect.RedirectionActionBuilder;
-import org.pac4j.core.util.CommonHelper;
+import org.pac4j.core.util.HttpActionHelper;
 
 import java.util.Optional;
 
@@ -47,8 +48,8 @@ import java.util.Optional;
 public class TextAjaxRequestResolver extends DefaultAjaxRequestResolver {
 
 	@Override
-	public HttpAction buildAjaxResponse(final WebContext context,
-										final RedirectionActionBuilder redirectionActionBuilder){
+	public HttpAction buildAjaxResponse(final CallContext context,
+										final RedirectionActionBuilder redirectionActionBuilder) {
 		String url = null;
 
 		if(isAddRedirectionUrlAsHeader()){
@@ -58,14 +59,15 @@ public class TextAjaxRequestResolver extends DefaultAjaxRequestResolver {
 			}
 		}
 
-		if(context.getRequestParameter(FACES_PARTIAL_AJAX_PARAMETER).isPresent() == false){
-			if(CommonHelper.isNotBlank(url)){
-				context.setResponseHeader(HttpConstants.LOCATION_HEADER, url);
+		WebContext webContext = context.webContext();
+		if(webContext.getRequestParameter(FACES_PARTIAL_AJAX_PARAMETER).isPresent() == false){
+			if(Validate.isNotBlank(url)){
+				webContext.setResponseHeader(HttpConstants.LOCATION_HEADER, url);
 			}
-			throw UnauthorizedAction.INSTANCE;
+			throw new UnauthorizedAction();
 		}
 
-		return RedirectionActionHelper.buildFormPostContentAction(context,
+		return HttpActionHelper.buildFormPostContentAction(webContext,
 				Optional.ofNullable(url).orElse(Constants.EMPTY_STRING));
 	}
 
