@@ -19,7 +19,7 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2023 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.shiro.session;
@@ -78,7 +78,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 * @param keyPrefix
 	 * 		SESSION Key 前缀
 	 * @param expire
-	 * 		过期时间（单位：秒）{@link #expire}
+	 * 		过期时间（单位：秒）
 	 */
 	public RedisSessionDAO(String keyPrefix, int expire) {
 		super(keyPrefix, expire);
@@ -90,7 +90,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 * @param keyPrefix
 	 * 		SESSION Key 前缀
 	 * @param expire
-	 * 		过期时间（单位：秒）{@link #expire}
+	 * 		过期时间（单位：秒）
 	 * @param sessionInMemoryEnabled
 	 * 		SESSION 是否存储在内存中
 	 * @param sessionInMemoryTimeout
@@ -108,7 +108,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 * @param keyPrefix
 	 * 		SESSION Key 前缀
 	 * @param expire
-	 * 		过期时间（单位：秒）{@link #expire}
+	 * 		过期时间（单位：秒）
 	 */
 	public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire) {
 		this(keyPrefix, expire);
@@ -123,14 +123,14 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	 * @param keyPrefix
 	 * 		SESSION Key 前缀
 	 * @param expire
-	 * 		过期时间（单位：秒）{@link #expire}
+	 * 		过期时间（单位：秒）
 	 * @param sessionInMemoryEnabled
 	 * 		SESSION 是否存储在内存中
 	 * @param sessionInMemoryTimeout
 	 * 		SESSION 存储在内存中的过期时间
 	 */
 	public RedisSessionDAO(RedisManager redisManager, String keyPrefix, int expire, boolean sessionInMemoryEnabled,
-						   long sessionInMemoryTimeout) {
+	                       long sessionInMemoryTimeout) {
 		this(keyPrefix, expire, sessionInMemoryEnabled, sessionInMemoryTimeout);
 		this.redisManager = redisManager;
 	}
