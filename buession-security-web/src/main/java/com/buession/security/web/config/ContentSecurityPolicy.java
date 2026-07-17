@@ -44,6 +44,9 @@ public class ContentSecurityPolicy extends BaseConfig {
 	 */
 	private String policyDirectives;
 
+	/**
+	 * 构造函数
+	 */
 	public ContentSecurityPolicy() {
 		super(true);
 	}

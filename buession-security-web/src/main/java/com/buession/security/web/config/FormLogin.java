@@ -67,6 +67,9 @@ public class FormLogin extends BaseConfig {
 	 */
 	private String failureForwardUrl;
 
+	/**
+	 * 构造函数
+	 */
 	public FormLogin() {
 		super(false);
 	}
@@ -184,14 +187,9 @@ public class FormLogin extends BaseConfig {
 
 	@Override
 	public String toString() {
-		return new StringJoiner(", ", "{", "}")
-				.add("enabled=" + getEnabled())
-				.add("loginPage=" + loginPage)
-				.add("usernameParameter=" + usernameParameter)
-				.add("passwordParameter=" + passwordParameter)
-				.add("successForwardUrl=" + successForwardUrl)
-				.add("failureForwardUrl=" + failureForwardUrl)
-				.toString();
+		return new StringJoiner(", ", "{", "}").add("enabled=" + getEnabled()).add("loginPage=" + loginPage)
+				.add("usernameParameter=" + usernameParameter).add("passwordParameter=" + passwordParameter)
+				.add("successForwardUrl=" + successForwardUrl).add("failureForwardUrl=" + failureForwardUrl).toString();
 	}
 
 }

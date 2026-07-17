@@ -37,6 +37,12 @@ class BaseConfig {
 	 */
 	private boolean enabled;
 
+	/**
+	 * 构造函数
+	 *
+	 * @param enabled
+	 * 		是否启用
+	 */
 	protected BaseConfig(final boolean enabled) {
 		this.enabled = enabled;
 	}

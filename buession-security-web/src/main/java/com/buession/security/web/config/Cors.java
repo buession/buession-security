@@ -47,6 +47,9 @@ public class Cors extends BaseConfig {
 
 	private Map<String, Options> options;
 
+	/**
+	 * 构造函数
+	 */
 	public Cors() {
 		super(true);
 	}

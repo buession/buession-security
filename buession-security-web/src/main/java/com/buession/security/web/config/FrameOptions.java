@@ -41,6 +41,9 @@ public class FrameOptions extends BaseConfig {
 	 */
 	private XFrameOptionsMode mode = XFrameOptionsMode.DENY;
 
+	/**
+	 * 构造函数
+	 */
 	public FrameOptions() {
 		super(true);
 	}

@@ -43,6 +43,9 @@ public class HttpBasic extends BaseConfig {
 	 */
 	private String realmName;
 
+	/**
+	 * 构造函数
+	 */
 	public HttpBasic() {
 		super(true);
 	}

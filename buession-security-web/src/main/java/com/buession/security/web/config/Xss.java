@@ -45,6 +45,9 @@ public class Xss extends BaseConfig {
 	 */
 	private XssProtection policy;
 
+	/**
+	 * 构造函数
+	 */
 	public Xss() {
 		super(true);
 	}
