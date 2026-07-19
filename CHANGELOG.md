@@ -2,11 +2,12 @@
 ===========================
 
 
-## [4.0.1](https://github.com/buession/buession-security/releases/tag/v4.0.1) (2026-07-15)
+## [5.0.0](https://github.com/buession/buession-security/releases/tag/v5.0.0) (2026-07-15)
 
 ### 🔨依赖升级
 
-- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v4.0.1)
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v5.0.0)
+- [buji-pac4j](https://github.com/bujiio/buji-pac4j) 版本升级至 9.1.1
 
 
 ---
