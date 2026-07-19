@@ -9,6 +9,10 @@
 - [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v5.0.0)
 - [buji-pac4j](https://github.com/bujiio/buji-pac4j) 版本升级至 9.1.1
 
+### 🔔 变化
+
+- 删除模块 buession-security-mcrypt
+
 
 ---
 
