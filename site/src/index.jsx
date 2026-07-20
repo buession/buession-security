@@ -5,7 +5,7 @@ banner:
   btns: 
     - { name: '开 始', href: '/docs/quickstart.html', primary: true }
     - { name: 'Github >', href: 'https://github.com/buession/buession-security' }
-  caption: '当前版本: v4.0.0'
+  caption: '当前版本: v5.0.0'
 features: 
   - { name: '优雅', desc: '经过精雕细琢，我们带给大家一个精心设计的、标准的、高内聚低耦合的通用类库' }
   - { name: '灵活', desc: '非重复造车轮，我们是整合市面上开源的类库，以标准的接口暴露给上层用户，用户可替换或自行封装同类组件。在此基础上，封装了大量的常用的类库。' }
