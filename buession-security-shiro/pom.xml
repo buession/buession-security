@@ -67,7 +67,6 @@
 			<groupId>com.buession</groupId>
 			<artifactId>buession-web</artifactId>
 			<version>${buession.version}</version>
-			<scope>compile</scope>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>

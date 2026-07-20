@@ -59,7 +59,6 @@
 		<module>../buession-security-crypto</module>
 		<module>../buession-security-pac4j</module>
 		<module>../buession-security-shiro</module>
-		<module>../buession-security-spring</module>
 		<module>../buession-security-web</module>
 	</modules>
 
