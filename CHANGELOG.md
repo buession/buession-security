@@ -12,6 +12,7 @@
 ### 🔔 变化
 
 - 删除模块 buession-security-mcrypt
+- buession-security-pac4j 删除未使用的 pac4j 依赖
 
 
 ---

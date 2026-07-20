@@ -19,18 +19,18 @@
  * +-------------------------------------------------------------------------------------------------------+
  * | License: http://www.apache.org/licenses/LICENSE-2.0.txt 										       |
  * | Author: Yong.Teng <webmaster@buession.com> 													       |
- * | Copyright @ 2013-2025 Buession.com Inc.														       |
+ * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
 package com.buession.security.pac4j.profile;
 
-import com.buession.beans.BeanConverter;
-import com.buession.beans.DefaultBeanConverter;
 import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.UserProfile;
-import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 
+import java.beans.PropertyDescriptor;
 import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -101,17 +101,23 @@ public class ProfileUtils {
 	 *
 	 * @since 2.3.0
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> T toObject(final UserProfile profile, final Class<T> type) {
-		final T instance = BeanUtils.instantiateClass(type);
+		BeanWrapper userProfilewrapper = new BeanWrapperImpl(profile);
+		BeanWrapper wrapper = new BeanWrapperImpl(type);
 
-		if(profile != null){
-			final BeanConverter beanConverter = new DefaultBeanConverter();
-
-			beanConverter.convert(profile, instance);
-			beanConverter.convert(profile.getAttributes(), instance);
+		wrapper.setPropertyValues(profile.getAttributes());
+		for(PropertyDescriptor pd : userProfilewrapper.getPropertyDescriptors()){
+			if(pd.getReadMethod() != null){
+				String name = pd.getName();
+				Object value = userProfilewrapper.getPropertyValue(name);
+				if(value != null && wrapper.isWritableProperty(name)){
+					wrapper.setPropertyValue(name, value);
+				}
+			}
 		}
 
-		return instance;
+		return (T) wrapper.getWrappedInstance();
 	}
 
 	/**

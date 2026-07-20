@@ -64,11 +64,6 @@
 
 		<dependency>
 			<groupId>com.buession</groupId>
-			<artifactId>buession-beans</artifactId>
-			<version>${buession.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.buession</groupId>
 			<artifactId>buession-web</artifactId>
 			<version>${buession.version}</version>
 			<scope>provided</scope>
@@ -95,16 +90,17 @@
 			<optional>true</optional>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+		</dependency>
+
 		<!-- pac4j start -->
 		<dependency>
 			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-config</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-jakartaee</artifactId>
-			<version>${pac4j.version}</version>
-		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-cas</artifactId>
@@ -115,10 +111,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-http</artifactId>
+			<scope>provided</scope>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-oauth</artifactId>
@@ -129,6 +128,8 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		-->
+		<!--
 		<dependency>
 			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-kerberos</artifactId>
@@ -188,6 +189,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		-->
 		<!-- pac4j end -->
 
 		<dependency>
@@ -195,10 +197,6 @@
 			<artifactId>buji-pac4j</artifactId>
 			<version>9.1.1</version>
 			<exclusions>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>javax.servlet-api</artifactId>
-				</exclusion>
 				<exclusion>
 					<groupId>org.apache.shiro</groupId>
 					<artifactId>*</artifactId>
