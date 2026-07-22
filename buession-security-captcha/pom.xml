@@ -84,7 +84,6 @@
 			<groupId>com.buession</groupId>
 			<artifactId>buession-json</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>com.buession</groupId>
 			<artifactId>buession-web</artifactId>

@@ -51,10 +51,6 @@
 		<url>https://github.com/buession/buession-security/issues</url>
 	</issueManagement>
 
-	<properties>
-		<cas.client.version>3.6.4</cas.client.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.buession.security</groupId>
@@ -100,102 +96,22 @@
 			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-config</artifactId>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-cas</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.bouncycastle</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		-->
 		<dependency>
 			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-http</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<!--
 		<dependency>
 			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-oauth</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.code.findbugs</groupId>
-					<artifactId>jsr305</artifactId>
-				</exclusion>
-			</exclusions>
+			<artifactId>pac4j-javaee</artifactId>
+			<version>${pac4j.version}</version>
 		</dependency>
-		-->
-		<!--
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-kerberos</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-ldap</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-oidc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-saml</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-orm</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>jcl-over-slf4j</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-sql</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-jwt</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.bouncycastle</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>spring-security-pac4j</artifactId>
-			<version>10.0.0</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.annotation</groupId>
-					<artifactId>javax.annotation-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.security</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.projectlombok</groupId>
-					<artifactId>lombok</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		-->
 		<!-- pac4j end -->
 
 		<dependency>
 			<groupId>io.buji</groupId>
 			<artifactId>buji-pac4j</artifactId>
-			<version>9.1.1</version>
+			<version>9.1.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.shiro</groupId>

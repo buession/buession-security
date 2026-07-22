@@ -63,7 +63,7 @@
 	</modules>
 
 	<properties>
-		<buession.version>4.0.1</buession.version>
+		<buession.version>5.0.0</buession.version>
 	</properties>
 
 	<dependencyManagement>
