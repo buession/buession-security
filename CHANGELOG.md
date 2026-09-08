@@ -2,6 +2,20 @@
 ===========================
 
 
+## [5.0.1](https://github.com/buession/buession-security/releases/tag/v5.0.1) (2026-xx-xx)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v5.0.1)
+
+---
+
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v5.0.0)
+
+
 ## [5.0.0](https://github.com/buession/buession-security/releases/tag/v5.0.0) (2026-09-08)
 
 ### 🔨依赖升级
