@@ -34,26 +34,40 @@ import java.util.StringJoiner;
  */
 public class FeaturePolicy extends BaseConfig {
 
+	/**
+	 * 策略
+	 */
 	private String policy;
 
+	/**
+	 * 构造函数
+	 */
 	public FeaturePolicy() {
 		super(false);
 	}
 
+	/**
+	 * 返回 Referrer 策略
+	 *
+	 * @return Referrer 策略
+	 */
 	public String getPolicy() {
 		return policy;
 	}
 
+	/**
+	 * 设置 Referrer 策略
+	 *
+	 * @param policy
+	 * 		Referrer 策略
+	 */
 	public void setPolicy(String policy) {
 		this.policy = policy;
 	}
 
 	@Override
 	public String toString() {
-		return new StringJoiner(", ", "{", "}")
-				.add("enabled=" + getEnabled())
-				.add("policy=" + policy)
-				.toString();
+		return new StringJoiner(", ", "{", "}").add("enabled=" + getEnabled()).add("policy=" + policy).toString();
 	}
 
 }

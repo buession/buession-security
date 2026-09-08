@@ -22,57 +22,72 @@
  * | Copyright @ 2013-2026 Buession.com Inc.														       |
  * +-------------------------------------------------------------------------------------------------------+
  */
-package com.buession.security.web.config;
+package com.buession.security.pac4j;
+
+import com.buession.security.pac4j.profile.ProfileUtils;
+import org.junit.jupiter.api.Test;
+import org.pac4j.http.profile.RestProfile;
+
+import java.util.StringJoiner;
 
 /**
  *
  *
  * @author Yong.Teng
- * @since 4.0.0
+ * @since 1.0.0
  */
-class BaseConfig {
+public class ProfileUtilsTest {
 
-	/**
-	 * 是否启用
-	 */
-	private boolean enabled;
+	@Test
+	public void toObject() {
+		RestProfile restProfile = new RestProfile();
+		restProfile.setId("123");
+		restProfile.addAttribute("email", "webmaster@buession.com");
 
-	/**
-	 * 构造函数
-	 *
-	 * @param enabled
-	 * 		是否启用
-	 */
-	protected BaseConfig(final boolean enabled) {
-		this.enabled = enabled;
+		System.out.println(ProfileUtils.toObject(restProfile, User.class));
 	}
 
-	/**
-	 * 返回是否启用
-	 *
-	 * @return 是否启用
-	 */
-	public boolean isEnabled() {
-		return getEnabled();
-	}
+	public final static class User {
 
-	/**
-	 * 返回是否启用
-	 *
-	 * @return 是否启用
-	 */
-	public boolean getEnabled() {
-		return enabled;
-	}
+		private String id;
 
-	/**
-	 * 设置是否启用
-	 *
-	 * @param enabled
-	 * 		是否启用
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+		private String name;
+
+		private String email;
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
+		}
+
+		@Override
+		public String toString() {
+			return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
+					.add("id='" + id + "'")
+					.add("name='" + name + "'")
+					.add("email='" + email + "'")
+					.toString();
+		}
+
 	}
 
 }

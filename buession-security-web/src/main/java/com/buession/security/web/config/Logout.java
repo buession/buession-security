@@ -50,6 +50,9 @@ public class Logout extends BaseConfig {
 
 	private boolean invalidateHttpSession;
 
+	/**
+	 * 构造函数
+	 */
 	public Logout() {
 		super(false);
 	}

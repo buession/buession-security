@@ -34,16 +34,33 @@ import java.util.StringJoiner;
  */
 public class ReferrerPolicy extends BaseConfig {
 
+	/**
+	 * Referrer 策略
+	 */
 	private Policy policy = Policy.NO_REFERRER;
 
+	/**
+	 * 构造函数
+	 */
 	public ReferrerPolicy() {
 		super(true);
 	}
 
+	/**
+	 * 返回 Referrer 策略
+	 *
+	 * @return Referrer 策略
+	 */
 	public Policy getPolicy() {
 		return policy;
 	}
 
+	/**
+	 * 设置 Referrer 策略
+	 *
+	 * @param policy
+	 * 		Referrer 策略
+	 */
 	public void setPolicy(Policy policy) {
 		this.policy = policy;
 	}

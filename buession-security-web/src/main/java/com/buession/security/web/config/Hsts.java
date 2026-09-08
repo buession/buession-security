@@ -53,6 +53,9 @@ public class Hsts extends BaseConfig {
 	 */
 	private Boolean preload;
 
+	/**
+	 * 构造函数
+	 */
 	public Hsts() {
 		super(true);
 	}

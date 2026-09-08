@@ -7,7 +7,7 @@
 		<groupId>com.buession.security</groupId>
 		<artifactId>buession-security-parent</artifactId>
 		<relativePath>../buession-security-parent</relativePath>
-		<version>4.0.0</version>
+		<version>5.0.0</version>
 	</parent>
 	<artifactId>buession-security-shiro</artifactId>
 	<url>https://security.buession.com/</url>
@@ -67,7 +67,6 @@
 			<groupId>com.buession</groupId>
 			<artifactId>buession-web</artifactId>
 			<version>${buession.version}</version>
-			<scope>compile</scope>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -111,16 +110,23 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk18on</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>

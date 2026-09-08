@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<name>Buession Security Pac4j</name>
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.buession.security</groupId>
 		<artifactId>buession-security-parent</artifactId>
 		<relativePath>../buession-security-parent</relativePath>
-		<version>4.0.0</version>
+		<version>5.0.0</version>
 	</parent>
 	<artifactId>buession-security-pac4j</artifactId>
 	<url>https://security.buession.com/</url>
@@ -51,10 +51,6 @@
 		<url>https://github.com/buession/buession-security/issues</url>
 	</issueManagement>
 
-	<properties>
-		<cas.client.version>3.6.4</cas.client.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.buession.security</groupId>
@@ -62,11 +58,6 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.buession</groupId>
-			<artifactId>buession-beans</artifactId>
-			<version>${buession.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>com.buession</groupId>
 			<artifactId>buession-web</artifactId>
@@ -95,6 +86,11 @@
 			<optional>true</optional>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+		</dependency>
+
 		<!-- pac4j start -->
 		<dependency>
 			<groupId>org.pac4j</groupId>
@@ -102,91 +98,14 @@
 		</dependency>
 		<dependency>
 			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-jakartaee</artifactId>
-			<version>${pac4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-cas</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.bouncycastle</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-http</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-oauth</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.code.findbugs</groupId>
-					<artifactId>jsr305</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-kerberos</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-ldap</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-oidc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-saml</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-orm</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>jcl-over-slf4j</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-sql</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>pac4j-jwt</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.bouncycastle</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.pac4j</groupId>
-			<artifactId>spring-security-pac4j</artifactId>
-			<version>10.0.0</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.annotation</groupId>
-					<artifactId>javax.annotation-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.security</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.projectlombok</groupId>
-					<artifactId>lombok</artifactId>
-				</exclusion>
-			</exclusions>
+			<artifactId>pac4j-javaee</artifactId>
+			<version>${pac4j.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- pac4j end -->
 
@@ -195,14 +114,6 @@
 			<artifactId>buji-pac4j</artifactId>
 			<version>9.1.0</version>
 			<exclusions>
-				<exclusion>
-					<groupId>org.pac4j</groupId>
-					<artifactId>pac4j-javaee</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>javax.servlet-api</artifactId>
-				</exclusion>
 				<exclusion>
 					<groupId>org.apache.shiro</groupId>
 					<artifactId>*</artifactId>

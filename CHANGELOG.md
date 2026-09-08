@@ -2,6 +2,22 @@
 ===========================
 
 
+## [5.0.0](https://github.com/buession/buession-security/releases/tag/v5.0.0) (2026-09-08)
+
+### 🔨依赖升级
+
+- [依赖库版本升级和安全漏洞修复](https://github.com/buession/buession-parent/releases/tag/v5.0.0)
+
+### 🔔 变化
+
+- 删除模块 buession-security-mcrypt
+- 删除模块 buession-security-spring
+- buession-security-pac4j 删除未使用的 pac4j 依赖
+
+
+---
+
+
 ## [4.0.0](https://github.com/buession/buession-security/releases/tag/v4.0.0) (2026-07-15)
 
 ### 🔨依赖升级

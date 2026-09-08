@@ -63,6 +63,9 @@ public class Csrf extends BaseConfig {
 	 */
 	private Set<String> ignoringRequestMatchers;
 
+	/**
+	 * 构造函数
+	 */
 	public Csrf() {
 		super(true);
 	}

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<name>Buession Security Parent</name>
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.buession</groupId>
 		<artifactId>parent</artifactId>
 		<relativePath/>
-		<version>4.0.0</version>
+		<version>5.0.0</version>
 	</parent>
 	<groupId>com.buession.security</groupId>
 	<artifactId>buession-security-parent</artifactId>
 	<url>https://security.buession.com/</url>
 	<description>Buession Security Framework Parent</description>
-	<version>4.0.0</version>
+	<version>5.0.0</version>
 	<packaging>pom</packaging>
 
 	<organization>
@@ -57,15 +57,13 @@
 		<module>../buession-security-core</module>
 		<module>../buession-security-captcha</module>
 		<module>../buession-security-crypto</module>
-		<module>../buession-security-mcrypt</module>
 		<module>../buession-security-pac4j</module>
 		<module>../buession-security-shiro</module>
-		<module>../buession-security-spring</module>
 		<module>../buession-security-web</module>
 	</modules>
 
 	<properties>
-		<buession.version>4.0.0</buession.version>
+		<buession.version>5.0.0</buession.version>
 	</properties>
 
 	<dependencyManagement>
