@@ -24,9 +24,7 @@ footer:
       - { name: 'Buession Framework', href: 'https://www.buession.com/' }
       - { name: 'Buession Security', href: 'https://security.buession.com/' }
       - { name: 'Buession Logging', href: 'https://logging.buession.com/' }
-      - { name: 'Buession Canal', href: 'https://canal.buession.com/' }
       - { name: 'Buession SpringBoot', href: 'https://springboot.buession.com/' }
-      - { name: 'Buession SpringCloud', href: 'https://springcloud.buession.com/' }
       - { name: 'Buession Cas', href: 'https://cas.buession.com/' }
 
 ---
